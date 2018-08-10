@@ -8,9 +8,8 @@ import {
 import { SearchResultReducer } from '../../reducers/searchResult';
 
 const INITIAL_STATE = {
-  facilities: [],
-  providers: [],
-  selectedFacility: null,
+  results: [],
+  selectedResult: null,
   pagination: {}
 };
 
@@ -19,11 +18,11 @@ describe('facilities reducer', () => {
     const state = SearchResultReducer(INITIAL_STATE, {
       type: FETCH_VA_FACILITY,
       payload: {
-        name: 'selectedFacility'
+        name: 'selectedResult'
       },
     });
 
-    expect(state.selectedFacility).to.eql({ name: 'selectedFacility' });
+    expect(state.selectedResult).to.eql({ name: 'selectedResult' });
   });
 
   it('should handle fetching a list of facilities', () => {
@@ -31,8 +30,8 @@ describe('facilities reducer', () => {
       type: FETCH_VA_FACILITIES,
       payload: {
         data: [
-          { name: 'selectedFacility1' },
-          { name: 'selectedFacility2' },
+          { name: 'selectedResult1' },
+          { name: 'selectedResult2' },
         ],
         meta: {
           pagination: {
@@ -42,7 +41,7 @@ describe('facilities reducer', () => {
       },
     });
 
-    expect(state.facilities.length).to.eql(2);
+    expect(state.results.length).to.eql(2);
     expect(state.pagination.currentPage).to.eql(1);
   });
 

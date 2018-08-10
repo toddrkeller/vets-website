@@ -6,12 +6,12 @@ import Downshift from 'downshift';
 import { facilityTypes, ccLocatorEnabled } from '../config';
 import { keyMap } from '../utils/helpers';
 
-let FACILITY_OPTIONS;
+let LOCATION_OPTIONS;
 
 if (ccLocatorEnabled()) {
-  FACILITY_OPTIONS = ['all', 'health', 'cc_provider', 'benefits', 'cemetery', 'vet_center'];
+  LOCATION_OPTIONS = ['all', 'health', 'cc_provider', 'benefits', 'cemetery', 'vet_center'];
 } else {
-  FACILITY_OPTIONS = ['all', 'health', 'benefits', 'cemetery', 'vet_center'];
+  LOCATION_OPTIONS = ['all', 'health', 'benefits', 'cemetery', 'vet_center'];
 }
 
 const facilityOptionClasses = (item, selected) => classNames(
@@ -36,7 +36,7 @@ const FacilityTypeDropdown = ({
     if (e.keyCode === keyMap.TAB && isOpen) { closeMenu(); }
   };
 
-  const options = FACILITY_OPTIONS.map((item, index) => (
+  const options = LOCATION_OPTIONS.map((item, index) => (
     <li key={item} {...getItemProps({
       item,
       className: facilityOptionClasses(item, index === highlightedIndex),
@@ -74,7 +74,7 @@ const FacilityTypeDropdown = ({
 class Wrapper extends Component {
   render() {
     const facilityType = this.props.facilityType || 'all';
-    const highlightedIndex = FACILITY_OPTIONS.indexOf(facilityType);
+    const highlightedIndex = LOCATION_OPTIONS.indexOf(facilityType);
 
     return (
       <Downshift
