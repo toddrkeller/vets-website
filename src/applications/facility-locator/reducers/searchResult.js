@@ -5,7 +5,7 @@ import {
   SEARCH_FAILED
 } from '../utils/actionTypes';
 
-const INITIAL_STATE = {
+export const INITIAL_STATE = {
   results: [],
   selectedResult: null,
   pagination: {}
