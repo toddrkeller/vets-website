@@ -45,8 +45,12 @@
     "test:watch": "node script/watch.js",
     "test:visual": "./script/run-nightwatch.sh --visual",
     "test:visual:baseline": "./script/run-nightwatch.sh --visual --command=baseline",
+    "test:jest": "jest",
+    "test:jest:cover": "npm run test:jest -- --coverage ",
+    "test:jest:watch": "jest --watchAll",
     "watch": "node script/build.js --watch",
-    "watch:static": "npm run watch -- --entry static-pages"
+    "watch:static": "npm run watch -- --entry static-pages",
+    "watch:all": "npm run watch && npm run test:jest:watch"
   },
   "repository": {
     "type": "git",
@@ -65,6 +69,18 @@
       "src/platform/testing/**",
       "**/*.spec.js",
       "**/*.spec.jsx"
+    ]
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/script/assetsTransformer.js",
+      "\\.(css)$": "<rootDir>/script/assetsTransformer.js"
+    },
+    "testMatch": [
+      "**/?(*.)jest.+(spec|test).js?(x)"
+    ],
+    "setupFiles": [
+      "<rootDir>/src/platform/testing/unit/enzyme-setup.js"
     ]
   },
   "homepage": "https://github.com/department-of-veterans-affairs/vets-website#readme",
@@ -121,6 +137,9 @@
     "imports-loader": "^0.6.5",
     "ismobilejs": "^0.4.0",
     "isomorphic-fetch": "^2.2.1",
+    "jest": "^23.5.0",
+    "jest-axe": "^3.0.0",
+    "jest-cli": "^23.5.0",
     "jsdom": "^11.1.0",
     "jsonschema": "^1.1.1",
     "leaflet": "^1.0.3",
