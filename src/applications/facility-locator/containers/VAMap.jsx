@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
@@ -7,7 +7,7 @@ import { Tabs, TabList, TabPanel, Tab } from 'react-tabs';
 import { Map, TileLayer, FeatureGroup } from 'react-leaflet';
 import { mapboxClient, mapboxToken } from '../components/MapboxClient';
 import isMobile from 'ismobilejs';
-import { map, /* find, */ compact, isEmpty, debounce } from 'lodash';
+import { map, compact, isEmpty, debounce } from 'lodash';
 import {
   updateSearchQuery,
   genBBoxFromAddress,
@@ -71,7 +71,12 @@ class VAMap extends Component {
         this.genBBoxFromCoords(currentPosition.coords);
       });
     } else {
-      this.props.searchWithBounds(currentQuery.bounds, currentQuery.facilityType, currentQuery.serviceType, currentQuery.currentPage);
+      this.props.searchWithBounds({
+        bounds: currentQuery.bounds,
+        facilityType: currentQuery.facilityType,
+        serviceType: currentQuery.serviceType,
+        page: currentQuery.currentPage
+      });
     }
   }
 
@@ -94,7 +99,12 @@ class VAMap extends Component {
     }
 
     if (newQuery.bounds && (currentQuery.bounds !== newQuery.bounds) && !newQuery.searchBoundsInProgress) {
-      this.props.searchWithBounds(newQuery.bounds, newQuery.facilityType, newQuery.serviceType, resultsPage);
+      this.props.searchWithBounds({
+        bounds: newQuery.bounds,
+        facilityType: newQuery.facilityType,
+        serviceType: newQuery.serviceType,
+        page: resultsPage
+      });
     }
 
     if (!isEmpty(nextProps.results) || newQuery.inProgress) {
@@ -281,12 +291,12 @@ class VAMap extends Component {
       this.context.router.push(`facility/${id}`);
     };
 
-    return results.map(f => {
+    return results.map(r => {
       const iconProps = {
-        key: f.id,
-        position: [f.attributes.lat, f.attributes.long],
+        key: r.id,
+        position: [r.attributes.lat, r.attributes.long],
         onClick: () => {
-          const searchResult = document.getElementById(f.id);
+          const searchResult = document.getElementById(r.id);
           if (searchResult) {
             Array.from(document.getElementsByClassName('facility-result')).forEach((e) => {
               e.classList.remove('active');
@@ -294,27 +304,27 @@ class VAMap extends Component {
             searchResult.classList.add('active');
             document.getElementById('searchResultsContainer').scrollTop = searchResult.offsetTop;
           }
-          this.props.fetchVAFacility(f.id, f);
+          this.props.fetchVAFacility(r.id, r);
         },
       };
 
       const popupContent = (
         <div>
-          <a onClick={linkAction.bind(this, f.id)}>
-            <h5>{f.attributes.name}</h5>
+          <a onClick={linkAction.bind(this, r.id)}>
+            <h5>{r.attributes.name}</h5>
           </a>
-          { (f.type === LocationType.CC_PROVIDER) ? (
-            <Fragment>
-              <h6>{f.attributes.orgName}</h6>
-              <p>Services: <strong>{f.attributes.specialty.map(s => s.name).join(', ')}</strong></p>
-            </Fragment>
+          { (r.type === LocationType.CC_PROVIDER) ? (
+            <div>
+              <h6>{r.attributes.orgName}</h6>
+              <p>Services: <strong>{r.attributes.specialty.map(s => s.name).join(', ')}</strong></p>
+            </div>
           ) : (
-            <p>Facility type: <strong>{facilityTypes[f.attributes.facilityType]}</strong></p>
+            <p>Facility type: <strong>{facilityTypes[r.attributes.facilityType]}</strong></p>
           )}
         </div>
       );
 
-      switch (f.attributes.facilityType) {
+      switch (r.attributes.facilityType) {
         case FacilityType.VA_HEALTH_FACILITY:
           return (
             <HealthMarker {...iconProps}>
