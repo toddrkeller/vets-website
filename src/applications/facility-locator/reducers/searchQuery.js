@@ -6,7 +6,7 @@ import {
   FETCH_LOCATIONS,
 } from '../utils/actionTypes';
 
-const INITIAL_STATE = {
+export const INITIAL_STATE = {
   searchString: '',
   serviceType: null,
   facilityType: null,

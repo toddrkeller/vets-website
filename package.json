@@ -81,7 +81,10 @@
     ],
     "setupFiles": [
       "<rootDir>/src/platform/testing/unit/enzyme-setup.js"
-    ]
+    ],
+    "globals": {
+      "__BUILDTYPE__": "development"
+    }
   },
   "homepage": "https://github.com/department-of-veterans-affairs/vets-website#readme",
   "devDependencies": {
@@ -202,6 +205,7 @@
     "recursive-uncache": "^0.1.1",
     "redbox-react": "^1.2.10",
     "redux": "^3.5.2",
+    "redux-mock-store": "^1.5.3",
     "redux-thunk": "^2.1.0",
     "request": "^2.79.0",
     "sass-lint": "^1.10.2",

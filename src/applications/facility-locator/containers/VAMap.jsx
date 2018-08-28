@@ -25,7 +25,7 @@ import { facilityTypes } from '../config';
 import { LocationType, FacilityType, BOUNDING_RADIUS } from '../constants';
 import { areGeocodeEqual } from '../utils/helpers';
 
-class VAMap extends Component {
+export class VAMap extends Component {
 
   constructor(props) {
     super(props);

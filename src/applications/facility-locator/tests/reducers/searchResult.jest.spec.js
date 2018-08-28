@@ -1,7 +1,7 @@
 import {
-  FETCH_VA_FACILITY,
-  FETCH_VA_FACILITIES,
-  SEARCH_FAILED
+  FETCH_LOCATION_DETAIL,
+  FETCH_LOCATIONS,
+  SEARCH_FAILED,
 } from '../../utils/actionTypes';
 import {
   SearchResultReducer as reducer,
@@ -21,7 +21,7 @@ describe('Reducer Tests :: SearchResultReducer', () => {
     expect(resultState).toEqual(INITIAL_STATE);
   });
 
-  test('FETCH_VA_FACILITY Updates Selected Result', () => {
+  test('FETCH_LOCATION_DETAIL Updates Selected Result', () => {
     const payload = {
       data: {
         id: 'vha_691GE',
@@ -29,7 +29,7 @@ describe('Reducer Tests :: SearchResultReducer', () => {
         attributes: { uniqueId: '343o' }
       }
     };
-    const action = { type: FETCH_VA_FACILITY, payload };
+    const action = { type: FETCH_LOCATION_DETAIL, payload };
     const expectedState = {
       ...INITIAL_STATE,
       selectedResult: payload
@@ -40,7 +40,7 @@ describe('Reducer Tests :: SearchResultReducer', () => {
     expect(resultState).toEqual(expectedState);
   });
 
-  test('FETCH_VA_FACILITIES correctly updates state', () => {
+  test('FETCH_LOCATIONS correctly updates state', () => {
     const payload = {
       data: [{
         id: 'vha_691GE',
@@ -56,7 +56,7 @@ describe('Reducer Tests :: SearchResultReducer', () => {
         }
       }
     };
-    const action = { type: FETCH_VA_FACILITIES, payload };
+    const action = { type: FETCH_LOCATIONS, payload };
     const expectedState = {
       results: [...payload.data],
       selectedResult: INITIAL_STATE.selectedResult,
