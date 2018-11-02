@@ -62,7 +62,7 @@ import {
 
 import { PTSD } from '../constants';
 
-import fullSchema from './schema';
+import fullSchema from 'vets-json-schema/dist/21-526EZ-ALLCLAIMS-schema.json';
 
 const formConfig = {
   urlPrefix: '/',
@@ -82,11 +82,10 @@ const formConfig = {
     noAuth:
       'Please sign in again to resume your application for disability claims increase.',
   },
-  // transformForSubmit: transform,
   introduction: IntroductionPage,
   confirmation: ConfirmationPoll,
   // TODO: Remove this once we've got the api up and running
-  submit: () => Promise.resolve({ attributes: { jobId: '12345' } }),
+  // submit: () => Promise.resolve({ attributes: { jobId: '12345' } }),
   // footerContent: FormFooter,
   // getHelp: GetFormHelp,
   defaultDefinitions: {

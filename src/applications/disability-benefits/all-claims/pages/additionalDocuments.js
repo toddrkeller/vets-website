@@ -3,9 +3,9 @@ import environment from '../../../../platform/utilities/environment';
 import { additionalDocumentDescription } from '../content/additionalDocuments';
 import { FIFTY_MB } from '../constants';
 
-import full526EZSchema from '../config/schema.js';
+import fullSchema from 'vets-json-schema/dist/21-526EZ-ALLCLAIMS-schema.json';
 
-const { attachments } = full526EZSchema.properties;
+const { attachments } = fullSchema.properties;
 
 export const uiSchema = {
   additionalDocuments: Object.assign(

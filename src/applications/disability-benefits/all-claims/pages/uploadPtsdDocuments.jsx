@@ -2,7 +2,7 @@ import React from 'react';
 import fileUploadUI from 'us-forms-system/lib/js/definitions/file';
 import environment from '../../../../platform/utilities/environment';
 
-import fullSchema from '../config/schema';
+import fullSchema from 'vets-json-schema/dist/21-526EZ-ALLCLAIMS-schema.json';
 import { DocumentDescription } from '../content/uploadPtsdDocuments';
 import { PtsdNameTitle } from '../content/ptsdClassification';
 
@@ -57,7 +57,5 @@ export const uiSchema = {
 export const schema = {
   type: 'object',
   required: ['ptsd781'],
-  properties: {
-    ptsd781,
-  },
+  properties: { ptsd781 },
 };

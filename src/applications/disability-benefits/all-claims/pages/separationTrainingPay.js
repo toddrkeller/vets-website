@@ -1,5 +1,5 @@
 import dateUI from 'us-forms-system/lib/js/definitions/date';
-import fullSchema from '../config/schema';
+import fullSchema from 'vets-json-schema/dist/21-526EZ-ALLCLAIMS-schema.json';
 import merge from 'lodash/merge';
 import { hasSeparationPay } from '../validations';
 import {
