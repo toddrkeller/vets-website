@@ -1027,6 +1027,23 @@ const schema = {
       type: 'boolean',
       default: false,
     },
+    ptsd781: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          name: {
+            type: 'string',
+          },
+          size: {
+            type: 'integer',
+          },
+          confirmationCode: {
+            type: 'string',
+          },
+        },
+      },
+    },
   },
 };
 

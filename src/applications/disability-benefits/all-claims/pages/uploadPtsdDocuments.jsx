@@ -2,10 +2,13 @@ import React from 'react';
 import fileUploadUI from 'us-forms-system/lib/js/definitions/file';
 import environment from '../../../../platform/utilities/environment';
 
+import fullSchema from '../config/schema';
 import { DocumentDescription } from '../content/uploadPtsdDocuments';
 import { PtsdNameTitle } from '../content/ptsdClassification';
 
 const FIFTY_MB = 52428800;
+
+const { ptsd781 } = fullSchema.properties;
 
 export const uiSchema = {
   'ui:title': ({ formData }) => (
@@ -55,22 +58,6 @@ export const schema = {
   type: 'object',
   required: ['ptsd781'],
   properties: {
-    ptsd781: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          name: {
-            type: 'string',
-          },
-          size: {
-            type: 'integer',
-          },
-          confirmationCode: {
-            type: 'string',
-          },
-        },
-      },
-    },
+    ptsd781,
   },
 };
