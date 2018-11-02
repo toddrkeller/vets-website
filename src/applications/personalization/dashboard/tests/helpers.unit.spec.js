@@ -45,7 +45,13 @@ const schemaToConfigIds = {
   definitions: 'N/A',
 };
 
-const excludedForms = new Set(['28-1900', '28-8832', '24-0296', '21-4142']);
+const excludedForms = new Set([
+  '28-1900',
+  '28-8832',
+  '24-0296',
+  '21-4142',
+  '21-526EZ-ALLCLAIMS', // Form not in prod
+]);
 
 describe('profile helpers:', () => {
   describe('formTitles', () => {
@@ -84,6 +90,7 @@ describe('profile helpers:', () => {
       const allFormIds = Object.keys(schemas).filter(
         formId => !excludedForms.has(formId),
       );
+      console.log(allFormIds);
       const allMappedIds = Object.keys(schemaToConfigIds);
       const sipEnabledConfigs = configs.filter(config => !config.disableSave);
       const sipEnabledFormIds = sipEnabledConfigs.map(

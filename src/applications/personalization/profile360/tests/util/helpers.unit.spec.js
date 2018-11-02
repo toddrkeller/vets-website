@@ -14,6 +14,7 @@ import fullSchema5490 from '../../../../edu-benefits/5490/config/form';
 import fullSchema5495 from '../../../../edu-benefits/5495/config/form';
 import fullSchemaFeedbackTool from '../../../../edu-benefits/feedback-tool/config/form';
 import fullSchema526EZ from '../../../../disability-benefits/526EZ/config/form';
+import fullSchema526EZAllClaims from '../../../../disability-benefits/all-claims/config/form';
 import fullSchema527EZ from '../../../../pensions/config/form';
 import fullSchema530 from '../../../../burials/config/form';
 import fullSchema10007 from '../../../../pre-need/config/form';
@@ -32,6 +33,7 @@ const configs = [
   fullSchema5495,
   fullSchemaFeedbackTool,
   fullSchema526EZ,
+  fullSchema526EZAllClaims,
   fullSchema527EZ,
   fullSchema530,
   fullSchema10007,
