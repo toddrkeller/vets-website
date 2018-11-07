@@ -1,5 +1,5 @@
 import dateUI from 'us-forms-system/lib/js/definitions/date';
-import fullSchema from 'vets-json-schema/dist/21-526EZ-ALLCLAIMS-schema.json';
+import fullSchema from '/Users/adhocteam/Sites/vets-json-schema/dist/21-526EZ-ALLCLAIMS-schema.json';
 import merge from 'lodash/merge';
 import { hasSeparationPay } from '../validations';
 import {
@@ -11,6 +11,7 @@ const {
   separationPayDate: separationPayDateSchema,
   separationPayBranch: separationPayBranchSchema,
   waiveTrainingPay: waiveTrainingPaySchema,
+  hasTrainingPay,
 } = fullSchema.properties;
 
 export const uiSchema = {
@@ -37,13 +38,13 @@ export const uiSchema = {
       'ui:required': hasSeparationPay,
     },
   },
-  'view:hasTrainingPay': {
+  hasTrainingPay: {
     'ui:title': 'Did you receive active or inactive training pay?',
     'ui:widget': 'yesNo',
   },
   'view:waiveTrainingPay': {
     'ui:options': {
-      expandUnder: 'view:hasTrainingPay',
+      expandUnder: 'hasTrainingPay',
     },
     'view:waiveTrainingPayDescription': {
       'ui:title': 'Training pay waiver',
@@ -58,7 +59,7 @@ export const uiSchema = {
 
 export const schema = {
   type: 'object',
-  required: ['view:hasSeparationPay', 'view:hasTrainingPay'],
+  required: ['view:hasSeparationPay', 'hasTrainingPay'],
   properties: {
     'view:hasSeparationPay': {
       type: 'boolean',
@@ -74,7 +75,7 @@ export const schema = {
         separationPayBranch: separationPayBranchSchema,
       },
     },
-    'view:hasTrainingPay': {
+    hasTrainingPay: {
       type: 'boolean',
     },
     'view:waiveTrainingPay': {
