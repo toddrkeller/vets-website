@@ -1,21 +1,21 @@
 import React from 'react';
 import fileUploadUI from 'us-forms-system/lib/js/definitions/file';
 import environment from '../../../../platform/utilities/environment';
-import fullSchema from 'vets-json-schema/dist/21-526EZ-ALLCLAIMS-schema.json';
+import fullSchema from '/Users/adhocteam/Sites/vets-json-schema/dist/21-526EZ-ALLCLAIMS-schema.json';
 
 import { DocumentDescription } from '../content/uploadPtsdDocuments';
 import { PtsdNameTitle } from '../content/ptsdClassification';
 
 const FIFTY_MB = 52428800;
 
-const { ptsd781a } = fullSchema.properties;
+const { ptsd781aAttachment } = fullSchema.properties;
 
 export const uiSchema = {
   'ui:title': ({ formData }) => (
     <PtsdNameTitle formData={formData} formType="781a" />
   ),
   'ui:description': DocumentDescription,
-  ptsd781a: fileUploadUI('', {
+  ptsd781aAttachment: fileUploadUI('', {
     itemDescription: 'PTSD 781a form',
     hideLabelText: true,
     fileUploadUrl: `${environment.API_URL}/v0/upload_supporting_evidence`,
@@ -56,6 +56,6 @@ export const uiSchema = {
 
 export const schema = {
   type: 'object',
-  required: ['ptsd781a'],
-  properties: { ptsd781a },
+  required: ['ptsd781aAttachment'],
+  properties: { ptsd781aAttachment },
 };
