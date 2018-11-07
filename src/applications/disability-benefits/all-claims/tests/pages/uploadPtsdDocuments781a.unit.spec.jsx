@@ -65,7 +65,7 @@ describe('781a record upload', () => {
         definitions={formConfig.defaultDefinitions}
         schema={schema}
         data={{
-          ptsd781a: [
+          ptsd781aAttachment: [
             {
               confirmationCode: 'testing',
               name: '781a.pdf',
