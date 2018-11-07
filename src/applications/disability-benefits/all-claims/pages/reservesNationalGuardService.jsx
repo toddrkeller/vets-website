@@ -1,6 +1,6 @@
 import { get } from 'lodash';
 
-import fullSchema from 'vets-json-schema/dist/21-526EZ-ALLCLAIMS-schema.json';
+import fullSchema from '/Users/adhocteam/Sites/vets-json-schema/dist/21-526EZ-ALLCLAIMS-schema.json';
 
 import dateRangeUI from 'us-forms-system/lib/js/definitions/dateRange';
 import phoneUI from 'us-forms-system/lib/js/definitions/phone';
@@ -181,6 +181,7 @@ export const schema = {
       properties: {
         reservesNationalGuardService: {
           type: 'object',
+          required: ['unitName', 'obligationTermOfServiceDateRange'],
           properties: {
             obligationTermOfServiceDateRange,
             unitName,
