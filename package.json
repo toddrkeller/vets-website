@@ -168,7 +168,6 @@
     "polyfill-function-prototype-bind": "0.0.1",
     "prettier": "^1.14.3",
     "quick_check": "^0.7.0",
-    "raven-js": "^3.12.1",
     "react": "^15.5.4",
     "react-addons-css-transition-group": "^15.3.2",
     "react-addons-perf": "^15.3.0",
@@ -221,6 +220,7 @@
   "dependencies": {
     "@department-of-veterans-affairs/formation": "^1.11.0",
     "@department-of-veterans-affairs/react-jsonschema-form": "^1.0.0",
+    "@sentry/browser": "^4.3.0",
     "babel-plugin-dynamic-import-node": "^1.2.0",
     "blob-polyfill": "^2.0.20171115",
     "camelcase-keys-recursive": "^0.8.2",

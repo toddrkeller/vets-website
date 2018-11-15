@@ -1,4 +1,4 @@
-import Raven from 'raven-js';
+import * as Sentry from '@sentry/browser';
 import { isEqual } from 'lodash';
 
 import recordEvent from '../../../platform/monitoring/record-event';
@@ -104,7 +104,7 @@ export function getLetterListAndBSLOptions() {
   return dispatch =>
     getLetterList(dispatch)
       .then(() => getBenefitSummaryOptions(dispatch))
-      .catch(error => Raven.captureException(error));
+      .catch(error => Sentry.captureException(error));
 }
 
 export function getAddressFailure() {
@@ -131,7 +131,7 @@ export function getMailingAddress() {
       },
       response => {
         const status = getStatus(response);
-        Raven.captureException(
+        Sentry.captureException(
           new Error(`vets_letters_error_getMailingAddress: ${status}`),
         );
         return dispatch(getAddressFailure());
@@ -218,7 +218,7 @@ export function getLetterPdf(letterType, letterName, letterOptions) {
       },
       response => {
         const status = getStatus(response);
-        Raven.captureException(
+        Sentry.captureException(
           new Error(`vets_letters_error_getLetterPdf_${letterType}: ${status}`),
         );
         return dispatch(getLetterPdfFailure(letterType));
@@ -284,13 +284,13 @@ export function saveAddress(address) {
           const mismatchError = new Error(
             "letters-address-update addresses don't match",
           );
-          Raven.captureException(mismatchError);
+          Sentry.captureException(mismatchError);
         }
         return dispatch(saveAddressSuccess(responseAddress));
       },
       response => {
         const status = getStatus(response);
-        Raven.captureException(
+        Sentry.captureException(
           new Error(`vets_letters_error_saveAddress: ${status}`),
         );
         return dispatch(saveAddressFailure());
@@ -314,7 +314,7 @@ export function getAddressCountries() {
       response => {
         const status = getStatus(response);
         recordEvent({ event: 'letter-get-address-countries-failure' });
-        Raven.captureException(
+        Sentry.captureException(
           new Error(`vets_letters_error_getAddressCountries: ${status}`),
         );
         return dispatch({ type: GET_ADDRESS_COUNTRIES_FAILURE });
@@ -337,7 +337,7 @@ export function getAddressStates() {
       response => {
         const status = getStatus(response);
         recordEvent({ event: 'letter-get-address-states-success' });
-        Raven.captureException(
+        Sentry.captureException(
           new Error(`vets_letters_error_getAddressStates: ${status}`),
         );
         return dispatch({ type: GET_ADDRESS_STATES_FAILURE });

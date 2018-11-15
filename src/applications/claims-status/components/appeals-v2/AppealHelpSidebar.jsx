@@ -1,5 +1,5 @@
 import React from 'react';
-import Raven from 'raven-js';
+import * as Sentry from '@sentry/browser';
 
 const vbaVersion = (
   <div>
@@ -51,12 +51,12 @@ export default function AppealHelpSidebar({ location, aoj }) {
       case 'other':
         return boardVersion;
       default:
-        Raven.captureMessage(`appeal-status-unexpected-aoj: ${aoj}`);
+        Sentry.captureMessage(`appeal-status-unexpected-aoj: ${aoj}`);
     }
   } else if (location === 'bva') {
     return boardVersion;
   } else {
-    Raven.captureMessage(`appeal-status-unexpected-location: ${location}`);
+    Sentry.captureMessage(`appeal-status-unexpected-location: ${location}`);
   }
 
   return null;

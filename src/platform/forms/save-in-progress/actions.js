@@ -1,4 +1,4 @@
-import Raven from 'raven-js';
+import * as Sentry from '@sentry/browser';
 import 'isomorphic-fetch';
 
 import recordEvent from '../../monitoring/record-event';
@@ -309,8 +309,8 @@ export function fetchInProgressForm(
         } catch (e) {
           // We don’t want to lose the stacktrace, but want to be able to search for migration errors
           // related to SiP
-          Raven.captureException(e);
-          Raven.captureMessage('vets_sip_error_migration', {
+          Sentry.captureException(e);
+          Sentry.captureMessage('vets_sip_error_migration', {
             extra: {
               formData: sanitizeForm(resBody.formData),
               metadata: resBody.metadata,
@@ -323,14 +323,14 @@ export function fetchInProgressForm(
         let loadedStatus = status;
         if (status instanceof SyntaxError) {
           // if res.json() has a parsing error, it’ll reject with a SyntaxError
-          Raven.captureException(
+          Sentry.captureException(
             new Error(`vets_sip_error_server_json: ${status.message}`),
           );
           loadedStatus = LOAD_STATUSES.invalidData;
         } else if (status instanceof Error) {
           // If we’ve got an error that isn’t a SyntaxError, it’s probably a network error
-          Raven.captureException(status);
-          Raven.captureMessage('vets_sip_error_fetch');
+          Sentry.captureException(status);
+          Sentry.captureMessage('vets_sip_error_fetch');
           loadedStatus = LOAD_STATUSES.clientFailure;
         }
 
@@ -350,7 +350,7 @@ export function fetchInProgressForm(
               event: `${trackingPrefix}sip-form-load-signed-out`,
             });
           } else {
-            Raven.captureMessage(`vets_sip_error_load: ${loadedStatus}`);
+            Sentry.captureMessage(`vets_sip_error_load: ${loadedStatus}`);
             recordEvent({
               event: `${trackingPrefix}sip-form-load-failed`,
             });

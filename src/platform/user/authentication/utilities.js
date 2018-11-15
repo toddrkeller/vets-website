@@ -1,4 +1,4 @@
-import Raven from 'raven-js';
+import * as Sentry from '@sentry/browser';
 import appendQuery from 'append-query';
 
 import recordEvent from '../../monitoring/record-event';
@@ -61,7 +61,7 @@ function popup(popupUrl, clickedEvent, openedEvent) {
     ).then(() => popupWindow);
   }
 
-  Raven.captureMessage('Failed to open new window', {
+  Sentry.captureMessage('Failed to open new window', {
     extra: { url: popupUrl },
   });
 

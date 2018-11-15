@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import Raven from 'raven-js';
+import * as Sentry from '@sentry/browser';
 import appendQuery from 'append-query';
 import { createSelector } from 'reselect';
 import { apiRequest } from '../../../platform/utilities/api';
@@ -120,7 +120,7 @@ export const getDisabilityName = name => {
       .join(' ');
   }
 
-  Raven.captureMessage('form_526: no name supplied for ratedDisability');
+  Sentry.captureMessage('form_526: no name supplied for ratedDisability');
   return 'Unknown Condition';
 };
 
@@ -139,7 +139,7 @@ export function transformDisabilities(disabilities = []) {
 export function prefillTransformer(pages, formData, metadata) {
   const { disabilities } = formData;
   if (!disabilities || !Array.isArray(disabilities)) {
-    Raven.captureMessage(
+    Sentry.captureMessage(
       'vets-disability-increase-no-rated-disabilities-found',
     );
     return { metadata, formData, pages };
@@ -184,7 +184,7 @@ export function queryForFacilities(input = '') {
         label: facility.attributes.name,
       })),
     error => {
-      Raven.captureMessage('Error querying for facilities', { input, error });
+      Sentry.captureMessage('Error querying for facilities', { input, error });
       return [];
     },
   );

@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import Raven from 'raven-js';
+import * as Sentry from '@sentry/browser';
 
 import {
   login,
@@ -105,7 +105,7 @@ describe('auth URL helpers', () => {
 
   it('should handle failure to open window', done => {
     global.window.open = sinon.stub().returns(null);
-    const mockRaven = sinon.stub(Raven, 'captureMessage');
+    const mockSentry = sinon.stub(Sentry, 'captureMessage');
     login('idme').catch(error => {
       try {
         expect(error.message).to.eq('Failed to open new window');
@@ -114,6 +114,6 @@ describe('auth URL helpers', () => {
         done(e);
       }
     });
-    expect(mockRaven.calledOnce).to.be.true;
+    expect(mockSentry.calledOnce).to.be.true;
   });
 });

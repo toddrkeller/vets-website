@@ -1,5 +1,5 @@
 import React from 'react';
-import Raven from 'raven-js';
+import * as Sentry from '@sentry/browser';
 import get from '../../../platform/utilities/data/get';
 import recordEvent from '../../../platform/monitoring/record-event';
 import environment from '../../../platform/utilities/environment';
@@ -117,7 +117,7 @@ export function getAppealsV2() {
             action.type = FETCH_APPEALS_ERROR;
             break;
         }
-        Raven.captureException(`vets_appeals_v2_err_get_appeals ${status}`);
+        Sentry.captureException(`vets_appeals_v2_err_get_appeals ${status}`);
         return dispatch(action);
       },
     );
@@ -181,7 +181,7 @@ export function getClaimsV2(poll = pollRequest) {
 
     poll({
       onError: response => {
-        Raven.captureException(
+        Sentry.captureException(
           `vets_claims_v2_err_get_claims ${getStatus(response)}`,
         );
         dispatch({ type: FETCH_CLAIMS_ERROR });

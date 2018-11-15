@@ -1,5 +1,5 @@
 import _ from 'lodash/fp';
-import Raven from 'raven-js';
+import * as Sentry from '@sentry/browser';
 
 import environment from '../../../platform/utilities/environment';
 import conditionalStorage from '../../../platform/utilities/storage/conditionalStorage';
@@ -267,7 +267,7 @@ export function makeAuthRequest(
 
   fetch(`${environment.API_URL}${url}`, options)
     .catch(err => {
-      Raven.captureMessage(`vets_client_error: ${err.message}`, {
+      Sentry.captureMessage(`vets_client_error: ${err.message}`, {
         extra: {
           error: err,
         },

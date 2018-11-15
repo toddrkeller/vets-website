@@ -1,4 +1,4 @@
-import Raven from 'raven-js';
+import * as Sentry from '@sentry/browser';
 import hcaManifest from '../../hca/manifest.js';
 import dependentStatusManifest from '../../disability-benefits/686/manifest.js';
 import feedbackManifest from '../../edu-benefits/feedback-tool/manifest.js';
@@ -145,7 +145,7 @@ export const sipEnabledForms = new Set([
 export function isSIPEnabledForm(savedForm) {
   const formNumber = savedForm.form;
   if (!formTitles[formNumber] || !formLinks[formNumber]) {
-    Raven.captureMessage('vets_sip_list_item_missing_info');
+    Sentry.captureMessage('vets_sip_list_item_missing_info');
     return false;
   }
   if (!sipEnabledForms.has(formNumber)) {

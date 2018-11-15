@@ -1,5 +1,5 @@
 import React from 'react';
-import Raven from 'raven-js';
+import * as Sentry from '@sentry/browser';
 import { connect } from 'react-redux';
 
 import backendServices from '../../../platform/user/profile/constants/backendServices';
@@ -17,7 +17,7 @@ export class AppContent extends React.Component {
   constructor(props) {
     super(props);
     if (props.isDataAvailable === false) {
-      Raven.captureException(new Error(UNREGISTERED_ERROR));
+      Sentry.captureException(new Error(UNREGISTERED_ERROR));
       this.state = { errorLogged: true };
     } else {
       this.state = { errorLogged: false };
@@ -27,7 +27,7 @@ export class AppContent extends React.Component {
   componentWillReceiveProps(nextProps) {
     // only log isDataAvailable error if one isn't already logged
     if (nextProps.isDataAvailable === false && !this.state.errorLogged) {
-      Raven.captureException(new Error(UNREGISTERED_ERROR));
+      Sentry.captureException(new Error(UNREGISTERED_ERROR));
       this.setState({ errorLogged: true });
     }
   }

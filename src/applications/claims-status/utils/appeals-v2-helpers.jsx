@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import _ from 'lodash';
-import Raven from 'raven-js';
+import * as Sentry from '@sentry/browser';
 import { Link } from 'react-router';
 import siteName from '../../../platform/brand-consolidation/site-name';
 
@@ -743,7 +743,7 @@ export function getEventContent(event) {
         description: '',
       };
     default:
-      Raven.captureMessage('appeals-unknown-event', {
+      Sentry.captureMessage('appeals-unknown-event', {
         extra: {
           eventType: event.type,
         },
@@ -804,7 +804,7 @@ export const makeDurationText = timeliness => {
     const durationError = new Error(
       'vets_appeals_v2_helpers_makeDurationText_bad_timeliness_input',
     );
-    Raven.captureException(durationError);
+    Sentry.captureException(durationError);
     return durationText;
   }
 
@@ -1481,7 +1481,7 @@ export function getAlertContent(alert, appealIsActive) {
  */
 export const getStatus = response => {
   if (response instanceof Error) {
-    Raven.captureException(response, { tags: { location: 'getStatus' } });
+    Sentry.captureException(response, { tags: { location: 'getStatus' } });
   }
   return response.errors && response.errors.length
     ? response.errors[0].status

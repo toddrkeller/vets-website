@@ -1,5 +1,5 @@
 import React from 'react';
-import Raven from 'raven-js';
+import * as Sentry from '@sentry/browser';
 import moment from 'moment';
 import environment from '../../platform/utilities/environment';
 import conditionalStorage from '../../platform/utilities/storage/conditionalStorage';
@@ -55,8 +55,8 @@ function checkStatus(guid) {
     })
     .catch(res => {
       if (res instanceof Error) {
-        Raven.captureException(res);
-        Raven.captureMessage('vets_pension_poll_client_error');
+        Sentry.captureException(res);
+        Sentry.captureMessage('vets_pension_poll_client_error');
 
         // keep polling because we know they submitted earlier
         // and this is likely a network error

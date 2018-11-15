@@ -7,7 +7,7 @@
  */
 
 import environment from '../../utilities/environment';
-import Raven from 'raven-js';
+import * as Sentry from '@sentry/browser';
 import { whitelistedPaths } from './whitelisted-paths';
 
 /**
@@ -113,7 +113,7 @@ export function captureMetrics() {
   try {
     observer.observe({ entryTypes: ['navigation'] });
   } catch (error) {
-    Raven.captureException(error);
+    Sentry.captureException(error);
   }
 }
 

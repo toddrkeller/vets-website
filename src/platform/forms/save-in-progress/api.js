@@ -1,4 +1,4 @@
-import Raven from 'raven-js';
+import * as Sentry from '@sentry/browser';
 import recordEvent from '../../monitoring/record-event';
 import environment from '../../utilities/environment';
 import conditionalStorage from '../../utilities/storage/conditionalStorage';
@@ -25,11 +25,11 @@ export function removeFormApi(formId) {
     })
     .catch(res => {
       if (res instanceof Error) {
-        Raven.captureException(res);
-        Raven.captureMessage('vets_sip_error_delete');
+        Sentry.captureException(res);
+        Sentry.captureMessage('vets_sip_error_delete');
         return Promise.resolve();
       } else if (!res.ok) {
-        Raven.captureMessage(`vets_sip_error_delete: ${res.statusText}`);
+        Sentry.captureMessage(`vets_sip_error_delete: ${res.statusText}`);
       }
 
       return Promise.reject(res);
@@ -55,7 +55,7 @@ export function saveFormApi(
 
   const userToken = conditionalStorage().getItem('userToken');
   if (!userToken) {
-    Raven.captureMessage('vets_sip_missing_token');
+    Sentry.captureMessage('vets_sip_missing_token');
     recordEvent({
       event: `${trackingPrefix}sip-form-save-failed`,
     });
@@ -96,8 +96,8 @@ export function saveFormApi(
           event: `${trackingPrefix}sip-form-save-failed`,
         });
       } else {
-        Raven.captureException(resOrError);
-        Raven.captureMessage('vets_sip_error_save', {
+        Sentry.captureException(resOrError);
+        Sentry.captureMessage('vets_sip_error_save', {
           extra: {
             form: sanitizeForm(formData),
           },

@@ -1,4 +1,4 @@
-import Raven from 'raven-js';
+import * as Sentry from '@sentry/browser';
 import appendQuery from 'append-query';
 
 import environment from '../environment';
@@ -48,7 +48,7 @@ export function apiRequest(resource, optionalSettings = {}, success, error) {
   settings.headers = newHeaders;
   return fetch(url, settings)
     .catch(err => {
-      Raven.captureMessage(`vets_client_error: ${err.message}`, {
+      Sentry.captureMessage(`vets_client_error: ${err.message}`, {
         extra: {
           error: err,
         },
