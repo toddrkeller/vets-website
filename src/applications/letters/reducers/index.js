@@ -34,6 +34,8 @@ import {
   CANCEL_EDITING_ADDRESS,
 } from '../utils/constants';
 
+import vet360 from '../../personalization/profile360/vet360/reducers';
+
 export const initialState = {
   countries: [],
   countriesAvailable: false,
@@ -236,4 +238,5 @@ function letters(state = initialState, action) {
 
 export default {
   letters,
+  vet360,
 };
