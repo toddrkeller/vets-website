@@ -74,11 +74,13 @@ import {
   unemployabilityFormIntro,
 } from '../pages';
 
-import { PTSD } from '../constants';
+import { createFormConfig781, createFormConfig781a } from './781';
+
+import { PTSD, PTSD_INCIDENT_ITERATION } from '../constants';
 
 import fullSchema from './schema';
 
-const formConfig = {
+const createFormConfig = {
   urlPrefix: '/',
   intentToFileUrl: '/evss_claims/intent_to_file/compensation',
   submitUrl: `${environment.API_URL}/v0/disability_compensation_form/submit`,
@@ -249,6 +251,7 @@ const formConfig = {
           uiSchema: ptsdWalkthroughChoice781.uiSchema,
           schema: ptsdWalkthroughChoice781.schema,
         },
+        ...createFormConfig781(PTSD_INCIDENT_ITERATION),
         uploadPtsdDocuments781: {
           title: 'Upload PTSD Documents - 781',
           path: 'new-disabilities/ptsd-781-upload',
@@ -267,6 +270,7 @@ const formConfig = {
           uiSchema: ptsdWalkthroughChoice781a.uiSchema,
           schema: ptsdWalkthroughChoice781a.schema,
         },
+        ...createFormConfig781a(PTSD_INCIDENT_ITERATION),
         uploadPtsdDocuments781a: {
           title: 'Upload PTSD Documents - 781a',
           path: 'new-disabilities/ptsd-781a-upload',
@@ -434,4 +438,4 @@ const formConfig = {
   },
 };
 
-export default formConfig;
+export default createFormConfig;
