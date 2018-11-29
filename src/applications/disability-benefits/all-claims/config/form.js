@@ -50,6 +50,7 @@ import {
   federalOrders,
   fullyDevelopedClaim,
   homelessOrAtRisk,
+  hospitalizationHistory,
   militaryHistory,
   newDisabilities,
   newDisabilityFollowUp,
@@ -310,6 +311,14 @@ const formConfig = {
           depends: formData => formData['view:unemployabilityStatus'],
           uiSchema: unemployabilityFormIntro.uiSchema,
           schema: unemployabilityFormIntro.schema,
+        },
+        hospitalizationHistory: {
+          title: 'Hospitalization',
+          path: 'hospitalization-history',
+          depends: formData =>
+            formData['view:unemployabilityUploadChoice'] === 'answerQuestions',
+          uiSchema: hospitalizationHistory.uiSchema,
+          schema: hospitalizationHistory.schema,
         },
         prisonerOfWar: {
           title: 'Prisoner of War (POW)',
