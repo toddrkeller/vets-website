@@ -86,6 +86,7 @@ import {
   individualUnemployability,
   physicalHealthChanges,
   hospitalizationHistory,
+  educationHistory,
   newDisabilities,
   ancillaryFormsWizardSummary,
 } from '../pages';
@@ -375,6 +376,14 @@ const formConfig = {
             formData['view:unemployabilityUploadChoice'] === 'answerQuestions',
           uiSchema: hospitalizationHistory.uiSchema,
           schema: hospitalizationHistory.schema,
+        },
+        educationHistory: {
+          title: 'Education and Training',
+          path: 'education-history',
+          depends: formData =>
+            formData['view:unemployabilityUploadChoice'] === 'answerQuestions',
+          uiSchema: educationHistory.uiSchema,
+          schema: educationHistory.schema,
         },
         prisonerOfWar: {
           title: 'Prisoner of War (POW)',

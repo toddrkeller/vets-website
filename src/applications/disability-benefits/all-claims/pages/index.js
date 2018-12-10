@@ -269,6 +269,11 @@ import {
 } from './hospitalizationHistory';
 
 import {
+  uiSchema as educationHistoryUISchema,
+  schema as educationHistorySchema,
+} from './educationHistory';
+
+import {
   uiSchema as conclusionCombatUISchema,
   schema as conclusionCombatSchema,
 } from './conclusionCombat';
@@ -558,6 +563,11 @@ export const physicalHealthChanges = {
 export const hospitalizationHistory = {
   uiSchema: hospitalizationHistoryUISchema,
   schema: hospitalizationHistorySchema,
+};
+
+export const educationHistory = {
+  uiSchema: educationHistoryUISchema,
+  schema: educationHistorySchema,
 };
 
 export const conclusionCombat = {
