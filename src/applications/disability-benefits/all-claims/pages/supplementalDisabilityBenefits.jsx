@@ -21,7 +21,7 @@ const supplementalBenefitsHelp = (
 );
 
 export const uiSchema = {
-  'ui:title': 'Individual Unemployability',
+  'ui:title': unemployabilityTitle,
   'ui:description': supplementalBenefitsTitle,
   receiveExpectDisabilityRetirement: {
     'ui:title':
@@ -49,7 +49,8 @@ export const schema = {
       type: 'boolean',
     },
     'view:supplementalBenefitsHelp': {
-      type: 'string',
+      type: 'object',
+      properties: {},
     },
   },
 };
