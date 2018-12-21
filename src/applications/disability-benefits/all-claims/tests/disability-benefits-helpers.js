@@ -5,12 +5,29 @@ function completeAlternateName(client, data) {
   const hasAlternateName = data['view:hasAlternateName'];
 
   client.selectYesNo('root_view:hasAlternateName', hasAlternateName);
+  if (hasAlternateName) {
+    data.alternateNames.forEach((name, i, list) => {
+      const { first, middle, last } = name;
+      client
+        .fill(`input[name="root_alternateNames_${i}_first"]`, first)
+        .fill(`input[name="root_alternateNames_${i}_middle"]`, middle)
+        .fill(`input[name="root_alternateNames_${i}_last"]`, last);
+
+      if (i < list.length - 1) client.click('.va-growable-add-btn');
+    });
+  }
 }
 
 function completeMilitaryRetiredPay(client, data) {
   const retiredPay = data['view:hasMilitaryRetiredPay'];
 
   client.selectYesNo('root_view:hasMilitaryRetiredPay', retiredPay);
+  if (retiredPay) {
+    client.selectDropdown(
+      'root_militaryRetiredPayBranch',
+      data.militaryRetiredPayBranch,
+    );
+  }
 }
 
 function completeCombatZonePost911(client, data) {

@@ -83,20 +83,22 @@ const runTest = E2eHelpers.createE2eTest(client => {
 
   // Disabilities
   // Orientation
-  E2eHelpers.expectLocation(client, '/disabilities/orientation');
-  client.axeCheck('.main').click('.form-progress-buttons .usa-button-primary');
+  //E2eHelpers.expectLocation(client, '/disabilities/orientation');
+   E2eHelpers.expectNavigateAwayFrom(client, '/disabilities/orientation');
+  client.axeCheck('.main');
+  client.click('.form-progress-buttons .usa-button-primary');
 
   // Rated Disability Selection
-  E2eHelpers.expectLocation(client, '/disabilities/rated-disabilities');
-  client.axeCheck('.main');
-  PageHelpers.selectDisabilities(client); // Just selects the first one
-  client.click('.form-progress-buttons .usa-button-primary');
+  // E2eHelpers.expectNavigateAwayFrom(client, '/disabilities/rated-disabilities');
+  // client.axeCheck('.main');
+  // PageHelpers.selectDisabilities(client); // Just selects the first one
+  // client.click('.form-progress-buttons .usa-button-primary');
   // ****
   // // New Disability
-  // E2eHelpers.expectLocation(client, '/new-disabilities');
-  // client.axeCheck('.main');
-  // PageHelpers.completeNewDisability(client, testData.data);
-  // client.click('.form-progress-buttons .usa-button-primary');
+  E2eHelpers.expectLocation(client, '/new-disabilities');
+  client.axeCheck('.main');
+  PageHelpers.completeNewDisability(client, testData.data);
+  client.click('.form-progress-buttons .usa-button-primary');
 
   // // PTSD
   // E2eHelpers.expectLocation(
@@ -269,4 +271,4 @@ const runTest = E2eHelpers.createE2eTest(client => {
 });
 
 module.exports = runTest;
-module.exports['@disabled'] = true;
+//module.exports['@disabled'] = true;
