@@ -1,6 +1,7 @@
 import {
   unemployabilityTitle,
   introDescription,
+  unemployabilityHelp,
 } from '../content/unemployabilityFormIntro';
 
 export const uiSchema = {
@@ -18,6 +19,9 @@ export const uiSchema = {
       },
     },
   },
+  'view:unemployabilityHelp': {
+    'ui:description': unemployabilityHelp,
+  },
 };
 
 export const schema = {
@@ -27,6 +31,10 @@ export const schema = {
     'view:unemployabilityUploadChoice': {
       type: 'string',
       enum: ['answerQuestions', 'upload'],
+    },
+    'view:unemployabilityHelp': {
+      type: 'object',
+      properties: {},
     },
   },
 };
