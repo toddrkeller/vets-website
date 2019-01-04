@@ -239,6 +239,11 @@ import {
 } from './unemployabilityFormIntro';
 
 import {
+  uiSchema as unemployabilityDisabilitiesUISchema,
+  schema as unemployabilityDisabilitiesSchema,
+} from './unemployabilityDisabilities';
+
+import {
   uiSchema as workBehaviorChangesUISchema,
   schema as workBehaviorChangesSchema,
 } from './workBehaviorChanges';
@@ -303,6 +308,22 @@ import {
   schema as hospitalizationHistorySchema,
 } from './hospitalizationHistory';
 
+import * as uploadUnemployabilitySupportingDocuments from './uploadUnemployabilitySupportingDocuments';
+
+import * as uploadUnemployabilitySupportingDocumentsChoice from './uploadUnemployabilitySupportingDocumentsChoice';
+
+import * as recentEducationTraining from './recentEducationTraining';
+
+import * as recentJobApplications from './recentJobApplications';
+
+import * as recentEarnedIncome from './recentEarnedIncome';
+
+import * as militaryDutyImpact from './militaryDutyImpact';
+
+import * as pastEducationTraining from './pastEducationTraining';
+
+import * as unemployabilityCertification from './unemployabilityCertification';
+
 import {
   uiSchema as supplementalBenefitsUISchema,
   schema as supplementalBenefitsSchema,
@@ -346,6 +367,10 @@ import {
 } from './secondaryUploadSourcesChoice';
 
 import * as ancillaryFormsWizardSummary from './ancillaryFormsWizardSummary';
+import {
+  uiSchema as incomeDetailsUISchema,
+  schema as incomeDetailsSchema,
+} from './incomeDetails';
 
 export const alternateNames = {
   uiSchema: alternateNamesUISchema,
@@ -577,6 +602,11 @@ export const unemployabilityFormIntro = {
   schema: unemployabilityFormIntroSchema,
 };
 
+export const unemployabilityDisabilities = {
+  uiSchema: unemployabilityDisabilitiesUISchema,
+  schema: unemployabilityDisabilitiesSchema,
+};
+
 export const socialBehaviorChanges = {
   uiSchema: socialBehaviorChangesUISchema,
   schema: socialBehaviorChangesSchema,
@@ -652,6 +682,22 @@ export const hospitalizationHistory = {
   schema: hospitalizationHistorySchema,
 };
 
+export { uploadUnemployabilitySupportingDocuments };
+
+export { uploadUnemployabilitySupportingDocumentsChoice };
+
+export { unemployabilityCertification };
+
+export { pastEducationTraining };
+
+export { militaryDutyImpact };
+
+export { recentEarnedIncome };
+
+export { recentEducationTraining };
+
+export { recentJobApplications };
+
 export const supplementalBenefits = {
   uiSchema: supplementalBenefitsUISchema,
   schema: supplementalBenefitsSchema,
@@ -698,3 +744,8 @@ export const secondaryUploadSourcesChoice = {
 };
 
 export { ancillaryFormsWizardSummary };
+
+export const incomeDetails = {
+  uiSchema: incomeDetailsUISchema,
+  schema: incomeDetailsSchema,
+};
