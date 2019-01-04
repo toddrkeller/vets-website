@@ -25,7 +25,7 @@ export const unemployabilityHelp = (
       <li>
         You can‘t hold down a steady job that supports you financially (known as
         substantially gainful employment) because of your service-connected
-        disability. Odd jobs (marginal employment), don‘t count.
+        disability. Odd jobs (marginal employment), aren't disqualifying.
       </li>
       <p>
         <strong>Note:</strong> in certain cases - for example, if you need to be
@@ -49,10 +49,13 @@ export const introDescription = (
           <div>
             <h5>Answer Questions</h5>
             <p>
-              You can either answer the questions online and provide supporting
-              documents. Or if you‘ve already completed a Veteran‘s Application
-              for Increased Compensation Based on Unemployability (VA Form
-              21-8940), you can upload the form. If you choose to answer
+              First, we'll ask you questions about your situation and how your
+              service-connected disability prevents you from holding down a
+              steady job. You can either answer the questions online and provide
+              supporting documents. Or if you‘ve already completed a Veteran‘s
+              Application for Increased Compensation Based on Unemployability
+              (VA Form 21-8940), you can upload the form. If you choose to
+              answer
             </p>
           </div>
         </li>
