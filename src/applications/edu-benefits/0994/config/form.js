@@ -1,6 +1,6 @@
 import environment from '../../../../platform/utilities/environment';
 
-import preSubmitInfo from '../../../../platform/forms/preSubmitInfo';
+import preSubmitInfo from '../preSubmitInfo';
 
 import FormFooter from '../../../../platform/forms/components/FormFooter';
 
