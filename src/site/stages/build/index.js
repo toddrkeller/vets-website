@@ -166,6 +166,44 @@ function defaultBuild(BUILD_OPTIONS) {
   smith.use(createRedirects(BUILD_OPTIONS));
   smith.use(checkBrokenLinks(BUILD_OPTIONS));
 
+  const cheerio = require('cheerio');
+  smith.use(files => {
+    Object.keys(files).forEach(fileName => {
+      const doc = cheerio.load(files[fileName].contents);
+      if (doc('#va-detailpage-sidebar').length) {
+        const menu = doc('#va-detailpage-sidebar');
+        console.log({
+          fileName,
+          sidebarTitle: menu.find('.left-side-nav-title > h4').text(),
+          items: menu
+            .find('.usa-accordion > li')
+            .map((i, el) => ({
+              open:
+                doc(el)
+                  .find('button')
+                  .attr('aria-expanded') === 'true',
+              items: doc(el)
+                .find('.usa-sidenav-list > li')
+                .map((j, el2) => ({
+                  active: doc(el2).hasClass('active-level'),
+                  title: doc(el2)
+                    .find('a')
+                    .text(),
+                  href: doc(el2)
+                    .find('a')
+                    .attr('href'),
+                })),
+              title: doc(el)
+                .find('button')
+                .text()
+                .trim(),
+            }))
+            .get(),
+        });
+      }
+    });
+  });
+
   /* eslint-disable no-console */
   smith.build(err => {
     if (err) throw err;
