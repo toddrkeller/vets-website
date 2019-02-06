@@ -168,40 +168,102 @@ function defaultBuild(BUILD_OPTIONS) {
 
   const cheerio = require('cheerio');
   smith.use(files => {
-    Object.keys(files).forEach(fileName => {
-      const doc = cheerio.load(files[fileName].contents);
-      if (doc('#va-detailpage-sidebar').length) {
+    const pages = Object.keys(files)
+      .filter(fileName => {
+        const doc = cheerio.load(files[fileName].contents);
+        return (
+          !fileName.startsWith('drupal') &&
+          doc('#va-detailpage-sidebar').length > 0
+        );
+      })
+      .map(fileName => {
+        const doc = cheerio.load(files[fileName].contents);
         const menu = doc('#va-detailpage-sidebar');
-        console.log({
+        const backLink = doc('.sidenav-previous-page');
+        const nonAccordionNav = menu.find('> div > .usa-sidenav-list > li');
+        const accordionNav = menu.find('.usa-accordion > li');
+
+        const menus = accordionNav
+          .map((i, el) => ({
+            title: doc(el)
+              .find('button')
+              .text()
+              .trim(),
+            open:
+              doc(el)
+                .find('button')
+                .attr('aria-expanded') === 'true',
+            items: doc(el)
+              .find('.usa-sidenav-list > li')
+              .map((j, el2) => ({
+                active: doc(el2).hasClass('active-level'),
+                title: doc(el2)
+                  .find('> a')
+                  .text()
+                  .trim(),
+                href: doc(el2)
+                  .find('> a')
+                  .attr('href'),
+                items: doc(el2)
+                  .find('.usa-sidenav-sub_list > li')
+                  .map((k, el3) => ({
+                    title: doc(el3)
+                      .find('a')
+                      .text()
+                      .trim(),
+                    href: doc(el3)
+                      .find('a')
+                      .attr('href'),
+                  }))
+                  .get(),
+              }))
+              .get(),
+          }))
+          .get();
+
+        const items = nonAccordionNav
+          .map((i, el) => ({
+            active: doc(el).hasClass('active-level'),
+            title: doc(el)
+              .find('> a')
+              .text()
+              .trim(),
+            href: doc(el)
+              .find('> a')
+              .attr('href'),
+            items: doc(el)
+              .find('.usa-sidenav-sub_list > li')
+              .map((j, el2) => ({
+                title: doc(el2)
+                  .find('a')
+                  .text()
+                  .trim(),
+                href: doc(el2)
+                  .find('a')
+                  .attr('href'),
+              }))
+              .get(),
+          }))
+          .get();
+
+        return {
           fileName,
           sidebarTitle: menu.find('.left-side-nav-title > h4').text(),
-          items: menu
-            .find('.usa-accordion > li')
-            .map((i, el) => ({
-              open:
-                doc(el)
-                  .find('button')
-                  .attr('aria-expanded') === 'true',
-              items: doc(el)
-                .find('.usa-sidenav-list > li')
-                .map((j, el2) => ({
-                  active: doc(el2).hasClass('active-level'),
-                  title: doc(el2)
-                    .find('a')
-                    .text(),
-                  href: doc(el2)
-                    .find('a')
-                    .attr('href'),
-                })),
-              title: doc(el)
-                .find('button')
-                .text()
-                .trim(),
-            }))
-            .get(),
-        });
-      }
-    });
+          backLink: backLink.length
+            ? {
+                title: backLink
+                  .find('a')
+                  .text()
+                  .trim(),
+                href: backLink.find('a').attr('href'),
+              }
+            : null,
+          items,
+          menus,
+        };
+      });
+    const fs = require('fs');
+    fs.writeFileSync('sidebar.json', JSON.stringify(pages, null, 2));
   });
 
   /* eslint-disable no-console */
