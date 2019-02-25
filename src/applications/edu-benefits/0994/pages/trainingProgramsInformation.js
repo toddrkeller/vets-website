@@ -17,7 +17,11 @@ const getCourseType = (formData, index) =>
 
 const checkLocation = field => field === 'inPerson' || field === 'both';
 
-const showLocation = (formData, index) =>
+const programNameEntered = (formData, index) =>
+  _.get(formData, `vetTecPrograms[${index}].programName`, '').trim() !== '';
+
+const locationRequired = (formData, index) =>
+  programNameEntered(formData, index) &&
   checkLocation(getCourseType(formData, index));
 
 const getProgramName = (formData, index) =>
@@ -60,8 +64,7 @@ export const uiSchema = {
       },
       locationCity: {
         'ui:title': 'City',
-        'ui:required': (formData, index) =>
-          getProgramName(formData, index) && showLocation(formData, index),
+        'ui:required': locationRequired,
         'ui:errorMessages': {
           pattern: 'Please fill in a valid city',
         },
@@ -75,16 +78,16 @@ export const uiSchema = {
         'ui:errorMessages': {
           pattern: 'Please select a valid state',
         },
-        'ui:required': (formData, index) =>
-          getProgramName(formData, index) && showLocation(formData, index),
+        'ui:required': locationRequired,
         'ui:options': {
           expandUnder: 'courseType',
           expandUnderCondition: checkLocation,
         },
       },
-      plannedStartDate: _.merge(dateUI('What is your estimated start date?'), {
-        'ui:required': getProgramName,
-      }),
+      plannedStartDate: {
+        ...dateUI('What is your estimated start date?'),
+        'ui:required': programNameEntered,
+      },
     },
   },
 };
@@ -114,7 +117,10 @@ export const schema = {
             ...location.properties.state,
             'ui:collapsed': true,
           },
-          plannedStartDate,
+          plannedStartDate: {
+            ...plannedStartDate,
+            'ui:collapsed': true,
+          },
         },
       },
     },
