@@ -96,10 +96,10 @@ describe('Schemaform <RoutedSavableApp>', () => {
       {
         pageList: [
           {
-            path: 'intro',
+            path: '/introduction',
           },
           {
-            path: 'test-path',
+            path: '/test-path',
           },
         ],
       },
@@ -125,9 +125,10 @@ describe('Schemaform <RoutedSavableApp>', () => {
       prefillStatus: PREFILL_STATUSES.unfilled,
       router,
       routes,
+      data: {},
     });
 
-    expect(router.push.calledWith('test-path')).to.be.true;
+    expect(router.push.calledWith('/test-path')).to.be.true;
   });
   it('should route and reset fetch status on success', () => {
     const formConfig = {
@@ -161,6 +162,7 @@ describe('Schemaform <RoutedSavableApp>', () => {
     );
 
     tree.getMountedInstance().componentWillReceiveProps({
+      formConfig,
       router,
       returnUrl,
       loadedStatus: LOAD_STATUSES.success,

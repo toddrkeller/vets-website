@@ -1,6 +1,6 @@
 import fullSchema from 'vets-json-schema/dist/22-0994-schema.json';
 import _ from 'lodash';
-import dateUI from 'us-forms-system/lib/js/definitions/date';
+import dateUI from 'platform/forms-system/src/js/definitions/date';
 import { trainingDescription } from '../content/trainingProgramsInformation';
 import VetTecProgramView from '../components/VetTecProgramView';
 
@@ -12,6 +12,18 @@ const {
   plannedStartDate,
 } = fullSchema.properties.vetTecPrograms.items.properties;
 
+const getCourseType = (formData, index) =>
+  _.get(formData, `vetTecPrograms[${index}].courseType`, '');
+
+const checkLocation = field => field === 'inPerson' || field === 'both';
+
+const programNameEntered = (formData, index) =>
+  _.get(formData, `vetTecPrograms[${index}].programName`, '').trim() !== '';
+
+const locationRequired = (formData, index) =>
+  programNameEntered(formData, index) &&
+  checkLocation(getCourseType(formData, index));
+
 export const uiSchema = {
   'ui:description': trainingDescription,
   vetTecPrograms: {
@@ -21,43 +33,57 @@ export const uiSchema = {
     },
     items: {
       providerName: {
-        'ui:title':
-          'What’s the name of the provider of the program you’d like to attend?',
+        'ui:title': 'What’s the name of the program’s provider?',
       },
       programName: {
         'ui:title': 'What’s the name of the program?',
       },
       courseType: {
-        'ui:title': 'Is the training in-person or online?',
+        'ui:title': 'Is it an in-person or online program?',
         'ui:widget': 'radio',
         'ui:options': {
           labels: {
-            inPerson: 'In-person',
+            inPerson: 'In person',
             online: 'Online',
-            both: 'It’s both online and in-person',
+            both: 'Both online and in person',
           },
         },
+        'ui:required': programNameEntered,
       },
-      location: {
+      'view:location': {
+        'ui:title': ' ',
         'ui:description': 'Where will you take this training?',
         'ui:options': {
           expandUnder: 'courseType',
-          hideIf: (formData, index) =>
-            !(
-              _.get(formData, `vetTecPrograms[${index}].courseType`, '') ===
-                'inPerson' ||
-              _.get(formData, `vetTecPrograms[${index}].courseType`, '') ===
-                'both'
-            ),
-        },
-        city: {
-          'ui:title': 'City',
-        },
-        state: {
-          'ui:title': 'State',
+          expandUnderCondition: checkLocation,
         },
       },
-      plannedStartDate: dateUI('What is your estimated start date?'),
+      locationCity: {
+        'ui:title': 'City',
+        'ui:required': locationRequired,
+        'ui:errorMessages': {
+          pattern: 'Please fill in a valid city',
+        },
+        'ui:options': {
+          expandUnder: 'courseType',
+          expandUnderCondition: checkLocation,
+        },
+      },
+      locationState: {
+        'ui:title': 'State',
+        'ui:errorMessages': {
+          pattern: 'Please select a valid state',
+        },
+        'ui:required': locationRequired,
+        'ui:options': {
+          expandUnder: 'courseType',
+          expandUnderCondition: checkLocation,
+        },
+      },
+      plannedStartDate: {
+        ...dateUI('What’s your estimated start date?'),
+        'ui:required': programNameEntered,
+      },
     },
   },
 };
@@ -74,11 +100,23 @@ export const schema = {
           providerName,
           programName,
           courseType,
-          location: {
-            ...location,
+          'view:location': {
+            type: 'object',
+            properties: {},
             'ui:collapsed': true,
           },
-          plannedStartDate,
+          locationCity: {
+            ...location.properties.city,
+            'ui:collapsed': true,
+          },
+          locationState: {
+            ...location.properties.state,
+            'ui:collapsed': true,
+          },
+          plannedStartDate: {
+            ...plannedStartDate,
+            'ui:collapsed': true,
+          },
         },
       },
     },

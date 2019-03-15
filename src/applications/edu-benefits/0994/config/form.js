@@ -45,7 +45,7 @@ const formConfig = {
   transformForSubmit: transform,
   introduction: IntroductionPage,
   confirmation: ConfirmationPage,
-  title: 'Apply for VET TEC Benefits',
+  title: 'Apply for VET TEC',
   subTitle: 'Form 22-0994',
   preSubmitInfo,
   footerContent: FormFooter,
@@ -56,8 +56,8 @@ const formConfig = {
   },
   chapters: {
     // Chapter - Benefits eligibility
-    benefitsEligibility: {
-      title: 'Benefits eligibility',
+    applicantInformation: {
+      title: 'Applicant Information',
       pages: {
         applicantInformation: {
           title: 'Applicant Information',
@@ -66,7 +66,7 @@ const formConfig = {
           schema: applicantInformation.schema,
         },
         benefitsEligibility: {
-          title: 'Benefits Eligibility',
+          title: 'Applicant Information',
           path: 'benefits-eligibility',
           uiSchema: benefitsEligibility.uiSchema,
           schema: benefitsEligibility.schema,
@@ -138,15 +138,15 @@ const formConfig = {
       pages: {
         // page - contact information
         contactInformation: {
-          title: 'Contact Information',
+          title: 'Contact information',
           path: 'contact-information',
           uiSchema: contactInformation.uiSchema,
           schema: contactInformation.schema,
         },
         // page - banking information
         bankInformation: {
-          title: 'Bank Information',
-          path: 'bank-information',
+          title: 'Direct deposit information',
+          path: 'direct-deposit-information',
           uiSchema: bankInformation.uiSchema,
           schema: bankInformation.schema,
         },

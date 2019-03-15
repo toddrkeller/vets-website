@@ -13,3 +13,27 @@ export const srSubstitute = (srIgnored, substitutionText) => (
     <span className="sr-only">{substitutionText}</span>
   </span>
 );
+
+export const maskBankInformation = (string, unmaskedLength) => {
+  // If no string is given, tell the screen reader users the account or routing number is blank
+  if (!string) {
+    return srSubstitute('', 'is blank');
+  }
+  const repeatCount =
+    string.length > unmaskedLength ? string.length - unmaskedLength : 0;
+  const maskedString = srSubstitute(
+    `${'●'.repeat(repeatCount)}`,
+    'ending with',
+  );
+  return (
+    <span>
+      {maskedString}
+      {string.slice(-unmaskedLength)}
+    </span>
+  );
+};
+
+export const hasNewBankInformation = (bankAccount = {}) => {
+  const { accountType, accountNumber, routingNumber } = bankAccount;
+  return accountType || accountNumber || routingNumber;
+};

@@ -1,16 +1,17 @@
 // Builds the site using Metalsmith as the top-level build runner.
+const fs = require('fs');
+const path = require('path');
 const Metalsmith = require('metalsmith');
 const collections = require('metalsmith-collections');
-const dateInFilename = require('metalsmith-date-in-filename');
 const inPlace = require('metalsmith-in-place');
 const layouts = require('metalsmith-layouts');
-const liquid = require('tinyliquid');
 const markdown = require('metalsmith-markdownit');
-const moment = require('moment');
 const navigation = require('metalsmith-navigation');
 const permalinks = require('metalsmith-permalinks');
+const registerLiquidFilters = require('../../filters/liquid');
 
 const getOptions = require('../build/options');
+const environments = require('../../constants/environments');
 const createBuildSettings = require('../build/plugins/create-build-settings');
 const updateExternalLinks = require('../build/plugins/update-external-links');
 const createEnvironmentFilter = require('../build/plugins/create-environment-filter');
@@ -18,14 +19,16 @@ const nonceTransformer = require('../build/plugins/nonceTransformer');
 const leftRailNavResetLevels = require('../build/plugins/left-rail-nav-reset-levels');
 const rewriteVaDomains = require('../build/plugins/rewrite-va-domains');
 const applyFragments = require('../build/plugins/apply-fragments');
+const addAssetHashes = require('../build/plugins/add-asset-hashes');
 
 function createPipeline(options) {
   const BUILD_OPTIONS = getOptions(options);
   const smith = Metalsmith(__dirname); // eslint-disable-line new-cap
+  const isDevBuild = [environments.LOCALHOST, environments.VAGOVDEV].includes(
+    BUILD_OPTIONS.buildtype,
+  );
 
-  // Custom liquid filter(s)
-  liquid.filters.humanizeDate = dt =>
-    moment(dt, 'YYYY-MM-DD').format('MMMM D, YYYY');
+  registerLiquidFilters();
 
   // Set up Metalsmith. BE CAREFUL if you change the order of the plugins. Read the comments and
   // add comments about any implicit dependencies you are introducing!!!
@@ -44,7 +47,6 @@ function createPipeline(options) {
   smith.use(applyFragments(BUILD_OPTIONS));
   smith.use(collections(BUILD_OPTIONS.collections));
   smith.use(leftRailNavResetLevels());
-  smith.use(dateInFilename(true));
 
   // smith.use(cspHash({ pattern: ['js/*.js', 'generated/*.css', 'generated/*.js'] }))
 
@@ -130,7 +132,28 @@ function createPipeline(options) {
 
   smith.use(updateExternalLinks(BUILD_OPTIONS));
 
-  // smith.use(addAssetHashes(BUILD_OPTIONS));
+  // For prod builds, we need to add asset hashes, but since this is a live
+  // request, we're not doing a webpack build. So we need to put the manifest
+  // in the files object so that we can reuse the addAssetHashes plugin
+  if (!isDevBuild) {
+    smith.use((files, metalsmith, done) => {
+      const fileManifestPath = 'generated/file-manifest.json';
+      // eslint-disable-next-line no-param-reassign
+      files[fileManifestPath] = {
+        path: fileManifestPath,
+        contents: fs.readFileSync(
+          path.join(
+            __dirname,
+            '../../../..',
+            BUILD_OPTIONS.buildpath,
+            fileManifestPath,
+          ),
+        ),
+      };
+      done();
+    });
+    smith.use(addAssetHashes(true));
+  }
 
   return smith;
 }

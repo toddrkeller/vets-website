@@ -1,14 +1,18 @@
 import sinon from 'sinon';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
+import _ from '../../../../platform/utilities/data';
 
 import {
-  addCheckboxPerDisability,
+  makeSchemaForNewDisabilities,
+  makeSchemaForRatedDisabilities,
+  makeSchemaForAllDisabilities,
   capitalizeEachWord,
   fieldsHaveInput,
   hasGuardOrReservePeriod,
   hasHospitalCare,
   hasOtherEvidence,
+  increaseOnly,
   isAnswering781aQuestions,
   isAnswering781Questions,
   isInFuture,
@@ -20,10 +24,12 @@ import {
   needsToEnter781,
   needsToEnter781a,
   needsToEnterUnemployability,
+  newConditionsOnly,
   queryForFacilities,
   ReservesGuardDescription,
   servedAfter911,
   viewifyFields,
+  recordEventOnce,
 } from '../utils.jsx';
 
 describe('526 helpers', () => {
@@ -156,6 +162,14 @@ describe('526 helpers', () => {
           'some disability with hyphenated-words',
           'Some Disability With Hyphenated-Words',
         ],
+        [
+          "some disability with possessive's stuff",
+          "Some Disability With Possessive's Stuff",
+        ],
+        [
+          "some disability with possessive's-hyphen",
+          "Some Disability With Possessive's-Hyphen",
+        ],
         ['some "quote" disability', 'Some "Quote" Disability'],
       ].forEach(pair => expect(capitalizeEachWord(pair[0])).to.equal(pair[1]));
     });
@@ -170,8 +184,8 @@ describe('526 helpers', () => {
     });
   });
 
-  describe('addCheckboxPerDisability', () => {
-    it('should return disabilitiesViews with downcased keynames', () => {
+  describe('makeSchemaForNewDisabilities', () => {
+    it('should return schema with downcased keynames', () => {
       const formData = {
         newDisabilities: [
           {
@@ -179,10 +193,87 @@ describe('526 helpers', () => {
           },
         ],
       };
-      expect(addCheckboxPerDisability(formData)).to.eql({
+      expect(makeSchemaForNewDisabilities(formData)).to.eql({
         properties: {
           'ptsd personal trauma': {
             title: 'Ptsd Personal Trauma',
+            type: 'boolean',
+          },
+        },
+      });
+    });
+
+    it('should return correct schema when periods used', () => {
+      const formData = {
+        newDisabilities: [
+          {
+            condition: 'period. Period.',
+          },
+        ],
+      };
+      expect(makeSchemaForNewDisabilities(formData)).to.eql({
+        properties: {
+          'period. period.': {
+            title: 'Period. Period.',
+            type: 'boolean',
+          },
+        },
+      });
+    });
+  });
+
+  describe('makeSchemaForRatedDisabilities', () => {
+    it('should return schema for selected disabilities only', () => {
+      const formData = {
+        ratedDisabilities: [
+          {
+            name: 'Ptsd personal trauma',
+            'view:selected': false,
+          },
+          {
+            name: 'Diabetes mellitus',
+            'view:selected': true,
+          },
+        ],
+      };
+      expect(makeSchemaForRatedDisabilities(formData)).to.eql({
+        properties: {
+          'diabetes mellitus': {
+            title: 'Diabetes Mellitus',
+            type: 'boolean',
+          },
+        },
+      });
+    });
+  });
+
+  describe('makeSchemaForAllDisabilities', () => {
+    it('should return schema for all (selected) disabilities', () => {
+      const formData = {
+        ratedDisabilities: [
+          {
+            name: 'Ptsd personal trauma',
+            'view:selected': false,
+          },
+          {
+            name: 'Diabetes mellitus',
+            'view:selected': true,
+          },
+        ],
+        newDisabilities: [
+          {
+            condition: 'A new Condition.',
+          },
+        ],
+      };
+      expect(makeSchemaForAllDisabilities(formData)).to.eql({
+        properties: {
+          'diabetes mellitus': {
+            title: 'Diabetes Mellitus',
+            type: 'boolean',
+          },
+          'a new condition.': {
+            title: 'A New Condition.',
             type: 'boolean',
           },
         },
@@ -723,6 +814,42 @@ describe('isAnswering781aQuestions', () => {
       expect(hasHospitalCare(formData)).to.be.false;
     });
   });
+
+  describe('recordEventOnce', () => {
+    beforeEach(() => {
+      window.oldDataLayer = _.cloneDeep(window.dataLayer);
+      window.dataLayer = [];
+    });
+
+    afterEach(() => {
+      window.dataLayer = _.cloneDeep(window.oldDataLayer);
+      delete window.oldDataLayer;
+    });
+
+    const testKey = 'help-text-label';
+    const testEvent = {
+      event: 'test-event',
+      [testKey]: 'Test Event',
+    };
+
+    it('should record event if not already in dataLayer', () => {
+      // sanity check to ensure that setup worked
+      expect(window.dataLayer.length).to.equal(0);
+
+      recordEventOnce(testEvent, testKey);
+      expect(window.dataLayer.length).to.equal(1);
+    });
+
+    it('should not record duplicate events', () => {
+      // sanity check to ensure that setup worked
+      expect(window.dataLayer.length).to.equal(0);
+
+      recordEventOnce(testEvent, testKey);
+      recordEventOnce(testEvent, testKey);
+
+      expect(window.dataLayer.length).to.equal(1);
+    });
+  });
 });
 
 describe('all claims utils - isWithinRange', () => {
@@ -750,5 +877,57 @@ describe('all claims utils - isWithinRange', () => {
   it('should return false for a date range that ends after the date range specified', () => {
     expect(isWithinRange({ from: '1991-01-01', to: '1993-01-01' }, dateRange))
       .to.be.false;
+  });
+});
+
+describe('526 v2 depends functions', () => {
+  const increaseOnlyData = {
+    'view:claimType': {
+      'view:claimingIncrease': true,
+      'view:claimingNew': false,
+    },
+  };
+  const newOnlyData = {
+    'view:claimType': {
+      'view:claimingIncrease': false,
+      'view:claimingNew': true,
+    },
+  };
+  const increaseAndNewData = {
+    'view:claimType': {
+      'view:claimingIncrease': true,
+      'view:claimingNew': true,
+    },
+  };
+  // Shouldn't be possible, but worth testing anyhow
+  const noneSelected = {
+    'view:claimType': {
+      'view:claimingIncrease': false,
+      'view:claimingNew': false,
+    },
+  };
+  describe('newOnly', () => {
+    it('should return true if only new conditions are claimed', () => {
+      expect(newConditionsOnly(newOnlyData)).to.be.true;
+    });
+    it('should return false if already-rated conditions are claimed', () => {
+      expect(newConditionsOnly(increaseOnlyData)).to.be.false;
+      expect(newConditionsOnly(increaseAndNewData)).to.be.false;
+    });
+    it('should return false if no claim type is selected', () => {
+      expect(newConditionsOnly(noneSelected)).to.be.false;
+    });
+  });
+  describe('increaseOnly', () => {
+    it('should return true if only alread-rated conditions are claimed', () => {
+      expect(increaseOnly(increaseOnlyData)).to.be.true;
+    });
+    it('should return false if new conditions are claimed', () => {
+      expect(increaseOnly(newOnlyData)).to.be.false;
+      expect(increaseOnly(increaseAndNewData)).to.be.false;
+    });
+    it('should return false if no claim type is selected', () => {
+      expect(increaseOnly(noneSelected)).to.be.false;
+    });
   });
 });

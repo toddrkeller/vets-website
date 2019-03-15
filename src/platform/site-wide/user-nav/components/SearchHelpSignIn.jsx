@@ -4,7 +4,6 @@ import classNames from 'classnames';
 
 import isBrandConsolidationEnabled from '../../../brand-consolidation/feature-flag';
 import isVATeamSiteSubdomain from '../../../brand-consolidation/va-subdomain';
-import recordEvent from '../../../monitoring/record-event';
 import { hasSession } from '../../../user/profile/utilities';
 import HelpMenu from './HelpMenu';
 import SearchMenu from './SearchMenu';
@@ -13,8 +12,7 @@ import SignInProfileMenu from './SignInProfileMenu';
 class SearchHelpSignIn extends React.Component {
   handleSignInSignUp = e => {
     e.preventDefault();
-    recordEvent({ event: 'login-link-clicked-header' });
-    this.props.toggleLoginModal(true);
+    this.props.onSignInSignUp();
   };
 
   handleMenuClick = menu => () => {
@@ -106,13 +104,12 @@ SearchHelpSignIn.propTypes = {
   isLoggedIn: PropTypes.bool,
   isMenuOpen: PropTypes.objectOf(PropTypes.bool).isRequired,
   isProfileLoading: PropTypes.bool.isRequired,
+  onSignInSignUp: PropTypes.func.isRequired,
+  toggleMenu: PropTypes.func.isRequired,
   userGreeting: PropTypes.oneOfType([
     PropTypes.node,
     PropTypes.arrayOf(PropTypes.node),
   ]),
-  userEmail: PropTypes.string,
-  toggleLoginModal: PropTypes.func.isRequired,
-  toggleMenu: PropTypes.func.isRequired,
 };
 
 export default SearchHelpSignIn;

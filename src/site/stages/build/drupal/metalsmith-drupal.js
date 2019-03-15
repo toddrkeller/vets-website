@@ -3,9 +3,13 @@
 const fs = require('fs-extra');
 const path = require('path');
 const chalk = require('chalk');
+const recursiveRead = require('recursive-readdir');
 
 const ENVIRONMENTS = require('../../../constants/environments');
 const getApiClient = require('./api');
+const convertDrupalFilesToLocal = require('./assets');
+const { compilePage, createFileObj } = require('./page');
+const createHealthCareRegionListPages = require('./health-care-region');
 
 const DRUPAL_CACHE_FILENAME = 'drupal.json';
 
@@ -24,8 +28,8 @@ const DRUPAL_COLORIZED_OUTPUT = chalk.rgb(73, 167, 222);
 // eslint-disable-next-line no-console
 const log = message => console.log(DRUPAL_COLORIZED_OUTPUT(message));
 
-function writeDrupalIndexPage(files) {
-  log('Drupal index page written to /drupal.');
+function writeDrupalDebugPage(files) {
+  log('Drupal debug page written to /drupal/debug.');
 
   const drupalPages = Object.keys(files)
     .filter(page => page.startsWith('drupal'))
@@ -37,7 +41,7 @@ function writeDrupalIndexPage(files) {
     <ol>${drupalPages}</ol>
   `;
 
-  files['drupal/index.html'] = {
+  files['drupal/debug/index.html'] = {
     contents: Buffer.from(drupalIndex),
   };
 }
@@ -68,18 +72,25 @@ function pipeDrupalPagesIntoMetalsmith(contentData, files) {
       entityBundle,
     } = page;
 
-    files[`drupal${drupalPagePath}/index.html`] = {
-      ...page,
-      layout: `${entityBundle}.drupal.liquid`,
-      contents: Buffer.from('<!-- Drupal-provided data -->'),
-      debug: JSON.stringify(page, null, 4),
-      // Keep these pages out of the sitemap until we remove
-      // the drupal prefix
-      private: true,
-    };
+    const pageCompiled = compilePage(page, contentData);
+
+    files[`drupal${drupalPagePath}/index.html`] = createFileObj(
+      pageCompiled,
+      `${entityBundle}.drupal.liquid`,
+    );
+
+    if (page.entityBundle === 'health_care_region_page') {
+      createHealthCareRegionListPages(pageCompiled, drupalPagePath, files);
+    }
   }
 
-  writeDrupalIndexPage(files);
+  writeDrupalDebugPage(files);
+  files[`drupal/index.md`] = {
+    ...files['index.md'],
+    path: 'drupal/index.html',
+    isDrupalPage: true,
+    private: true,
+  };
 }
 
 async function loadDrupal(buildOptions) {
@@ -107,6 +118,7 @@ async function loadDrupal(buildOptions) {
     if (buildOptions.buildtype === ENVIRONMENTS.LOCALHOST) {
       const serialized = Buffer.from(JSON.stringify(drupalPages, null, 2));
       fs.ensureDirSync(buildOptions.cacheDirectory);
+      fs.emptyDirSync(path.join(buildOptions.cacheDirectory, 'drupalFiles'));
       fs.writeFileSync(drupalCache, serialized);
     }
   } else {
@@ -119,6 +131,24 @@ async function loadDrupal(buildOptions) {
 
   log('Drupal successfully loaded!');
   return drupalPages;
+}
+
+async function loadCachedDrupalFiles(buildOptions, files) {
+  const cachedFilesPath = path.join(buildOptions.cacheDirectory, 'drupalFiles');
+  if (!buildOptions[PULL_DRUPAL_BUILD_ARG] && fs.existsSync(cachedFilesPath)) {
+    const cachedDrupalFiles = await recursiveRead(cachedFilesPath);
+    cachedDrupalFiles.forEach(file => {
+      const relativePath = path.relative(
+        path.join(buildOptions.cacheDirectory, 'drupalFiles'),
+        file,
+      );
+      files[relativePath] = {
+        path: relativePath,
+        isDrupalAsset: true,
+        contents: fs.readFileSync(file),
+      };
+    });
+  }
 }
 
 function getDrupalContent(buildOptions) {
@@ -136,6 +166,8 @@ function getDrupalContent(buildOptions) {
       if (!drupalData) {
         drupalData = await loadDrupal(buildOptions);
       }
+      drupalData = convertDrupalFilesToLocal(drupalData, files, buildOptions);
+      loadCachedDrupalFiles(buildOptions, files);
       pipeDrupalPagesIntoMetalsmith(drupalData, files);
       log('Successfully piped Drupal content into Metalsmith!');
       done();

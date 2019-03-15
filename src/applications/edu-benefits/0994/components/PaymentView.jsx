@@ -1,6 +1,7 @@
+import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
-import { srSubstitute } from '../utils';
+import { maskBankInformation, hasNewBankInformation } from '../utils';
 
 export const accountTitleLabels = {
   CHECKING: 'Checking Account',
@@ -8,32 +9,25 @@ export const accountTitleLabels = {
   NOBANK: 'No Bank Account',
 };
 
-const mask = (string, unmaskedLength) => {
-  // If no string is given, tell the screen reader users the account or routing number is blank
-  if (!string) {
-    return srSubstitute('', 'is blank');
-  }
-  const repeatCount =
-    string.length > unmaskedLength ? string.length - unmaskedLength : 0;
-  const maskedString = srSubstitute(
-    `${'●'.repeat(repeatCount)}`,
-    'ending with',
-  );
-  return (
-    <span>
-      {maskedString}
-      {string.slice(-unmaskedLength)}
-    </span>
-  );
-};
-
 export const PaymentView = ({ formData = {}, originalData = {} }) => {
-  const bankAccountType =
-    formData.bankAccount.accountType || originalData.bankAccountType;
-  const bankAccountNumber =
-    formData.bankAccount.accountNumber || originalData.bankAccountNumber;
-  const bankRoutingNumber =
-    formData.bankAccount.routingNumber || originalData.bankRoutingNumber;
+  const bankAccount = _.get(formData, 'bankAccount', {});
+  const {
+    accountType: newAccountType,
+    accountNumber: newAccountNumber,
+    routingNumber: newRoutingNumber,
+  } = bankAccount;
+
+  const hasNewBankAccountInfo = hasNewBankInformation(bankAccount);
+
+  const bankAccountType = hasNewBankAccountInfo
+    ? newAccountType
+    : originalData.bankAccountType;
+  const bankAccountNumber = hasNewBankAccountInfo
+    ? newAccountNumber
+    : originalData.bankAccountNumber;
+  const bankRoutingNumber = hasNewBankAccountInfo
+    ? newRoutingNumber
+    : originalData.bankRoutingNumber;
 
   return (
     <div>
@@ -43,15 +37,15 @@ export const PaymentView = ({ formData = {}, originalData = {} }) => {
             {accountTitleLabels[(bankAccountType || '').toUpperCase()]}
           </strong>
         </p>
-        <p>Account number: {mask(bankAccountNumber, 4)}</p>
-        <p>Bank routing number: {mask(bankRoutingNumber, 4)}</p>
+        <p>Account number: {maskBankInformation(bankAccountNumber, 4)}</p>
+        <p>Bank routing number: {maskBankInformation(bankRoutingNumber, 4)}</p>
       </div>
     </div>
   );
 };
 
 const mapStateToProps = state => ({
-  originalData: state.form.data['view:prefillBankAccount'],
+  originalData: state.form.data.prefillBankAccount,
 });
 
 export default connect(mapStateToProps)(PaymentView);

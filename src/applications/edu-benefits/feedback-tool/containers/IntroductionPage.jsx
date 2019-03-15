@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { focusElement } from '../../../../platform/utilities/ui';
-import FormTitle from 'us-forms-system/lib/js/components/FormTitle';
+import FormTitle from 'platform/forms-system/src/js/components/FormTitle';
 import OMBInfo from '@department-of-veterans-affairs/formation-react/OMBInfo';
 import SaveInProgressIntro from '../../../../platform/forms/save-in-progress/SaveInProgressIntro';
 
@@ -30,6 +30,13 @@ class IntroductionPage extends React.Component {
           Get started right now by filling out a short form. Follow the steps
           below.
         </p>
+        <SaveInProgressIntro
+          messages={this.props.route.formConfig.savedFormMessages}
+          pageList={this.props.route.pageList}
+          downtime={this.props.route.formConfig.downtime}
+          prefillEnabled={this.props.route.formConfig.prefillEnabled}
+          startText="Submit Your Feedback"
+        />
         <div className="process schemaform-process">
           <ol>
             <li className="process-step list-one">
