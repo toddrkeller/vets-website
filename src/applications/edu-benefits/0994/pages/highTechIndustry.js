@@ -8,6 +8,18 @@ const {
   currentSalary,
 } = fullSchema.properties;
 
+function validateNoneApply(errors, fieldData, formData) {
+  const highTechnologyEmploymentTypes =
+    formData['view:salaryEmploymentTypes'].highTechnologyEmploymentType;
+  if (highTechnologyEmploymentTypes.noneApply) {
+    highTechnologyEmploymentTypes.computerProgramming = false;
+    highTechnologyEmploymentTypes.computerSoftware = false;
+    highTechnologyEmploymentTypes.dataProcessing = false;
+    highTechnologyEmploymentTypes.informationSciences = false;
+    highTechnologyEmploymentTypes.mediaApplication = false;
+  }
+}
+
 export const uiSchema = {
   'ui:description': highTechIndustryDescription,
   currentHighTechnologyEmployment: {
@@ -72,6 +84,7 @@ export const uiSchema = {
       },
       noneApply: {
         'ui:title': 'None of these',
+        'ui:validations': [validateNoneApply],
       },
     },
   },
