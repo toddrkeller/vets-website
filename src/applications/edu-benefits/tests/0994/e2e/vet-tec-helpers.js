@@ -3,6 +3,10 @@ import _ from 'lodash';
 const E2eHelpers = require('../../../../../platform/testing/e2e/helpers');
 const Timeouts = require('../../../../../platform/testing/e2e/timeouts');
 
+export const clientPause = (client, time = Timeouts.verySlow) => {
+  client.pause(time);
+};
+
 export const clickAddAnother = (client, i, list) => {
   if (i < list.length - 1) client.click('.va-growable-add-btn');
 };

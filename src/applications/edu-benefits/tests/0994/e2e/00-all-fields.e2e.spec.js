@@ -7,6 +7,7 @@ const FormsTestHelpers = require('../../../../../platform/testing/e2e/form-helpe
 const Auth = require('../../../../../platform/testing/e2e/auth');
 
 import {
+  clientPause,
   completeFormPage,
   completeAlreadySubmitted,
   completeMilitaryService,
@@ -45,7 +46,7 @@ const authentication = client => {
 const e2eTests = (client, formData) => {
   // Benefits eligibility
   // Personal Information
-  completeFormPage('/applicant/information', client);
+  completeFormPage('/applicant/information', client, 60000, clientPause);
 
   // Already submitted
   completeFormPage(
