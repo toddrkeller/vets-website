@@ -8,15 +8,6 @@ const {
   currentSalary,
 } = fullSchema.properties;
 
-const HIGH_TECH_EMPLOYMENT_TYPES = {
-  COMPUTER_PROGRAMMING: 'computerProgramming',
-  COMPUTER_SOFTWARE: 'computerSoftware',
-  DATA_PROCESSING: 'dataProcessing',
-  INFORMATION_SCIENCES: 'informationSciences',
-  MEDIA_APPLICATION: 'mediaApplication',
-  NONE_APPLY: 'noneApply',
-};
-
 const typeCount = types => {
   let count = 0;
   Object.values(types).forEach(value => {
@@ -126,27 +117,27 @@ export const uiSchema = {
       'ui:title': ' ',
       'ui:description':
         'Which area best describes your high-tech work experience? (Check all that apply.)',
-      [HIGH_TECH_EMPLOYMENT_TYPES.COMPUTER_PROGRAMMING]: {
+      computerProgramming: {
         'ui:title': 'Computer programming',
         'ui:validations': [validateNoneApply],
       },
-      [HIGH_TECH_EMPLOYMENT_TYPES.DATA_PROCESSING]: {
+      computerSoftware: {
         'ui:title': 'Data processing',
         'ui:validations': [validateNoneApply],
       },
-      [HIGH_TECH_EMPLOYMENT_TYPES.COMPUTER_SOFTWARE]: {
+      dataProcessing: {
         'ui:title': 'Computer software',
         'ui:validations': [validateNoneApply],
       },
-      [HIGH_TECH_EMPLOYMENT_TYPES.INFORMATION_SCIENCES]: {
+      informationSciences: {
         'ui:title': 'Information sciences',
         'ui:validations': [validateNoneApply],
       },
-      [HIGH_TECH_EMPLOYMENT_TYPES.MEDIA_APPLICATION]: {
+      mediaApplication: {
         'ui:title': 'Media application',
         'ui:validations': [validateNoneApply],
       },
-      [HIGH_TECH_EMPLOYMENT_TYPES.NONE_APPLY]: {
+      noneApply: {
         'ui:title': 'None of these',
         'ui:validations': [validateNoneApply],
       },
@@ -167,16 +158,16 @@ export const schema = {
         highTechnologyEmploymentType: {
           type: 'object',
           properties: {
-            [HIGH_TECH_EMPLOYMENT_TYPES.COMPUTER_PROGRAMMING]: {
+            computerProgramming: {
               type: 'boolean',
             },
-            [HIGH_TECH_EMPLOYMENT_TYPES.DATA_PROCESSING]: { type: 'boolean' },
-            [HIGH_TECH_EMPLOYMENT_TYPES.COMPUTER_SOFTWARE]: { type: 'boolean' },
-            [HIGH_TECH_EMPLOYMENT_TYPES.INFORMATION_SCIENCES]: {
+            computerSoftware: { type: 'boolean' },
+            dataProcessing: { type: 'boolean' },
+            informationSciences: {
               type: 'boolean',
             },
-            [HIGH_TECH_EMPLOYMENT_TYPES.MEDIA_APPLICATION]: { type: 'boolean' },
-            [HIGH_TECH_EMPLOYMENT_TYPES.NONE_APPLY]: { type: 'boolean' },
+            mediaApplication: { type: 'boolean' },
+            noneApply: { type: 'boolean' },
           },
         },
       },
