@@ -47,3 +47,5 @@ TargetCheckboxWidget.propTypes = {
   options: PropTypes.object,
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 };
+
+export default TargetCheckboxWidget;
