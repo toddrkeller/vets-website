@@ -11,8 +11,17 @@ export const FDCDescription = (
     <a
       href="/disability/how-to-file-claim/evidence-needed/fully-developed-claims/"
       target="_blank"
+      rel="noopener noreferrer"
     >
       Learn more about the FDC program
+    </a>
+    .<br />
+    <a
+      href="/disability/how-to-file-claim/evidence-needed/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      View the evidence requirements for disability claims
     </a>
     .
   </div>
@@ -44,12 +53,12 @@ export const noFDCWarning = (
         <ul>
           <li>
             Visit the Claim Status tool and upload your documents under the File
-            tab. <a href="/track-claims">Track the status of your claims.</a>
+            tab. <a href="/track-claims">Track the status of your claims</a>
           </li>
           <li>
             Call Veterans Benefits Assistance at{' '}
-            <a href="tel:1-800-827-1000">1-800-827-1000</a>, Monday – Friday,
-            8:30 a.m. – 4:30 p.m. (ET).
+            <a href="tel:1-800-827-1000">800-827-1000</a>, Monday – Friday, 8:30
+            a.m. – 4:30 p.m. ET.
           </li>
           <li>
             Save your application and return to it later when you have your

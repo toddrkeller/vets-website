@@ -1,10 +1,8 @@
 import FindVABenefitsIntro from '../components/FindVABenefitsIntro';
 import Profile360Intro from '../components/Profile360Intro';
 import PersonalizationBanner from '../components/PersonalizationBanner';
-import ClaimIncreaseBanner from '../components/ClaimIncreaseBanner';
 import VAPlusVetsModal from '../components/VAPlusVetsModal';
 import WelcomeToNewVAModal from '../components/WelcomeToNewVAModal';
-import AllClaimsBetaBanner from '../components/AllClaimsBetaBanner';
 
 const config = {
   announcements: [
@@ -19,7 +17,6 @@ const config = {
       name: 'welcome-to-new-va',
       paths: /^\/$/,
       component: WelcomeToNewVAModal,
-      disabled: !WelcomeToNewVAModal.isEnabled(),
     },
     {
       name: 'find-benefits-intro',
@@ -32,22 +29,6 @@ const config = {
       paths: /^(\/profile\/)$/,
       component: Profile360Intro,
       relatedAnnouncements: ['personalization'],
-    },
-    {
-      name: 'all-claims',
-      paths: /disability\/how-to-file-claim\/$/,
-      component: AllClaimsBetaBanner,
-      showEverytime: true,
-    },
-    {
-      name: 'claim-increase',
-      paths: /disability-benefits\/apply\/$/,
-      component: ClaimIncreaseBanner,
-    },
-    {
-      name: 'claim-increase',
-      paths: /^\/$/,
-      component: ClaimIncreaseBanner,
     },
     {
       name: 'personalization',

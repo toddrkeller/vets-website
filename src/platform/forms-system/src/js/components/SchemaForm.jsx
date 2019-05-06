@@ -47,8 +47,8 @@ class SchemaForm extends React.Component {
       StringField,
     };
   }
-
-  componentWillReceiveProps(newProps) {
+  // eslint-disable-next-line
+  UNSAFE_componentWillReceiveProps(newProps) {
     if (
       newProps.name !== this.props.name ||
       newProps.pagePerItemIndex !== this.props.pagePerItemIndex
@@ -149,9 +149,17 @@ class SchemaForm extends React.Component {
   }
 
   validate(formData, errors) {
-    const { schema, uiSchema } = this.props;
+    const { schema, uiSchema, appStateData } = this.props;
     if (uiSchema) {
-      uiSchemaValidate(errors, uiSchema, schema, formData);
+      uiSchemaValidate(
+        errors,
+        uiSchema,
+        schema,
+        formData,
+        '',
+        null,
+        appStateData,
+      );
     }
     return errors;
   }
@@ -205,6 +213,7 @@ SchemaForm.propTypes = {
   schema: PropTypes.object.isRequired,
   uiSchema: PropTypes.object.isRequired,
   data: PropTypes.any,
+  appStateData: PropTypes.object,
   reviewMode: PropTypes.bool,
   editModeOnReviewPage: PropTypes.bool,
   onSubmit: PropTypes.func,

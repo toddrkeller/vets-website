@@ -5,7 +5,7 @@ import appendQuery from 'append-query';
 import { createSelector } from 'reselect';
 import { omit } from 'lodash';
 import merge from 'lodash/merge';
-import recordEvent from '../../../platform/monitoring/record-event';
+import fastLevenshtein from 'fast-levenshtein';
 import { apiRequest } from '../../../platform/utilities/api';
 import environment from '../../../platform/utilities/environment';
 import _ from '../../../platform/utilities/data';
@@ -31,6 +31,7 @@ import {
   STATE_VALUES,
   TWENTY_FIVE_MB,
   USA,
+  TYPO_THRESHOLD,
 } from './constants';
 
 /**
@@ -481,12 +482,24 @@ export const isDisabilityPtsd = disability => {
     return false;
   }
 
-  const loweredDisability = disability.toLowerCase();
-  return PTSD_MATCHES.some(
-    ptsdString =>
-      ptsdString.includes(loweredDisability) ||
-      loweredDisability.includes(ptsdString),
-  );
+  const strippedDisability = disability.toLowerCase().replace(/[^a-zA-Z]/g, '');
+
+  return PTSD_MATCHES.some(ptsdString => {
+    const strippedString = ptsdString.replace(/[^a-zA-Z]/g, '');
+    if (strippedString === strippedDisability) {
+      return true;
+    }
+
+    // does the veteran's input contain a string from our match list?
+    if (strippedDisability.includes(strippedString)) {
+      return true;
+    }
+
+    return (
+      fastLevenshtein.get(strippedString, strippedDisability) <
+      Math.ceil(strippedDisability.length * TYPO_THRESHOLD)
+    );
+  });
 };
 
 export const hasNewPtsdDisability = formData =>
@@ -760,25 +773,6 @@ export const directToCorrectForm = ({
   }
 };
 
-/**
- * Pushes an event to the Analytics dataLayer if the event doesn't already
- * exist there. If the event contains a `key` property whose value matches an
- * existing item in the dataLayer with the same key/value pair, the whole event
- * and all of its properties will be skipped.
- * @param {object} event this will get pushed to `dataLayer`.
- * @param {string} key the property in the event object to use when looking for
- *                     existing matches in the dataLayer
- */
-export const recordEventOnce = (event, key) => {
-  const alreadyRecorded =
-    window.dataLayer &&
-    !!window.dataLayer.find(item => item[key] === event[key]);
-
-  if (!alreadyRecorded) {
-    recordEvent(event);
-  }
-};
-
 export const claimingRated = formData =>
   formData.ratedDisabilities &&
   formData.ratedDisabilities.some(d => d['view:selected']);
@@ -789,3 +783,15 @@ export const claimingNew = formData =>
 
 export const hasClaimedConditions = formData =>
   claimingNew(formData) || claimingRated(formData);
+
+export const hasRatedDisabilities = formData =>
+  formData.ratedDisabilities && formData.ratedDisabilities.length;
+
+/**
+ * Finds active service periods—those without end dates or end dates
+ * in the future.
+ */
+export const activeServicePeriods = formData =>
+  _.get('serviceInformation.servicePeriods', formData, []).filter(
+    sp => !sp.dateRange.to || moment(sp.dateRange.to).isAfter(moment()),
+  );

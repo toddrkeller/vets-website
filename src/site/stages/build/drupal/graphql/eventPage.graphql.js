@@ -2,26 +2,13 @@
  * An event detail page
  * Example: /pittsburgh-health-care/events/example-event
  */
+const entityElementsFromPages = require('./entityElementsForPages.graphql');
 
 module.exports = `
  fragment eventPage on NodeEvent {
-    entityId
-    entityBundle
-    entityPublished
+    ${entityElementsFromPages}
     changed
     title
-    entityUrl {
-      ... on EntityCanonicalUrl {
-        breadcrumb {
-          url {
-            path
-            routed
-          }
-          text
-        }
-        path
-      }
-    }
     fieldMedia {
       entity {
         ... on MediaImage {
@@ -38,11 +25,10 @@ module.exports = `
       }
     }
     fieldDate {
-      date
-      value
-    }
-    fieldAddToCalendar {
-      fileref 
+        startDate
+        value
+        endDate
+        endValue
     }
     fieldAddress {
       addressLine1

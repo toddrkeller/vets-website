@@ -35,8 +35,8 @@ class ArrayField extends React.Component {
     this.scrollToRow = this.scrollToRow.bind(this);
     this.isLocked = this.isLocked.bind(this);
   }
-
-  componentWillReceiveProps(newProps) {
+  // eslint-disable-next-line
+  UNSAFE_componentWillReceiveProps(newProps) {
     if (newProps.arrayData !== this.props.arrayData) {
       const arrayData = Array.isArray(newProps.arrayData)
         ? newProps.arrayData
@@ -247,6 +247,7 @@ class ArrayField extends React.Component {
                       ) : null}
                       <SchemaForm
                         data={item}
+                        appStateData={this.props.appStateData}
                         schema={itemSchema}
                         uiSchema={arrayPageConfig.uiSchema}
                         title={pageTitle}
@@ -286,6 +287,7 @@ class ArrayField extends React.Component {
                   <SchemaForm
                     reviewMode
                     data={item}
+                    appStateData={this.props.appStateData}
                     schema={itemSchema}
                     uiSchema={arrayPageConfig.uiSchema}
                     title={itemTitle}
@@ -342,5 +344,6 @@ ArrayField.propTypes = {
   path: PropTypes.array.isRequired,
   formData: PropTypes.object,
   arrayData: PropTypes.array,
+  appStateData: PropTypes.object,
   pageTitle: PropTypes.string,
 };

@@ -1,4 +1,5 @@
 import _ from '../../../platform/utilities/data';
+
 import {
   transformForSubmit,
   filterViewFields,
@@ -195,7 +196,10 @@ export function transform(formConfig, form) {
   // Grab ratedDisabilities before they're deleted in case the page is inactive
   // We need to send all of these to vets-api even if the veteran doesn't apply
   // for an increase on any of them
-  const savedRatedDisabilities = _.cloneDeep(form.data.ratedDisabilities);
+  const { ratedDisabilities } = form.data;
+  const savedRatedDisabilities = ratedDisabilities
+    ? _.cloneDeep(ratedDisabilities)
+    : undefined;
 
   // Define the transformations
   const filterEmptyObjects = formData =>
@@ -315,6 +319,42 @@ export function transform(formConfig, form) {
     return clonedData;
   };
 
+  // transform secondary disabilities into primary, with description appended
+  const transformSecondaryDisabilities = formData => {
+    if (!formData.newSecondaryDisabilities) {
+      return formData;
+    }
+
+    const clonedData = _.cloneDeep(formData);
+
+    const transformedSecondaries = clonedData.newSecondaryDisabilities.map(
+      sd => {
+        // prepend caused by condition to primary description
+        const descString = [
+          'Secondary to ',
+          sd.causedByDisability,
+          '\n',
+          sd.causedByDisabilityDescription,
+        ].join('');
+
+        return {
+          condition: sd.condition,
+          cause: causeTypes.NEW,
+          classificationCode: sd.classificationCode,
+          // truncate description to 400 characters
+          primaryDescription: descString.substring(0, 400),
+        };
+      },
+    );
+
+    clonedData.newPrimaryDisabilities = (
+      clonedData.newPrimaryDisabilities || []
+    ).concat(transformedSecondaries);
+
+    delete clonedData.newSecondaryDisabilities;
+    return clonedData;
+  };
+
   // Transform the related disabilities lists into an array of strings
   const stringifyRelatedDisabilities = formData => {
     if (!formData.vaTreatmentFacilities) {
@@ -347,6 +387,33 @@ export function transform(formConfig, form) {
       `${formData.separationPayDate}-XX-XX`,
       formData,
     );
+  };
+
+  /**
+   * We want veterans to be able to type in all chars in the homelessness POC
+   * name field, but we only want to send allowed characters (per schema) to
+   * vets-api
+   * @param {object} formData
+   * @returns {object} either formData, or if homelessness contact name exists,
+   * a copy of formData with the homelessness POC name sanitized
+   */
+  const sanitizeHomelessnessContact = formData => {
+    const { homelessnessContact } = formData;
+    if (!homelessnessContact || !homelessnessContact.name) {
+      return formData;
+    }
+
+    // When name is present, phoneNumber is required and vice-versa
+    // But neither field is required unless the other is present
+    const sanitizedHomelessnessContact = {
+      name: homelessnessContact.name
+        .replace(/[^a-zA-Z0-9-/' ]/g, ' ')
+        .trim()
+        .replace(/\s{2,}/g, ' '),
+      phoneNumber: homelessnessContact.phoneNumber,
+    };
+
+    return _.set('homelessnessContact', sanitizedHomelessnessContact, formData);
   };
 
   const addForm4142 = formData => {
@@ -465,13 +532,18 @@ export function transform(formConfig, form) {
     addPTSDCause,
     addClassificationCodeToNewDisabilities,
     splitNewDisabilities,
+    transformSecondaryDisabilities,
     stringifyRelatedDisabilities,
     transformSeparationPayDate,
+    sanitizeHomelessnessContact,
     addForm4142,
     addForm0781,
     addForm8940,
     addFileAttachmments,
-  ].reduce((formData, transformer) => transformer(formData), form.data);
+  ].reduce(
+    (formData, transformer) => transformer(formData),
+    _.cloneDeep(form.data),
+  );
 
   return JSON.stringify({ form526: transformedData });
 }

@@ -1,11 +1,7 @@
 const moment = require('moment');
 const fetch = require('node-fetch');
+const SocksProxyAgent = require('socks-proxy-agent');
 
-const GET_ALL_PAGES = require('./graphql/GetAllPages.graphql');
-const GET_PAGE_BY_ID = require('./graphql/GetPageById.graphql');
-const GET_LATEST_PAGE_BY_ID = require('./graphql/GetLatestPageById.graphql');
-
-const ENVIRONMENTS = require('../../../constants/environments');
 const DRUPALS = require('../../../constants/drupals');
 
 function encodeCredentials({ user, password }) {
@@ -26,15 +22,7 @@ function getDrupalClient(buildOptions) {
   });
 
   const envConfig = DRUPALS[buildOptions.buildtype];
-  const drupalConfig = {};
-
-  if (buildOptions.buildtype === ENVIRONMENTS.LOCALHOST) {
-    // On localhost, build args can override the default environment.
-    Object.assign(drupalConfig, envConfig, buildArgs);
-  } else {
-    // Otherwise, properties from the hardcoded env configs should take priority.
-    Object.assign(drupalConfig, buildArgs, envConfig);
-  }
+  const drupalConfig = Object.assign({}, envConfig, buildArgs);
 
   const { address, user, password } = drupalConfig;
   const drupalUri = `${address}/graphql`;
@@ -43,14 +31,29 @@ function getDrupalClient(buildOptions) {
     Authorization: `Basic ${encodedCredentials}`,
     'Content-Type': 'application/json',
   };
+  const agent = new SocksProxyAgent('socks://127.0.0.1:2001');
 
   return {
+    // We have to point to aws urls on Jenkins, so the only
+    // time we'll be using cms.va.gov addresses is locally,
+    // when we need a proxy
+    usingProxy: address.includes('cms.va.gov'),
+
     getSiteUri() {
       return address;
     },
 
+    async proxyFetch(url, options = {}) {
+      return fetch(
+        url,
+        Object.assign({}, options, {
+          agent: this.usingProxy ? agent : undefined,
+        }),
+      );
+    },
+
     async query(args) {
-      const response = await fetch(drupalUri, {
+      const response = await this.proxyFetch(drupalUri, {
         headers,
         method: 'post',
         mode: 'cors',
@@ -64,24 +67,26 @@ function getDrupalClient(buildOptions) {
       throw new Error(`HTTP error: ${response.status}: ${response.statusText}`);
     },
 
-    getAllPages() {
+    getAllPages(onlyPublishedContent = true) {
+      const GET_ALL_PAGES = require('./graphql/GetAllPages.graphql');
       return this.query({
         query: GET_ALL_PAGES,
-        variables: { today: moment().format('YYYY-MM-DD') },
-      });
-    },
-
-    getPageById(url) {
-      return this.query({
-        query: GET_PAGE_BY_ID,
-        variables: { path: url, today: moment().format('YYYY-MM-DD') },
+        variables: {
+          today: moment().format('YYYY-MM-DD'),
+          onlyPublishedContent,
+        },
       });
     },
 
     getLatestPageById(nodeId) {
+      const GET_LATEST_PAGE_BY_ID = require('./graphql/GetLatestPageById.graphql');
       return this.query({
         query: GET_LATEST_PAGE_BY_ID,
-        variables: { id: nodeId, today: moment().format('YYYY-MM-DD') },
+        variables: {
+          id: nodeId,
+          today: moment().format('YYYY-MM-DD'),
+          onlyPublishedContent: false,
+        },
       });
     },
   };

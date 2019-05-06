@@ -35,7 +35,7 @@ class MilitaryInformationContent extends React.Component {
                 <p>
                   We’re sorry. We can’t find your Department of Defense (DoD)
                   ID. We need this to access your military service records.
-                  Please call us at 1-800-827-1000, or visit your nearest VA
+                  Please call us at 800-827-1000, or visit your nearest VA
                   regional benefit office and request to be added to the Defense
                   Enrollment Eligibility Reporting System (DEERS).
                 </p>
@@ -132,7 +132,7 @@ export default function MilitaryInformation(props) {
 
   return (
     <div>
-      <h2 className="va-profile-heading">Military Service</h2>
+      <h2 className="va-profile-heading">Military service</h2>
       <DowntimeNotification
         render={handleDowntimeForSection('military service')}
         dependencies={[externalServices.emis]}

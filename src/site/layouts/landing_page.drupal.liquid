@@ -6,7 +6,18 @@
   <main>
     <div class="usa-grid usa-grid-full">
       <article class="usa-width-two-thirds">
+        {% if fieldTitleIcon %}
+          <div class="inline hub-main-icon">
+            <i class="icon-large white hub-icon-{{ fieldTitleIcon }} hub-background-{{ fieldTitleIcon }}"></i>
+          </div>
+
+          <div class="inline hub-main-title">
+            <h1>{{ title }}</h1>
+          </div>
+
+        {% else %}
         <h1>{{ title }}</h1>
+        {% endif %}
         <div class="va-introtext">
           <p>{{ fieldIntroText }}</p>
         </div>
@@ -23,8 +34,10 @@
           {% endfor %}
         </ul>
         {% endif %}
-        {% if fieldAlert != empty %}
-        {% include "src/site/blocks/alert.drupal.liquid" with alert = fieldAlert.entity %}
+        {% if fieldAlert.length %}
+            {% for alert in fieldAlert %}
+                {% include "src/site/blocks/alert.drupal.liquid" with alert = alert.entity %}
+            {% endfor %}
         {% endif %}
         {% if fieldSpokes != empty %}
         {% for spoke in fieldSpokes %}
@@ -57,11 +70,11 @@
             <button
               class="usa-accordion-button usa-accordion-button-dark rail-heading"
               aria-expanded="true" aria-controls="a1">
-              Ask Questions
+              Ask questions
             </button>
             <div id="a1" class="usa-accordion-content" aria-hidden="false">
               <section>
-                <h4>Message Us</h4>
+                <h4>Message us</h4>
                 <ul class="va-nav-linkslist-list social">
                   <li>
                     <a href="https://iris.custhelp.va.gov/app/ask">
@@ -72,7 +85,7 @@
               </section>
               {% if fieldSupportServices != empty %}
               <section>
-                <h4>Call Us</h4>
+                <h4>Call us</h4>
                 <ul class="va-nav-linkslist-list social">
                   {% for supportService in fieldSupportServices %}
                   {% assign service = supportService.entity %}

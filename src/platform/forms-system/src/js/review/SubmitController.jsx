@@ -15,7 +15,8 @@ import {
 import { setPreSubmit, setSubmission, submitForm } from '../actions';
 
 class SubmitController extends React.Component {
-  componentWillReceiveProps(nextProps) {
+  // eslint-disable-next-line
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const nextStatus = nextProps.form.submission.status;
     const previousStatus = this.props.form.submission.status;
     if (
@@ -47,7 +48,7 @@ class SubmitController extends React.Component {
   };
 
   handleSubmit = () => {
-    const { form, formConfig, pagesByChapter, trackingPrefix } = this.props;
+    const { form, formConfig, pageList, trackingPrefix } = this.props;
 
     // If a pre-submit agreement is required, make sure it was accepted
     const preSubmit = this.getPreSubmit(formConfig);
@@ -59,7 +60,7 @@ class SubmitController extends React.Component {
 
     // Validation errors in this situation are not visible, so we’d
     // like to know if they’re common
-    const { isValid, errors } = isValidForm(form, pagesByChapter);
+    const { isValid, errors } = isValidForm(form, pageList);
     if (!isValid) {
       recordEvent({
         event: `${trackingPrefix}-validation-failed`,

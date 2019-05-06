@@ -1,8 +1,5 @@
 import React from 'react';
 import recordEvent from '../../../../platform/monitoring/record-event';
-import isBrandConsolidationEnabled from '../../../../platform/brand-consolidation/feature-flag';
-
-const propertyName = isBrandConsolidationEnabled() ? 'VA.gov' : 'Vets.gov';
 
 export default function TermsAndConditions({ mhvAccount }) {
   const termsConditionsUrl =
@@ -11,8 +8,12 @@ export default function TermsAndConditions({ mhvAccount }) {
 
   if (mhvAccount.termsAndConditionsAccepted) {
     content = (
-      <p>
-        <i className="fa fa-check-circle" /> You’ve accepted the latest{' '}
+      <>
+        <p>
+          <i className="fa fa-check-circle" />
+          You’ve accepted the latest terms and conditions for medical
+          information.
+        </p>
         <a
           href={termsConditionsUrl}
           onClick={() =>
@@ -23,10 +24,9 @@ export default function TermsAndConditions({ mhvAccount }) {
             })
           }
         >
-          Terms and Conditions for Medical Information
+          View terms and conditions for medical information
         </a>
-        .
-      </p>
+      </>
     );
   } else if (mhvAccount.accountState === 'needs_terms_acceptance') {
     content = (
@@ -35,8 +35,8 @@ export default function TermsAndConditions({ mhvAccount }) {
           <div className="usa-alert-body">
             <div className="usa-alert-heading">
               <strong>
-                Want to use {propertyName} health tools to do things like refill
-                your VA prescriptions?
+                Want to use VA.gov health tools to do things like refill your VA
+                prescriptions?
               </strong>
             </div>
             <p className="usa-alert-text">
@@ -60,7 +60,7 @@ export default function TermsAndConditions({ mhvAccount }) {
         </div>
         <p>
           Once you agree to these Terms and Conditions, you’ll be able to use{' '}
-          {propertyName} health tools to:
+          VA.gov health tools to:
         </p>
         <ul>
           <li>Refill your VA prescriptions</li>
