@@ -94,14 +94,14 @@ export function apiRequest(
 ) {
   const url = resource[0] === '/' ? [BASE_URL, resource].join('') : resource;
 
-  const settings = {
-    ...DEFAULT_FETCH_SETTINGS,
-    ...customSettings,
-    headers: {
+  const settings = { ...DEFAULT_FETCH_SETTINGS, ...customSettings };
+
+  if (customSettings) {
+    settings.headers = {
       ...DEFAULT_FETCH_SETTINGS.headers,
       ...customSettings.headers,
-    },
-  };
+    };
+  }
 
   // The error callback should still be invoked if there's a general exception.
   const handleError = error => {
