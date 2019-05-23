@@ -6,9 +6,9 @@ import { createSelector } from 'reselect';
 import { omit } from 'lodash';
 import merge from 'lodash/merge';
 import fastLevenshtein from 'fast-levenshtein';
-import { apiRequest } from '../../../platform/utilities/api';
-import environment from '../../../platform/utilities/environment';
-import _ from '../../../platform/utilities/data';
+import { apiRequest } from 'platform/utilities/api';
+import environment from 'platform/utilities/environment';
+import _ from 'platform/utilities/data';
 import fullSchema from 'vets-json-schema/dist/21-526EZ-ALLCLAIMS-schema.json';
 import fileUploadUI from 'platform/forms-system/src/js/definitions/file';
 import {
@@ -181,13 +181,16 @@ export function queryForFacilities(input = '') {
   return apiRequest(
     url,
     {},
-    response =>
-      response.data.map(facility => ({
+    ({ payload }) =>
+      payload.data.map(facility => ({
         id: facility.id,
         label: facility.attributes.name,
       })),
     error => {
-      Raven.captureMessage('Error querying for facilities', { input, error });
+      Raven.captureMessage('Error querying for facilities', {
+        input,
+        error: error.payload || error.message,
+      });
       return [];
     },
   );

@@ -1,9 +1,9 @@
 import Raven from 'raven-js';
 import { isEqual } from 'lodash';
 
-import recordEvent from '../../../platform/monitoring/record-event';
+import recordEvent from 'platform/monitoring/record-event';
+import { apiRequest } from 'platform/utilities/api';
 import {
-  apiRequest,
   stripEmpties,
   toGenericAddress,
   getStatus,
@@ -46,18 +46,18 @@ export function cancelEditingAddress() {
 
 export function getLetterList(dispatch) {
   return apiRequest(
-    '/v0/letters',
+    '/letters',
     null,
-    response => {
+    ({ payload }) => {
       recordEvent({ event: 'letter-list-success' });
       return dispatch({
         type: GET_LETTERS_SUCCESS,
-        data: response,
+        payload,
       });
     },
-    response => {
+    error => {
       recordEvent({ event: 'letter-list-failure' });
-      const status = getStatus(response);
+      const status = getStatus(error);
       if (status === '403') {
         // Backend authentication problem
         dispatch({ type: BACKEND_AUTHENTICATION_ERROR });
@@ -81,19 +81,19 @@ export function getLetterList(dispatch) {
 
 export function getBenefitSummaryOptions(dispatch) {
   return apiRequest(
-    '/v0/letters/beneficiary',
+    '/letters/beneficiary',
     null,
-    response => {
+    ({ payload }) => {
       recordEvent({ event: 'letter-get-bsl-success' });
       return dispatch({
         type: GET_BENEFIT_SUMMARY_OPTIONS_SUCCESS,
-        data: response,
+        payload,
       });
     },
-    response => {
+    error => {
       recordEvent({ event: 'letter-get-bsl-failure' });
       dispatch({ type: GET_BENEFIT_SUMMARY_OPTIONS_FAILURE });
-      const status = getStatus(response);
+      const status = getStatus(error);
       throw new Error(`vets_letters_error_getBenefitSummaryOptions: ${status}`);
     },
   );
@@ -115,22 +115,22 @@ export function getAddressFailure() {
 export function getMailingAddress() {
   return dispatch =>
     apiRequest(
-      '/v0/address',
+      '/address',
       null,
-      response => {
+      ({ payload }) => {
         recordEvent({ event: 'letter-get-address-success' });
-        const responseCopy = Object.assign({}, response);
+        const payloadCopy = Object.assign({}, payload);
         // translate military address properties to generic properties for use in front end
-        responseCopy.data.attributes.address = toGenericAddress(
-          response.data.attributes.address,
+        payloadCopy.data.attributes.address = toGenericAddress(
+          payload.data.attributes.address,
         );
         return dispatch({
           type: GET_ADDRESS_SUCCESS,
-          data: responseCopy,
+          payload: payloadCopy,
         });
       },
-      response => {
-        const status = getStatus(response);
+      error => {
+        const status = getStatus(error);
         Raven.captureException(
           new Error(`vets_letters_error_getMailingAddress: ${status}`),
         );
@@ -186,7 +186,7 @@ export function getLetterPdf(letterType, letterName, letterOptions) {
       downloadWindow = window.open();
     }
     return apiRequest(
-      `/v0/letters/${letterType}`,
+      `/letters/${letterType}`,
       settings,
       response => {
         let downloadUrl;
@@ -216,8 +216,8 @@ export function getLetterPdf(letterType, letterName, letterOptions) {
         });
         return dispatch({ type: GET_LETTER_PDF_SUCCESS, data: letterType });
       },
-      response => {
-        const status = getStatus(response);
+      error => {
+        const status = getStatus(error);
         Raven.captureException(
           new Error(`vets_letters_error_getLetterPdf_${letterType}: ${status}`),
         );
@@ -273,12 +273,12 @@ export function saveAddress(address) {
   return dispatch => {
     dispatch(saveAddressPending());
     return apiRequest(
-      '/v0/address',
+      '/address',
       settings,
-      response => {
+      ({ payload }) => {
         // translate military address properties back to front end address
         const responseAddress = toGenericAddress(
-          response.data.attributes.address,
+          payload.data.attributes.address,
         );
         if (!isEqual(stripEmpties(address), stripEmpties(responseAddress))) {
           const mismatchError = new Error(
@@ -288,8 +288,8 @@ export function saveAddress(address) {
         }
         return dispatch(saveAddressSuccess(responseAddress));
       },
-      response => {
-        const status = getStatus(response);
+      error => {
+        const status = getStatus(error);
         Raven.captureException(
           new Error(`vets_letters_error_saveAddress: ${status}`),
         );
@@ -302,17 +302,17 @@ export function saveAddress(address) {
 export function getAddressCountries() {
   return dispatch =>
     apiRequest(
-      '/v0/address/countries',
+      '/address/countries',
       null,
-      response => {
+      ({ payload }) => {
         recordEvent({ event: 'letter-get-address-countries-success' });
         return dispatch({
           type: GET_ADDRESS_COUNTRIES_SUCCESS,
-          countries: response,
+          countries: payload,
         });
       },
-      response => {
-        const status = getStatus(response);
+      error => {
+        const status = getStatus(error);
         recordEvent({ event: 'letter-get-address-countries-failure' });
         Raven.captureException(
           new Error(`vets_letters_error_getAddressCountries: ${status}`),
@@ -325,17 +325,17 @@ export function getAddressCountries() {
 export function getAddressStates() {
   return dispatch =>
     apiRequest(
-      '/v0/address/states',
+      '/address/states',
       null,
-      response => {
+      ({ payload }) => {
         recordEvent({ event: 'letter-get-address-states-success' });
         return dispatch({
           type: GET_ADDRESS_STATES_SUCCESS,
-          states: response,
+          states: payload,
         });
       },
-      response => {
-        const status = getStatus(response);
+      error => {
+        const status = getStatus(error);
         recordEvent({ event: 'letter-get-address-states-success' });
         Raven.captureException(
           new Error(`vets_letters_error_getAddressStates: ${status}`),

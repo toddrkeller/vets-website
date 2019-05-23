@@ -1,5 +1,4 @@
-import environment from '../../../../platform/utilities/environment';
-import { apiRequest } from '../../../../platform/utilities/api';
+import { apiRequest } from 'platform/utilities/api';
 
 export function loadPrescriptions(options) {
   let url = '/';
@@ -32,19 +31,19 @@ export function loadPrescriptions(options) {
     });
 
     apiRequest(
-      `${environment.API_URL}/v0/prescriptions${url}`,
+      `/prescriptions${url}`,
       null,
-      data =>
+      ({ payload }) =>
         dispatch({
           type: 'LOAD_PRESCRIPTIONS_SUCCESS',
           active: options.active,
-          data,
+          payload,
         }),
-      response =>
+      ({ payload }) =>
         dispatch({
           type: 'LOAD_PRESCRIPTIONS_FAILURE',
           active: options.active,
-          errors: response.errors,
+          payload,
         }),
     );
   };

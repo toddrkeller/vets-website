@@ -1,5 +1,5 @@
-import recordEvent from '../../../platform/monitoring/record-event';
-import { apiRequest } from '../../../platform/utilities/api';
+import recordEvent from 'platform/monitoring/record-event';
+import { apiRequest } from 'platform/utilities/api';
 
 export const FETCHING_LATEST_TERMS = 'FETCHING_LATEST_TERMS';
 export const FETCH_LATEST_TERMS_FAILURE = 'FETCH_LATEST_TERMS_FAILURE';
@@ -27,8 +27,8 @@ export function fetchLatestTerms(termsName) {
     apiRequest(
       LATEST_TC_URI(termsName),
       null,
-      ({ data }) => dispatch({ type: FETCH_LATEST_TERMS_SUCCESS, data }),
-      errors => dispatch({ type: FETCH_LATEST_TERMS_FAILURE, errors }),
+      ({ payload }) => dispatch({ type: FETCH_LATEST_TERMS_SUCCESS, payload }),
+      () => dispatch({ type: FETCH_LATEST_TERMS_FAILURE }),
     );
   };
 }
@@ -63,7 +63,7 @@ export function acceptTerms(termsName) {
         recordEvent({ event: 'terms-accepted' });
         dispatch({ type: ACCEPT_LATEST_TERMS_SUCCESS });
       },
-      errors => dispatch({ type: ACCEPT_LATEST_TERMS_FAILURE, errors }),
+      () => dispatch({ type: ACCEPT_LATEST_TERMS_FAILURE }),
     );
   };
 }

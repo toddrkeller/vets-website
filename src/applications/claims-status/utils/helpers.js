@@ -1,7 +1,4 @@
-import _ from 'lodash/fp';
-import Raven from 'raven-js';
-
-import environment from '../../../platform/utilities/environment';
+import { apiFetch } from 'platform/utilities/api';
 import { SET_UNAUTHORIZED } from '../actions/index.jsx';
 
 const evidenceGathering = 'Evidence gathering, review, and decision';
@@ -241,56 +238,14 @@ export function itemsNeedingAttentionFromVet(events) {
   ).length;
 }
 
-export function makeAuthRequest(
-  url,
-  userOptions,
-  dispatch,
-  onSuccess,
-  onError,
-) {
-  const options = _.merge(
-    {
-      method: 'GET',
-      credentials: 'include',
-      mode: 'cors',
-      headers: {
-        'X-Key-Inflection': 'camel',
-      },
-      responseType: 'json',
-    },
-    userOptions,
-  );
-
-  fetch(`${environment.API_URL}${url}`, options)
-    .catch(err => {
-      Raven.captureMessage(`vets_client_error: ${err.message}`, {
-        extra: {
-          error: err,
-        },
-      });
-
-      return Promise.reject(err);
-    })
-    .then(resp => {
-      if (resp.ok) {
-        if (options.responseType) {
-          return resp[options.responseType]();
-        }
-        return Promise.resolve();
-      }
-
-      return Promise.reject(resp);
-    })
-    .then(onSuccess)
-    .catch(resp => {
-      if (resp.status === 401) {
-        dispatch({
-          type: SET_UNAUTHORIZED,
-        });
-      } else {
-        onError(resp);
-      }
-    });
+export function makeAuthRequest(url, options, dispatch, onSuccess, onError) {
+  apiFetch(url, options, onSuccess, resp => {
+    if (resp.status === 401) {
+      dispatch({ type: SET_UNAUTHORIZED });
+    } else {
+      onError(resp);
+    }
+  });
 }
 
 export function getCompletedDate(claim) {

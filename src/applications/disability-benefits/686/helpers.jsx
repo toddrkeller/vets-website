@@ -2,7 +2,7 @@ import AdditionalInfo from '@department-of-veterans-affairs/formation-react/Addi
 import React from 'react';
 import moment from 'moment';
 import { transformForSubmit } from 'platform/forms-system/src/js/helpers';
-// import { apiRequest } from '../../../platform/utilities/api';
+// import { apiRequest } from 'platform/utilities/api';
 
 export const childRelationshipStatusLabels = {
   biological: 'Biological',
@@ -51,7 +51,7 @@ export function fetchDisabilityRating({ onDone }) {
   // return apiRequest(
   //   fetchUrl,
   //   null,
-  //   payload => onDone(payload),
+  //   response => onDone(response),
   //   error => onError(error)
   // );
 }

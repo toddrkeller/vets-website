@@ -16,7 +16,7 @@ export default function recipients(state = initialState, action) {
       // Take the recipients object returned during the fetch operation
       // and one return {label, value} object for each object in the
       // action.recipients.data array.
-      const data = action.recipients.data.map(item => ({
+      const data = action.payload.recipients.data.map(item => ({
         label: item.attributes.name,
         value: item.attributes.triageTeamId,
       }));

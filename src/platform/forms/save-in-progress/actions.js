@@ -1,12 +1,12 @@
 import Raven from 'raven-js';
 import 'isomorphic-fetch';
 
-import recordEvent from '../../monitoring/record-event';
-import { logOut } from '../../user/authentication/actions';
-import environment from '../../utilities/environment';
+import recordEvent from 'platform/monitoring/record-event';
+import { logOut } from 'platform/user/authentication/actions';
+import { REMOVING_SAVED_FORM_SUCCESS } from 'platform/user/profile/actions';
+import { apiFetch } from 'platform/utilities/api';
 import { sanitizeForm } from '../helpers';
 import { removeFormApi, saveFormApi } from './api';
-import { REMOVING_SAVED_FORM_SUCCESS } from '../../user/profile/actions';
 
 export const SET_SAVE_FORM_STATUS = 'SET_SAVE_FORM_STATUS';
 export const SET_AUTO_SAVE_FORM_STATUS = 'SET_AUTO_SAVE_FORM_STATUS';
@@ -231,7 +231,7 @@ export function fetchInProgressForm(
     dispatch(setFetchFormPending(prefill));
 
     // Query the api and return a promise (for navigation / error handling afterward)
-    return fetch(`${environment.API_URL}/v0/in_progress_forms/${formId}`, {
+    return apiFetch(`/in_progress_forms/${formId}`, {
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
@@ -239,9 +239,7 @@ export function fetchInProgressForm(
       },
     })
       .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
+        if (res.ok) return res;
 
         let status = LOAD_STATUSES.failure;
         if (res.status === 401) {
@@ -252,16 +250,16 @@ export function fetchInProgressForm(
         }
         return Promise.reject(status);
       })
-      .then(resBody => {
+      .then(({ payload }) => {
         // Just in case something funny happens where the json returned isn’t an object as expected
         // Unfortunately, JavaScript is quite fiddly here, so there has to be additional checks
-        if (typeof resBody !== 'object' || Array.isArray(resBody) || !resBody) {
+        if (typeof payload !== 'object' || Array.isArray(payload) || !payload) {
           return Promise.reject(LOAD_STATUSES.invalidData);
         }
 
         // If an empty object is returned, throw a not-found
         // TODO: When / if we return a 404 for applications that don’t exist, remove this
-        if (Object.keys(resBody).length === 0) {
+        if (Object.keys(payload).length === 0) {
           return Promise.reject(LOAD_STATUSES.notFound);
         }
 
@@ -272,8 +270,8 @@ export function fetchInProgressForm(
         try {
           const dataToMigrate = {
             formId,
-            formData: resBody.formData,
-            metadata: resBody.metadata,
+            formData: payload.formData,
+            metadata: payload.metadata,
           };
 
           ({ formData, metadata } = migrateFormData(dataToMigrate, migrations));
@@ -301,8 +299,8 @@ export function fetchInProgressForm(
           Raven.captureException(e);
           Raven.captureMessage('vets_sip_error_migration', {
             extra: {
-              formData: sanitizeForm(resBody.formData),
-              metadata: resBody.metadata,
+              formData: sanitizeForm(payload.formData),
+              metadata: payload.metadata,
             },
           });
           return Promise.reject(LOAD_STATUSES.invalidData);

@@ -1,8 +1,8 @@
 import React from 'react';
 import Raven from 'raven-js';
 import moment from 'moment';
-import environment from '../../platform/utilities/environment';
 import { transformForSubmit } from 'platform/forms-system/src/js/helpers';
+import { apiFetch } from 'platform/utilities/api';
 
 function replacer(key, value) {
   // if the containing object has a name, we’re in the national guard object
@@ -31,36 +31,19 @@ function replacer(key, value) {
 }
 
 function checkStatus(guid) {
-  const headers = {
-    'Content-Type': 'application/json',
-    'X-Key-Inflection': 'camel',
-  };
+  return apiFetch(`/pension_claims/${guid}`).catch(res => {
+    if (res instanceof Error) {
+      Raven.captureException(res);
+      Raven.captureMessage('vets_pension_poll_client_error');
 
-  return fetch(`${environment.API_URL}/v0/pension_claims/${guid}`, {
-    credentials: 'include',
-    headers,
-    mode: 'cors',
-  })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
+      // keep polling because we know they submitted earlier
+      // and this is likely a network error
+      return Promise.resolve();
+    }
 
-      return Promise.reject(res);
-    })
-    .catch(res => {
-      if (res instanceof Error) {
-        Raven.captureException(res);
-        Raven.captureMessage('vets_pension_poll_client_error');
-
-        // keep polling because we know they submitted earlier
-        // and this is likely a network error
-        return Promise.resolve();
-      }
-
-      // if we get here, it's likely that we hit a server error
-      return Promise.reject(res);
-    });
+    // if we get here, it's likely that we hit a server error
+    return Promise.reject(res);
+  });
 }
 
 const POLLING_INTERVAL = 1000;
@@ -108,28 +91,16 @@ function transform(formConfig, form) {
 }
 
 export function submit(form, formConfig) {
-  const headers = {
-    'Content-Type': 'application/json',
-    'X-Key-Inflection': 'camel',
-  };
-
+  const headers = { 'Content-Type': 'application/json' };
   const body = transform(formConfig, form);
 
-  return fetch(`${environment.API_URL}/v0/pension_claims`, {
-    body,
-    credentials: 'include',
-    headers,
-    method: 'POST',
-    mode: 'cors',
-  })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(res);
-    })
-    .then(resp => {
-      const { guid, confirmationNumber, regionalOffice } = resp.data.attributes;
+  return apiFetch(`/pension_claims`, { body, headers, method: 'POST' })
+    .then(({ payload }) => {
+      const {
+        guid,
+        confirmationNumber,
+        regionalOffice,
+      } = payload.data.attributes;
       return new Promise((resolve, reject) => {
         pollStatus(
           { guid, confirmationNumber, regionalOffice },

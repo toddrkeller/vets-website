@@ -4,9 +4,9 @@ import React from 'react';
 import fullSchema from 'vets-json-schema/dist/FEEDBACK-TOOL-schema.json';
 import { transformForSubmit } from 'platform/forms-system/src/js/helpers';
 
-import dataUtils from '../../../platform/utilities/data/index';
-import { apiRequest } from '../../../platform/utilities/api';
-import recordEvent from '../../../platform/monitoring/record-event';
+import { apiRequest } from 'platform/utilities/api';
+import dataUtils from 'platform/utilities/data/index';
+import recordEvent from 'platform/monitoring/record-event';
 
 import UserInteractionRecorder from '../components/UserInteractionRecorder';
 
@@ -53,7 +53,7 @@ export function fetchInstitutions({ institutionQuery, page, onDone, onError }) {
   return apiRequest(
     fetchUrl,
     null,
-    payload => onDone(payload),
+    ({ payload }) => onDone(payload),
     error => onError(error),
   );
 }
@@ -91,9 +91,7 @@ export function transform(
 }
 
 function checkStatus(guid) {
-  const headers = { 'Content-Type': 'application/json' };
-
-  return apiRequest(`/gi_bill_feedbacks/${guid}`, { headers }, null, res => {
+  return apiRequest(`/gi_bill_feedbacks/${guid}`, null, null, res => {
     if (res instanceof Error) {
       Raven.captureException(res);
       Raven.captureMessage('vets_gi_bill_feedbacks_poll_client_error');
@@ -142,8 +140,8 @@ export function submit(form, formConfig) {
     body,
   };
 
-  const onSuccess = json => {
-    const guid = json.data.attributes.guid;
+  const onSuccess = ({ payload }) => {
+    const guid = payload.data.attributes.guid;
     return new Promise((resolve, reject) => {
       pollStatus(
         guid,

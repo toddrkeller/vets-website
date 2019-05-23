@@ -32,7 +32,7 @@ export function hcaEnrollmentStatus(state = initialState, action) {
         applicationDate,
         enrollmentDate,
         preferredFacility,
-      } = action.data;
+      } = action.payload.data;
       const isInESR =
         enrollmentStatus !== HCA_ENROLLMENT_STATUSES.noneOfTheAbove;
       return {
@@ -49,7 +49,7 @@ export function hcaEnrollmentStatus(state = initialState, action) {
     }
 
     case FETCH_ENROLLMENT_STATUS_FAILED: {
-      const { errors } = action;
+      const { errors } = action.payload;
       const noESRRecordFound =
         errors && errors.some(error => error.code === '404');
       const hasServerError = errors && errors.some(error => error.code >= 500);

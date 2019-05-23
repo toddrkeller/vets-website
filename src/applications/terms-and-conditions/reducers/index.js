@@ -13,7 +13,7 @@ import {
 const initialState = {
   accepted: false,
   attributes: {},
-  errors: null,
+  hasError: false,
   loading: {
     acceptance: false,
     tc: false,
@@ -32,14 +32,14 @@ export function termsAndConditions(state = initialState, action) {
     case FETCHING_LATEST_TERMS:
       return {
         ...state,
-        errors: null,
+        hasError: false,
         loading: { ...state.loading, tc: true },
       };
 
     case ACCEPT_LATEST_TERMS_FAILURE:
       return {
         ...state,
-        errors: action.errors,
+        hasError: true,
         loading: { ...state.loading, acceptance: false },
       };
 
@@ -53,14 +53,14 @@ export function termsAndConditions(state = initialState, action) {
     case FETCH_LATEST_TERMS_FAILURE:
       return {
         ...state,
-        errors: action.errors,
+        hasError: true,
         loading: { ...state.loading, tc: false },
       };
 
     case FETCH_LATEST_TERMS_SUCCESS: {
       return {
         ...state,
-        attributes: action.data.attributes,
+        attributes: action.payload.data.attributes,
         loading: { ...state.loading, tc: false },
       };
     }

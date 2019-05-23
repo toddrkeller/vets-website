@@ -3,6 +3,8 @@ import moment from 'moment';
 import _ from 'lodash';
 import Raven from 'raven-js';
 import { Link } from 'react-router';
+
+import get from 'platform/utilities/data/get';
 import Decision from '../components/appeals-v2/Decision';
 
 // This literally determines how many rows are displayed per page on the v2 index page
@@ -2075,9 +2077,7 @@ export const getErrorStatus = response => {
   if (response instanceof Error) {
     Raven.captureException(response, { tags: { location: 'getStatus' } });
   }
-  return response.errors && response.errors.length
-    ? response.errors[0].status
-    : UNKNOWN_STATUS;
+  return get('payload.errors[0].status', response, UNKNOWN_STATUS);
 };
 
 // Series of utility functions to sort claims and appeals by last updated date

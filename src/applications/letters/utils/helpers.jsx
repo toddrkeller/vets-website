@@ -2,23 +2,14 @@
 import React from 'react';
 import Raven from 'raven-js';
 
-import { apiRequest as commonApiClient } from '../../../platform/utilities/api';
-import environment from '../../../platform/utilities/environment';
-import { formatDateShort } from '../../../platform/utilities/date';
+import get from 'platform/utilities/data/get';
+import { formatDateShort } from 'platform/utilities/date';
 import {
   BENEFIT_OPTIONS,
   STATE_CODE_TO_NAME,
   ADDRESS_TYPES,
   MILITARY_STATES,
 } from './constants';
-
-export function apiRequest(resource, optionalSettings = {}, success, error) {
-  const baseUrl = `${environment.API_URL}`;
-  const requestUrl =
-    resource[0] === '/' ? [baseUrl, resource].join('') : resource;
-
-  return commonApiClient(requestUrl, optionalSettings, success, error);
-}
 
 export const addressUpdateUnavailable = (
   <div>
@@ -547,9 +538,7 @@ export const toGenericAddress = address => {
  * @returns {string} status code or 'unknown'
  */
 export const getStatus = response =>
-  response.errors && response.errors.length
-    ? response.errors[0].status
-    : 'unknown';
+  get('payload.errors[0].status', response, 'unknown');
 
 // NOTE: It "shouldn't" ever happen...but it did. In production.
 export function isAddressEmpty(address) {

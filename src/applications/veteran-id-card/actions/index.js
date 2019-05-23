@@ -1,5 +1,5 @@
-import recordEvent from '../../../platform/monitoring/record-event';
-import { apiRequest } from '../../../platform/utilities/api';
+import recordEvent from 'platform/monitoring/record-event';
+import { apiRequest } from 'platform/utilities/api';
 
 export const ATTRS_FETCHING = 'ATTRS_FETCHING';
 export const ATTRS_SUCCESS = 'ATTRS_SUCCESS';
@@ -19,19 +19,19 @@ export function initiateIdRequest() {
     apiRequest(
       '/id_card/attributes',
       {},
-      response => {
+      ({ payload }) => {
         recordEvent({ event: 'vic-submit-success' });
         dispatch({
           type: ATTRS_SUCCESS,
-          vicUrl: response.url,
-          traits: response.traits,
+          vicUrl: payload.url,
+          traits: payload.traits,
         });
       },
-      response => {
+      ({ payload }) => {
         recordEvent({ event: 'vic-submit-failure' });
         dispatch({
           type: ATTRS_FAILURE,
-          errors: response.errors,
+          errors: payload.errors,
         });
       },
     );
@@ -72,11 +72,11 @@ export function submitEmail(email) {
           type: VIC_EMAIL_CAPTURE_SUCCESS,
         });
       },
-      response => {
+      ({ payload }) => {
         recordEvent({ event: 'vic-email-failure' });
         dispatch({
           type: VIC_EMAIL_CAPTURE_FAILURE,
-          errors: response.errors,
+          errors: payload.errors,
         });
       },
     );

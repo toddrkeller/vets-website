@@ -1,4 +1,4 @@
-import { apiRequest } from '../../../utilities/api';
+import { apiRequest } from 'platform/utilities/api';
 
 export const RETRIEVE_SCHEDULED_DOWNTIME = 'RETRIEVE_SCHEDULED_DOWNTIME';
 export const RECEIVE_SCHEDULED_DOWNTIME = 'RECEIVE_SCHEDULED_DOWNTIME';
@@ -55,7 +55,7 @@ export function getScheduledDowntime() {
     let data;
     try {
       const response = await apiRequest('/maintenance_windows/');
-      data = response.data;
+      data = response.payload.data;
     } catch (err) {
       // Probably in a test environment and the route isn't mocked.
     } finally {

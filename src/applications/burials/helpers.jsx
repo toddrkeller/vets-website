@@ -6,29 +6,19 @@ import { transformForSubmit } from 'platform/forms-system/src/js/helpers';
 import { apiRequest } from '../../platform/utilities/api';
 
 function checkStatus(guid) {
-  const headers = { 'Content-Type': 'application/json' };
+  return apiRequest(`/burial_claims/${guid}`).catch(res => {
+    if (res instanceof Error) {
+      Raven.captureException(res);
+      Raven.captureMessage('vets_burial_poll_client_error');
 
-  return apiRequest(
-    `/burial_claims/${guid}`,
-    {
-      headers,
-      mode: 'cors',
-    },
-    null,
-    res => {
-      if (res instanceof Error) {
-        Raven.captureException(res);
-        Raven.captureMessage('vets_burial_poll_client_error');
+      // keep polling because we know they submitted earlier
+      // and this is likely a network error
+      return Promise.resolve();
+    }
 
-        // keep polling because we know they submitted earlier
-        // and this is likely a network error
-        return Promise.resolve();
-      }
-
-      // if we get here, it's likely that we hit a server error
-      return Promise.reject(res);
-    },
-  );
+    // if we get here, it's likely that we hit a server error
+    return Promise.reject(res);
+  });
 }
 
 const POLLING_INTERVAL = 1000;
@@ -41,14 +31,14 @@ function pollStatus(
   setTimeout(() => {
     checkStatus(guid)
       .then(res => {
-        if (!res || res.data.attributes.state === 'pending') {
+        if (!res || res.payload.data.attributes.state === 'pending') {
           pollStatus(
             { guid, confirmationNumber, regionalOffice },
             onDone,
             onError,
           );
-        } else if (res.data.attributes.state === 'success') {
-          const response = res.data.attributes.response || {
+        } else if (res.payload.data.attributes.state === 'success') {
+          const response = res.payload.data.attributes.response || {
             confirmationNumber,
             regionalOffice,
           };
@@ -56,7 +46,9 @@ function pollStatus(
         } else {
           // needs to start with this string to get the right message on the form
           throw new Error(
-            `vets_server_error_burial: status ${res.data.attributes.state}`,
+            `vets_server_error_burial: status ${
+              res.payload.data.attributes.state
+            }`,
           );
         }
       })
@@ -77,8 +69,8 @@ export function transform(formConfig, form) {
 
 export function submit(form, formConfig) {
   const headers = { 'Content-Type': 'application/json' };
-
   const body = transform(formConfig, form);
+
   const apiRequestOptions = {
     headers,
     body,
@@ -86,8 +78,12 @@ export function submit(form, formConfig) {
     mode: 'cors',
   };
 
-  const onSuccess = resp => {
-    const { guid, confirmationNumber, regionalOffice } = resp.data.attributes;
+  const onSuccess = ({ payload }) => {
+    const {
+      guid,
+      confirmationNumber,
+      regionalOffice,
+    } = payload.data.attributes;
     return new Promise((resolve, reject) => {
       pollStatus(
         { guid, confirmationNumber, regionalOffice },

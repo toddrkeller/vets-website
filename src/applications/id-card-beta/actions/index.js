@@ -1,4 +1,4 @@
-import { apiRequest } from '../../../platform/utilities/api';
+import { apiRequest } from 'platform/utilities/api';
 
 export const BETA_REGISTERING = 'BETA_REGISTERING';
 export const BETA_REGISTER_SUCCESS = 'BETA_REGISTER_SUCCESS';
@@ -15,10 +15,10 @@ export function registerBeta() {
     apiRequest(
       '/beta_registration/veteran_id_card',
       settings,
-      response =>
+      ({ payload }) =>
         dispatch({
           type: BETA_REGISTER_SUCCESS,
-          username: response.user,
+          username: payload.user,
           stats: 'succeeded',
         }),
       () =>

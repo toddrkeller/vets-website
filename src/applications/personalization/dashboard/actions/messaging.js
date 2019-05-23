@@ -1,6 +1,5 @@
+import { apiRequest } from 'platform/utilities/api';
 import { createUrlWithQuery } from '../utils/helpers';
-import environment from '../../../../platform/utilities/environment';
-import { apiRequest } from '../../../../platform/utilities/api';
 
 import {
   FETCH_FOLDER_FAILURE,
@@ -11,7 +10,7 @@ import {
   LOADING_RECIPIENTS,
 } from '../utils/constants';
 
-const baseUrl = `${environment.API_URL}/v0/messaging/health`;
+const BASE_URL = `/messaging/health`;
 
 export function fetchFolder(id, query = {}) {
   return dispatch => {
@@ -29,18 +28,18 @@ export function fetchFolder(id, query = {}) {
       Promise.all(
         [folderUrl, messagesUrl].map(url =>
           apiRequest(
-            `${baseUrl}${url}`,
+            `${BASE_URL}${url}`,
             null,
             response => response,
             errorHandler,
           ),
         ),
       )
-        .then(data =>
+        .then(([folder, messages]) =>
           dispatch({
             type: FETCH_FOLDER_SUCCESS,
-            folder: data[0],
-            messages: data[1],
+            folder,
+            messages,
           }),
         )
         .catch(errorHandler);
@@ -56,11 +55,10 @@ export function fetchRecipients() {
     dispatch({ type: LOADING_RECIPIENTS });
 
     apiRequest(
-      `${baseUrl}${url}`,
+      `${BASE_URL}${url}`,
       null,
-      recipients => dispatch({ type: FETCH_RECIPIENTS_SUCCESS, recipients }),
-      response =>
-        dispatch({ type: FETCH_RECIPIENTS_FAILURE, errors: response.errors }),
+      ({ payload }) => dispatch({ type: FETCH_RECIPIENTS_SUCCESS, payload }),
+      () => dispatch({ type: FETCH_RECIPIENTS_FAILURE }),
     );
   };
 }

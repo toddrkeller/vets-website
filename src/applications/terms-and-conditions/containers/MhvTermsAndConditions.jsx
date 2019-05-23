@@ -133,7 +133,7 @@ export class MhvTermsAndConditions extends React.Component {
 
   /* eslint-disable react/no-danger */
   renderTermsAndConditions = () => {
-    if (this.props.errors) {
+    if (this.props.hasError) {
       return (
         <AlertBox
           headline="We failed to process the terms and conditions"

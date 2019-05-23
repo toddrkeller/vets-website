@@ -98,11 +98,14 @@ export class AuthApp extends React.Component {
     if (!this.state.error || hasSession()) this.validateSession();
   }
 
-  handleAuthError = error => {
+  // This callback could receive a client error or error response from the API.
+  // If client error (Error), there will be a message and no payload.
+  // If error response (Response), there will be a payload and no message.
+  handleAuthError = ({ payload, message }) => {
     const loginType = this.props.location.query.type;
 
-    Raven.captureMessage(`User fetch error: ${error.message}`, {
-      extra: { error },
+    Raven.captureMessage('Auth callback user request error', {
+      extra: { payload, message },
       tags: { loginType },
     });
 
@@ -111,7 +114,7 @@ export class AuthApp extends React.Component {
     this.setState({ error: true });
   };
 
-  handleAuthSuccess = payload => {
+  handleAuthSuccess = ({ payload }) => {
     const { type } = this.props.location.query;
     const authMetrics = new AuthMetrics(type, payload);
     authMetrics.run();

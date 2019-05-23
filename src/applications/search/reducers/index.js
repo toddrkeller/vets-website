@@ -44,7 +44,7 @@ function SearchReducer(state = initialState, action) {
         perPage,
         totalPages,
         searchesPerformed,
-        errors: undefined,
+        hasError: false,
         loading: false,
       };
     }
@@ -53,7 +53,7 @@ function SearchReducer(state = initialState, action) {
       return {
         ...state,
         recommendedResults: undefined,
-        errors: action.errors,
+        hasError: true,
         results: undefined,
         loading: false,
       };

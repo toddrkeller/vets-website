@@ -39,10 +39,10 @@ export function fetchUserSelectedBenefits() {
     return apiRequest(
       '/user/preferences',
       null,
-      response => {
+      ({ payload }) => {
         dispatch({
           type: FETCH_USER_PREFERENCES_SUCCEEDED,
-          payload: response,
+          payload,
         });
       },
       () => {
@@ -67,10 +67,10 @@ export function fetchAvailableBenefits() {
     return apiRequest(
       '/user/preferences/choices/benefits',
       null,
-      response => {
+      ({ payload }) => {
         dispatch({
           type: FETCH_ALL_BENEFITS_SUCCEEDED,
-          payload: response,
+          payload,
         });
       },
       () => {

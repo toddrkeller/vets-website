@@ -59,7 +59,7 @@ function letters(state = initialState, action) {
       const letterDownloadStatus = {};
       _.forEach(letter => {
         letterDownloadStatus[letter.letterType] = DOWNLOAD_STATUSES.pending;
-      }, action.data.data.attributes.letters);
+      }, action.payload.data.attributes.letters);
 
       return {
         ...state,
@@ -100,7 +100,7 @@ function letters(state = initialState, action) {
         state,
       );
     case GET_ADDRESS_SUCCESS: {
-      const { attributes } = action.data.data;
+      const { attributes } = action.payload.data;
       return {
         ...state,
         address: attributes.address,
@@ -116,7 +116,7 @@ function letters(state = initialState, action) {
       );
     case GET_BENEFIT_SUMMARY_OPTIONS_SUCCESS: {
       // Gather all possible displayed options that the user may toggle on/off.
-      const benefitInfo = action.data.data.attributes.benefitInformation;
+      const benefitInfo = action.payload.data.attributes.benefitInformation;
       const possibleOptions = [];
       Object.keys(benefitInfo).forEach(key => {
         if (

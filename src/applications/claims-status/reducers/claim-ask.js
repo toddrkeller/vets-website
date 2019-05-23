@@ -25,7 +25,7 @@ export default function claimDetailReducer(state = initialState, action) {
     }
     case SET_DECISION_REQUEST_ERROR: {
       return _.assign(state, {
-        decisionRequestError: action.error,
+        decisionRequestError: action.payload,
         loadingDecisionRequest: false,
       });
     }

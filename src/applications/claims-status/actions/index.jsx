@@ -71,11 +71,11 @@ export function getAppeals(filter) {
     dispatch({ type: FETCH_APPEALS });
 
     makeAuthRequest(
-      '/v0/appeals',
+      '/appeals',
       null,
       dispatch,
-      appeals => {
-        dispatch({ type: SET_APPEALS, filter, appeals: appeals.data });
+      ({ payload }) => {
+        dispatch({ type: SET_APPEALS, filter, appeals: payload.data });
       },
       () => dispatch({ type: SET_APPEALS_UNAVAILABLE }),
     );
@@ -83,7 +83,7 @@ export function getAppeals(filter) {
 }
 
 export function fetchAppealsSuccess(response) {
-  const appeals = response.data;
+  const appeals = response.payload.data;
   return {
     type: FETCH_APPEALS_SUCCESS,
     appeals,
@@ -96,7 +96,7 @@ export function getAppealsV2() {
     return apiRequest(
       '/appeals',
       null,
-      appeals => dispatch(fetchAppealsSuccess(appeals)),
+      response => dispatch(fetchAppealsSuccess(response)),
       response => {
         const status = getErrorStatus(response);
         const action = { type: '' };
@@ -125,7 +125,7 @@ export function getAppealsV2() {
 }
 
 export function fetchClaimsSuccess(response) {
-  const claims = response.data;
+  const claims = response.payload.data;
   const pages = Math.ceil(claims.length / ROWS_PER_PAGE);
   return {
     type: FETCH_CLAIMS_SUCCESS,
@@ -172,7 +172,7 @@ export function pollRequest({
 }
 
 export function getSyncStatus(claimsAsyncResponse) {
-  return get('meta.syncStatus', claimsAsyncResponse, null);
+  return get('payload.meta.syncStatus', claimsAsyncResponse, null);
 }
 
 export function getClaimsV2(poll = pollRequest) {
@@ -244,8 +244,8 @@ export function getClaimDetail(id, router, poll = pollRequest) {
       onSuccess: response =>
         dispatch({
           type: SET_CLAIM_DETAIL,
-          claim: response.data,
-          meta: response.meta,
+          claim: response.payload.data,
+          meta: response.payload.meta,
         }),
       pollingInterval: window.VetsGov.pollTimeout || 1000,
       shouldFail: response => getSyncStatus(response) === 'FAILED',
@@ -261,7 +261,7 @@ export function submitRequest(id) {
       type: SUBMIT_DECISION_REQUEST,
     });
     makeAuthRequest(
-      `/v0/evss_claims/${id}/request_decision`,
+      `/evss_claims/${id}/request_decision`,
       { method: 'POST' },
       dispatch,
       () => {
@@ -274,8 +274,8 @@ export function submitRequest(id) {
           }),
         );
       },
-      error => {
-        dispatch({ type: SET_DECISION_REQUEST_ERROR, error });
+      ({ payload }) => {
+        dispatch({ type: SET_DECISION_REQUEST_ERROR, payload });
       },
     );
   };

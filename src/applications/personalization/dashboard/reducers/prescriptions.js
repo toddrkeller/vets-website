@@ -40,18 +40,18 @@ export default function prescriptions(state = initialState, action) {
       const loadingState = set(`${section}.loading`, false, state);
       const errorState = set(
         `${section}.errors`,
-        action.errors || [],
+        (action.payload && action.payload.errors) || [],
         loadingState,
       );
       return set('items', null, errorState);
     }
 
     case 'LOAD_PRESCRIPTIONS_SUCCESS': {
-      const sort = action.data.meta.sort;
+      const sort = action.payload.meta.sort;
       const sortValue = Object.keys(sort)[0];
       const sortOrder = sort[sortValue];
-      const pagination = action.data.meta.pagination;
-      const newState = { items: action.data.data };
+      const pagination = action.payload.meta.pagination;
+      const newState = { items: action.payload.data };
 
       if (action.active) {
         newState.active = {

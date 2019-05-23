@@ -1,8 +1,7 @@
 import _ from 'lodash/fp';
 import Raven from 'raven-js';
 import recordEvent from '../../platform/monitoring/record-event';
-import { apiRequest } from '../../platform/utilities/api';
-import environment from '../../platform/utilities/environment';
+import { apiFetch, apiRequest } from '../../platform/utilities/api';
 import backendServices from '../../platform/user/profile/constants/backendServices';
 import { transformForSubmit } from 'platform/forms-system/src/js/helpers';
 
@@ -82,9 +81,7 @@ export function transform(form, formConfig) {
 }
 
 function checkStatus(guid) {
-  const headers = { 'Content-Type': 'application/json' };
-
-  return apiRequest(`/vic/vic_submissions/${guid}`, { headers }, null, res => {
+  return apiRequest(`/vic/vic_submissions/${guid}`).catch(res => {
     if (res instanceof Error) {
       Raven.captureException(res);
       Raven.captureMessage('vets_vic_poll_client_error');
@@ -121,22 +118,9 @@ function pollStatus(guid, onDone, onError) {
 }
 
 export function fetchPreview(id) {
-  const headers = {
-    'X-Key-Inflection': 'camel',
-  };
-
-  return fetch(
-    `${environment.API_URL}/v0/vic/profile_photo_attachments/${id}`,
-    {
-      credentials: 'include',
-      headers,
-    },
-  )
+  return apiFetch(`/vic/profile_photo_attachments/${id}`)
     .then(resp => {
-      if (resp.ok) {
-        return resp.blob();
-      }
-
+      if (resp.ok) return resp.blob();
       return new Error(resp.responseText);
     })
     .then(blob => window.URL.createObjectURL(blob));
@@ -166,8 +150,8 @@ export function submit(form, formConfig) {
       photoPromise = fetchPreview(form.data.photo.confirmationCode);
     }
 
-    const onSuccess = resp => {
-      const guid = resp.data.attributes.guid;
+    const onSuccess = ({ payload }) => {
+      const guid = payload.data.attributes.guid;
       pollStatus(
         guid,
         response => {

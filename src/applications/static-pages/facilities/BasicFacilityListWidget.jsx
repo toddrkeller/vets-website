@@ -1,6 +1,7 @@
 import React from 'react';
-import { apiRequest } from '../../../platform/utilities/api';
 import LoadingIndicator from '@department-of-veterans-affairs/formation-react/LoadingIndicator';
+
+import { apiRequest } from 'platform/utilities/api';
 import FacilityTitle from './FacilityTitle';
 import FacilityAddress from './FacilityAddress';
 import FacilityPhone from './FacilityPhone';
@@ -25,10 +26,10 @@ export default class BasicFacilityListWidget extends React.Component {
     );
   }
 
-  handleFacilitiesSuccess = facilities => {
+  handleFacilitiesSuccess = ({ payload }) => {
     this.setState({
       loading: false,
-      facilities: facilities.data,
+      facilities: payload.data,
     });
   };
 

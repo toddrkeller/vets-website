@@ -61,8 +61,10 @@ function callAPI(dispatch, formData = {}) {
   apiRequest(
     url,
     null,
-    data => dispatch({ type: FETCH_ENROLLMENT_STATUS_SUCCEEDED, data }),
-    ({ errors }) => dispatch({ type: FETCH_ENROLLMENT_STATUS_FAILED, errors }),
+    ({ payload }) =>
+      dispatch({ type: FETCH_ENROLLMENT_STATUS_SUCCEEDED, payload }),
+    ({ payload = {} }) =>
+      dispatch({ type: FETCH_ENROLLMENT_STATUS_FAILED, payload }),
   );
 }
 

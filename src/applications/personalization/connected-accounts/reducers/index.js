@@ -23,9 +23,18 @@ function connectedAccounts(state = initialState, action) {
     case LOADING_CONNECTED_ACCOUNTS:
       return { ...state, loading: true };
     case FINISHED_CONNECTED_ACCOUNTS:
-      return { ...state, accounts: action.data, loading: false, errors: [] };
+      return {
+        ...state,
+        accounts: action.payload.data,
+        loading: false,
+        errors: [],
+      };
     case ERROR_CONNECTED_ACCOUNTS:
-      return { ...state, loading: false, errors: action.errors };
+      return {
+        ...state,
+        loading: false,
+        errors: action.payload && action.payload.errors,
+      };
     case DELETING_CONNECTED_ACCOUNT: {
       const accounts = state.accounts.map(account => {
         if (account.id === action.accountId) {
@@ -38,7 +47,11 @@ function connectedAccounts(state = initialState, action) {
     case ERROR_DELETING_CONNECTED_ACCOUNT: {
       const accounts = state.accounts.map(account => {
         if (account.id === action.accountId) {
-          return { ...account, deleting: false, errors: action.errors };
+          return {
+            ...account,
+            deleting: false,
+            errors: action.payload && action.payload.errors,
+          };
         }
         return account;
       });

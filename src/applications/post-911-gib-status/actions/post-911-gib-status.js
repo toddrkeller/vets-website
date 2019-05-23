@@ -1,7 +1,8 @@
 import Raven from 'raven-js';
 
-import recordEvent from '../../../platform/monitoring/record-event';
-import { apiRequest } from '../../../platform/utilities/api';
+import recordEvent from 'platform/monitoring/record-event';
+import { apiRequest } from 'platform/utilities/api';
+import get from 'platform/utilities/data/get';
 
 import {
   BACKEND_AUTHENTICATION_ERROR,
@@ -19,17 +20,16 @@ export function getEnrollmentData() {
     apiRequest(
       '/post911_gi_bill_status',
       null,
-      response => {
+      ({ payload }) => {
         recordEvent({ event: 'post911-status-success' });
         return dispatch({
           type: GET_ENROLLMENT_DATA_SUCCESS,
-          data: response.data.attributes,
+          data: payload.data.attributes,
         });
       },
-      response => {
+      responseOrError => {
         recordEvent({ event: 'post911-status-failure' });
-        const error =
-          response.errors.length > 0 ? response.errors[0] : undefined;
+        const error = get('payload.errors[0]', responseOrError);
         if (error) {
           if (error.status === '503' || error.status === '504') {
             // Either EVSS or a partner service is down or EVSS times out
@@ -70,11 +70,12 @@ export function getServiceAvailability() {
       serviceAvailability: SERVICE_AVAILABILITY_STATES.pending,
     });
 
-    return apiRequest('/backend_statuses/gibs')
-      .then(response => {
-        const availability = response.data.attributes.isAvailable;
-        const uptimeRemaining =
-          response.data.attributes.uptimeRemaining || null;
+    return apiRequest(
+      '/backend_statuses/gibs',
+      null,
+      ({ payload }) => {
+        const availability = payload.data.attributes.isAvailable;
+        const uptimeRemaining = payload.data.attributes.uptimeRemaining || null;
 
         dispatch({
           type: SET_SERVICE_AVAILABILITY,
@@ -87,12 +88,13 @@ export function getServiceAvailability() {
           type: SET_SERVICE_UPTIME_REMAINING,
           uptimeRemaining,
         });
-      })
-      .catch(() => {
+      },
+      () => {
         dispatch({
           type: SET_SERVICE_AVAILABILITY,
           serviceAvailability: SERVICE_AVAILABILITY_STATES.down,
         });
-      });
+      },
+    );
   };
 }

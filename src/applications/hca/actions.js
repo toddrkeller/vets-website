@@ -78,8 +78,10 @@ function callAPI(dispatch, formData = {}) {
   apiRequest(
     url,
     null,
-    data => dispatch({ type: FETCH_ENROLLMENT_STATUS_SUCCEEDED, data }),
-    ({ errors }) => dispatch({ type: FETCH_ENROLLMENT_STATUS_FAILED, errors }),
+    ({ payload }) =>
+      dispatch({ type: FETCH_ENROLLMENT_STATUS_SUCCEEDED, payload }),
+    ({ payload = {} }) =>
+      dispatch({ type: FETCH_ENROLLMENT_STATUS_FAILED, payload }),
   );
 }
 
@@ -134,13 +136,12 @@ export function getDismissedHCANotification() {
     apiRequest(
       url,
       null,
-      response =>
+      ({ payload }) =>
         dispatch({
           type: FETCH_DISMISSED_HCA_NOTIFICATION_SUCCEEDED,
-          response,
+          payload,
         }),
-      ({ errors }) =>
-        dispatch({ type: FETCH_DISMISSED_HCA_NOTIFICATION_FAILED, errors }),
+      () => dispatch({ type: FETCH_DISMISSED_HCA_NOTIFICATION_FAILED }),
     );
   };
 }

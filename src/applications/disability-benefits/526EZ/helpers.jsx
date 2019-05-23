@@ -763,9 +763,9 @@ export function fetchPaymentInformation() {
   return apiRequest(
     '/ppiu/payment_information',
     {},
-    response =>
+    ({ payload }) =>
       // Return only the bit the UI cares about
-      response.data.attributes.responses[0].paymentAccount,
+      payload.data.attributes.responses[0].paymentAccount,
     () => {
       Raven.captureMessage('vets_payment_information_fetch_failure');
       return Promise.reject();

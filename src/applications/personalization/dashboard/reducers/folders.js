@@ -33,13 +33,12 @@ const folderKey = folderName => _.kebabCase(folderName);
 export default function folders(state = initialState, action) {
   switch (action.type) {
     case FETCH_FOLDER_SUCCESS: {
-      const attributes = action.folder.data.attributes;
-      const messages = action.messages.data.map(message => message.attributes);
+      const { attributes } = action.folder.payload.data;
+      const messages = action.messages.payload.data.map(
+        message => message.attributes,
+      );
 
-      const meta = action.messages.meta;
-      const filter = meta.filter;
-      const pagination = meta.pagination;
-      const sort = meta.sort;
+      const { filter, pagination, sort } = action.messages.payload.meta;
       const sortValue = Object.keys(sort)[0];
       const sortOrder = sort[sortValue];
 

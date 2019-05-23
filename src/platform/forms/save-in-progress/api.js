@@ -1,25 +1,12 @@
 import Raven from 'raven-js';
-import recordEvent from '../../monitoring/record-event';
-import environment from '../../utilities/environment';
+import recordEvent from 'platform/monitoring/record-event';
+import { apiFetch } from 'platform/utilities/api';
+import environment from 'platform/utilities/environment';
 import { sanitizeForm } from '../helpers';
 
 export function removeFormApi(formId) {
-  return fetch(`${environment.API_URL}/v0/in_progress_forms/${formId}`, {
-    method: 'DELETE',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Key-Inflection': 'camel',
-    },
-  })
-    .then(res => {
-      if (!res.ok) {
-        return Promise.reject(res);
-      }
-
-      return Promise.resolve();
-    })
-    .catch(res => {
+  return apiFetch(`/in_progress_forms/${formId}`, { method: 'DELETE' }).catch(
+    res => {
       if (res instanceof Error) {
         Raven.captureException(res);
         Raven.captureMessage('vets_sip_error_delete');
@@ -29,7 +16,8 @@ export function removeFormApi(formId) {
       }
 
       return Promise.reject(res);
-    });
+    },
+  );
 }
 
 export function saveFormApi(

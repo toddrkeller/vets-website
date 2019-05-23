@@ -13,7 +13,7 @@ export const REMOVING_SAVED_FORM_FAILURE = 'REMOVING_SAVED_FORM_FAILURE';
 
 export * from './mhv';
 
-const baseUrl = '/user';
+const BASE_URL = '/user';
 
 export function updateProfileFields(payload) {
   return {
@@ -31,8 +31,8 @@ export function profileLoadingFinished() {
 export function refreshProfile(forceCacheClear = false) {
   return async dispatch => {
     const url = forceCacheClear
-      ? appendQuery(baseUrl, { now: new Date().getTime() })
-      : baseUrl;
+      ? appendQuery(BASE_URL, { now: new Date().getTime() })
+      : BASE_URL;
 
     const payload = await apiRequest(url);
     dispatch(updateProfileFields(payload));

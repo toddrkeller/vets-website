@@ -1,6 +1,6 @@
-import { apiRequest } from '../../../../platform/utilities/api';
+import { apiRequest } from 'platform/utilities/api';
 
-export * from '../../../../platform/user/profile/actions';
+export * from 'platform/user/profile/actions';
 
 export const LOADING_CONNECTED_ACCOUNTS = 'LOADING_CONNECTED_ACCOUNTS';
 export const FINISHED_CONNECTED_ACCOUNTS = 'FINISHED_CONNECTED_ACCOUNTS';
@@ -22,8 +22,8 @@ export function loadConnectedAccounts() {
     return apiRequest(
       grantsUrl,
       null,
-      ({ data }) => dispatch({ type: FINISHED_CONNECTED_ACCOUNTS, data }),
-      ({ errors }) => dispatch({ type: ERROR_CONNECTED_ACCOUNTS, errors }),
+      ({ payload }) => dispatch({ type: FINISHED_CONNECTED_ACCOUNTS, payload }),
+      ({ payload }) => dispatch({ type: ERROR_CONNECTED_ACCOUNTS, payload }),
     );
   };
 }
@@ -36,8 +36,12 @@ export function deleteConnectedAccount(accountId) {
       `${grantsUrl}/${accountId}`,
       { method: 'DELETE' },
       () => dispatch({ type: FINISHED_DELETING_CONNECTED_ACCOUNT, accountId }),
-      ({ errors }) =>
-        dispatch({ type: ERROR_DELETING_CONNECTED_ACCOUNT, accountId, errors }),
+      ({ payload }) =>
+        dispatch({
+          type: ERROR_DELETING_CONNECTED_ACCOUNT,
+          accountId,
+          payload,
+        }),
     );
   };
 }

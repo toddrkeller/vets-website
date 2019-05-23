@@ -109,8 +109,7 @@ class SearchApp extends React.Component {
   };
 
   renderResults() {
-    const { loading, errors } = this.props.search;
-    const hasErrors = !!(errors && errors.length > 0);
+    const { loading, hasError } = this.props.search;
     const nonBlankUserInput =
       this.state.userInput &&
       this.state.userInput.replace(/\s/g, '').length > 0;
@@ -132,7 +131,7 @@ class SearchApp extends React.Component {
       </form>
     );
 
-    if (hasErrors && !loading) {
+    if (hasError && !loading) {
       return (
         <div className="usa-width-three-fourths medium-8 small-12 columns error">
           <AlertBox

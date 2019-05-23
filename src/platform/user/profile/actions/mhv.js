@@ -1,5 +1,5 @@
-import { apiRequest } from '../../../utilities/api';
-import get from '../../../utilities/data/get';
+import get from 'platform/utilities/data/get';
+import { apiRequest } from 'platform/utilities/api';
 
 export const FETCHING_MHV_ACCOUNT = 'FETCHING_MHV_ACCOUNT';
 export const FETCH_MHV_ACCOUNT_FAILURE = 'FETCH_MHV_ACCOUNT_FAILURE';
@@ -13,17 +13,17 @@ export const UPGRADING_MHV_ACCOUNT = 'UPGRADING_MHV_ACCOUNT';
 export const UPGRADE_MHV_ACCOUNT_FAILURE = 'UPGRADE_MHV_ACCOUNT_FAILURE';
 export const UPGRADE_MHV_ACCOUNT_SUCCESS = 'UPGRADE_MHV_ACCOUNT_SUCCESS';
 
-const baseUrl = '/mhv_account';
+const BASE_URL = '/mhv_account';
 
 export function fetchMHVAccount() {
   return dispatch => {
     dispatch({ type: FETCHING_MHV_ACCOUNT });
 
     apiRequest(
-      baseUrl,
+      BASE_URL,
       null,
-      ({ data }) => dispatch({ type: FETCH_MHV_ACCOUNT_SUCCESS, data }),
-      ({ errors }) => dispatch({ type: FETCH_MHV_ACCOUNT_FAILURE, errors }),
+      ({ payload }) => dispatch({ type: FETCH_MHV_ACCOUNT_SUCCESS, payload }),
+      ({ payload }) => dispatch({ type: FETCH_MHV_ACCOUNT_FAILURE, payload }),
     );
   };
 }
@@ -33,9 +33,9 @@ export function createMHVAccount() {
     dispatch({ type: CREATING_MHV_ACCOUNT });
 
     return apiRequest(
-      baseUrl,
+      BASE_URL,
       { method: 'POST' },
-      ({ data }) => dispatch({ type: CREATE_MHV_ACCOUNT_SUCCESS, data }),
+      ({ payload }) => dispatch({ type: CREATE_MHV_ACCOUNT_SUCCESS, payload }),
       () => dispatch({ type: CREATE_MHV_ACCOUNT_FAILURE }),
     );
   };
@@ -52,7 +52,7 @@ export function upgradeMHVAccount() {
     // Note that as long as the actual MHV upgrade responded with a success,
     // it will count as a success even if user fetch fails for whatever reason.
     try {
-      mhvAccount = await apiRequest(`${baseUrl}/upgrade`, { method: 'POST' });
+      mhvAccount = await apiRequest(`${BASE_URL}/upgrade`, { method: 'POST' });
       userProfile = await apiRequest('/user');
     } catch (error) {
       if (!mhvAccount) return dispatch({ type: UPGRADE_MHV_ACCOUNT_FAILURE });

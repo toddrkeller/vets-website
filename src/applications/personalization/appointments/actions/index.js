@@ -1,4 +1,4 @@
-import { apiRequest } from '../../../../platform/utilities/api';
+import { apiRequest } from 'platform/utilities/api';
 
 export const FETCH_APPOINTMENTS = 'FETCH_APPOINTMENTS';
 export const FETCH_APPOINTMENTS_SUCCESS = 'FETCH_APPOINTMENTS_SUCCESS';
@@ -13,15 +13,15 @@ export function fetchAppointments() {
     return apiRequest(
       '/appointments',
       null,
-      res =>
+      ({ payload }) =>
         dispatch({
           type: FETCH_APPOINTMENTS_SUCCESS,
-          data: res.data.attributes.appointments,
+          data: payload.data.attributes.appointments,
         }),
-      err => {
+      error => {
         dispatch({
           type: FETCH_APPOINTMENTS_FAILURE,
-          err,
+          error,
         });
       },
     );

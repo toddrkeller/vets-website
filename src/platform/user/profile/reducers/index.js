@@ -81,7 +81,7 @@ function profileInformation(state = initialState, action) {
         'mhvAccount',
         {
           ...state.mhvAccount,
-          errors: action.errors,
+          errors: action.payload && action.payload.errors,
           loading: false,
         },
         state,
@@ -111,13 +111,20 @@ function profileInformation(state = initialState, action) {
 
     case FETCH_MHV_ACCOUNT_SUCCESS:
     case CREATE_MHV_ACCOUNT_SUCCESS:
-      return updateMhvAccountState(state, action.data.attributes);
+      return updateMhvAccountState(state, action.payload.data.attributes);
 
     case UPGRADE_MHV_ACCOUNT_SUCCESS: {
       const newState = !action.userProfile
         ? state
-        : Object.assign({}, state, mapRawUserDataToState(action.userProfile));
-      return updateMhvAccountState(newState, action.mhvAccount.data.attributes);
+        : Object.assign(
+            {},
+            state,
+            mapRawUserDataToState(action.userProfile.payload),
+          );
+      return updateMhvAccountState(
+        newState,
+        action.mhvAccount.payload.data.attributes,
+      );
     }
 
     case REMOVING_SAVED_FORM_SUCCESS: {

@@ -2,7 +2,7 @@ export const FETCH_SEARCH_RESULTS = 'FETCH_SEARCH_RESULTS';
 export const FETCH_SEARCH_RESULTS_SUCCESS = 'FETCH_SEARCH_RESULTS_SUCCESS';
 export const FETCH_SEARCH_RESULTS_FAILURE = 'FETCH_SEARCH_RESULTS_FAILURE';
 
-import { apiRequest } from '../../../platform/utilities/api';
+import { apiRequest } from 'platform/utilities/api';
 
 export function fetchSearchResults(query, page) {
   return dispatch => {
@@ -21,17 +21,13 @@ export function fetchSearchResults(query, page) {
     apiRequest(
       queryString,
       settings,
-      response =>
+      ({ payload }) =>
         dispatch({
           type: FETCH_SEARCH_RESULTS_SUCCESS,
-          results: response.data.attributes.body,
-          meta: response.meta,
+          results: payload.data.attributes.body,
+          meta: payload.meta,
         }),
-      error =>
-        dispatch({
-          type: FETCH_SEARCH_RESULTS_FAILURE,
-          errors: error.errors,
-        }),
+      () => dispatch({ type: FETCH_SEARCH_RESULTS_FAILURE }),
     );
   };
 }
