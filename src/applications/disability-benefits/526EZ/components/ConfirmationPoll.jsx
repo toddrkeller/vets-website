@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import get from '../../../../platform/utilities/data/get';
-import { apiRequest } from '../../../../platform/utilities/api';
+import { apiRequest } from 'platform/utilities/api';
+import get from 'platform/utilities/data/get';
 
 import ConfirmationPage from '../containers/ConfirmationPage';
 import { pendingMessage } from '../content/confirmation-poll';
@@ -53,11 +53,11 @@ export class ConfirmationPoll extends React.Component {
         }
 
         // Check status
-        const status = response.data.attributes.status;
+        const status = response.payload.data.attributes.status;
         if (terminalStatuses.has(status)) {
           this.setState({
             submissionStatus: status,
-            claimId: get('data.attributes.claimId', response) || null,
+            claimId: get('payload.data.attributes.claimId', response) || null,
           });
         } else {
           // Wait for a bit and recurse
@@ -82,7 +82,7 @@ export class ConfirmationPoll extends React.Component {
         this.setState({
           submissionStatus: submissionStatuses.apiFailure,
           // NOTE: I don't know that it'll always take this shape.
-          failureCode: get('errors[0].status', response),
+          failureCode: get('payload.errors[0].status', response),
         });
       },
     );

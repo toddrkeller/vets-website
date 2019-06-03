@@ -37,9 +37,10 @@ export default (state = initialState, action) => {
       const newState = set('fetchCallState', requestStates.succeeded, state);
 
       // The full list is potentially more than just compensation ITFs, but we don't need those
-      const itfList = get('attributes.intentToFile', action.data).filter(
-        i => i.type === 'compensation',
-      );
+      const itfList = get(
+        'data.attributes.intentToFile',
+        action.payload,
+      ).filter(i => i.type === 'compensation');
       const activeITF = itfList.find(i => i.status === itfStatuses.active);
 
       // Set the curentITFStatus
@@ -61,7 +62,7 @@ export default (state = initialState, action) => {
     case ITF_CREATION_SUCCEEDED: {
       const newState = set('creationCallState', requestStates.succeeded, state);
       newState.previousITF = state.currentITF;
-      newState.currentITF = action.data.attributes.intentToFile;
+      newState.currentITF = action.payload.data.attributes.intentToFile;
       return newState;
     }
     case ITF_CREATION_FAILED:
