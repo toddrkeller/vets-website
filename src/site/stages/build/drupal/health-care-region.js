@@ -4,11 +4,12 @@ const {
   createFileObj,
   paginatePages,
   updateEntityUrlObj,
+  generateBreadCrumbs,
 } = require('./page');
 
 // Creates the facility pages
 function createHealthCareRegionListPages(page, drupalPagePath, files) {
-  const sidebar = { facilitySidebar: page.facilitySidebar };
+  const sidebar = page.facilitySidebar;
 
   // Create the top-level locations page for Health Care Regions
   const locEntityUrl = createEntityUrlObj(drupalPagePath);
@@ -23,7 +24,9 @@ function createHealthCareRegionListPages(page, drupalPagePath, files) {
     title: page.title,
   };
   const locPage = updateEntityUrlObj(locObj, drupalPagePath, 'Locations');
+  const locPath = locPage.entityUrl.path;
   locPage.regionOrOffice = page.title;
+  locPage.entityUrl = generateBreadCrumbs(locPath);
 
   files[`${drupalPagePath}/locations/index.html`] = createFileObj(
     locPage,
@@ -45,6 +48,7 @@ function createHealthCareRegionListPages(page, drupalPagePath, files) {
     homelessHealthServices: page.homelessHealthServices,
     genomicMedicineHealthServices: page.genomicMedicineHealthServices,
     veteranCareHealthServices: page.veteranCareHealthServices,
+    otherHealthServices: page.otherHealthServices,
     fieldClinicalHealthServi: page.fieldClinicalHealthCareServi,
     facilitySidebar: sidebar,
     entityUrl: hsEntityUrl,
@@ -57,7 +61,9 @@ function createHealthCareRegionListPages(page, drupalPagePath, files) {
     'Patient and health services',
     'health-services',
   );
+  const hsPath = hsPage.entityUrl.path;
   hsPage.regionOrOffice = page.title;
+  hsPage.entityUrl = generateBreadCrumbs(hsPath);
 
   files[`${drupalPagePath}/health-services/index.html`] = createFileObj(
     hsPage,
@@ -75,7 +81,9 @@ function createHealthCareRegionListPages(page, drupalPagePath, files) {
     alert: page.alert,
   };
   const prPage = updateEntityUrlObj(prObj, drupalPagePath, 'Press Releases');
+  const prPath = prPage.entityUrl.path;
   prPage.regionOrOffice = page.title;
+  prPage.entityUrl = generateBreadCrumbs(prPath);
 
   paginatePages(
     prPage,
@@ -101,7 +109,9 @@ function createHealthCareRegionListPages(page, drupalPagePath, files) {
     'Community stories',
     'stories',
   );
+  const nsPath = nsPage.entityUrl.path;
   nsPage.regionOrOffice = page.title;
+  nsPage.entityUrl = generateBreadCrumbs(nsPath);
 
   paginatePages(
     nsPage,
@@ -122,7 +132,9 @@ function createHealthCareRegionListPages(page, drupalPagePath, files) {
     { alert: page.alert },
   );
   const eventPage = updateEntityUrlObj(eventObj, drupalPagePath, 'Events');
+  const eventPagePath = eventPage.entityUrl.path;
   eventPage.regionOrOffice = page.title;
+  eventPage.entityUrl = generateBreadCrumbs(eventPagePath);
 
   paginatePages(
     eventPage,
@@ -149,7 +161,9 @@ function createHealthCareRegionListPages(page, drupalPagePath, files) {
     drupalPagePath,
     'Leadership',
   );
+  const bioPagePath = bioListingPage.entityUrl.path;
   bioListingPage.regionOrOffice = page.title;
+  bioListingPage.entityUrl = generateBreadCrumbs(bioPagePath);
 
   paginatePages(
     bioListingPage,

@@ -8,8 +8,8 @@ import { formattedDate } from '../utils/helpers';
 
 import backendServices from 'platform/user/profile/constants/backendServices';
 import { fetchFolder, fetchRecipients } from '../actions/messaging';
+import { recordDashboardClick } from '../helpers';
 import { mhvBaseUrl } from 'platform/site-wide/cta-widget/helpers';
-import environment from 'platform/utilities/environment';
 
 class MessagingWidget extends React.Component {
   componentDidMount() {
@@ -87,12 +87,12 @@ class MessagingWidget extends React.Component {
 
     return (
       <div id="msg-widget">
-        {environment.isProduction() && <h2>Check secure messages</h2>}
-        {!environment.isProduction() && <h3>Check secure messages</h3>}
+        <h3>Check secure messages</h3>
         {content}
         <p>
           <a
             href={`${mhvBaseUrl()}/mhv-portal-web/secure-messaging`}
+            onClick={recordDashboardClick('view-all-messages')}
             rel="noopener noreferrer"
             target="_blank"
           >

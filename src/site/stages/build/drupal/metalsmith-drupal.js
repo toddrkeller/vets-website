@@ -60,6 +60,7 @@ function pipeDrupalPagesIntoMetalsmith(contentData, files) {
 }
 
 async function loadDrupal(buildOptions) {
+  const contentApi = getApiClient(buildOptions);
   const drupalCache = path.join(
     buildOptions.cacheDirectory,
     DRUPAL_CACHE_FILENAME,
@@ -77,7 +78,6 @@ async function loadDrupal(buildOptions) {
   if (shouldPullDrupal) {
     log('Attempting to load Drupal content from API...');
 
-    const contentApi = getApiClient(buildOptions);
     const drupalTimer = `${contentApi.getSiteUri()} response time: `;
 
     console.time(drupalTimer);
@@ -86,9 +86,14 @@ async function loadDrupal(buildOptions) {
 
     console.timeEnd(drupalTimer);
 
+    if (drupalPages.errors && drupalPages.errors.length) {
+      log(JSON.stringify(drupalPages.errors, null, 2));
+      throw new Error('Drupal query returned with errors');
+    }
+
     const serialized = Buffer.from(JSON.stringify(drupalPages, null, 2));
     fs.ensureDirSync(buildOptions.cacheDirectory);
-    fs.emptyDirSync(path.join(buildOptions.cacheDirectory, 'drupal'));
+    fs.emptyDirSync(path.dirname(drupalCache));
     fs.writeFileSync(drupalCache, serialized);
   } else {
     log('Attempting to load Drupal content from cache...');
@@ -149,7 +154,6 @@ function getDrupalContent(buildOptions) {
     } catch (err) {
       buildOptions.drupalError = drupalData;
       log(err.stack);
-      log(JSON.stringify(drupalData));
       log('Failed to pipe Drupal content into Metalsmith!');
       if (buildOptions.buildtype !== ENVIRONMENTS.LOCALHOST) {
         done(err);

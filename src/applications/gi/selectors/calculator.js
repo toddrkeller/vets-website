@@ -2,6 +2,7 @@ import { isEmpty } from 'lodash';
 import { createSelector } from 'reselect';
 
 import { formatCurrency } from '../utils/helpers';
+import environment from '../../../platform/utilities/environment';
 
 const getConstants = state => state.constants.constants;
 
@@ -562,7 +563,12 @@ const getDerivedValues = createSelector(
     } else if (isFlightOrCorrespondence) {
       housingAllowTerm1 = 0;
     } else if (isOJT) {
-      housingAllowTerm1 = ropOjt * (tier * bah + kickerBenefit);
+      // Changes for 18970. Keeping the changes behind a production flag until EDU can review the fix.
+      if (onlineClasses === 'yes' && !environment.isProduction()) {
+        housingAllowTerm1 = ropOjt * ((tier * avgBah) / 2 + kickerBenefit);
+      } else {
+        housingAllowTerm1 = ropOjt * (tier * bah + kickerBenefit);
+      }
     } else if (onlineClasses === 'yes') {
       housingAllowTerm1 =
         termLength * rop * ((tier * avgBah) / 2 + kickerBenefit);
@@ -914,7 +920,9 @@ export const getCalculatedBenefits = createSelector(
       tuition: true,
       // only necessay for chapter 33 recipients who are the only beneficiaries to receive a housing allowance (BAH)
       // (disabled in staging)
-      beneficiaryLocationQuestion: false,
+      beneficiaryLocationQuestion:
+        eligibility.onlineClasses !== 'yes' &&
+        eligibility.giBillChapter === '33',
       giBillBenefit: derived.isChapter33,
       books: false,
       yellowRibbon: false,
