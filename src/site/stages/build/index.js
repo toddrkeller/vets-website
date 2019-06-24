@@ -25,7 +25,7 @@ const checkBrokenLinks = require('./plugins/check-broken-links');
 const rewriteVaDomains = require('./plugins/rewrite-va-domains');
 const rewriteDrupalPages = require('./plugins/rewrite-drupal-pages');
 const createDrupalDebugPage = require('./plugins/create-drupal-debug');
-const configureAssets = require('./plugins/configure-assets');
+// const configureAssets = require('./plugins/configure-assets');
 const applyFragments = require('./plugins/apply-fragments');
 const checkCollections = require('./plugins/check-collections');
 const createHeaderFooter = require('./plugins/create-header-footer');
@@ -163,7 +163,7 @@ function defaultBuild(BUILD_OPTIONS) {
   smith.use(addSubheadingsIds(BUILD_OPTIONS));
   smith.use(downloadDrupalAssets(BUILD_OPTIONS));
 
-  configureAssets(smith, BUILD_OPTIONS);
+  // configureAssets(smith, BUILD_OPTIONS);
 
   smith.use(createSitemaps(BUILD_OPTIONS));
   smith.use(createRedirects(BUILD_OPTIONS));
@@ -176,7 +176,7 @@ function defaultBuild(BUILD_OPTIONS) {
       .filter(fileName => {
         const doc = cheerio.load(files[fileName].contents);
         return (
-          !fileName.startsWith('drupal') &&
+          !files[fileName].isDrupalPage &&
           doc('#va-detailpage-sidebar').length > 0
         );
       })
