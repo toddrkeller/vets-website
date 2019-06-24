@@ -6,19 +6,20 @@ import moment from 'moment';
 
 import LoadingIndicator from '@department-of-veterans-affairs/formation-react/LoadingIndicator';
 import { getNextPagePath } from 'platform/forms-system/src/js/routing';
+import recordEvent from 'platform/monitoring/record-event';
 import _ from 'platform/utilities/data';
 
 import {
   formDescriptions,
   formBenefits,
-} from '../../../applications/personalization/profile360/util/helpers';
-import { toggleLoginModal } from '../../site-wide/user-nav/actions';
+} from 'applications/personalization/profile360/util/helpers';
+import { toggleLoginModal } from 'platform/site-wide/user-nav/actions';
 import { fetchInProgressForm, removeInProgressForm } from './actions';
 import FormStartControls from './FormStartControls';
 import { getIntroState } from './selectors';
 import DowntimeNotification, {
   externalServiceStatus,
-} from '../../monitoring/DowntimeNotification';
+} from 'platform/monitoring/DowntimeNotification';
 import DowntimeMessage from './DowntimeMessage';
 
 class SaveInProgressIntro extends React.Component {
@@ -128,8 +129,24 @@ class SaveInProgressIntro extends React.Component {
     } else if (renderSignInMessage) {
       alert = renderSignInMessage(prefillEnabled);
     } else if (prefillEnabled && !verifyRequiredPrefill) {
-      const { retentionPeriod } = this.props;
-      alert = (
+      const { buttonOnly, retentionPeriod } = this.props;
+      alert = buttonOnly ? (
+        <>
+          <button className="usa-button-primary" onClick={this.openLoginModal}>
+            Sign in to start your application
+          </button>
+          {!this.props.hideUnauthedStartLink && (
+            <p>
+              <button
+                className="va-button-link schemaform-start-button"
+                onClick={this.goToBeginning}
+              >
+                Start your application without signing in
+              </button>
+            </p>
+          )}
+        </>
+      ) : (
         <div className="usa-alert usa-alert-info schemaform-sip-alert">
           <div className="usa-alert-body">
             <h3 className="usa-alert-heading">
@@ -160,16 +177,18 @@ class SaveInProgressIntro extends React.Component {
                 className="usa-button-primary"
                 onClick={this.openLoginModal}
               >
-                Sign in to Start Your Application
+                Sign in to start your application
               </button>
-              <p>
-                <button
-                  className="va-button-link schemaform-start-button"
-                  onClick={this.goToBeginning}
-                >
-                  Start your application without signing in.
-                </button>
-              </p>
+              {!this.props.hideUnauthedStartLink && (
+                <p>
+                  <button
+                    className="va-button-link schemaform-start-button"
+                    onClick={this.goToBeginning}
+                  >
+                    Start your application without signing in
+                  </button>
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -205,11 +224,12 @@ class SaveInProgressIntro extends React.Component {
   };
 
   goToBeginning = () => {
+    recordEvent({ event: 'no-login-start-form' });
     this.props.router.push(this.getStartPage());
   };
 
   openLoginModal = () => {
-    this.props.toggleLoginModal(true);
+    this.props.toggleLoginModal(true, 'cta-form');
   };
 
   renderDowntime = (downtime, children) => {
@@ -259,6 +279,9 @@ class SaveInProgressIntro extends React.Component {
     const content = (
       <div>
         {!this.props.buttonOnly && this.getAlert(savedForm)}
+        {this.props.buttonOnly &&
+          !this.props.user.login.currentlyLoggedIn &&
+          this.getAlert(savedForm)}
         {this.props.user.login.currentlyLoggedIn && (
           <FormStartControls
             resumeOnly={this.props.resumeOnly}
@@ -333,6 +356,7 @@ SaveInProgressIntro.propTypes = {
   downtime: PropTypes.object,
   gaStartEventName: PropTypes.string,
   startMessageOnly: PropTypes.bool,
+  hideUnauthedStartLink: PropTypes.bool,
 };
 
 SaveInProgressIntro.defaultProps = {

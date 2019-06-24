@@ -4,6 +4,18 @@ DRUPAL_MAPPING = [
   'prod': 'vagovprod',
 ]
 
+DRUPAL_ADDRESSES = [
+  'vagovdev'    : 'http://internal-dev-vagovcms-3000-552087943.us-gov-west-1.elb.amazonaws.com',
+  'vagovstaging': 'http://internal-stg-vagovcms-3000-521598752.us-gov-west-1.elb.amazonaws.com',
+  'vagovprod'   : 'http://internal-prod-vagovcms-3001-2053888503.us-gov-west-1.elb.amazonaws.com',
+]
+
+DRUPAL_CREDENTIALS = [
+  'vagovdev'    : 'drupal-dev',
+  'vagovstaging': 'drupal-staging',
+  'vagovprod'   : 'drupal-prod',
+]
+
 ALL_VAGOV_BUILDTYPES = [
   'vagovdev',
   'vagovstaging',
@@ -74,13 +86,34 @@ def slackNotify() {
   }
 }
 
+def puppeteerNotification() {
+  message = "(Testing) @chris.valarida: `${env.BRANCH_NAME}` failed the puppeteer tests. |${env.RUN_DISPLAY_URL}".stripMargin()
+  slackSend message: message,
+    color: 'danger',
+    failOnError: true
+}
+
+def slackIntegrationNotify() {
+  message = "(Testing) @jbalboni: integration tests failed. |${env.RUN_DISPLAY_URL}".stripMargin()
+  slackSend message: message,
+    color: 'danger',
+    failOnError: true
+}
+
+def slackCachedContent(envName) {
+  message = "vets-website built with cached Drupal data for ${envName}. |${env.RUN_DISPLAY_URL}".stripMargin()
+  slackSend message: message,
+    color: 'warning',
+    failOnError: true
+}
+
 def setup() {
   stage("Setup") {
 
     dir("vagov-content") {
       checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', noTags: true, reference: '', shallow: true]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'va-bot', url: 'git@github.com:department-of-veterans-affairs/vagov-content.git']]]
     }
-    
+
     dir("vets-website") {
       sh "mkdir -p build"
       sh "mkdir -p logs/selenium"
@@ -98,26 +131,54 @@ def setup() {
   }
 }
 
-def build(String ref, dockerContainer, Boolean contentOnlyBuild) {
+def build(String ref, dockerContainer, String assetSource, String envName, Boolean useCache) {
+  def buildDetails = buildDetails(envName, ref)
+  def drupalAddress = DRUPAL_ADDRESSES.get(envName)
+  def drupalCred = DRUPAL_CREDENTIALS.get(envName)
+  def drupalMode = useCache ? '' : '--pull-drupal'
+
+  withCredentials([usernamePassword(credentialsId:  "${drupalCred}", usernameVariable: 'DRUPAL_USERNAME', passwordVariable: 'DRUPAL_PASSWORD')]) {
+    dockerContainer.inside(DOCKER_ARGS) {
+      sh "cd /application && npm --no-color run build -- --buildtype=${envName} --asset-source=${assetSource} --drupal-address=${drupalAddress} ${drupalMode}"
+      sh "cd /application && echo \"${buildDetails}\" > build/${envName}/BUILD.txt"
+    }
+  }
+}
+
+def buildAll(String ref, dockerContainer, Boolean contentOnlyBuild) {
   stage("Build") {
     if (shouldBail()) { return }
 
     try {
       def builds = [:]
+      def envUsedCache = [:]
       def assetSource = contentOnlyBuild ? ref : 'local'
 
       for (int i=0; i<VAGOV_BUILDTYPES.size(); i++) {
         def envName = VAGOV_BUILDTYPES.get(i)
-        def buildDetails = buildDetails(envName, ref)
         builds[envName] = {
-          dockerContainer.inside(DOCKER_ARGS) {
-            sh "cd /application && npm --no-color run build -- --buildtype=${envName} --asset-source=${assetSource}"
-            sh "cd /application && echo \"${buildDetails}\" > build/${envName}/BUILD.txt"
+          try {
+            build(ref, dockerContainer, assetSource, envName, false)
+            envUsedCache[envName] = false
+          } catch (error) {
+            // We're not using the cache for content only builds, because requesting
+            // a content only build is an attempt to refresh content from the current set
+            if (!contentOnlyBuild) {
+              dockerContainer.inside(DOCKER_ARGS) {
+                sh "cd /application && node script/drupal-aws-cache.js --fetch --buildtype=${envName}"
+              }
+              build(ref, dockerContainer, assetSource, envName, true)
+              envUsedCache[envName] = true
+            } else {
+              build(ref, dockerContainer, assetSource, envName, false)
+              envUsedCache[envName] = false
+            }
           }
         }
       }
 
       parallel builds
+      return envUsedCache
     } catch (error) {
       slackNotify()
       throw error
@@ -125,7 +186,13 @@ def build(String ref, dockerContainer, Boolean contentOnlyBuild) {
   }
 }
 
-def prearchive(dockerContainer) {
+def prearchive(dockerContainer, envName) {
+  dockerContainer.inside(DOCKER_ARGS) {
+    sh "cd /application && node script/prearchive.js --buildtype=${envName}"
+  }
+}
+
+def prearchiveAll(dockerContainer) {
   stage("Prearchive Optimizations") {
     if (shouldBail()) { return }
 
@@ -136,9 +203,7 @@ def prearchive(dockerContainer) {
         def envName = VAGOV_BUILDTYPES.get(i)
 
         builds[envName] = {
-          dockerContainer.inside(DOCKER_ARGS) {
-            sh "cd /application && node script/prearchive.js --buildtype=${envName}"
-          }
+          prearchive(dockerContainer, envName)
         }
       }
 
@@ -150,7 +215,17 @@ def prearchive(dockerContainer) {
   }
 }
 
-def archive(dockerContainer, String ref) {
+def archive(dockerContainer, String ref, String envName) {
+  dockerContainer.inside(DOCKER_ARGS) {
+    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'vetsgov-website-builds-s3-upload',
+                     usernameVariable: 'AWS_ACCESS_KEY', passwordVariable: 'AWS_SECRET_KEY']]) {
+      sh "tar -C /application/build/${envName} -cf /application/build/${envName}.tar.bz2 ."
+      sh "s3-cli put --acl-public --region us-gov-west-1 /application/build/${envName}.tar.bz2 s3://vetsgov-website-builds-s3-upload/${ref}/${envName}.tar.bz2"
+    }
+  }
+}
+
+def archiveAll(dockerContainer, String ref) {
   stage("Archive") {
     if (shouldBail()) { return }
 
@@ -161,18 +236,44 @@ def archive(dockerContainer, String ref) {
         def envName = VAGOV_BUILDTYPES.get(i)
 
         archives[envName] = {
-          dockerContainer.inside(DOCKER_ARGS) {
-            withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'vetsgov-website-builds-s3-upload',
-                             usernameVariable: 'AWS_ACCESS_KEY', passwordVariable: 'AWS_SECRET_KEY']]) {
-              sh "tar -C /application/build/${envName} -cf /application/build/${envName}.tar.bz2 ."
-              sh "s3-cli put --acl-public --region us-gov-west-1 /application/build/${envName}.tar.bz2 s3://vetsgov-website-builds-s3-upload/${ref}/${envName}.tar.bz2"
-            }
-          }
+          archive(dockerContainer, ref, envName)
         }
       }
 
       parallel archives
 
+    } catch (error) {
+      slackNotify()
+      throw error
+    }
+  }
+}
+
+def cacheDrupalContent(dockerContainer, envUsedCache) {
+  stage("Cache Drupal Content") {
+    if (!isDeployable()) { return }
+
+    try {
+      def archives = [:]
+
+      for (int i=0; i<VAGOV_BUILDTYPES.size(); i++) {
+        def envName = VAGOV_BUILDTYPES.get(i)
+
+        if (!envUsedCache[envName]) {
+          dockerContainer.inside(DOCKER_ARGS) {
+            sh "cd /application && node script/drupal-aws-cache.js --buildtype=${envName}"
+          }
+        } else {
+          slackCachedContent(envName)
+        }
+      }
+
+      dockerContainer.inside(DOCKER_ARGS) {
+        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'vetsgov-website-builds-s3-upload',
+                         usernameVariable: 'AWS_ACCESS_KEY', passwordVariable: 'AWS_SECRET_KEY']]) {
+          sh "s3-cli sync --acl-public --region us-gov-west-1 /application/.cache/content s3://vetsgov-website-builds-s3-upload/content/"
+        }
+      }
     } catch (error) {
       slackNotify()
       throw error

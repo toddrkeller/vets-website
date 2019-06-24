@@ -1,9 +1,8 @@
 import React from 'react';
 import moment from 'moment';
 import _ from 'lodash';
-import Raven from 'raven-js';
+import * as Sentry from '@sentry/browser';
 import { Link } from 'react-router';
-import siteName from '../../../platform/brand-consolidation/site-name';
 import Decision from '../components/appeals-v2/Decision';
 
 // This literally determines how many rows are displayed per page on the v2 index page
@@ -42,10 +41,9 @@ export function getTypeName(appeal) {
     case APPEAL_TYPES.appeal:
       return 'Appeal';
     default:
-      Raven.captureMessage('appeals-unknown-type', {
-        extra: {
-          type: appeal.type,
-        },
+      Sentry.withScope(scope => {
+        scope.setExtra('type', appeal.type);
+        Sentry.captureMessage('appeals-unknown-type');
       });
       return null;
   }
@@ -631,7 +629,7 @@ export function getStatusContents(appeal, name = {}) {
             <br />
             Washington, DC 20038
             <br />
-            Fax 1-844-678-8979
+            Fax 844-678-8979
           </p>
         </div>
       );
@@ -725,7 +723,7 @@ export function getStatusContents(appeal, name = {}) {
                 <br />
                 Janesville, WI 53547-4444
                 <br />
-                Fax 1-844-531-7818
+                Fax 844-531-7818
               </p>
             </div>
           )}
@@ -820,7 +818,7 @@ export function getStatusContents(appeal, name = {}) {
     default:
       contents.title = 'We don’t know your status';
       contents.description = (
-        <p>We’re sorry, {siteName} will soon be updated to show your status.</p>
+        <p>We’re sorry, VA.gov will soon be updated to show your status.</p>
       );
   }
 
@@ -1046,10 +1044,9 @@ export function getEventContent(event) {
         description: '',
       };
     default:
-      Raven.captureMessage('appeals-unknown-event', {
-        extra: {
-          eventType: event.type,
-        },
+      Sentry.withScope(scope => {
+        scope.setExtra('eventType', event.type);
+        Sentry.captureMessage('appeals-unknown-event');
       });
       return null;
   }
@@ -1119,7 +1116,7 @@ export const makeDurationText = timeliness => {
     const durationError = new Error(
       'vets_appeals_v2_helpers_makeDurationText_bad_timeliness_input',
     );
-    Raven.captureException(durationError);
+    Sentry.captureException(durationError);
     return durationText;
   }
 
@@ -1163,6 +1160,7 @@ export const makeDurationText = timeliness => {
  */
 export function getNextEvents(appeal) {
   const { type: currentStatus, details } = appeal.attributes.status;
+  const appealType = appeal.type;
 
   switch (currentStatus) {
     case STATUS_TYPES.pendingSoc: {
@@ -1421,14 +1419,20 @@ export function getNextEvents(appeal) {
                   Your hearing will be transcribed and added to your appeal
                   file. The judge won’t make a decision about your appeal at the
                   hearing.{' '}
-                  <a href="/disability/file-an-appeal/board-of-veterans-appeals/">
+                  <a
+                    href={
+                      appealType === APPEAL_TYPES.appeal
+                        ? '/decision-reviews/board-appeal/veterans-law-judge-hearing/'
+                        : '/disability/file-an-appeal/board-of-veterans-appeals/'
+                    }
+                  >
                     Learn more about hearings.
                   </a>
                 </p>
                 {appeal.type === APPEAL_TYPES.appeal && (
                   <p>
                     If you’ve changed your mind about having a hearing, you can
-                    write to the Board of Veterans‘ Appeals to withdraw your
+                    write to the Board of Veterans’ Appeals to withdraw your
                     hearing request.{' '}
                     {eligibleToSwitch
                       ? eligibleDescription
@@ -1456,7 +1460,13 @@ export function getNextEvents(appeal) {
                 Your hearing will be transcribed and added to your appeal file.
                 The judge won’t make a decision about your appeal at the
                 hearing.{' '}
-                <a href="/disability/file-an-appeal/board-of-veterans-appeals/">
+                <a
+                  href={
+                    appealType === APPEAL_TYPES.appeal
+                      ? '/decision-reviews/board-appeal/veterans-law-judge-hearing/'
+                      : '/disability/file-an-appeal/board-of-veterans-appeals/'
+                  }
+                >
                   Learn more about hearings
                 </a>
                 , including how to prepare for, reschedule, or cancel your
@@ -1759,7 +1769,7 @@ export function getAlertContent(alert, appealIsActive) {
               <br />
               Washington, DC 20038
               <br />
-              Fax 1-844-678-8979
+              Fax 844-678-8979
             </p>
             <p>
               Please contact your Veterans Service Organization or
@@ -1790,7 +1800,7 @@ export function getAlertContent(alert, appealIsActive) {
               <br />
               Washington, DC 20038
               <br />
-              Fax 1-844-678-8979
+              Fax 844-678-8979
             </p>
           </div>
         ),
@@ -1983,7 +1993,7 @@ export function getAlertContent(alert, appealIsActive) {
                     Appeal to a Veterans Law Judge. A judge at the Board of
                     Veterans’ Appeals in Washington, D.C. will review your case.
                     This option is called a{' '}
-                    <a href="/decision-reviews/board-appeal">Board Appeal</a>.{' '}
+                    <a href="/decision-reviews/board-appeal">Board Appeal</a>{' '}
                     <strong>Available until {formattedDueDate}.</strong>
                   </p>
                 </li>
@@ -2061,7 +2071,10 @@ export const UNKNOWN_STATUS = 'unknown';
  */
 export const getErrorStatus = response => {
   if (response instanceof Error) {
-    Raven.captureException(response, { tags: { location: 'getStatus' } });
+    Sentry.withScope(scope => {
+      scope.setTag('location', 'getStatus');
+      Sentry.captureException(response);
+    });
   }
   return response.errors && response.errors.length
     ? response.errors[0].status

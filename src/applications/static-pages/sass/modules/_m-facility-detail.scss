@@ -23,4 +23,14 @@
    li.active-level > .usa-sidenav-sub_list {
       display: block;
    }
+
+   &.va-sidebarnav {
+      h4 {
+         width: 100%;
+      }
+   }
+}
+
+.when-where-width {
+   width: 45px;
 }

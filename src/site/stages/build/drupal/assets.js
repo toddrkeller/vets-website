@@ -1,4 +1,6 @@
 const getDrupalClient = require('./api');
+const cheerio = require('cheerio');
+const { PUBLIC_URLS } = require('../../../constants/drupals');
 
 function replacePathInData(data, replacer) {
   let current = data;
@@ -11,7 +13,7 @@ function replacePathInData(data, replacer) {
       let newValue = current;
 
       if (typeof current[key] === 'string') {
-        newValue = replacer(current[key]);
+        newValue = replacer(current[key], key);
       } else {
         newValue = replacePathInData(current[key], replacer);
       }
@@ -45,10 +47,39 @@ function convertAssetPath(drupalInstance, url) {
   return `/files/${path}`;
 }
 
+function updateAttr(attr, doc, client) {
+  const assetsToDownload = [];
+  const usingAWS = !!PUBLIC_URLS[client.getSiteUri()];
+
+  doc(`[${attr}*="cms.va.gov/sites"]`).each((i, el) => {
+    const item = doc(el);
+    const srcAttr = item.attr(attr);
+
+    const siteURI = srcAttr.match(
+      /http[s]{0,1}:\/\/[^.]*[.]{0,1}cms\.va\.gov/,
+    )[0];
+    const awsURI = Object.entries(PUBLIC_URLS).find(
+      entry => entry[1] === siteURI,
+    )[0];
+
+    const newAssetPath = convertAssetPath(siteURI, srcAttr);
+    assetsToDownload.push({
+      // urls in WYSIWYG content won't be the aws urls, they'll be cms urls
+      // this means we need to replace them with the aws urls if we're on jenkins
+      src: usingAWS ? srcAttr.replace(siteURI, awsURI) : srcAttr,
+      dest: newAssetPath,
+    });
+
+    item.attr(attr, newAssetPath);
+  });
+
+  return assetsToDownload;
+}
+
 function convertDrupalFilesToLocal(drupalData, files, options) {
   const client = getDrupalClient(options);
 
-  return replacePathInData(drupalData, data => {
+  return replacePathInData(drupalData, (data, key) => {
     if (data.startsWith(`${client.getSiteUri()}/sites/default/files`)) {
       const newPath = convertAssetPath(client.getSiteUri(), data);
       const decodedFileName = decodeURIComponent(newPath).substring(1);
@@ -61,6 +92,29 @@ function convertDrupalFilesToLocal(drupalData, files, options) {
       };
 
       return newPath;
+    }
+
+    if (key === 'processed') {
+      const doc = cheerio.load(data);
+      const assetsToDownload = [
+        ...updateAttr('href', doc, client),
+        ...updateAttr('src', doc, client),
+      ];
+
+      if (assetsToDownload.length) {
+        assetsToDownload.forEach(({ src, dest }) => {
+          const decodedFileName = decodeURIComponent(dest).substring(1);
+          // eslint-disable-next-line no-param-reassign
+          files[decodedFileName] = {
+            path: decodedFileName,
+            source: src,
+            isDrupalAsset: true,
+            contents: '',
+          };
+        });
+      }
+
+      return doc.html();
     }
 
     return data;

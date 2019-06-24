@@ -156,7 +156,7 @@ const attachmentsSchema = {
   minItems: 1,
   items: {
     type: 'object',
-    required: ['attachmentId'],
+    required: ['attachmentId', 'name'],
     properties: {
       name: {
         type: 'string',
@@ -203,7 +203,7 @@ const formConfig = {
   },
   transformForSubmit: transform,
   introduction: IntroductionPage,
-  additionalRoutes: !environment.isProduction() && [
+  additionalRoutes: [
     {
       path: 'id-form',
       component: IDPage,
@@ -378,6 +378,7 @@ const formConfig = {
           title: 'Permanent address',
           initialData: {},
           uiSchema: {
+            'ui:description': PrefillMessage,
             veteranAddress: _.merge(addressUI('Permanent address', true), {
               street: {
                 'ui:errorMessages': {
@@ -560,8 +561,7 @@ const formConfig = {
         documentUpload: {
           title: 'Upload your discharge papers',
           path: 'military-service/documents',
-          depends: formData =>
-            !formData['view:isUserInMVI'] && !environment.isProduction(),
+          depends: formData => !formData['view:isUserInMvi'],
           editModeOnReviewPage: true,
           uiSchema: {
             'ui:title': 'Upload your discharge papers',

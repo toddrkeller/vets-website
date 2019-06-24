@@ -1,10 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import classNames from 'classnames';
 
-import isBrandConsolidationEnabled from '../../../brand-consolidation/feature-flag';
-import isVATeamSiteSubdomain from '../../../brand-consolidation/va-subdomain';
-import { hasSession } from '../../../user/profile/utilities';
+import isVATeamSiteSubdomain from '../../../utilities/environment/va-subdomain';
+import { hasSession } from 'platform/user/profile/utilities';
 import HelpMenu from './HelpMenu';
 import SearchMenu from './SearchMenu';
 import SignInProfileMenu from './SignInProfileMenu';
@@ -44,30 +42,11 @@ class SearchHelpSignIn extends React.Component {
       );
     }
 
-    const buttonClasses = classNames({
-      'va-button-link': true,
-      'sign-in-link': true,
-    });
-
-    if (!isBrandConsolidationEnabled()) {
-      return (
-        <div className="sign-in-links">
-          <button className={buttonClasses} onClick={this.handleSignInSignUp}>
-            Sign In
-          </button>
-          <span className="sign-in-spacer">|</span>
-          <button className={buttonClasses} onClick={this.handleSignInSignUp}>
-            Sign Up
-          </button>
-        </div>
-      );
-    }
-
     return (
       <div className="sign-in-links">
         {!isSubdomain && (
           <button className="sign-in-link" onClick={this.handleSignInSignUp}>
-            Sign In
+            Sign in
           </button>
         )}
         {isSubdomain && (
@@ -75,7 +54,7 @@ class SearchHelpSignIn extends React.Component {
             className="usa-button sign-in-link"
             href={`https://www.va.gov/my-va`}
           >
-            Sign In
+            Sign in
           </a>
         )}
       </div>

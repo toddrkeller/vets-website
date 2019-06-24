@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import DowntimeNotification, {
   externalServices,
   externalServiceStatus,
-} from '../../../../platform/monitoring/DowntimeNotification';
-import DowntimeApproaching from '../../../../platform/monitoring/DowntimeNotification/components/DowntimeApproaching';
-import recordEvent from '../../../../platform/monitoring/record-event';
+} from 'platform/monitoring/DowntimeNotification';
+import DowntimeApproaching from 'platform/monitoring/DowntimeNotification/components/DowntimeApproaching';
+import recordEvent from 'platform/monitoring/record-event';
 
 import Vet360TransactionReporter from '../vet360/containers/TransactionReporter';
 
@@ -14,6 +14,7 @@ import Hero from './Hero';
 import ContactInformation from './ContactInformation';
 import PersonalInformation from './PersonalInformation';
 import MilitaryInformation from './MilitaryInformation';
+import PaymentInformation from '../containers/PaymentInformation';
 
 import IdentityVerification from './IdentityVerification';
 import MVIError from './MVIError';
@@ -32,7 +33,7 @@ class ProfileView extends React.Component {
     user: PropTypes.object,
   };
 
-  handleDowntime = (downtime, children) => {
+  handleDowntimeApproaching = (downtime, children) => {
     if (downtime.status === externalServiceStatus.downtimeApproaching) {
       return (
         <DowntimeApproaching
@@ -69,11 +70,12 @@ class ProfileView extends React.Component {
         content = (
           <DowntimeNotification
             appTitle={appTitle}
-            render={this.handleDowntime}
+            render={this.handleDowntimeApproaching}
             dependencies={[
               externalServices.emis,
-              externalServices.vet360,
+              externalServices.evss,
               externalServices.mvi,
+              externalServices.vet360,
             ]}
           >
             <div>
@@ -84,6 +86,7 @@ class ProfileView extends React.Component {
                 militaryInformation={militaryInformation}
               />
               <ContactInformation />
+              <PaymentInformation />
               <PersonalInformation
                 fetchPersonalInformation={fetchPersonalInformation}
                 personalInformation={personalInformation}

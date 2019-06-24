@@ -16,12 +16,26 @@ const QA = '... qa';
 const LIST_OF_LINK_TEASERS = '... listOfLinkTeasers';
 const REACT_WIDGET = '... reactWidget';
 const SPANISH_SUMMARY = '... spanishSummary';
+const ALERT_PARAGRAPH = '... alertParagraph';
+const TABLE = '... table';
+
+// Get current feature flags
+const {
+  featureFlags,
+  enabledFeatureFlags,
+} = require('./../../../../utilities/featureFlags');
+
+let fieldAministrationKey;
+if (enabledFeatureFlags[featureFlags.GRAPHQL_MODULE_UPDATE]) {
+  fieldAministrationKey = 'FieldNodePageFieldAdministration';
+} else {
+  fieldAministrationKey = 'FieldNodeFieldAdministration';
+}
 
 module.exports = `
 
   fragment page on NodePage {
     ${entityElementsFromPages}
-    entityId
     fieldIntroText
     fieldDescription
     fieldFeaturedContent {
@@ -43,10 +57,21 @@ module.exports = `
         ${LIST_OF_LINK_TEASERS}
         ${REACT_WIDGET} 
         ${SPANISH_SUMMARY}
+        ${TABLE}
+        ${ALERT_PARAGRAPH}
       }
     }
     ${FIELD_ALERT} 
     ${FIELD_RELATED_LINKS}
+    fieldAdministration {
+      ... on ${fieldAministrationKey} {
+        entity {
+          ... on TaxonomyTermAdministration {
+            name
+          }
+        }
+      }
+    }
     fieldPageLastBuilt {
       date
     }    

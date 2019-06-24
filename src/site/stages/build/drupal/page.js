@@ -1,4 +1,5 @@
 /* eslint-disable no-param-reassign, no-continue */
+const path = require('path');
 const _ = require('lodash');
 const set = require('lodash/fp/set');
 
@@ -26,7 +27,7 @@ function createEntityUrlObj(pagePath) {
   return {
     breadcrumb: [
       {
-        url: { path: '/drupal/', routed: true },
+        url: { path: '/', routed: true },
         text: 'Home',
       },
     ],
@@ -105,10 +106,9 @@ function paginatePages(page, files, field, layout, ariaLabel, perPage) {
       };
     }
 
-    files[`drupal${pagedPage.entityUrl.path}/index.html`] = createFileObj(
-      pagedPage,
-      layout,
-    );
+    const fileName = path.join('.', pagedPage.entityUrl.path, 'index.html');
+
+    files[fileName] = createFileObj(pagedPage, layout);
   }
 }
 
@@ -120,19 +120,19 @@ function updateEntityUrlObj(page, drupalPagePath, title, pathSuffix) {
       .replace(/&/g, '')
       .replace(/\s+/g, '-')
       .toLowerCase();
+
   let generatedPage = Object.assign({}, page);
+  const absolutePath = path.join('/', drupalPagePath, pathSuffix);
+
   generatedPage.entityUrl.breadcrumb = [
     ...page.entityUrl.breadcrumb,
     {
-      url: { path: drupalPagePath },
+      url: { path: absolutePath },
       text: page.title,
     },
   ];
-  generatedPage = set(
-    'entityUrl.path',
-    `${drupalPagePath}/${pathSuffix}`,
-    page,
-  );
+
+  generatedPage = set('entityUrl.path', absolutePath, page);
 
   generatedPage.title = title;
   return generatedPage;
@@ -140,54 +140,120 @@ function updateEntityUrlObj(page, drupalPagePath, title, pathSuffix) {
 
 // Generate breadcrumbs from drupal page path
 function generateBreadCrumbs(pathString) {
-  const pathArray = _.split(pathString, '/');
+  const pathArray = pathString.split('/');
   const entityUrlObj = createEntityUrlObj(pathString);
+  let previous = '';
+  let trimmedValue;
   for (const value of pathArray) {
+    trimmedValue = _.trim(value, '/');
     if (value) {
+      const dehandlized =
+        value === 'pittsburgh-health-care'
+          ? 'VA Pittsburgh health care'
+          : _.startCase(_.trim(value, '-'));
       entityUrlObj.breadcrumb.push({
         url: {
-          path: `/${value}`,
+          path: `${previous}${value}`,
           routed: true,
         },
-        text: _.startCase(_.trim(value, '-')),
+        text: dehandlized,
       });
     }
+    previous += `${trimmedValue}/`;
   }
-  entityUrlObj.breadcrumb.pop();
+
   return entityUrlObj;
+}
+
+function getHubSidebar(navsArray, owner) {
+  // Get the right benefits hub sidebar
+  for (const nav of navsArray) {
+    if (nav !== null && nav.links.length) {
+      const navName = _.toLower(nav.name.replace(/&/g, 'and'));
+      if (owner !== null && owner === navName) {
+        return { sidebar: nav };
+      }
+    }
+  }
+
+  // default to no menu
+  return { sidebar: {} };
 }
 
 function compilePage(page, contentData) {
   const {
     data: {
-      sidebarQuery: sidebarNav = {},
+      healthcareHubSidebarQuery: healthcareHubSidebarNav = {},
+      recordsHubSidebarQuery: recordsHubSidebarNav = {},
+      pensionHubSidebarQuery: pensionHubSidebarNav = {},
+      careersHubSidebarQuery: careersHubSidebarNav = {},
       alerts: alertsItem = {},
       facilitySidebarQuery: facilitySidebarNav = {},
-      icsFiles: { entities: icsFiles },
+      outreachSidebarQuery: outreachSidebarNav = {},
     },
   } = contentData;
 
-  const sidebarNavItems = { sidebar: sidebarNav };
+  // Get page owner
+  let owner;
+  if (page.fieldAdministration) {
+    owner = _.toLower(page.fieldAdministration.entity.name);
+  }
+  // Benefits hub side navs in an array to loop through later
+  const sideNavs = [
+    healthcareHubSidebarNav,
+    recordsHubSidebarNav,
+    pensionHubSidebarNav,
+    careersHubSidebarNav,
+  ];
+  let sidebarNavItems;
+
   const facilitySidebarNavItems = { facilitySidebar: facilitySidebarNav };
+  const outreachSidebarNavItems = { outreachSidebar: outreachSidebarNav };
   const alertItems = { alert: alertsItem };
 
-  const {
-    entityUrl: { path: drupalPagePath },
-    entityBundle,
-  } = page;
+  const { entityUrl, entityBundle } = page;
 
   const pageIdRaw = parseInt(page.entityId, 10);
   const pageId = { pid: pageIdRaw };
+  page.entityUrl = generateBreadCrumbs(entityUrl.path);
   let pageCompiled;
 
   switch (entityBundle) {
-    case 'page':
-      pageCompiled = Object.assign(page, sidebarNavItems, alertItems, pageId);
+    case 'office':
+      pageCompiled = Object.assign(
+        {},
+        page,
+        facilitySidebarNavItems,
+        outreachSidebarNavItems,
+        alertItems,
+        pageId,
+      );
+      break;
+
+    case 'health_care_region_detail_page':
+      pageCompiled = Object.assign(
+        {},
+        page,
+        facilitySidebarNavItems,
+        outreachSidebarNavItems,
+        alertItems,
+        pageId,
+      );
+      break;
+    case 'health_care_local_facility':
+      pageCompiled = Object.assign(
+        {},
+        page,
+        facilitySidebarNavItems,
+        alertItems,
+        pageId,
+      );
       break;
     case 'health_care_region_page':
       pageCompiled = Object.assign(
         page,
         facilitySidebarNavItems,
+        outreachSidebarNavItems,
         alertItems,
         pageId,
       );
@@ -196,6 +262,7 @@ function compilePage(page, contentData) {
       pageCompiled = Object.assign(
         page,
         facilitySidebarNavItems,
+        outreachSidebarNavItems,
         alertItems,
         pageId,
       );
@@ -204,43 +271,45 @@ function compilePage(page, contentData) {
       pageCompiled = Object.assign(
         page,
         facilitySidebarNavItems,
+        outreachSidebarNavItems,
         alertItems,
         pageId,
       );
       break;
     case 'event': {
-      let addToCalendar;
-      for (const icsFile of icsFiles) {
-        if (
-          page.fieldAddToCalendar !== null &&
-          icsFile.fid === parseInt(page.fieldAddToCalendar.fileref, 10)
-        ) {
-          addToCalendar = icsFile.url;
-        }
-      }
-
       // eslint-disable-next-line no-param-reassign
-      page.entityUrl = generateBreadCrumbs(drupalPagePath);
       pageCompiled = Object.assign(
         page,
         facilitySidebarNavItems,
+        outreachSidebarNavItems,
         alertItems,
         pageId,
-        { addToCalendarLink: addToCalendar },
       );
       break;
     }
     case 'person_profile':
-      page.entityUrl = generateBreadCrumbs(drupalPagePath);
       pageCompiled = Object.assign(
         page,
         facilitySidebarNavItems,
+        outreachSidebarNavItems,
         alertItems,
         pageId,
       );
       break;
     default:
-      pageCompiled = page;
+      // Get the right benefits hub sidebar
+      sidebarNavItems = getHubSidebar(sideNavs, owner);
+      page.entityUrl = generateBreadCrumbs(entityUrl.path);
+
+      // Build page with correct sidebar
+      pageCompiled = Object.assign(
+        {},
+        page,
+        sidebarNavItems,
+        outreachSidebarNavItems,
+        alertItems,
+        pageId,
+      );
       break;
   }
 
@@ -253,4 +322,5 @@ module.exports = {
   paginatePages,
   createEntityUrlObj,
   updateEntityUrlObj,
+  generateBreadCrumbs,
 };

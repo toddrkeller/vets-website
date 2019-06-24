@@ -24,6 +24,19 @@ export const benefitsLabels = {
       </a>
     </p>
   ),
+  // 1995-STEM related
+  fryScholarship: (
+    <p>
+      Fry Scholarship (Chapter 33)
+      <br />
+      <a
+        href="/education/survivor-dependent-benefits/fry-scholarship/"
+        target="_blank"
+      >
+        Learn more
+      </a>
+    </p>
+  ),
   chapter30: (
     <p>
       Montgomery GI Bill (MGIB-AD, Chapter 30)
@@ -151,9 +164,9 @@ export const directDepositWarning = (
     >
       www.usdirectexpress.com
     </a>{' '}
-    or by telephone at <a href="tel:8003331795">1-800-333-1795</a>. If you chose
+    or by telephone at <a href="tel:8003331795">800-333-1795</a>. If you chose
     not to enroll, you must contact representatives handling waiver requests for
-    the Department of Treasury at <a href="tel:8882242950">1-888-224-2950</a>.
+    the Department of Treasury at <a href="tel:8882242950">888-224-2950</a>.
     They will address any questions or concerns you may have and encourage your
     participation in EFT.
   </div>

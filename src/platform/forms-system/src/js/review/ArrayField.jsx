@@ -35,8 +35,8 @@ class ArrayField extends React.Component {
     this.scrollToRow = this.scrollToRow.bind(this);
     this.isLocked = this.isLocked.bind(this);
   }
-
-  componentWillReceiveProps(newProps) {
+  // eslint-disable-next-line
+  UNSAFE_componentWillReceiveProps(newProps) {
     if (newProps.arrayData !== this.props.arrayData) {
       const arrayData = Array.isArray(newProps.arrayData)
         ? newProps.arrayData
@@ -247,8 +247,10 @@ class ArrayField extends React.Component {
                       ) : null}
                       <SchemaForm
                         data={item}
+                        appStateData={this.props.appStateData}
                         schema={itemSchema}
                         uiSchema={arrayPageConfig.uiSchema}
+                        trackingPrefix={this.props.trackingPrefix}
                         title={pageTitle}
                         hideTitle
                         name={fieldName}
@@ -286,8 +288,10 @@ class ArrayField extends React.Component {
                   <SchemaForm
                     reviewMode
                     data={item}
+                    appStateData={this.props.appStateData}
                     schema={itemSchema}
                     uiSchema={arrayPageConfig.uiSchema}
+                    trackingPrefix={this.props.trackingPrefix}
                     title={itemTitle}
                     name={fieldName}
                     onChange={data => this.handleSetData(index, data)}
@@ -338,9 +342,11 @@ export default ArrayField;
 ArrayField.propTypes = {
   schema: PropTypes.object.isRequired,
   uiSchema: PropTypes.object,
+  trackingPrefix: PropTypes.string.required,
   pageKey: PropTypes.string.isRequired,
   path: PropTypes.array.isRequired,
   formData: PropTypes.object,
   arrayData: PropTypes.array,
+  appStateData: PropTypes.object,
   pageTitle: PropTypes.string,
 };

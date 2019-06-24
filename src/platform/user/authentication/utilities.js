@@ -1,18 +1,17 @@
 import appendQuery from 'append-query';
-import Raven from 'raven-js';
+import * as Sentry from '@sentry/browser';
 
 import recordEvent from '../../monitoring/record-event';
 import environment from '../../utilities/environment';
 
 export const authnSettings = {
   RETURN_URL: 'authReturnUrl',
-  PENDING_AUTH_ACTION: 'pendingAuthAction',
-  PENDING_LOGIN_POLICY: 'pendingLoginPolicy',
 };
 
 const SESSIONS_URI = `${environment.API_URL}/sessions`;
 const sessionTypeUrl = type => `${SESSIONS_URI}/${type}/new`;
 
+const SIGNUP_URL = sessionTypeUrl('signup');
 const MHV_URL = sessionTypeUrl('mhv');
 const DSLOGON_URL = sessionTypeUrl('dslogon');
 const IDME_URL = sessionTypeUrl('idme');
@@ -31,27 +30,51 @@ const loginUrl = policy => {
   }
 };
 
-export function setRavenLoginType(loginType) {
-  Raven.setTagsContext({ loginType });
+export function setSentryLoginType(loginType) {
+  Sentry.setTag('loginType', loginType);
 }
 
-export function clearRavenLoginType() {
-  const context = Raven.getContext(); // Note: Do not mutate context directly.
-  const tags = { ...context.tags };
-  delete tags.loginType;
-  Raven.setTagsContext(tags);
+export function clearSentryLoginType() {
+  Sentry.setTag('loginType', undefined);
+}
+
+function redirectWithGAClientId(redirectUrl) {
+  try {
+    // eslint-disable-next-line no-undef
+    const trackers = ga.getAll();
+
+    // Tracking IDs for Staging and Prod
+    const vagovTrackingIds = ['UA-50123418-16', 'UA-50123418-17'];
+
+    const tracker = trackers.find(t => {
+      const trackingId = t.get('trackingId');
+      return vagovTrackingIds.includes(trackingId);
+    });
+
+    const clientId = tracker && tracker.get('clientId');
+
+    window.location = clientId
+      ? // eslint-disable-next-line camelcase
+        appendQuery(redirectUrl, { client_id: clientId })
+      : redirectUrl;
+  } catch (e) {
+    window.location = redirectUrl;
+  }
 }
 
 function redirect(redirectUrl, clickedEvent) {
   // Keep track of the URL to return to after auth operation.
   sessionStorage.setItem(authnSettings.RETURN_URL, window.location);
   recordEvent({ event: clickedEvent });
-  window.location = redirectUrl;
+
+  if (redirectUrl.includes('idme')) {
+    redirectWithGAClientId(redirectUrl);
+  } else {
+    window.location = redirectUrl;
+  }
 }
 
 export function login(policy) {
-  sessionStorage.setItem(authnSettings.PENDING_AUTH_ACTION, 'login');
-  sessionStorage.setItem(authnSettings.PENDING_LOGIN_POLICY, policy);
   return redirect(loginUrl(policy), 'login-link-clicked-modal');
 }
 
@@ -64,14 +87,10 @@ export function verify() {
 }
 
 export function logout() {
-  clearRavenLoginType();
+  clearSentryLoginType();
   return redirect(LOGOUT_URL, 'logout-link-clicked');
 }
 
 export function signup() {
-  sessionStorage.setItem(authnSettings.PENDING_AUTH_ACTION, 'register');
-  return redirect(
-    appendQuery(IDME_URL, { signup: true }),
-    'register-link-clicked',
-  );
+  return redirect(SIGNUP_URL, 'register-link-clicked');
 }

@@ -5,6 +5,12 @@ const {
 } = require('./paragraph-fragments/listOfLinkTeasers.paragraph.graphql');
 const { FIELD_ALERT } = require('./block-fragments/alert.block.graphql');
 
+// Get current feature flags
+const {
+  featureFlags,
+  enabledFeatureFlags,
+} = require('./../../../../utilities/featureFlags');
+
 /**
  * The top-level page for a section of the website.
  * Examples include /health-care/, /disability/, etc.
@@ -12,22 +18,27 @@ const { FIELD_ALERT } = require('./block-fragments/alert.block.graphql');
 const ADMIN = '...administration';
 
 module.exports = `
-  
+
   fragment landingPage on NodeLandingPage {
     ${entityElementsFromPages}
-    entityId
     fieldIntroText
     ${FIELD_PROMO}
     ${FIELD_RELATED_LINKS}
     ${FIELD_ALERT}
+    fieldTitleIcon
     fieldSpokes {
       entity {
         ...listOfLinkTeasers
       }
-    }    
-    fieldSupportServices {          
-      ...on FieldNodeFieldSupportServices {            
-        entity {      
+    }
+    ${
+      enabledFeatureFlags[featureFlags.FEATURE_FIELD_LINKS]
+        ? 'fieldLinks { title url { path } }'
+        : ''
+    }
+    fieldSupportServices {
+      ...on FieldNodeFieldSupportServices {
+        entity {
           entityId
           entityBundle
           ...on NodeSupportService {
@@ -39,9 +50,9 @@ module.exports = `
                 path
               }
               title
-              options                  
+              options
             }
-            fieldPhoneNumber                
+            fieldPhoneNumber
           }
         }
       }

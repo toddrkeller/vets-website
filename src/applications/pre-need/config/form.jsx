@@ -124,11 +124,11 @@ const formConfig = {
                 ssn: ssnDashesUI,
                 dateOfBirth: currentOrPastDateUI('Date of birth'),
                 relationshipToVet: {
-                  'ui:title': 'Relationship to Servicemember',
+                  'ui:title': 'Relationship to service member',
                   'ui:widget': 'radio',
                   'ui:options': {
                     labels: {
-                      1: 'I am the Servicemember/Veteran',
+                      1: 'I am the service member/Veteran',
                       2: 'Spouse or surviving spouse',
                       3: 'Unmarried adult child',
                       4: 'Other',
@@ -186,16 +186,24 @@ const formConfig = {
                   veteran: {
                     type: 'object',
                     required: ['gender', 'maritalStatus', 'militaryStatus'],
-                    properties: _.pick(
-                      [
-                        'militaryServiceNumber',
-                        'vaClaimNumber',
-                        'placeOfBirth',
-                        'gender',
-                        'maritalStatus',
-                        'militaryStatus',
-                      ],
-                      veteran.properties,
+                    properties: _.set(
+                      'militaryStatus.enum',
+                      veteran.properties.militaryStatus.enum.filter(
+                        // Doesn't make sense to have options for the
+                        // Veteran to say they're deceased
+                        opt => !['I', 'D'].includes(opt),
+                      ),
+                      _.pick(
+                        [
+                          'militaryServiceNumber',
+                          'vaClaimNumber',
+                          'placeOfBirth',
+                          'gender',
+                          'maritalStatus',
+                          'militaryStatus',
+                        ],
+                        veteran.properties,
+                      ),
                     ),
                   },
                 },
@@ -333,7 +341,7 @@ const formConfig = {
       pages: {
         // Two sets of military history pages dependent on
         // whether the applicant is the veteran or not.
-        // If not, "Sponsor‘s" precedes all the field labels.
+        // If not, "Sponsor’s" precedes all the field labels.
         applicantMilitaryHistory: {
           path: 'applicant-military-history',
           depends: isVeteran,

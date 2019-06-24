@@ -4,6 +4,8 @@ import moment from 'moment';
 import AdditionalInfo from '@department-of-veterans-affairs/formation-react/AdditionalInfo';
 import vaMedicalFacilities from 'vets-json-schema/dist/vaMedicalFacilities.json';
 
+import currentOrPastDateUI from 'platform/forms-system/src/js/definitions/currentOrPastDate';
+import ssnUI from 'platform/forms-system/src/js/definitions/ssn';
 import {
   stringifyFormReplacer,
   filterViewFields,
@@ -21,8 +23,8 @@ import facilityLocator from '../facility-locator/manifest';
 export function prefillTransformer(pages, formData, metadata, state) {
   let newData = formData;
 
-  if (isInMVI(state) || state.hcaIDForm.isUserInMVI) {
-    newData = { ...newData, 'view:isUserInMVI': true };
+  if (isInMVI(state)) {
+    newData = { ...newData, 'view:isUserInMvi': true };
   }
 
   return {
@@ -197,6 +199,21 @@ export const medicalCenterLabels = Object.keys(vaMedicalFacilities).reduce(
   },
   {},
 );
+
+/**
+ *
+ * @param {string} facilityId - facility id in the form: `123 - ABCD` where the
+ * id to look up is the first part of the string
+ * @returns {string} - either the actual name of the medical center or the
+ * passed in id if no match was found
+ */
+export function getMedicalCenterNameByID(facilityId) {
+  if (!facilityId || typeof facilityId !== 'string') {
+    return '';
+  }
+  const [id] = facilityId.split(' - ');
+  return medicalCenterLabels[id] || facilityId;
+}
 
 export const dischargeTypeLabels = {
   honorable: 'Honorable',
@@ -459,9 +476,70 @@ export const medicarePartADescription = (
   </div>
 );
 
+export const idFormSchema = {
+  type: 'object',
+  properties: {
+    firstName: {
+      type: 'string',
+      minLength: 1,
+      maxLength: 30,
+      pattern: '^.*\\S.*',
+    },
+    lastName: {
+      type: 'string',
+      minLength: 2,
+      maxLength: 30,
+      pattern: '^.*\\S.*',
+    },
+    dob: {
+      type: 'string',
+      format: 'date',
+    },
+    ssn: {
+      type: 'string',
+      pattern: '^[0-9]{9}$',
+    },
+  },
+  required: ['firstName', 'lastName', 'dob', 'ssn'],
+};
+
+export const idFormUiSchema = {
+  firstName: {
+    'ui:title': 'First name',
+    'ui:errorMessages': {
+      required: 'Please enter your first name.',
+    },
+  },
+  lastName: {
+    'ui:title': 'Last name',
+    'ui:errorMessages': {
+      required: 'Please enter your last name.',
+    },
+  },
+  dob: {
+    ...currentOrPastDateUI('Date of birth'),
+    'ui:errorMessages': {
+      required:
+        'Please provide your date of birth. Select the month and day, then enter your birth year.',
+    },
+  },
+  ssn: {
+    ...ssnUI,
+    'ui:errorMessages': {
+      required:
+        'Please enter your Social Security number in this format: XXX-XX-XXXX.',
+      // NOTE: this `pattern` message is ignored because the pattern
+      // validation error message is hard coded in the validation function:
+      // https://github.com/usds/us-forms-system/blob/db029cb4f18362870d420e3eee5b71be98004e5e/src/js/validation.js#L231
+      pattern:
+        'Please enter your Social Security number in this format: XXX-XX-XXXX.',
+    },
+  },
+};
+
 /**
  *
- * Provides the current Central Time (CT) offset according to whether or not daylight savings is in effect
+ * Provides the current Central Time CT offset according to whether or not daylight savings is in effect
  * @export
  * @param {boolean} isDST
  * @returns {number} offset in minutes
@@ -493,7 +571,7 @@ export function getAdjustedTime(time, offset) {
 }
 
 /**
- * Provides a current date object in Central Time (CT)
+ * Provides a current date object in Central Time CT
  * Adapted from https://stackoverflow.com/a/46355483 and https://stackoverflow.com/a/17085556
  */
 export function getCSTDate() {
@@ -529,4 +607,24 @@ export function validateDate(date) {
   const month = newDate.month() + 1; // Note: Months are zero indexed, so January is month 0.
   const year = newDate.year();
   return isValidDate(day, month, year);
+}
+
+/**
+ * Helper that takes two sets of props and returns true if any of its relevant
+ * props are different.
+ * @param {Object} prevProps - first set of props to compare
+ * @param {Object} props - second set of props to compare
+ * @returns {boolean} - true if any relevant props differ between the two sets
+ * of props; otherwise returns false
+ *
+ */
+export function didEnrollmentStatusChange(prevProps, props) {
+  const relevantProps = [
+    'enrollmentStatus',
+    'noESRRecordFound',
+    'shouldRedirect',
+  ];
+  return relevantProps.some(
+    propName => prevProps[propName] !== props[propName],
+  );
 }

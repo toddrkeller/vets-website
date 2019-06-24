@@ -41,13 +41,14 @@
     <main class="va-l-detail-page">
         <div class="usa-grid usa-grid-full">
 
-            {% include 'src/site/navigation/facility_sidebar_nav.drupal.liquid' with facilitySidebar %}
+            {% include 'src/site/navigation/facility_sidebar_nav.drupal.liquid' with sidebarData = facilitySidebar %}
 
             <div class="usa-width-three-fourths">
-                <article class="usa-content">
+                {% include "src/site/components/navigation-sidebar-trigger.html" with menuId = "va-detailpage-sidebar" %}
+                <article class="vads-u-padding-x--2 small-screen:vads-u-padding-x--3">
                     <h1>Our Leadership Team</h1>
                     {% for bio in pagedItems %}
-                        {% include "src/site/teasers/bio.drupal.liquid" with node = bio %}
+                        {% include "src/site/teasers/bio.drupal.liquid" with node = bio.entity %}
                     {% endfor %}
                     {% include "src/site/includes/pagination.drupal.liquid" %}
                 </article>

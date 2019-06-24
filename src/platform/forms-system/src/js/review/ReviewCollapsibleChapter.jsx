@@ -21,8 +21,8 @@ export default class ReviewCollapsibleChapter extends React.Component {
     super();
     this.handleEdit = this.handleEdit.bind(this);
   }
-
-  componentWillMount() {
+  // eslint-disable-next-line
+  UNSAFE_componentWillMount() {
     this.id = _.uniqueId();
   }
 
@@ -151,8 +151,10 @@ export default class ReviewCollapsibleChapter extends React.Component {
                     name={page.pageKey}
                     title={page.reviewTitle || page.title}
                     data={pageData}
+                    appStateData={page.appStateData}
                     schema={pageSchema}
                     uiSchema={pageUiSchema}
+                    trackingPrefix={this.props.form.trackingPrefix}
                     hideHeaderRow={page.hideHeaderRow}
                     hideTitle={expandedPages.length === 1}
                     pagePerItemIndex={page.index}
@@ -169,7 +171,13 @@ export default class ReviewCollapsibleChapter extends React.Component {
                       )
                     }
                     onChange={formData =>
-                      this.onChange(formData, page.arrayPath, page.index)
+                      this.onChange(
+                        typeof page.updateFormData === 'function'
+                          ? page.updateFormData(form.data, formData)
+                          : formData,
+                        page.arrayPath,
+                        page.index,
+                      )
                     }
                     uploadFile={this.props.uploadFile}
                     reviewMode={!editing}
@@ -181,7 +189,7 @@ export default class ReviewCollapsibleChapter extends React.Component {
                     ) : (
                       <ProgressButton
                         submitButton
-                        buttonText="Update Page"
+                        buttonText="Update page"
                         buttonClass="usa-button-primary"
                       />
                     )}
@@ -194,12 +202,20 @@ export default class ReviewCollapsibleChapter extends React.Component {
                       pageTitle={page.title}
                       arrayData={_.get(arrayField.path, form.data)}
                       formData={form.data}
+                      appStateData={page.appStateData}
                       formContext={formContext}
                       pageConfig={page}
                       onBlur={this.props.onBlur}
                       schema={arrayField.schema}
                       uiSchema={arrayField.uiSchema}
-                      setData={this.props.setData}
+                      trackingPrefix={this.props.form.trackingPrefix}
+                      setData={formData =>
+                        this.props.setData(
+                          typeof page.updateFormData === 'function'
+                            ? page.updateFormData(form.data, formData)
+                            : formData,
+                        )
+                      }
                       path={arrayField.path}
                     />
                   </div>

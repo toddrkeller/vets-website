@@ -1,6 +1,8 @@
 const { parse: parseUrl } = require('url');
 const _ = require('lodash/fp');
 
+const { searchAndDestroy } = require('./util');
+
 const FIELD_SELECTOR = 'input, select, textarea';
 const CONTINUE_BUTTON = '.form-progress-buttons .usa-button-primary';
 const ARRAY_ITEM_SELECTOR =
@@ -219,6 +221,13 @@ const getArrayInfo = (url, arrayPages = []) => {
 const getArrayData = (testData, arrayPageConfig) =>
   findData(`${arrayPageConfig.arrayPath}`, testData)[arrayPageConfig.index];
 
+const removeForeseeOverlay = async (page, log) => {
+  if (await page.$('.__acs')) {
+    log('Foresee found; destroying the overlay...');
+    await searchAndDestroy(page, '.__acs');
+  }
+};
+
 /**
  * Enters data for each field, looping until no more fields have been expanded and
  *  no more array items are available in the test data.
@@ -237,6 +246,8 @@ const fillPage = async (page, testData, testConfig, log = () => {}) => {
   let originalSnapshot;
   /* eslint-disable no-await-in-loop */
   do {
+    await removeForeseeOverlay(page, log);
+
     originalSnapshot = await getSnapshot(page);
     log(
       'Field list:',
@@ -295,11 +306,45 @@ const fillPage = async (page, testData, testConfig, log = () => {}) => {
 };
 
 /**
+ * Waits until the URL changes or the timeout is reached before returning the current URL.
+ *
+ * @param {Page} page - The page from puppeteer
+ * @param {object} options
+ * @param {number} options.timeout - The maximum number of milliseconds to wait before returning
+ * @param {string} options.previousUrl - The previous URL; used to bypass the loop if the URL already changed
+ * @return {string} The current URL
+ */
+const nextUrl = async (page, options = {}) => {
+  const opts = Object.assign(
+    { previousUrl: page.url(), timeout: 500 },
+    options,
+  );
+
+  if (page.url() !== opts.previousUrl) return page.url();
+
+  try {
+    await page.waitForNavigation({ timeout: opts.timeout });
+    return page.url();
+  } catch (e) {
+    return page.url();
+  }
+};
+
+/**
  * This is the main entry point. After all the setup has been performed, this function
  *  loops through the pages, filling in all the data it can until it gets to the review
  *  page.
  */
 const fillForm = async (page, testData, testConfig, log) => {
+  const runHook = async hook => {
+    if (typeof hook !== 'function') {
+      throw new Error(
+        `Bad testConfig: Page hook for ${page.url()} is not a function`,
+      );
+    }
+    return hook(page, testData, testConfig, log);
+  };
+
   // We want these actions to be performed synchronously, so the await
   //  statements in the loop make sense.
   /* eslint-disable no-await-in-loop */
@@ -311,15 +356,8 @@ const fillForm = async (page, testData, testConfig, log) => {
     const url = page.url();
     const hook = _.get(`pageHooks.${parseUrl(url).path}`, testConfig);
     if (hook) {
-      if (typeof hook !== 'function') {
-        throw new Error(
-          `Bad testConfig: Page hook for ${url} is not a function`,
-        );
-      }
-      const retVal = hook(page, testData, testConfig);
-      if (retVal instanceof Promise) {
-        await retVal;
-      }
+      await removeForeseeOverlay(page, log);
+      await runHook(hook);
     } else {
       await fillPage(page, testData, testConfig, log);
 
@@ -330,22 +368,66 @@ const fillForm = async (page, testData, testConfig, log) => {
       // If we're still on the page, it may be because an element was expanded
       //  and we tried to enter data too fast; try again
       // NOTE: This won't trigger if the field we missed isn't required!
-      if (page.url() === url) {
-        // TODO: Figure out how to remove this arbitrary time
-        await page.waitFor(300);
+      if ((await nextUrl(page, { previousUrl: url })) === url) {
         await fillPage(page, testData, testConfig, log);
+        log('Clicking continue again');
+        await page.click(CONTINUE_BUTTON);
       }
     }
 
-    if (page.url() === url) {
-      try {
-        await page.waitForNavigation({ timeout: 1000 });
-      } catch (e) {
-        throw new Error(`Expected to navigate away from ${url}`);
-      }
+    if ((await nextUrl(page, { previousUrl: url, timeout: 1000 })) === url) {
+      const messages = await page.$$eval('.usa-input-error-message', errors =>
+        errors.map(error => [error.getAttribute('id'), error.innerText]),
+      );
+      messages.forEach(([id, message]) => {
+        // eslint-disable-next-line no-console
+        console.error(`${id}: ${message}`);
+      });
+      throw new Error(`Expected to navigate away from ${url}`);
     }
   }
   /* eslint-enable no-await-in-loop */
+
+  // Run the review page hook if available
+  const reviewHook = _.get(
+    `pageHooks.${parseUrl(page.url()).path}`,
+    testConfig,
+  );
+  if (reviewHook) {
+    await runHook(reviewHook);
+  }
+
+  // Submit the form
+  log('Submitting the form');
+  await page.click('input[name="privacyAgreementAccepted"]');
+  await page.click('button.usa-button-primary');
+
+  // We should be on the confirmation page if all goes well
+  if (!(await nextUrl(page)).endsWith('confirmation')) {
+    // If we can tell what the problem probably is, provide a more helpful error message
+    try {
+      const message = await page.$eval(
+        '.usa-alert-body',
+        node => node.innerText,
+      );
+      if (message.includes('an error connecting to')) {
+        throw new Error('Error submitting the form. Is the submission mocked?');
+      }
+    } catch (e) {
+      throw new Error(
+        `Error submitting the form. Expected to be on the confirmation page, instead got ${page.url()}`,
+      );
+    }
+  }
+
+  // Run the confirmation hook if available
+  const confirmationHook = _.get(
+    `pageHooks.${parseUrl(page.url()).path}`,
+    testConfig,
+  );
+  if (confirmationHook) {
+    await runHook(confirmationHook);
+  }
 };
 
 module.exports = {

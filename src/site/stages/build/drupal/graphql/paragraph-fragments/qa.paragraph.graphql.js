@@ -15,6 +15,8 @@ module.exports = `
         ... process
         ... collapsiblePanel
         ... numberCallout
+        ... reactWidget
+        ... table
       }
     }
   }

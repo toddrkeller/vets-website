@@ -9,7 +9,8 @@
     {% include 'src/site/navigation/sidebar_nav.drupal.liquid' with sidebar %}
 
     <div class="usa-width-three-fourths">
-      {% if !entityPublished %}
+        {% include "src/site/components/navigation-sidebar-trigger.html" with menuId = "va-detailpage-sidebar" %}
+        {% if !entityPublished %}
         <div class="usa-alert usa-alert-info" >
           <div class="usa-alert-body">
             <p class="usa-alert-text">You are viewing a draft.</p>
@@ -23,8 +24,12 @@
           <p>{{ fieldIntroText }}</p>
         </div>
 
-        {% if fieldAlert %}
-            {% include "src/site/blocks/alert.drupal.liquid" with alert = fieldAlert.entity %}
+        {% if fieldAlert.length %}
+            {% for alert in fieldAlert %}
+              {% if alert.entity != empty %}
+                {% include "src/site/blocks/alert.drupal.liquid" with alert = alert.entity %}
+              {% endif %}
+            {% endfor %}
         {% endif %}
 
         {% assign featureCount = fieldFeaturedContent | size  %}
@@ -38,14 +43,7 @@
         </div>
         {% endif %}
 
-        {% assign widgetDelta = 1 %}
         {% for block in fieldContentBlock %}
-          {% if block.entity.entityBundle == 'react_widget' and block.entity.fieldCtaWidget == false %}
-            {% assign reactRoot = 'react-widget-' | append: widgetDelta %}
-            {% assign block.entity.reactRoot = reactRoot %}
-            {% assign widgetDelta = widgetDelta | plus: 1 %}
-          {% endif %}
-
           {% assign bundleComponent = "src/site/paragraphs/" | append: block.entity.entityBundle %}
           {% assign bundleComponentWithExtension = bundleComponent | append: ".drupal.liquid" %}
           {% include {{ bundleComponentWithExtension }} with entity = block.entity %}
@@ -68,5 +66,5 @@
   </div>
 
 </main>
-{% include "src/site/includes/footer.html" with widgets = fieldContentBlock | paragraphsToWidgets %}
+{% include "src/site/includes/footer.html" %}
 {% include "src/site/includes/debug.drupal.liquid" %}

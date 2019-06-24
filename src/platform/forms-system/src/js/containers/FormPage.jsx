@@ -48,8 +48,9 @@ class FormPage extends React.Component {
   }
 
   onChange = formData => {
+    const { pageConfig } = this.props.route;
     let newData = formData;
-    if (this.props.route.pageConfig.showPagePerItem) {
+    if (pageConfig.showPagePerItem) {
       // If this is a per item page, the formData object will have data for a particular
       // row in an array, so we need to update the full form data object and then call setData
       newData = _.set(
@@ -57,6 +58,9 @@ class FormPage extends React.Component {
         formData,
         this.props.form.data,
       );
+    }
+    if (typeof pageConfig.updateFormData === 'function') {
+      newData = pageConfig.updateFormData(this.formData(), newData);
     }
     this.props.setData(newData);
   };
@@ -80,6 +84,16 @@ class FormPage extends React.Component {
     this.props.router.push(path);
   };
 
+  formData = () => {
+    const { pageConfig } = this.props.route;
+    return this.props.route.pageConfig.showPagePerItem
+      ? _.get(
+          [pageConfig.arrayPath, this.props.params.index],
+          this.props.form.data,
+        )
+      : this.props.form.data;
+  };
+
   goBack = () => {
     const {
       form,
@@ -98,12 +112,13 @@ class FormPage extends React.Component {
       form,
       contentAfterButtons,
       formContext,
+      appStateData,
     } = this.props;
 
     let { schema, uiSchema } = form.pages[route.pageConfig.pageKey];
 
     const pageClasses = classNames('form-panel', route.pageConfig.pageClass);
-    let data = form.data;
+    const data = this.formData();
 
     if (route.pageConfig.showPagePerItem) {
       // Instead of passing through the schema/uiSchema to SchemaForm, the
@@ -112,13 +127,17 @@ class FormPage extends React.Component {
         schema.properties[route.pageConfig.arrayPath].items[params.index];
       // Similarly, the items uiSchema and the data for just that particular item are passed
       uiSchema = uiSchema[route.pageConfig.arrayPath].items;
-      // And the data should be for just the item in the array
-      data = _.get([route.pageConfig.arrayPath, params.index], data);
     }
     // It should be "safe" to check that this is the first page because it is
     // always eligible and enabled, no need to call getPreviousPagePath.
     const isFirstRoutePage =
       route.pageList[0].path === this.props.location.pathname;
+
+    function callOnContinue() {
+      if (typeof route.pageConfig.onContinue === 'function') {
+        route.pageConfig.onContinue(data);
+      }
+    }
 
     return (
       <div className={pageClasses}>
@@ -126,10 +145,12 @@ class FormPage extends React.Component {
           name={route.pageConfig.pageKey}
           title={route.pageConfig.title}
           data={data}
+          appStateData={appStateData}
           schema={schema}
           uiSchema={uiSchema}
           pagePerItemIndex={params ? params.index : undefined}
           formContext={formContext}
+          trackingPrefix={this.props.form.trackingPrefix}
           uploadFile={this.props.uploadFile}
           onChange={this.onChange}
           onSubmit={this.onSubmit}
@@ -148,6 +169,7 @@ class FormPage extends React.Component {
             <div className="small-6 medium-5 end columns">
               <ProgressButton
                 submitButton
+                onButtonClick={callOnContinue}
                 buttonText="Continue"
                 buttonClass="usa-button-primary"
                 afterText="»"
@@ -161,10 +183,12 @@ class FormPage extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
+  const { appStateSelector } = ownProps.route.pageConfig;
   return {
     form: state.form,
     user: state.user,
+    appStateData: appStateSelector && appStateSelector(state),
   };
 }
 
@@ -180,6 +204,7 @@ FormPage.propTypes = {
       pageKey: PropTypes.string.isRequired,
       schema: PropTypes.object.isRequired,
       uiSchema: PropTypes.object.isRequired,
+      onContinue: PropTypes.func,
     }),
     pageList: PropTypes.arrayOf(
       PropTypes.shape({

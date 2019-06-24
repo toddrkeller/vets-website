@@ -2,12 +2,15 @@
  * The 'Health Care Local Facility' bundle of the 'Content' entity type.
  */
 
-const EVENTS_RESULTS = `  
+const EVENTS_RESULTS = `
   entities {
     ... on NodeEvent {
         title
         fieldDate {
-          value
+            startDate
+            value
+            endDate
+            endValue
         }
         fieldDescription
         fieldLocationHumanreadable
@@ -20,12 +23,12 @@ const EVENTS_RESULTS = `
           }
         }
       }
-    
+
       entityUrl {
         path
       }
     }
-  
+
 `;
 
 function queryFilter(isAll) {
@@ -37,11 +40,9 @@ function queryFilter(isAll) {
     ${
       isAll
         ? ''
-        : '{ field: "field_event_date", value: [$today], operator: GREATER_THAN}'
+        : '{ field: "field_date", value: [$today], operator: GREATER_THAN}'
     }
-  ]} sort: {field: "field_event_date", direction: ASC } limit: ${
-    isAll ? '500' : '2'
-  })
+  ]} sort: {field: "field_date", direction: ASC } limit: ${isAll ? '500' : '2'})
   `;
 }
 

@@ -12,7 +12,7 @@ export default function LoginSettings() {
       our site-as well as to add an extra layer of security to your account.
       <br />
       <a
-        href="/faq/#what-is-idme"
+        href="/sign-in-faq/#what-is-idme"
         onClick={() =>
           recordEvent({
             event: 'account-navigation',
@@ -37,7 +37,7 @@ export default function LoginSettings() {
           >
             Manage your ID.me account
           </a>
-          .<span className="external-link-icon-black">&nbsp;</span>
+          <span className="external-link-icon-black">&nbsp;</span>
         </p>
         <AdditionalInfo triggerText="What is ID.me?">
           {idMeAnswer}

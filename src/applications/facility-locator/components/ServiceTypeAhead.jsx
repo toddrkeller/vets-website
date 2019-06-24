@@ -38,7 +38,7 @@ class ServiceTypeAhead extends Component {
   };
 
   // eslint-disable-next-line prettier/prettier
-  handleOnSelect = (selectedItem) => {
+  handleOnSelect = selectedItem => {
     const value = selectedItem ? selectedItem.specialtyCode.trim() : null;
     this.props.onSelect({
       target: { value },
@@ -46,10 +46,7 @@ class ServiceTypeAhead extends Component {
   };
 
   // eslint-disable-next-line prettier/prettier
-  optionClasses = (selected) => classNames(
-    'dropdown-option',
-    { selected }
-  )
+  optionClasses = selected => classNames('dropdown-option', { selected });
 
   shouldShow = (input, svc) => {
     return (
@@ -66,7 +63,9 @@ class ServiceTypeAhead extends Component {
   render() {
     const { defaultSelectedItem, services } = this.state;
     // eslint-disable-next-line prettier/prettier
-    const renderService = (s) => { return (s && s.name) ? s.name.trim() : ''; };
+    const renderService = s => {
+      return s && s.name ? s.name.trim() : '';
+    };
 
     return (
       <Downshift
@@ -91,12 +90,17 @@ class ServiceTypeAhead extends Component {
           selectedItem,
         }) => (
           <div>
-            <label {...getLabelProps()}>Service type (optional)</label>
+            <label {...getLabelProps()}>
+              Service type{' '}
+              <span className="vads-u-color--secondary-dark">(*Required)</span>
+            </label>
             <span id="service-typeahead">
               <input
                 {...getInputProps({
                   placeholder: 'Like primary care, cardiology',
                 })}
+                id="service-type-ahead-input"
+                required
               />
               {isOpen && inputValue.length >= 2 ? (
                 <div className="dropdown" role="listbox">
@@ -108,7 +112,9 @@ class ServiceTypeAhead extends Component {
                         {...getItemProps({
                           item: svc,
                           // eslint-disable-next-line prettier/prettier
-                          className: this.optionClasses(index === highlightedIndex),
+                          className: this.optionClasses(
+                            index === highlightedIndex,
+                          ),
                           role: 'option',
                           'aria-selected': index === highlightedIndex,
                         })}

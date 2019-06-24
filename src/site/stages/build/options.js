@@ -30,7 +30,11 @@ const COMMAND_LINE_OPTIONS_DEFINITIONS = [
     type: String,
     defaultValue: process.env.DRUPAL_ADDRESS,
   },
-  { name: 'drupal-user', type: String, defaultValue: process.env.DRUPAL_USER },
+  {
+    name: 'drupal-user',
+    type: String,
+    defaultValue: process.env.DRUPAL_USERNAME,
+  },
   {
     name: 'drupal-password',
     type: String,
@@ -93,7 +97,7 @@ function applyDefaultOptions(options) {
       [`${blocks}/**/*`]: '**/*.{md,html}',
       [`${teasers}/**/*`]: '**/*.{md,html}',
     },
-    cacheDirectory: path.resolve(projectRoot, '.cache'),
+    cacheDirectory: path.join(projectRoot, '.cache', options.buildtype),
   });
 }
 
@@ -143,12 +147,26 @@ function deriveHostUrl(options) {
   ];
 }
 
+function setUpFeatureFlags(options) {
+  global.buildtype = options.buildtype;
+  const {
+    enabledFeatureFlags,
+    featureFlags,
+  } = require('../../utilities/featureFlags');
+
+  Object.assign(options, {
+    enabledFeatureFlags,
+    featureFlags,
+  });
+}
+
 function getOptions(commandLineOptions) {
   const options = commandLineOptions || gatherFromCommandLine();
 
   applyDefaultOptions(options);
   applyEnvironmentOverrides(options);
   deriveHostUrl(options);
+  setUpFeatureFlags(options);
 
   return options;
 }

@@ -1,11 +1,11 @@
 import React from 'react';
 import moment from 'moment';
-import Raven from 'raven-js';
+import * as Sentry from '@sentry/browser';
 import appendQuery from 'append-query';
 import { createSelector } from 'reselect';
 import { omit } from 'lodash';
 import merge from 'lodash/merge';
-import recordEvent from '../../../platform/monitoring/record-event';
+import fastLevenshtein from 'fast-levenshtein';
 import { apiRequest } from '../../../platform/utilities/api';
 import environment from '../../../platform/utilities/environment';
 import _ from '../../../platform/utilities/data';
@@ -31,6 +31,8 @@ import {
   STATE_VALUES,
   TWENTY_FIVE_MB,
   USA,
+  TYPO_THRESHOLD,
+  itfStatuses,
 } from './constants';
 
 /**
@@ -62,6 +64,15 @@ export const srSubstitute = (srIgnored, substitutionText) => (
     <span className="sr-only">{substitutionText}</span>
   </span>
 );
+
+export const isActiveITF = currentITF => {
+  if (currentITF) {
+    const isActive = currentITF.status === itfStatuses.active;
+    const isNotExpired = moment().isBefore(currentITF.expirationDate);
+    return isActive && isNotExpired;
+  }
+  return false;
+};
 
 export const hasGuardOrReservePeriod = formData => {
   const serviceHistory = formData.servicePeriods;
@@ -151,9 +162,14 @@ export const capitalizeEachWord = name => {
     return name.replace(/\w[^\s-]*/g, capitalizeWord);
   }
 
-  Raven.captureMessage(
-    `form_526_v1 / form_526_v2: capitalizeEachWord requires 'name' argument of type 'string' but got ${typeof name}`,
-  );
+  if (typeof name !== 'string') {
+    // Sentry.captureMessage(
+    //   `form_526_v1 / form_526_v2: capitalizeEachWord requires 'name' argument of type 'string' but got ${typeof name}`,
+    // );
+  }
+
+  // TODO: Refactor this out; the function name doesn't imply that it
+  // would return a completely unrelated string
   return 'Unknown Condition';
 };
 
@@ -183,7 +199,11 @@ export function queryForFacilities(input = '') {
         label: facility.attributes.name,
       })),
     error => {
-      Raven.captureMessage('Error querying for facilities', { input, error });
+      Sentry.withScope(scope => {
+        scope.setExtra('input', input);
+        scope.setExtra('error', error);
+        Sentry.captureMessage('Error querying for facilities');
+      });
       return [];
     },
   );
@@ -191,11 +211,19 @@ export function queryForFacilities(input = '') {
 
 export const disabilityIsSelected = disability => disability['view:selected'];
 
+/**
+ * Takes a string and returns another that won't break SiP when used
+ * as a property name.
+ * @param {string} str - The string to make SiP-friendly
+ * @return {string} The SiP-friendly string
+ */
+export const sippableId = str => (str || 'blank').toLowerCase();
+
 const createCheckboxSchema = (schema, disabilityName) => {
   const capitalizedDisabilityName = capitalizeEachWord(disabilityName);
   return _.set(
-    // downcase value for SIP consistency
-    [`${capitalizedDisabilityName.toLowerCase()}`],
+    // As an array like this to prevent periods in the name being interpreted as nested objects
+    [sippableId(disabilityName)],
     { title: capitalizedDisabilityName, type: 'boolean' },
     schema,
   );
@@ -205,7 +233,7 @@ export const makeSchemaForNewDisabilities = createSelector(
   formData => formData.newDisabilities,
   (newDisabilities = []) => ({
     properties: newDisabilities
-      .map(disability => capitalizeEachWord(disability.condition))
+      .map(disability => disability.condition)
       .reduce(createCheckboxSchema, {}),
   }),
 );
@@ -215,7 +243,7 @@ export const makeSchemaForRatedDisabilities = createSelector(
   (ratedDisabilities = []) => ({
     properties: ratedDisabilities
       .filter(disabilityIsSelected)
-      .map(disability => capitalizeEachWord(disability.name))
+      .map(disability => disability.name)
       .reduce(createCheckboxSchema, {}),
   }),
 );
@@ -481,12 +509,24 @@ export const isDisabilityPtsd = disability => {
     return false;
   }
 
-  const loweredDisability = disability.toLowerCase();
-  return PTSD_MATCHES.some(
-    ptsdString =>
-      ptsdString.includes(loweredDisability) ||
-      loweredDisability.includes(ptsdString),
-  );
+  const strippedDisability = disability.toLowerCase().replace(/[^a-zA-Z]/g, '');
+
+  return PTSD_MATCHES.some(ptsdString => {
+    const strippedString = ptsdString.replace(/[^a-zA-Z]/g, '');
+    if (strippedString === strippedDisability) {
+      return true;
+    }
+
+    // does the veteran's input contain a string from our match list?
+    if (strippedDisability.includes(strippedString)) {
+      return true;
+    }
+
+    return (
+      fastLevenshtein.get(strippedString, strippedDisability) <
+      Math.ceil(strippedDisability.length * TYPO_THRESHOLD)
+    );
+  });
 };
 
 export const hasNewPtsdDisability = formData =>
@@ -576,17 +616,7 @@ export const ancillaryFormUploadUi = (
     hideLabelText: !label,
     fileUploadUrl: `${environment.API_URL}/v0/upload_supporting_evidence`,
     addAnotherLabel,
-    fileTypes: [
-      'pdf',
-      'jpg',
-      'jpeg',
-      'png',
-      'gif',
-      'bmp',
-      'tif',
-      'tiff',
-      'txt',
-    ],
+    fileTypes: ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'bmp', 'txt'],
     maxSize: TWENTY_FIVE_MB,
     createPayload: file => {
       const payload = new FormData();
@@ -760,25 +790,6 @@ export const directToCorrectForm = ({
   }
 };
 
-/**
- * Pushes an event to the Analytics dataLayer if the event doesn't already
- * exist there. If the event contains a `key` property whose value matches an
- * existing item in the dataLayer with the same key/value pair, the whole event
- * and all of its properties will be skipped.
- * @param {object} event this will get pushed to `dataLayer`.
- * @param {string} key the property in the event object to use when looking for
- *                     existing matches in the dataLayer
- */
-export const recordEventOnce = (event, key) => {
-  const alreadyRecorded =
-    window.dataLayer &&
-    !!window.dataLayer.find(item => item[key] === event[key]);
-
-  if (!alreadyRecorded) {
-    recordEvent(event);
-  }
-};
-
 export const claimingRated = formData =>
   formData.ratedDisabilities &&
   formData.ratedDisabilities.some(d => d['view:selected']);
@@ -789,3 +800,15 @@ export const claimingNew = formData =>
 
 export const hasClaimedConditions = formData =>
   claimingNew(formData) || claimingRated(formData);
+
+export const hasRatedDisabilities = formData =>
+  formData.ratedDisabilities && formData.ratedDisabilities.length;
+
+/**
+ * Finds active service periods—those without end dates or end dates
+ * in the future.
+ */
+export const activeServicePeriods = formData =>
+  _.get('serviceInformation.servicePeriods', formData, []).filter(
+    sp => !sp.dateRange.to || moment(sp.dateRange.to).isAfter(moment()),
+  );

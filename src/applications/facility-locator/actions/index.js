@@ -105,6 +105,14 @@ export const searchWithBounds = ({ bounds, facilityType, serviceType, page = 1 }
   const needsAddress = [LocationType.CC_PROVIDER, LocationType.ALL];
   // eslint-disable-next-line prettier/prettier
   return (dispatch) => {
+    dispatch({
+      type: SEARCH_STARTED,
+      payload: {
+        currentPage: page,
+        searchBoundsInProgress: true,
+      },
+    });
+
     if (needsAddress.includes(facilityType) && ccLocatorEnabled()) {
       // Remove Feature-flag when going live. ^^^
       reverseGeocodeBox(bounds).then(address => {
@@ -140,13 +148,6 @@ export const searchWithBounds = ({ bounds, facilityType, serviceType, page = 1 }
  */
 // eslint-disable-next-line prettier/prettier
 const fetchLocations = async (address = null, bounds, locationType, serviceType, page, dispatch) => {
-  dispatch({
-    type: SEARCH_STARTED,
-    payload: {
-      currentPage: page,
-      searchBoundsInProgress: true,
-    },
-  });
 
   try {
     // eslint-disable-next-line prettier/prettier
@@ -227,6 +228,7 @@ export const genBBoxFromAddress = (query) => {
               },
               bounds: minBounds,
               zoomLevel: res.features[0].id.split('.')[0] === 'region' ? 7 : 9,
+              currentPage: 1,
             },
           });
 

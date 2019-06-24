@@ -189,7 +189,7 @@ const formConfig = {
           uiSchema: {
             'view:isVeteran': {
               'ui:title':
-                'Are you a Servicemember or Veteran applying for counseling service?',
+                'Are you a service member or Veteran applying for counseling service?',
               'ui:widget': 'yesNo',
             },
             applicantFullName: _.merge(fullNameUI, {
@@ -206,7 +206,7 @@ const formConfig = {
             }),
             applicantRelationshipToVeteran: {
               'ui:title':
-                'What is your relationship to the Servicemember or Veteran?',
+                'What is your relationship to the service member or Veteran?',
               'ui:widget': 'radio',
               'ui:required': isNotVeteran,
               'ui:options': {
@@ -339,7 +339,7 @@ const formConfig = {
               },
             },
             previousVeteranBenefitsFullName: _.merge(fullNameUI, {
-              'ui:title': 'Veteran’s name under whom you‘ve claimed benefits',
+              'ui:title': 'Veteran’s name under whom you’ve claimed benefits',
               'ui:options': {
                 classNames: 'schemaform-field-template',
                 hideIf: isVeteranOrNoApplications,

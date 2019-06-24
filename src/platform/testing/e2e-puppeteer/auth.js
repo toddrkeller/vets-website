@@ -54,12 +54,13 @@ function initUserMock(token, level) {
               metadata: {},
             },
           ],
-          prefills_available: [],
+          prefills_available: ['21-526EZ'],
           services: [
             'facilities',
             'hca',
             'edu-benefits',
             'evss-claims',
+            'form526',
             'user-profile',
             'health-records',
             'rx',
@@ -116,7 +117,7 @@ async function testUnauthedUserFlow(client, path) {
 
   await client.waitForSelector('.login', { timeout: Timeouts.normal });
   expect(client.$eval('h1', node => node.innerText)).to.equal(
-    'Sign in to Vets.gov',
+    'Sign in to VA.gov',
   );
 }
 

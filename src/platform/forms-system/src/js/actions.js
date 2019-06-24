@@ -1,6 +1,7 @@
-import Raven from 'raven-js';
+import * as Sentry from '@sentry/browser';
 import moment from 'moment';
-import { transformForSubmit, recordEvent } from './helpers';
+import { transformForSubmit } from './helpers';
+import recordEvent from 'platform/monitoring/record-event';
 import { timeFromNow } from './utilities/date';
 
 export const SET_EDIT_MODE = 'SET_EDIT_MODE';
@@ -76,7 +77,7 @@ export function setViewedPages(pageKeys) {
   };
 }
 
-function submitToUrl(body, submitUrl, trackingPrefix) {
+export function submitToUrl(body, submitUrl, trackingPrefix) {
   return new Promise((resolve, reject) => {
     const req = new XMLHttpRequest();
     req.open('POST', submitUrl);
@@ -134,12 +135,11 @@ function submitToUrl(body, submitUrl, trackingPrefix) {
 
 export function submitForm(formConfig, form) {
   const captureError = (error, errorType) => {
-    Raven.captureException(error, {
-      fingerprint: [formConfig.trackingPrefix, error.message],
-      extra: {
-        errorType,
-        statusText: error.statusText,
-      },
+    Sentry.withScope(scope => {
+      scope.setFingerprint([formConfig.trackingPrefix]);
+      scope.setExtra('errorType', errorType);
+      scope.setExtra('statusText', error.statusText);
+      Sentry.captureException(error);
     });
     recordEvent({
       event: `${formConfig.trackingPrefix}-submission-failed${
@@ -190,7 +190,14 @@ export function submitForm(formConfig, form) {
   };
 }
 
-export function uploadFile(file, uiOptions, onProgress, onChange, onError) {
+export function uploadFile(
+  file,
+  uiOptions,
+  onProgress,
+  onChange,
+  onError,
+  trackingPrefix,
+) {
   return (dispatch, getState) => {
     if (file.size > uiOptions.maxSize) {
       onChange({
@@ -242,6 +249,8 @@ export function uploadFile(file, uiOptions, onProgress, onChange, onError) {
       if (req.status >= 200 && req.status < 300) {
         const body = 'response' in req ? req.response : req.responseText;
         const fileData = uiOptions.parseResponse(JSON.parse(body), file);
+
+        recordEvent({ event: `${trackingPrefix}file-uploaded` });
         onChange(fileData);
       } else {
         let errorMessage = req.statusText;
@@ -257,7 +266,7 @@ export function uploadFile(file, uiOptions, onProgress, onChange, onError) {
           name: file.name,
           errorMessage,
         });
-        Raven.captureMessage(`vets_upload_error: ${req.statusText}`);
+        Sentry.captureMessage(`vets_upload_error: ${req.statusText}`);
         onError();
       }
     });
@@ -268,10 +277,9 @@ export function uploadFile(file, uiOptions, onProgress, onChange, onError) {
         name: file.name,
         errorMessage,
       });
-      Raven.captureMessage(`vets_upload_error: ${errorMessage}`, {
-        extra: {
-          statusText: req.statusText,
-        },
+      Sentry.withScope(scope => {
+        scope.setExtra('statusText', req.statusText);
+        Sentry.captureMessage(`vets_upload_error: ${errorMessage}`);
       });
       onError();
     });

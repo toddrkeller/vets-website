@@ -14,8 +14,8 @@ export default class FileField extends React.Component {
       progress: 0,
     };
   }
-
-  componentWillReceiveProps(newProps) {
+  // eslint-disable-next-line
+  UNSAFE_componentWillReceiveProps(newProps) {
     const newFiles = newProps.formData || [];
     const files = this.props.formData || [];
     if (newFiles.length !== files.length) {
@@ -47,6 +47,7 @@ export default class FileField extends React.Component {
         () => {
           this.uploadRequest = null;
         },
+        this.props.formContext.trackingPrefix,
       );
     }
   };
@@ -244,7 +245,8 @@ export default class FileField extends React.Component {
               <label
                 role="button"
                 onKeyPress={e => {
-                  if (e.key === 'Enter') {
+                  e.preventDefault();
+                  if (['Enter', ' ', 'Spacebar'].indexOf(e.key) !== -1) {
                     document.getElementById(idSchema.$id).click();
                   }
                 }}

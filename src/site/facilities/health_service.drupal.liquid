@@ -1,4 +1,4 @@
-<div class="usa-accordion">
+<div class="usa-accordion-bordered">
     <ul class="usa-unstyled-list">
         {% assign serviceTaxonomy = healthService.fieldServiceNameAndDescripti.entity %}
         <li>
@@ -8,25 +8,30 @@
                     aria-controls="{{ serviceTaxonomy.entityBundle }}-{{ serviceTaxonomy.entityId }}"
             >
                 {{ serviceTaxonomy.name }}
+                {% if serviceTaxonomy.fieldAlsoKnownAs %}
+                    <p class="vads-u-font-weight--normal vads-u-margin--0">{{ serviceTaxonomy.fieldAlsoKnownAs }}</p>
+                {% endif %}
             </button>
             <div id="{{ serviceTaxonomy.entityBundle }}-{{ serviceTaxonomy.entityId }}" class="usa-accordion-content" aria-hidden="true">
-                <div>{{ serviceTaxonomy.fieldAlsoKnownAs }}</div>
-
+                {% if serviceTaxonomy.fieldCommonlyTreatedCondition %}<div><span class="vads-u-font-style--italic">Common Conditions: </span>{{ serviceTaxonomy.fieldCommonlyTreatedCondition }}</div>{% endif %}
+                {% if serviceTaxonomy.description.processed  %}
+                    <div>{{ serviceTaxonomy.description.processed }}</div>
+                {% endif %}
 
                 {% if healthService.fieldBody.processed %}
                     <div>{{ healthService.fieldBody.processed }}</div>
                 {% endif %}
 
-                {% if serviceTaxonomy.description.processed  %}
-                    <div>{{ serviceTaxonomy.description.processed }}</div>
+                {% if healthService.fieldLocalHealthCareService.length > 0 %}
+                    <p class="vads-u-font-weight--bold">Available at</p>
+                    <ul class="usa-unstyled-list">
+                        {% for location in healthService.fieldLocalHealthCareService %}
+                            {% assign facility = location.entity.fieldFacilityLocation.entity %}
+                            {% if facility != empty %}<li class="vads-u-margin-bottom--2">
+                                <a href="{{ facility.entityUrl.path }}">{{ facility.fieldNicknameForThisFacility }}</a></li>{% endif %}
+                        {% endfor %}
+                    </ul>
                 {% endif %}
-
-                <p class="vads-u-font-weight--bold">Available at</p>
-                <ul class="usa-unstyled-list">
-                    {% for location in healthService.fieldServiceLocation.entities %}
-                        <li class="vads-u-margin-bottom--2"><a href="/drupal{{ entityUrl.path }}/{{ location | locationUrlConvention }}">{{ location.fieldNicknameForThisFacility }}</a></li>
-                    {% endfor %}
-                </ul>
             </div>
         </li>
     </ul>
