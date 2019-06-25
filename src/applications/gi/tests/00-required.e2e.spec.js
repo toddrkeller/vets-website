@@ -90,33 +90,34 @@ module.exports = E2eHelpers.createE2eTest(client => {
     .axeCheck('.main');
 
   // check Foreign DOD and VA rate for online only
-  GiHelpers.ForeignOnlineOnly(client);
-  client
-    .waitForElementVisible(housingAllowance, Timeouts.normal)
-    .assert.containsText(
-      housingAllowance,
-      `${GiHelpers.formatCurrencyHalf(
-        GiHelpers.calculatorConstantsList.AVGDODBAH,
-      )}/mo`,
-    )
-    .axeCheck('.main');
+  GiHelpers.ForeignOnlineOnly(client, () => {
+    client
+      .waitForElementVisible(housingAllowance, Timeouts.normal)
+      .assert.containsText(
+        housingAllowance,
+        `${GiHelpers.formatCurrencyHalf(
+          GiHelpers.calculatorConstantsList.AVGDODBAH,
+        )}/mo`,
+      )
+      .axeCheck('.main');
 
-  client
-    .click('#radio-buttons-16-0')
-    .pause(100)
-    .assert.containsText(
-      housingAllowance,
-      `${GiHelpers.formatCurrencyHalf(
-        GiHelpers.calculatorConstantsList.AVGVABAH,
-      )}/mo`,
-    );
+    client
+      .click('#radio-buttons-16-0')
+      .pause(100)
+      .assert.containsText(
+        housingAllowance,
+        `${GiHelpers.formatCurrencyHalf(
+          GiHelpers.calculatorConstantsList.AVGVABAH,
+        )}/mo`,
+      );
 
-  client.openUrl(`${E2eHelpers.baseUrl}/gi-bill-comparison-tool/`);
+    client.openUrl(`${E2eHelpers.baseUrl}/gi-bill-comparison-tool/`);
 
-  client
-    .waitForElementVisible('body', Timeouts.verySlow)
-    .waitForElementVisible('.gi-app', Timeouts.verySlow)
-    .axeCheck('.main');
+    client
+      .waitForElementVisible('body', Timeouts.verySlow)
+      .waitForElementVisible('.gi-app', Timeouts.verySlow)
+      .axeCheck('.main');
+  });
 
   // check Foreign DOD and VA rate for in person only
   GiHelpers.ForeignInPersonOnly(client);

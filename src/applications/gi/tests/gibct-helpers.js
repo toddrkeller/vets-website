@@ -62,7 +62,7 @@ function verifyAllDEAojt(client) {
 }
 
 // Search foreign school online only
-function ForeignOnlineOnly(client) {
+function ForeignOnlineOnly(client, callback) {
   client
     .waitForElementVisible('body', Timeouts.verySlow)
     .waitForElementVisible('.gi-app', Timeouts.verySlow)
@@ -89,6 +89,7 @@ function ForeignOnlineOnly(client) {
     .click(schoolResult)
     .waitForElementVisible('body', 1000)
     .axeCheck('.main');
+  callback();
 }
 
 // Search foreign school in person only
