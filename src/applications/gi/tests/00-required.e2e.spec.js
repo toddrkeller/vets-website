@@ -90,7 +90,7 @@ module.exports = E2eHelpers.createE2eTest(client => {
     .axeCheck('.main');
 
   // check Foreign DOD and VA rate for online only
-  GiHelpers.ForeignOnlineOnly(client, () => {
+  const checkRatesOnlineOnly = () => {
     client
       .waitForElementVisible(housingAllowance, Timeouts.normal)
       .assert.containsText(
@@ -117,7 +117,9 @@ module.exports = E2eHelpers.createE2eTest(client => {
       .waitForElementVisible('body', Timeouts.verySlow)
       .waitForElementVisible('.gi-app', Timeouts.verySlow)
       .axeCheck('.main');
-  });
+  };
+
+  GiHelpers.ForeignOnlineOnly(client, checkRatesOnlineOnly);
 
   // check Foreign DOD and VA rate for in person only
   GiHelpers.ForeignInPersonOnly(client);
