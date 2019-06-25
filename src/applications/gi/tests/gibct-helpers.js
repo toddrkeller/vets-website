@@ -36,8 +36,9 @@ function searchAsDEA(client, expectedResult, resultRate, expectedRate) {
 
   client.expect.element(expectedResult).to.be.enabled.before(Timeouts.normal);
 
-  client.assert
-    .containsText(resultRate, expectedRate)
+  client.assert.containsText(resultRate, expectedRate);
+
+  client
     .click(expectedResult)
     .waitForElementVisible('.profile-page', Timeouts.normal)
     .axeCheck('.main');
