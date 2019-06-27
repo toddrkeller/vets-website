@@ -2,10 +2,10 @@ const E2eHelpers = require('../../../platform/testing/e2e/helpers');
 const Timeouts = require('../../../platform/testing/e2e/timeouts');
 const GiHelpers = require('./gibct-helpers');
 
-const firstResult =
-  '#react-root > div > div > div > div.search-page > div:nth-child(2) > div.search-results.small-12.usa-width-three-fourths.medium-9.columns.opened > div:nth-child(2) > div:nth-child(1) > div > div > div:nth-child(1) > div.small-12.usa-width-seven-twelfths.medium-7.columns > h2 > a';
-const firstResultRate =
-  '#react-root > div > div > div > div.search-page > div:nth-child(2) > div.search-results.small-12.usa-width-three-fourths.medium-9.columns.opened > div:nth-child(2) > div:nth-child(1) > div > div > div:nth-child(1) > div.small-12.usa-width-five-twelfths.medium-5.columns.estimated-benefits > div:nth-child(3) > div > h4 > div';
+// const firstResult =
+//   '#react-root > div > div > div > div.search-page > div:nth-child(2) > div.search-results.small-12.usa-width-three-fourths.medium-9.columns.opened > div:nth-child(2) > div:nth-child(1) > div > div > div:nth-child(1) > div.small-12.usa-width-seven-twelfths.medium-7.columns > h2 > a';
+// const firstResultRate =
+//   '#react-root > div > div > div > div.search-page > div:nth-child(2) > div.search-results.small-12.usa-width-three-fourths.medium-9.columns.opened > div:nth-child(2) > div:nth-child(1) > div > div > div:nth-child(1) > div.small-12.usa-width-five-twelfths.medium-5.columns.estimated-benefits > div:nth-child(3) > div > h4 > div';
 // const secondResult =
 //   '#react-root > div > div > div > div.search-page > div:nth-child(2) > div.search-results.small-12.usa-width-three-fourths.medium-9.columns.opened > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(1) > div.small-12.usa-width-seven-twelfths.medium-7.columns > h2 > a';
 // const secondResultRate =
@@ -19,8 +19,8 @@ const firstResultRate =
 // const dodRateRadio = '#radio-buttons-15-1';
 // const vaRateRadioUS = '#radio-buttons-16-0';
 // const dodRateRadioUS = '#radio-buttons-16-1';
-const deaEnrolledMax = 30;
-const housingRate = '#gbct_housing_allowance > div.small-6.columns.value > h5';
+// const deaEnrolledMax = 30;
+// const housingRate = '#gbct_housing_allowance > div.small-6.columns.value > h5';
 
 module.exports = E2eHelpers.createE2eTest(client => {
   GiHelpers.initApplicationMock();
@@ -35,25 +35,25 @@ module.exports = E2eHelpers.createE2eTest(client => {
     .waitForElementVisible('.gi-app', Timeouts.slow)
     .axeCheck('.main');
 
-  GiHelpers.searchAsDEA(
-    client,
-    firstResult,
-    firstResultRate,
-    GiHelpers.formatCurrency(GiHelpers.calculatorConstantsList.DEARATEOJT),
-  );
-
-  // Loops through all "Enrolled" options for an ojt facility and verifies the DEA housing rate
-  for (let i = 2; i <= deaEnrolledMax; i += 2) {
-    const deaRateOjtFormatted = Math.round(
-      (i / deaEnrolledMax) *
-        GiHelpers.formatNumber(GiHelpers.calculatorConstantsList.DEARATEOJT),
-    );
-    client.expect
-      .element(housingRate)
-      .to.be.enabled.before(Timeouts.normal)
-      .selectDropdown('working', i)
-      .assert.containsText(housingRate, `$${deaRateOjtFormatted}/mo`);
-  }
+  // GiHelpers.searchAsDEA(
+  //   client,
+  //   firstResult,
+  //   firstResultRate,
+  //   GiHelpers.formatCurrency(GiHelpers.calculatorConstantsList.DEARATEOJT),
+  // );
+  //
+  // // Loops through all "Enrolled" options for an ojt facility and verifies the DEA housing rate
+  // for (let i = 2; i <= deaEnrolledMax; i += 2) {
+  //   const deaRateOjtFormatted = Math.round(
+  //     (i / deaEnrolledMax) *
+  //       GiHelpers.formatNumber(GiHelpers.calculatorConstantsList.DEARATEOJT),
+  //   );
+  //   client.expect
+  //     .element(housingRate)
+  //     .to.be.enabled.before(Timeouts.normal)
+  //     .selectDropdown('working', i)
+  //     .assert.containsText(housingRate, `$${deaRateOjtFormatted}/mo`);
+  // }
 
   // client.openUrl(`${E2eHelpers.baseUrl}/gi-bill-comparison-tool/`);
   //
