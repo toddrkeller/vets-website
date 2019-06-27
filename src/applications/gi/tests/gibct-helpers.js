@@ -50,10 +50,9 @@ function searchAsDEA(client, expectedResult, resultRate, expectedRate) {
     .setValue('.keyword-search input[type="text"]', 'washington dc')
     .click('#search-button')
     .waitForElementVisible('.search-page', Timeouts.normal)
-    .axeCheck('.main');
-  client.expect.element(expectedResult).to.be.enabled.before(Timeouts.normal);
-  client.assert
-    .containsText(resultRate, expectedRate)
+    .expect.element(expectedResult)
+    .to.be.enabled.before(Timeouts.normal)
+    .assert.containsText(resultRate, expectedRate)
     .click(expectedResult)
     .waitForElementVisible('.profile-page', Timeouts.normal)
     .axeCheck('.main');
