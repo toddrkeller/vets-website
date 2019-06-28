@@ -30,17 +30,17 @@ module.exports = E2eHelpers.createE2eTest(client => {
   E2eHelpers.overrideSmoothScrolling(client);
   client.timeoutsAsyncScript(2000);
 
-  client
-    .waitForElementVisible('body', Timeouts.normal)
-    .waitForElementVisible('.gi-app', Timeouts.slow)
-    .axeCheck('.main');
-
-  GiHelpers.searchAsDEA(
+  const searchAsDea = GiHelpers.searchAsDEA(
     client,
     firstResult,
     firstResultRate,
     GiHelpers.formatCurrency(GiHelpers.calculatorConstantsList.DEARATEOJT),
   );
+
+  client
+    .waitForElementVisible('body', Timeouts.normal)
+    .waitForElementVisible('.gi-app', Timeouts.slow, searchAsDea)
+    .axeCheck('.main');
 
   // // Loops through all "Enrolled" options for an ojt facility and verifies the DEA housing rate
   // for (let i = 2; i <= deaEnrolledMax; i += 2) {
