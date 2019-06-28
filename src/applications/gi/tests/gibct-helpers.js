@@ -37,6 +37,32 @@ function verifyCh33(client, vaOrDodRadio, expectedRate) {
     .waitForElementVisible(housingRate, Timeouts.normal)
     .assert.containsText(housingRate, expectedRate);
 }
+
+const validateRates = (client, expectedResult, resultRate, expectedRate) => {
+  client.expect
+    .element(expectedResult)
+    .to.be.enabled.before(Timeouts.normal)
+    .assert.containsText(resultRate, expectedRate);
+};
+
+const searchClick = (
+  client,
+  expectedResult,
+  resultRate,
+  expectedRate,
+  searchValue,
+) => {
+  client
+    .clearValue('.keyword-search input[type="text"]')
+    .setValue('.keyword-search input[type="text"]', searchValue)
+    .click('#search-button')
+    .waitForElementVisible(
+      '.search-page',
+      Timeouts.normal,
+      validateRates(client, expectedResult, resultRate, expectedRate),
+    );
+};
+
 // Selects DEA as benefit type, searches for schools in washington dc, checks the housing rate of the expected result, and clicks the expected result
 function searchAsDEA(client, expectedResult, resultRate, expectedRate) {
   client
@@ -45,15 +71,16 @@ function searchAsDEA(client, expectedResult, resultRate, expectedRate) {
     .waitForElementVisible(
       '.keyword-search input[type="text"]',
       Timeouts.normal,
-    )
-    .clearValue('.keyword-search input[type="text"]')
-    .setValue('.keyword-search input[type="text"]', 'washington dc')
-    .click('#search-button')
-    .waitForElementVisible('.search-page', Timeouts.normal)
-    .expect.element(expectedResult)
-    .to.be.enabled.before(Timeouts.normal)
-    .assert.containsText(resultRate, expectedRate);
+      searchClick(
+        client,
+        expectedResult,
+        resultRate,
+        expectedRate,
+        'washington dc',
+      ),
+    );
 }
+
 // Verify the expected DEA housing rate for the selected "Enrolled" option
 function verifyDEA(client, enrolledOption, expectedDEA) {
   client
