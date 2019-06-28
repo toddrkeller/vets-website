@@ -52,10 +52,7 @@ function searchAsDEA(client, expectedResult, resultRate, expectedRate) {
     .waitForElementVisible('.search-page', Timeouts.normal)
     .expect.element(expectedResult)
     .to.be.enabled.before(Timeouts.normal)
-    .assert.containsText(resultRate, expectedRate)
-    .click(expectedResult)
-    .waitForElementVisible('.profile-page', Timeouts.normal)
-    .axeCheck('.main');
+    .assert.containsText(resultRate, expectedRate);
 }
 // Verify the expected DEA housing rate for the selected "Enrolled" option
 function verifyDEA(client, enrolledOption, expectedDEA) {
