@@ -13,6 +13,7 @@ import {
 import { scrollToFirstError } from 'platform/forms-system/src/js/utilities/ui';
 import { setArrayRecordTouched } from 'platform/forms-system/src/js/helpers';
 import { errorSchemaIsValid } from 'platform/forms-system/src/js/validation';
+import { getClassification } from '../../all-claims/form-components/autoClassification';
 
 const Element = Scroll.Element;
 const scroller = Scroll.scroller;
@@ -170,6 +171,8 @@ export default class ArrayField extends React.Component {
         );
         return { editing: newEditing };
       });
+      console.log('last index item ', this.props.formData[lastIndex]);
+      getClassification(this.props.formData[lastIndex].condition);
     } else {
       const touched = setArrayRecordTouched(this.props.idSchema.$id, lastIndex);
       this.props.formContext.setTouched(touched, () => {
@@ -239,12 +242,11 @@ export default class ArrayField extends React.Component {
       disabled,
       readonly,
       registry,
-      formContext,
       onBlur,
       schema,
     } = this.props;
     const definitions = registry.definitions;
-    const { TitleField, SchemaField } = registry.fields;
+    const { SchemaField } = registry.fields;
 
     const uiOptions = uiSchema['ui:options'] || {};
     const ViewField = uiOptions.viewField;
@@ -278,7 +280,6 @@ export default class ArrayField extends React.Component {
               <DescriptionField options={uiSchema['ui:options']} />
             )}
             {!textDescription && !DescriptionField && description}
-            {uiSchema['ui:description']}
           </div>
         )}
 

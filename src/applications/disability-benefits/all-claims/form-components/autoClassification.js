@@ -172,15 +172,24 @@ class AsyncDisplayWidget extends React.Component {
   }
 }
 
-const getClassification = claimText =>
+export const getClassification = claimText =>
   apiRequest(
     'http://198.199.119.238:8000/api/v1.0/classification',
     // eslint-disable-next-line camelcase
-    { claim_text: claimText },
+    {
+      method: 'POST',
+      mode: 'cors',
+      credentials: 'omit',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      // eslint-disable-next-line camelcase
+      body: JSON.stringify({ claim_text: claimText }),
+    },
     response => {
       // eslint-disable-next-line no-console
-      console.log('got response ', response.data.prediction);
-      return response.data.prediction;
+      console.log('got response ', response.prediction);
+      return response.prediction.classification;
     },
     () => {
       // eslint-disable-next-line no-console
