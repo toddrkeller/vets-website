@@ -171,14 +171,21 @@ export default class ArrayField extends React.Component {
         );
         return { editing: newEditing };
       });
-      getClassification(this.props.formData[lastIndex].condition).then(
-        value => {
-          // add classification to formData
-          this.props.onChange(
-            _.set([lastIndex, 'classification'], value, this.props.formData),
-          );
-        },
-      );
+
+      if (
+        !this.state.oldData ||
+        (this.state.oldData[lastIndex] || {}).condition !==
+          this.props.formData[lastIndex].condition
+      ) {
+        getClassification(this.props.formData[lastIndex].condition).then(
+          value => {
+            // add classification to formData
+            this.props.onChange(
+              _.set([lastIndex, 'classification'], value, this.props.formData),
+            );
+          },
+        );
+      }
     } else {
       const touched = setArrayRecordTouched(this.props.idSchema.$id, lastIndex);
       this.props.formContext.setTouched(touched, () => {
