@@ -40,6 +40,12 @@ export default class ArrayField extends React.Component {
 
     this.state = {
       editing: props.formData ? props.formData.map(() => false) : [true],
+      items: props.formData
+        ? props.formData.map(i => ({
+            condition: i.condition,
+            classification: null,
+          }))
+        : [],
     };
 
     this.handleAdd = this.handleAdd.bind(this);
@@ -172,7 +178,13 @@ export default class ArrayField extends React.Component {
         return { editing: newEditing };
       });
       console.log('last index item ', this.props.formData[lastIndex]);
-      getClassification(this.props.formData[lastIndex].condition);
+      getClassification(this.props.formData[lastIndex].condition).then(
+        value => {
+          this.setState(
+            _.set(['items', lastIndex, 'classification'], value, this.state),
+          );
+        },
+      );
     } else {
       const touched = setArrayRecordTouched(this.props.idSchema.$id, lastIndex);
       this.props.formContext.setTouched(touched, () => {
@@ -295,6 +307,8 @@ export default class ArrayField extends React.Component {
             );
             const isLast = items.length === index + 1;
             const isEditing = this.state.editing[index];
+            const classification = (this.state.items[index] || {})
+              .classification;
 
             if (isEditing) {
               return (
@@ -321,6 +335,9 @@ export default class ArrayField extends React.Component {
                           required={false}
                           disabled={disabled}
                           readonly={readonly}
+                          removeClassification={() =>
+                            this.removeClassification(index)
+                          }
                         />
                       </div>
                       <div className="row small-collapse">
@@ -377,6 +394,7 @@ export default class ArrayField extends React.Component {
                 <div className="row small-collapse">
                   <div className="small-9 columns">
                     <ViewField
+                      classification={classification}
                       formData={item}
                       onEdit={() => this.handleEdit(index)}
                     />

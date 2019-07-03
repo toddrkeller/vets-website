@@ -172,6 +172,97 @@ class AsyncDisplayWidget extends React.Component {
   }
 }
 
+class CustomField extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      condition: this.props.formData || '',
+      classification: null,
+    };
+  }
+
+  onChange(value) {
+    this.setState(
+      {
+        condition: value,
+      },
+      () => this.props.onChange(value),
+    );
+  }
+
+  renderSuggestion() {
+    if (!this.state.classification) return null;
+
+    return (
+      <div>
+        <strong>Disability we assigned</strong>
+        <p>{this.state.classification}</p>
+        <button
+          className="usa-button-secondary float-right"
+          type="button"
+          onClick={this.props.removeClassification}
+        >
+          Cancel
+        </button>
+      </div>
+    );
+  }
+
+  renderClassifiedView() {
+    return (
+      <div>
+        <hr />
+        <strong>Your Description</strong>
+        <p>{this.state.condition}</p>
+        <hr />
+        {this.renderSuggestion()}
+      </div>
+    );
+  }
+
+  render() {
+    const { isEditing, isLast } = this.props;
+
+    if (isEditing && !isLast) {
+      return this.renderClassifiedView();
+    }
+
+    return (
+      <div>
+        <strong>Your description</strong>
+        <input
+          type="text"
+          value={this.state.condition}
+          onChange={event => this.onChange(event.target.value)}
+        />
+      </div>
+    );
+  }
+}
+
+const titleComponent = (
+  <div>
+    <p>
+      Based on your description, we use data from previous claims to assign a
+      disability to your claim.
+    </p>
+    <p>
+      If the disability we assign you is wrong, you can choose to use your
+      disability description instead of the assigned disability.
+    </p>
+  </div>
+);
+
+export const uiSchema = {
+  'ui:title': titleComponent,
+  'ui:field': CustomField,
+};
+
+export const schema = {
+  type: 'object',
+  properties: {},
+};
+
 export const getClassification = claimText =>
   apiRequest(
     'http://198.199.119.238:8000/api/v1.0/classification',
@@ -197,27 +288,3 @@ export const getClassification = claimText =>
       return Promise.reject();
     },
   );
-
-const titleComponent = (
-  <div>
-    <p>
-      Based on your description, we use data from previous claims to assign a
-      disability to your claim.
-    </p>
-    <p>
-      If the disability we asign you is wrong, you can choose to use your
-      disability description instead of the assigned disability.
-    </p>
-    <strong>Your description</strong>
-  </div>
-);
-
-export const uiSchema = {
-  'ui:title': titleComponent,
-  'ui:field': 'StringField',
-};
-
-export const schema = {
-  type: 'object',
-  properties: {},
-};
