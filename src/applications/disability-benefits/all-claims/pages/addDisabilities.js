@@ -1,4 +1,4 @@
-import * as autosuggest from 'platform/forms-system/src/js/definitions/autosuggest';
+import * as autoClassification from '../form-components/autoClassification';
 import set from '../../../../platform/utilities/data/set';
 import get from '../../../../platform/utilities/data/get';
 import omit from '../../../../platform/utilities/data/omit';
@@ -37,7 +37,7 @@ export const uiSchema = {
     //  item), but that's not working.
     'ui:validations': [requireDisability],
     items: {
-      condition: autosuggest.uiSchema(
+      condition: autoClassification.uiSchema(
         autoSuggestTitle,
         () =>
           Promise.resolve(
