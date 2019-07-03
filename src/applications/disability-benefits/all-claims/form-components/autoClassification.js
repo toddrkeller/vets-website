@@ -191,7 +191,6 @@ const getClassification = claimText =>
 
 const titleComponent = (
   <div>
-    <h4>New disability</h4>
     <p>
       Based on your description, we use data from previous claims to assign a
       disability to your claim.

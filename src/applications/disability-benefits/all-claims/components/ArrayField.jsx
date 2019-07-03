@@ -274,18 +274,11 @@ export default class ArrayField extends React.Component {
       <div className={containerClassNames}>
         {hasTitleOrDescription && (
           <div className="schemaform-block-header">
-            {title && !hideTitle ? (
-              <TitleField
-                id={`${idSchema.$id}__title`}
-                title={title}
-                formContext={formContext}
-              />
-            ) : null}
-            {textDescription && <p>{textDescription}</p>}
             {DescriptionField && (
               <DescriptionField options={uiSchema['ui:options']} />
             )}
             {!textDescription && !DescriptionField && description}
+            {uiSchema['ui:description']}
           </div>
         )}
 
@@ -308,9 +301,7 @@ export default class ArrayField extends React.Component {
                   <Element name={`table_${itemIdPrefix}`} />
                   <div className="row small-collapse">
                     <div className="small-12 columns va-growable-expanded">
-                      {isLast &&
-                      items.length > 1 &&
-                      uiSchema['ui:options'].itemName ? (
+                      {uiSchema['ui:options'].itemName ? (
                         <h5>New {uiSchema['ui:options'].itemName}</h5>
                       ) : null}
                       <div className="input-section">
