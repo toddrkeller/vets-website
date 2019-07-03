@@ -44,6 +44,7 @@
 import { apiRequest } from '../../../../platform/utilities/api';
 
 import React from 'react';
+import { requireDisability } from '../validations';
 
 // import LoadingIndicator from '@department-of-veterans-affairs/formation-react/LoadingIndicator';
 // import AlertBox from '@department-of-veterans-affairs/formation-react/AlertBox';
@@ -174,7 +175,22 @@ import React from 'react';
 
 class ClassificationField extends React.Component {
   render() {
-    return <p>classification: {this.props.formData}</p>;
+    if (!this.props.formData) return null;
+
+    return (
+      <div>
+        <strong>Disability we assigned</strong>
+        <div>
+          <p>{this.props.formData}</p>
+          <button
+            className="va-button-link"
+            onClick={() => this.props.onChange(null)}
+          >
+            <i className="fa fa-trash" /> <span>Remove this</span>
+          </button>
+        </div>
+      </div>
+    );
   }
 }
 
@@ -182,8 +198,7 @@ class CustomField extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      condition: (this.props.formData || {}).condition || '',
-      classification: (this.props.formData || {}).classification || '',
+      condition: this.props.formData || '',
     };
   }
 
@@ -196,44 +211,11 @@ class CustomField extends React.Component {
     );
   }
 
-  renderSuggestion() {
-    if (!this.state.classification) return null;
-
-    return (
-      <div>
-        <strong>Disability we assigned</strong>
-        <p>{this.state.classification}</p>
-        <button
-          className="usa-button-secondary float-right"
-          type="button"
-          onClick={this.props.removeClassification}
-        >
-          Cancel
-        </button>
-      </div>
-    );
-  }
-
-  renderClassifiedView() {
-    return (
-      <div>
-        <hr />
-        <strong>Your Description</strong>
-        <p>{this.state.condition}</p>
-        <hr />
-        {this.renderSuggestion()}
-      </div>
-    );
-  }
-
   render() {
     // const { formContext, idSchema } = this.props;
     // if (formContext.touched[idSchema.$id.replace(/_condition$/, '')]) {
     //   return this.renderClassifiedView();
     // }
-    console.log('formData', this.props.formData);
-    this.renderClassifiedView();
-
     return (
       <div>
         <strong>Your description</strong>
@@ -264,8 +246,10 @@ export const uiSchema = {
   condition: {
     'ui:title': titleComponent,
     'ui:field': CustomField,
+    'ui:validations': [requireDisability],
   },
   classification: {
+    'ui:title': ' ',
     'ui:field': ClassificationField,
   },
 };

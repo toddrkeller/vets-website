@@ -40,12 +40,6 @@ export default class ArrayField extends React.Component {
 
     this.state = {
       editing: props.formData ? props.formData.map(() => false) : [true],
-      items: props.formData
-        ? props.formData.map(i => ({
-            condition: i.condition,
-            classification: null,
-          }))
-        : [],
     };
 
     this.handleAdd = this.handleAdd.bind(this);
@@ -177,17 +171,12 @@ export default class ArrayField extends React.Component {
         );
         return { editing: newEditing };
       });
-      console.log('last index item ', this.props.formData[lastIndex]);
       getClassification(this.props.formData[lastIndex].condition).then(
         value => {
-          this.setState(
-            _.set(['items', lastIndex, 'classification'], value, this.state),
-          );
-
+          // add classification to formData
           this.props.onChange(
-            _.set([lastIndex, 'classification'], value, this.props.formData)
+            _.set([lastIndex, 'classification'], value, this.props.formData),
           );
-          console.log(this.state.items)
         },
       );
     } else {
@@ -283,7 +272,6 @@ export default class ArrayField extends React.Component {
       formData && formData.length
         ? formData
         : [getDefaultFormState(schema, undefined, registry.definitions)];
-    console.log('items: ', items)
     const containerClassNames = classNames({
       'schemaform-field-container': true,
       'schemaform-block': hasTitleOrDescription,
@@ -314,9 +302,6 @@ export default class ArrayField extends React.Component {
             );
             const isLast = items.length === index + 1;
             const isEditing = this.state.editing[index];
-            const classification = (this.state.items[index] || {})
-              .classification;
-            console.log('item', item)
             if (isEditing) {
               return (
                 <div key={index} className="va-growable-background">
@@ -342,9 +327,6 @@ export default class ArrayField extends React.Component {
                           required={false}
                           disabled={disabled}
                           readonly={readonly}
-                          removeClassification={() =>
-                            this.removeClassification(index)
-                          }
                         />
                       </div>
                       <div className="row small-collapse">
@@ -401,7 +383,6 @@ export default class ArrayField extends React.Component {
                 <div className="row small-collapse">
                   <div className="small-9 columns">
                     <ViewField
-                      classification={classification}
                       formData={item}
                       onEdit={() => this.handleEdit(index)}
                     />
