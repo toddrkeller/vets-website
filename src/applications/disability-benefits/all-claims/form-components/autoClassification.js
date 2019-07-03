@@ -172,12 +172,18 @@ import React from 'react';
 //   }
 // }
 
+class ClassificationField extends React.Component {
+  render() {
+    return <p>classification: {this.props.formData}</p>;
+  }
+}
+
 class CustomField extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      condition: this.props.formData || '',
-      classification: null,
+      condition: (this.props.formData || {}).condition || '',
+      classification: (this.props.formData || {}).classification || '',
     };
   }
 
@@ -221,10 +227,12 @@ class CustomField extends React.Component {
   }
 
   render() {
-    const { formContext, idSchema } = this.props;
-    if (formContext.touched[idSchema.$id.replace(/_condition$/, '')]) {
-      return this.renderClassifiedView();
-    }
+    // const { formContext, idSchema } = this.props;
+    // if (formContext.touched[idSchema.$id.replace(/_condition$/, '')]) {
+    //   return this.renderClassifiedView();
+    // }
+    console.log('formData', this.props.formData);
+    this.renderClassifiedView();
 
     return (
       <div>
@@ -242,8 +250,8 @@ class CustomField extends React.Component {
 const titleComponent = (
   <div>
     <p>
-      Based on your description, we use data from previous claims to assign a
-      disability to your claim.
+      Based on your description, we use data from previous claims to disability
+      to your claim.
     </p>
     <p>
       If the disability we assign you is wrong, you can choose to use your
@@ -253,8 +261,13 @@ const titleComponent = (
 );
 
 export const uiSchema = {
-  'ui:title': titleComponent,
-  'ui:field': CustomField,
+  condition: {
+    'ui:title': titleComponent,
+    'ui:field': CustomField,
+  },
+  classification: {
+    'ui:field': ClassificationField,
+  },
 };
 
 export const schema = {

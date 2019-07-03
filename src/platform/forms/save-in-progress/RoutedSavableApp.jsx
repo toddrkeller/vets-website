@@ -229,7 +229,7 @@ class RoutedSavableApp extends React.Component {
   };
 
   render() {
-    const { currentLocation, formConfig, children, loadedStatus } = this.props;
+    const { currentLocation, formConfig, children, loadedStatus, formContext } = this.props;
     const trimmedPathname = currentLocation.pathname.replace(/\/$/, '');
     let content;
     const loadingForm =
@@ -256,7 +256,11 @@ class RoutedSavableApp extends React.Component {
       );
     } else {
       content = (
-        <FormApp formConfig={formConfig} currentLocation={currentLocation}>
+        <FormApp
+          formConfig={formConfig}
+          formContext={formContext}
+          currentLocation={currentLocation}
+        >
           {children}
         </FormApp>
       );

@@ -183,6 +183,11 @@ export default class ArrayField extends React.Component {
           this.setState(
             _.set(['items', lastIndex, 'classification'], value, this.state),
           );
+
+          this.props.onChange(
+            _.set([lastIndex, 'classification'], value, this.props.formData)
+          );
+          console.log(this.state.items)
         },
       );
     } else {
@@ -278,7 +283,7 @@ export default class ArrayField extends React.Component {
       formData && formData.length
         ? formData
         : [getDefaultFormState(schema, undefined, registry.definitions)];
-
+    console.log('items: ', items)
     const containerClassNames = classNames({
       'schemaform-field-container': true,
       'schemaform-block': hasTitleOrDescription,
@@ -311,7 +316,7 @@ export default class ArrayField extends React.Component {
             const isEditing = this.state.editing[index];
             const classification = (this.state.items[index] || {})
               .classification;
-
+            console.log('item', item)
             if (isEditing) {
               return (
                 <div key={index} className="va-growable-background">
