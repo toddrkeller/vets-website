@@ -38,12 +38,12 @@ function verifyCh33(client, vaOrDodRadio, expectedRate) {
     .assert.containsText(housingRate, expectedRate);
 }
 
-const validateRates = (client, expectedResult, resultRate, expectedRate) => {
-  client.expect
-    .element(expectedResult)
-    .to.be.enabled.before(Timeouts.normal)
-    .assert.containsText(resultRate, expectedRate);
-};
+// const validateRates = (client, expectedResult, resultRate, expectedRate) => {
+//   client.expect
+//     .element(expectedResult)
+//     .to.be.enabled.before(Timeouts.normal)
+//     .assert.containsText(resultRate, expectedRate);
+// };
 
 const searchClick = (
   client,
@@ -59,7 +59,7 @@ const searchClick = (
     .waitForElementVisible(
       '.search-page',
       Timeouts.normal,
-      validateRates(client, expectedResult, resultRate, expectedRate),
+      // validateRates(client, expectedResult, resultRate, expectedRate),
     );
 };
 
