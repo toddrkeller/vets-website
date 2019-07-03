@@ -148,6 +148,19 @@ export default class ArrayField extends React.Component {
       this.setState(_.set(['editing', index], false, this.state), () => {
         this.scrollToTop();
       });
+
+      if (
+        !this.state.oldData ||
+        (this.state.oldData[index] || {}).condition !==
+          this.props.formData[index].condition
+      ) {
+        getClassification(this.props.formData[index].condition).then(value => {
+          // add classification to formData
+          this.props.onChange(
+            _.set([index, 'classification'], value, this.props.formData),
+          );
+        });
+      }
     } else {
       // Set all the fields for this item as touched, so we show errors
       const touched = setArrayRecordTouched(this.props.idSchema.$id, index);
