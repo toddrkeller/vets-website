@@ -191,6 +191,8 @@ export default class ArrayField extends React.Component {
         scrollToFirstError();
       });
     }
+    const touched = setArrayRecordTouched(this.props.idSchema.$id, lastIndex);
+    this.props.formContext.setTouched(touched);
   }
 
   /*
