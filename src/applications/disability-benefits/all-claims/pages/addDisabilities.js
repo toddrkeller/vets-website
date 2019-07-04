@@ -2,16 +2,10 @@ import * as autoClassification from '../form-components/autoClassification';
 import set from '../../../../platform/utilities/data/set';
 import get from '../../../../platform/utilities/data/get';
 import omit from '../../../../platform/utilities/data/omit';
-import disabilityLabels from '../content/disabilityLabels';
-import {
-  descriptionInfo,
-  autoSuggestTitle,
-  newOnlyAlert,
-  increaseAndNewAlert,
-} from '../content/addDisabilities';
+import { newOnlyAlert, increaseAndNewAlert } from '../content/addDisabilities';
 import NewDisability from '../components/NewDisability';
 import ArrayField from '../components/ArrayField';
-import { validateDisabilityName, requireDisability } from '../validations';
+import { requireDisability } from '../validations';
 import {
   newConditionsOnly,
   newAndIncrease,
@@ -36,43 +30,6 @@ export const uiSchema = {
     // Ideally, this would show the validation on the array itself (or the name field in an array
     //  item), but that's not working.
     'ui:validations': [requireDisability],
-    // items: {
-    //   // condition: autoClassification.uiSchema(
-    //   //   autoSuggestTitle,
-    //   //   () =>
-    //   //     Promise.resolve(
-    //   //       Object.entries(disabilityLabels).map(([key, value]) => ({
-    //   //         id: key,
-    //   //         label: value,
-    //   //       })),
-    //   //     ),
-    //   //   {
-    //   //     'ui:options': {
-    //   //       debounceRate: 200,
-    //   //       freeInput: true,
-    //   //       inputTransformers: [
-    //   //         // Replace a bunch of things that aren't valid with valid equivalents
-    //   //         input => input.replace(/["”’]/g, `'`),
-    //   //         input => input.replace(/[;–]/g, ' -- '),
-    //   //         input => input.replace(/[&]/g, ' and '),
-    //   //         input => input.replace(/[\\]/g, '/'),
-    //   //         // TODO: Remove the period replacer once permanent fix in place
-    //   //         input => input.replace(/[.]/g, ' '),
-    //   //         // Strip out everything that's not valid and doesn't need to be replaced
-    //   //         // TODO: Add period back into allowed chars regex
-    //   //         input => input.replace(/([^a-zA-Z0-9\-',/() ]+)/g, ''),
-    //   //         // Get rid of extra whitespace characters
-    //   //         input => input.trim(),
-    //   //         input => input.replace(/\s{2,}/g, ' '),
-    //   //       ],
-    //   //     },
-    //   //     // autoSuggest schema doesn't have any default validations as long as { `freeInput: true` }
-
-    //   //     'ui:validations': [validateDisabilityName],
-    //   //   },
-    //   // ),
-    //   classification: autoClassification.uiSchema,
-    // },
     items: autoClassification.uiSchema,
   },
   // This object only shows up when the user tries to continue without claiming either a rated or new condition
