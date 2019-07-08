@@ -61,7 +61,8 @@ const searchClick = (
       // validateRates(client, expectedResult, resultRate, expectedRate),
     )
     .expect.element(expectedResult)
-    .to.be.enabled.before(Timeouts.normal);
+    .to.be.enabled.before(Timeouts.normal)
+    .assert.containsText(resultRate, expectedRate);
 };
 
 // Selects DEA as benefit type, searches for schools in washington dc, checks the housing rate of the expected result, and clicks the expected result
