@@ -39,8 +39,9 @@ function verifyCh33(client, vaOrDodRadio, expectedRate) {
 }
 
 const validateRates = (client, expectedResult, resultRate, expectedRate) => {
-  client.expect.element(expectedResult).to.be.enabled.before(Timeouts.normal);
-  alert(`${resultRate}/${expectedRate}`);
+  client.assert.containsText(resultRate, expectedRate);
+  // client.expect.element(expectedResult).to.be.enabled.before(Timeouts.normal);
+  alert(`${expectedResult}`);
 };
 
 const searchClick = (
