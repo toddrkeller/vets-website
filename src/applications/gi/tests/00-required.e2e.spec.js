@@ -34,7 +34,8 @@ module.exports = E2eHelpers.createE2eTest(client => {
     client,
     firstResult,
     firstResultRate,
-    GiHelpers.formatCurrency(GiHelpers.calculatorConstantsList.DEARATEOJT),
+    GiHelpers.calculatorConstantsList.DEARATEOJT,
+    // GiHelpers.formatCurrency(GiHelpers.calculatorConstantsList.DEARATEOJT),
   );
 
   client
