@@ -206,8 +206,8 @@ export default class ArrayField extends React.Component {
       });
     }
     // For making touch state visible to child components
-    // const touched = setArrayRecordTouched(this.props.idSchema.$id, lastIndex);
-    // this.props.formContext.setTouched(touched);
+    const touched = setArrayRecordTouched(this.props.idSchema.$id, lastIndex);
+    this.props.formContext.setTouched(touched);
   }
 
   /*
@@ -321,6 +321,9 @@ export default class ArrayField extends React.Component {
               itemIdPrefix,
               definitions,
             );
+
+            const isTouched = this.props.formContext.touched[itemIdPrefix];
+
             const isLast = items.length === index + 1;
             const isEditing = this.state.editing[index];
             if (isEditing) {
@@ -367,7 +370,7 @@ export default class ArrayField extends React.Component {
                               disabled={!this.props.formData}
                               onClick={this.handleSave}
                             >
-                              Save
+                              {isTouched ? 'Save' : 'Submit'}
                             </button>
                           )}
                           <div className="float-left row columns">
