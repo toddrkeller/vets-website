@@ -26,6 +26,7 @@ function generateWebpackDevConfig(buildOptions) {
         },
       ],
     },
+    disableHostCheck: true,
     hot: false,
     liveReload: false,
     port: buildOptions.port,

@@ -205,8 +205,9 @@ export default class ArrayField extends React.Component {
         scrollToFirstError();
       });
     }
-    const touched = setArrayRecordTouched(this.props.idSchema.$id, lastIndex);
-    this.props.formContext.setTouched(touched);
+    // For making touch state visible to child components
+    // const touched = setArrayRecordTouched(this.props.idSchema.$id, lastIndex);
+    // this.props.formContext.setTouched(touched);
   }
 
   /*
@@ -405,12 +406,6 @@ export default class ArrayField extends React.Component {
                     formData={item}
                     onEdit={() => this.handleEdit(index)}
                   />
-                  <button
-                    className="usa-button-secondary float-right"
-                    onClick={() => this.handleEdit(index)}
-                  >
-                    Edit
-                  </button>
                 </div>
               </div>
             );

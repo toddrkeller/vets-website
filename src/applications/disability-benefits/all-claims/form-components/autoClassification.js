@@ -32,39 +32,16 @@ class CustomField extends React.Component {
   }
 
   onChange(value) {
-    const cleanInput = this.cleanUpInput(value);
     this.setState(
       {
-        condition: cleanInput,
+        condition: value,
       },
-      () => this.props.onChange(cleanInput),
-    );
-  }
-
-  cleanUpInput(inputValue) {
-    const inputTransformers = [
-      // Replace a bunch of things that aren't valid with valid equivalents
-      input => input.replace(/["”’]/g, `'`),
-      input => input.replace(/[;–]/g, ' -- '),
-      input => input.replace(/[&]/g, ' and '),
-      input => input.replace(/[\\]/g, '/'),
-      // TODO: Remove the period replacer once permanent fix in place
-      input => input.replace(/[.]/g, ' '),
-      // Strip out everything that's not valid and doesn't need to be replaced
-      // TODO: Add period back into allowed chars regex
-      input => input.replace(/([^a-zA-Z0-9\-',/() ]+)/g, ''),
-      // Get rid of extra whitespace characters
-      input => input.trim(),
-      input => input.replace(/\s{2,}/g, ' '),
-    ];
-
-    return inputTransformers.reduce(
-      (userInput, transformer) => transformer(userInput),
-      inputValue,
+      () => this.props.onChange(value),
     );
   }
 
   render() {
+    // For accessing touch state from parent component
     // const { formContext, idSchema } = this.props;
     // if (formContext.touched[idSchema.$id.replace(/_condition$/, '')]) {
     //   return this.renderClassifiedView();
