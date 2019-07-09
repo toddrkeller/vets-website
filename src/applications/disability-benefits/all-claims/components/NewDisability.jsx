@@ -2,6 +2,13 @@ import React from 'react';
 import { capitalizeEachWord } from '../utils';
 
 export default function NewDisability({ formData, onEdit }) {
+  const classificationView = (
+    <>
+      <hr />
+      <p>{formData.classification}</p>
+    </>
+  );
+
   return (
     <div className="view-new-disability-container">
       <div className="row small-collapse">
@@ -14,8 +21,7 @@ export default function NewDisability({ formData, onEdit }) {
           </button>
         </div>
       </div>
-      <hr />
-      <p>{formData.classification}</p>
+      {formData.classification && classificationView}
     </div>
   );
 }

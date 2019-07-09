@@ -7,10 +7,11 @@ class ClassificationField extends React.Component {
     if (!this.props.formData) return null;
 
     return (
-      <div>
-        <strong>Disability we assigned</strong>
-        <div>
+      <div className="add-new-disability-container va-flex">
+        <div className="flex-auto classification-text">
           <p>{this.props.formData}</p>
+        </div>
+        <div className="flex-none">
           <button
             className="va-button-link"
             onClick={() => this.props.onChange(null)}
@@ -62,12 +63,8 @@ class CustomField extends React.Component {
 const titleComponent = (
   <div>
     <p>
-      Based on your description, we use data from previous claims to disability
-      to your claim.
-    </p>
-    <p>
-      If the disability we assign you is wrong, you can choose to use your
-      disability description instead of the assigned disability.
+      Based on your description, we use data from previous claims to assign a
+      disability to your claim.
     </p>
   </div>
 );

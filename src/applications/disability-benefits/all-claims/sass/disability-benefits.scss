@@ -164,3 +164,25 @@ ul.original-disability-list {
   margin-top: 2em;
   margin-bottom: 2em;
 }
+
+.add-new-disability-container {
+  padding: 0.5em;
+  border-top: solid gray thin;
+  border-bottom: solid gray thin;
+  align-items: center;
+
+  hr {
+    margin: 0;
+  }
+
+  .classification-text {
+    padding-right: 0.5em;
+  }
+
+  .flex-grow {
+    flex: 1 0 auto;
+  }
+  .flex-none {
+    flex: none;
+  }
+}
