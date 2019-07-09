@@ -19,8 +19,8 @@ const firstResultRate =
 // const dodRateRadio = '#radio-buttons-15-1';
 // const vaRateRadioUS = '#radio-buttons-16-0';
 // const dodRateRadioUS = '#radio-buttons-16-1';
-// const deaEnrolledMax = 30;
-// const housingRate = '#gbct_housing_allowance > div.small-6.columns.value > h5';
+const deaEnrolledMax = 30;
+const housingRate = '#gbct_housing_allowance > div.small-6.columns.value > h5';
 
 module.exports = E2eHelpers.createE2eTest(client => {
   GiHelpers.initApplicationMock();
@@ -42,18 +42,18 @@ module.exports = E2eHelpers.createE2eTest(client => {
     .waitForElementVisible('.gi-app', Timeouts.slow, searchAsDea)
     .axeCheck('.main');
 
-  // // Loops through all "Enrolled" options for an ojt facility and verifies the DEA housing rate
-  // for (let i = 2; i <= deaEnrolledMax; i += 2) {
-  //   const deaRateOjtFormatted = Math.round(
-  //     (i / deaEnrolledMax) *
-  //       GiHelpers.formatNumber(GiHelpers.calculatorConstantsList.DEARATEOJT),
-  //   );
-  //   client.expect
-  //     .element(housingRate)
-  //     .to.be.enabled.before(Timeouts.normal)
-  //     .selectDropdown('working', i)
-  //     .assert.containsText(housingRate, `$${deaRateOjtFormatted}/mo`);
-  // }
+  // Loops through all "Enrolled" options for an ojt facility and verifies the DEA housing rate
+  for (let i = 2; i <= deaEnrolledMax; i += 2) {
+    const deaRateOjtFormatted = Math.round(
+      (i / deaEnrolledMax) *
+        GiHelpers.formatNumber(GiHelpers.calculatorConstantsList.DEARATEOJT),
+    );
+    client.expect
+      .element(housingRate)
+      .to.be.enabled.before(Timeouts.normal)
+      .selectDropdown('working', i)
+      .assert.containsText(housingRate, `$${deaRateOjtFormatted}/mo`);
+  }
 
   // client.openUrl(`${E2eHelpers.baseUrl}/gi-bill-comparison-tool/`);
   //
