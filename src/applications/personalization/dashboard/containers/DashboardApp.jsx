@@ -103,9 +103,9 @@ const ManageBenefitsOrRequestRecords = () => (
           href="/education/gi-bill/post-9-11/ch-33-benefit"
           onClick={recordDashboardClick('post-911')}
         >
-          <h4 className="va-nav-linkslist-title">
+          <h3 className="vads-u-font-weight--bold vads-u-font-size--h4">
             Check Post-9/11 GI Bill benefits
-          </h4>
+          </h3>
           <p className="va-nav-linkslist-description">
             View and print your statement of benefits.
           </p>
@@ -116,7 +116,9 @@ const ManageBenefitsOrRequestRecords = () => (
           href="/health-care/get-medical-records/"
           onClick={recordDashboardClick('health-records')}
         >
-          <h4 className="va-nav-linkslist-title">Get your VA health records</h4>
+          <h3 className="vads-u-font-weight--bold vads-u-font-size--h4">
+            Get your VA health records
+          </h3>
           <p className="va-nav-linkslist-description">
             View, download, and print your VA health records.
           </p>
@@ -127,7 +129,9 @@ const ManageBenefitsOrRequestRecords = () => (
           href={lettersManifest.rootUrl}
           onClick={recordDashboardClick('download-letters')}
         >
-          <h4 className="va-nav-linkslist-title">Download your VA letters</h4>
+          <h3 className="vads-u-font-weight--bold vads-u-font-size--h4">
+            Download your VA letters
+          </h3>
           <p className="va-nav-linkslist-description">
             Access and download benefit letters and documents proving your
             status online.
@@ -206,13 +210,13 @@ class DashboardApp extends React.Component {
       <AlertBox
         content={
           <div>
-            <h4 className="usa-alert-heading">
+            <h3 className="usa-alert-heading">
               Verify your identity to access more VA.gov tools and features
-            </h4>
+            </h3>
             <p>
               When you verify your identity, you can use VA.gov to do things
-              like track your claims, refill your prescriptions, and download
-              your VA benefit letters.
+              like check the status of your claims and health care application,
+              refill your prescriptions, and download your VA benefit letters.
             </p>
             <a
               className="usa-button-primary"

@@ -1,42 +1,31 @@
-// helper function to round to nearest 10
-function roundRating(num) {
-  const ratingWithDecimal = Number.parseFloat(num).toFixed(0.1);
-  return Math.round(ratingWithDecimal / 10) * 10;
+export function getRatings(disabilities) {
+  return disabilities.map(disability => disability.rating);
 }
 
-function pullRatingsFromState(arr) {
-  const allRatings = [];
-  arr.forEach(e => {
-    allRatings.push(e.rating);
-  });
-  return allRatings;
+export function canCalculate(ratings) {
+  return ratings.filter(r => !!r).length >= 2;
 }
 
-export function calculateRating(arr) {
-  const ratingArr = pullRatingsFromState(arr);
-  const sortedArr = ratingArr.sort((a, b) => b - a);
-  let a;
-  let b;
-  let x;
+export function calculateCombinedRating(ratings) {
+  const ratingsSortedDesc = ratings.sort((a, b) => b - a);
 
-  while (sortedArr.length > 1) {
-    a = 100 - sortedArr[0];
-    b = (sortedArr[1] * a) / 100;
-    x = sortedArr[0] + b;
-    sortedArr.splice(0, 2, x);
-  }
+  const combinedRating = ratingsSortedDesc.reduce(
+    (currentCombinedRating, nextRating) => {
+      if (!currentCombinedRating) return nextRating;
 
-  if (sortedArr.length === 1) {
-    const lastCalcualtedRating = sortedArr[0];
-    let result = roundRating(lastCalcualtedRating);
+      const a = 100 - currentCombinedRating;
+      const b = nextRating * (a / 100);
+      const nextCombinedRating = currentCombinedRating + b;
 
-    const actualRating = Number(parseFloat(lastCalcualtedRating).toFixed(2));
-    if (result > 100) {
-      result = 100;
-    }
-    return [result, actualRating];
-  }
-  return [undefined, undefined];
+      return Math.round(nextCombinedRating);
+    },
+    null,
+  );
+
+  const combinedRatingRounded = Math.round(combinedRating / 10) * 10;
+
+  return {
+    exact: combinedRating,
+    rounded: combinedRatingRounded,
+  };
 }
-// will return array with two elements. first element in array is rounded rating
-// and second element is the actual rating
