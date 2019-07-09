@@ -42,17 +42,21 @@ module.exports = E2eHelpers.createE2eTest(client => {
     .waitForElementVisible('.gi-app', Timeouts.slow, searchAsDea)
     .axeCheck('.main');
 
+  const selectEnrolledOption = (index, deaRateOjtFormatted) => {
+    client.expect
+      // .element(housingRate)
+      // .to.be.enabled.before(Timeouts.normal)
+      .selectDropdown('working', index)
+      .assert.containsText(housingRate, `$${deaRateOjtFormatted}/mo`);
+  };
+
   // Loops through all "Enrolled" options for an ojt facility and verifies the DEA housing rate
   for (let i = 2; i <= deaEnrolledMax; i += 2) {
     const deaRateOjtFormatted = Math.round(
       (i / deaEnrolledMax) *
         GiHelpers.formatNumber(GiHelpers.calculatorConstantsList.DEARATEOJT),
     );
-    client.expect
-      .element(housingRate)
-      .to.be.enabled.before(Timeouts.normal)
-      .selectDropdown('working', i)
-      .assert.containsText(housingRate, `$${deaRateOjtFormatted}/mo`);
+    selectEnrolledOption(client, housingRate, deaRateOjtFormatted);
   }
 
   // client.openUrl(`${E2eHelpers.baseUrl}/gi-bill-comparison-tool/`);
