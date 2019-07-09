@@ -43,7 +43,10 @@ module.exports = E2eHelpers.createE2eTest(client => {
     .axeCheck('.main');
 
   const selectEnrolledOption = () => {
-    client.expect.element(housingRate).to.be.enabled.before(Timeouts.normal);
+    client
+      .waitForElementVisible(housingRate, Timeouts.normal)
+      .expect.element(housingRate)
+      .to.be.enabled.before(Timeouts.normal);
     // .selectDropdown('working', index)
     // .assert.containsText(housingRate, `$${deaRateOjtFormatted}/mo`);
   };
