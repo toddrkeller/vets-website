@@ -11,7 +11,7 @@ class ClassificationField extends React.Component {
         <div className="flex-auto classification-text">
           <p>{this.props.formData}</p>
         </div>
-        <div className="flex-none">
+        <div className="flex-none right">
           <button
             className="va-button-link"
             onClick={() => this.props.onChange(null)}

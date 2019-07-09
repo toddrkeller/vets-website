@@ -16,12 +16,12 @@ export const classificationHelp = (
   <div>
     <AdditionalInfo triggerText="What if the disability assignment looks wrong?">
       <p>
-        If the disability assignment looks wrong, you can choose to use your
-        disability description instead of the assigned disability.
+        If the disability we assign you is wrong, you can choose to use your
+        original disability description instead of the disability we assign you.
       </p>
       <p>
-        We'll only send your disability description with your claim if you
-        remove the assigned disability.
+        If you remove the disability we assigned you, we'll only send your
+        original disability description with your claim.
       </p>
     </AdditionalInfo>
   </div>

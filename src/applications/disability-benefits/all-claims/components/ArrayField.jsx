@@ -398,7 +398,7 @@ export default class ArrayField extends React.Component {
                               type="button"
                               onClick={() => this.handleRemove(index)}
                             >
-                              Remove
+                              Delete
                             </button>
                           )}
                         </div>
