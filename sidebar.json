@@ -21,6 +21,13 @@
     "menus": []
   },
   {
+    "fileName": "dst/index.html",
+    "sidebarTitle": "",
+    "backLink": null,
+    "items": [],
+    "menus": []
+  },
+  {
     "fileName": "discharge-upgrade-instructions/index.html",
     "sidebarTitle": "Records",
     "backLink": null,
@@ -77,13 +84,6 @@
     ]
   },
   {
-    "fileName": "dst/index.html",
-    "sidebarTitle": "",
-    "backLink": null,
-    "items": [],
-    "menus": []
-  },
-  {
     "fileName": "pension/aid-attendance-housebound/index.html",
     "sidebarTitle": "Pension benefits",
     "backLink": null,
@@ -93,6 +93,12 @@
         "title": "Get benefits",
         "open": true,
         "items": [
+          {
+            "active": false,
+            "title": "Eligibility",
+            "href": "/pension/eligibility",
+            "items": []
+          },
           {
             "active": false,
             "title": "How to apply",
@@ -109,6 +115,12 @@
             "active": true,
             "title": "Aid and Attendance benefits and Housebound allowance",
             "href": "/pension/aid-attendance-housebound",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Survivors Pension",
+            "href": "/pension/survivors-pension",
             "items": []
           }
         ]
@@ -155,6 +167,12 @@
           },
           {
             "active": false,
+            "title": "Survivors Pension rates",
+            "href": "/pension/survivors-pension-rates",
+            "items": []
+          },
+          {
+            "active": false,
             "title": "Protected pension rates",
             "href": "https://www.benefits.va.gov/PENSION/current_protected_pension_rate_tables.asp",
             "items": []
@@ -163,6 +181,122 @@
             "active": false,
             "title": "VA claim exam (C&P exam)",
             "href": "/disability/va-claim-exam/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Pension management centers",
+            "href": "/pension/pension-management-centers",
+            "items": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "fileName": "pension/eligibility/index.html",
+    "sidebarTitle": "Pension benefits",
+    "backLink": null,
+    "items": [],
+    "menus": [
+      {
+        "title": "Get benefits",
+        "open": true,
+        "items": [
+          {
+            "active": true,
+            "title": "Eligibility",
+            "href": "/pension/eligibility",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "How to apply",
+            "href": "/pension/how-to-apply",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Apply now",
+            "href": "/pension/application/527EZ",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Aid and Attendance benefits and Housebound allowance",
+            "href": "/pension/aid-attendance-housebound",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Survivors Pension",
+            "href": "/pension/survivors-pension",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Manage benefits",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "Check claim or appeal status",
+            "href": "/claim-or-appeal-status/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "View VA payment history",
+            "href": "/va-payment-history/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Change your address",
+            "href": "/change-address/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Change your VA direct deposit information",
+            "href": "/change-direct-deposit/",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "More resources",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "Veterans Pension rates",
+            "href": "/pension/veterans-pension-rates",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Survivors Pension rates",
+            "href": "/pension/survivors-pension-rates",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Protected pension rates",
+            "href": "https://www.benefits.va.gov/PENSION/current_protected_pension_rate_tables.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "VA claim exam (C&P exam)",
+            "href": "/disability/va-claim-exam/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Pension management centers",
+            "href": "/pension/pension-management-centers",
             "items": []
           }
         ]
@@ -179,6 +313,12 @@
         "title": "Get benefits",
         "open": true,
         "items": [
+          {
+            "active": false,
+            "title": "Eligibility",
+            "href": "/pension/eligibility",
+            "items": []
+          },
           {
             "active": true,
             "title": "How to apply",
@@ -201,6 +341,12 @@
             "title": "Aid and Attendance benefits and Housebound allowance",
             "href": "/pension/aid-attendance-housebound",
             "items": []
+          },
+          {
+            "active": false,
+            "title": "Survivors Pension",
+            "href": "/pension/survivors-pension",
+            "items": []
           }
         ]
       },
@@ -246,6 +392,12 @@
           },
           {
             "active": false,
+            "title": "Survivors Pension rates",
+            "href": "/pension/survivors-pension-rates",
+            "items": []
+          },
+          {
+            "active": false,
             "title": "Protected pension rates",
             "href": "https://www.benefits.va.gov/PENSION/current_protected_pension_rate_tables.asp",
             "items": []
@@ -254,6 +406,342 @@
             "active": false,
             "title": "VA claim exam (C&P exam)",
             "href": "/disability/va-claim-exam/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Pension management centers",
+            "href": "/pension/pension-management-centers",
+            "items": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "fileName": "pension/pension-management-centers/index.html",
+    "sidebarTitle": "Pension benefits",
+    "backLink": null,
+    "items": [],
+    "menus": [
+      {
+        "title": "Get benefits",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "Eligibility",
+            "href": "/pension/eligibility",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "How to apply",
+            "href": "/pension/how-to-apply",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Apply now",
+            "href": "/pension/application/527EZ",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Aid and Attendance benefits and Housebound allowance",
+            "href": "/pension/aid-attendance-housebound",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Survivors Pension",
+            "href": "/pension/survivors-pension",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Manage benefits",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "Check claim or appeal status",
+            "href": "/claim-or-appeal-status/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "View VA payment history",
+            "href": "/va-payment-history/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Change your address",
+            "href": "/change-address/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Change your VA direct deposit information",
+            "href": "/change-direct-deposit/",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "More resources",
+        "open": true,
+        "items": [
+          {
+            "active": false,
+            "title": "Veterans Pension rates",
+            "href": "/pension/veterans-pension-rates",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Survivors Pension rates",
+            "href": "/pension/survivors-pension-rates",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Protected pension rates",
+            "href": "https://www.benefits.va.gov/PENSION/current_protected_pension_rate_tables.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "VA claim exam (C&P exam)",
+            "href": "/disability/va-claim-exam/",
+            "items": []
+          },
+          {
+            "active": true,
+            "title": "Pension management centers",
+            "href": "/pension/pension-management-centers",
+            "items": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "fileName": "pension/survivors-pension-rates/index.html",
+    "sidebarTitle": "Pension benefits",
+    "backLink": null,
+    "items": [],
+    "menus": [
+      {
+        "title": "Get benefits",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "Eligibility",
+            "href": "/pension/eligibility",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "How to apply",
+            "href": "/pension/how-to-apply",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Apply now",
+            "href": "/pension/application/527EZ",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Aid and Attendance benefits and Housebound allowance",
+            "href": "/pension/aid-attendance-housebound",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Survivors Pension",
+            "href": "/pension/survivors-pension",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Manage benefits",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "Check claim or appeal status",
+            "href": "/claim-or-appeal-status/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "View VA payment history",
+            "href": "/va-payment-history/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Change your address",
+            "href": "/change-address/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Change your VA direct deposit information",
+            "href": "/change-direct-deposit/",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "More resources",
+        "open": true,
+        "items": [
+          {
+            "active": false,
+            "title": "Veterans Pension rates",
+            "href": "/pension/veterans-pension-rates",
+            "items": []
+          },
+          {
+            "active": true,
+            "title": "Survivors Pension rates",
+            "href": "/pension/survivors-pension-rates",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Protected pension rates",
+            "href": "https://www.benefits.va.gov/PENSION/current_protected_pension_rate_tables.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "VA claim exam (C&P exam)",
+            "href": "/disability/va-claim-exam/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Pension management centers",
+            "href": "/pension/pension-management-centers",
+            "items": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "fileName": "pension/survivors-pension/index.html",
+    "sidebarTitle": "Pension benefits",
+    "backLink": null,
+    "items": [],
+    "menus": [
+      {
+        "title": "Get benefits",
+        "open": true,
+        "items": [
+          {
+            "active": false,
+            "title": "Eligibility",
+            "href": "/pension/eligibility",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "How to apply",
+            "href": "/pension/how-to-apply",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Apply now",
+            "href": "/pension/application/527EZ",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Aid and Attendance benefits and Housebound allowance",
+            "href": "/pension/aid-attendance-housebound",
+            "items": []
+          },
+          {
+            "active": true,
+            "title": "Survivors Pension",
+            "href": "/pension/survivors-pension",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Manage benefits",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "Check claim or appeal status",
+            "href": "/claim-or-appeal-status/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "View VA payment history",
+            "href": "/va-payment-history/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Change your address",
+            "href": "/change-address/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Change your VA direct deposit information",
+            "href": "/change-direct-deposit/",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "More resources",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "Veterans Pension rates",
+            "href": "/pension/veterans-pension-rates",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Survivors Pension rates",
+            "href": "/pension/survivors-pension-rates",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Protected pension rates",
+            "href": "https://www.benefits.va.gov/PENSION/current_protected_pension_rate_tables.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "VA claim exam (C&P exam)",
+            "href": "/disability/va-claim-exam/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Pension management centers",
+            "href": "/pension/pension-management-centers",
             "items": []
           }
         ]
@@ -272,6 +760,12 @@
         "items": [
           {
             "active": false,
+            "title": "Eligibility",
+            "href": "/pension/eligibility",
+            "items": []
+          },
+          {
+            "active": false,
             "title": "How to apply",
             "href": "/pension/how-to-apply",
             "items": []
@@ -286,6 +780,12 @@
             "active": false,
             "title": "Aid and Attendance benefits and Housebound allowance",
             "href": "/pension/aid-attendance-housebound",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Survivors Pension",
+            "href": "/pension/survivors-pension",
             "items": []
           }
         ]
@@ -332,6 +832,12 @@
           },
           {
             "active": false,
+            "title": "Survivors Pension rates",
+            "href": "/pension/survivors-pension-rates",
+            "items": []
+          },
+          {
+            "active": false,
             "title": "Protected pension rates",
             "href": "https://www.benefits.va.gov/PENSION/current_protected_pension_rate_tables.asp",
             "items": []
@@ -340,6 +846,12 @@
             "active": false,
             "title": "VA claim exam (C&P exam)",
             "href": "/disability/va-claim-exam/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Pension management centers",
+            "href": "/pension/pension-management-centers",
             "items": []
           }
         ]
@@ -413,128 +925,6 @@
             "active": false,
             "title": "Search historical military records",
             "href": "https://www.archives.gov/",
-            "items": []
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "fileName": "careers-employment/careerscope-skills-assessment/index.html",
-    "sidebarTitle": "Careers and employment",
-    "backLink": null,
-    "items": [],
-    "menus": [
-      {
-        "title": "Get benefits",
-        "open": false,
-        "items": [
-          {
-            "active": false,
-            "title": "Vocational Rehab and Employment",
-            "href": "/careers-employment/vocational-rehabilitation",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Educational and Career Counseling",
-            "href": "/careers-employment/education-and-career-counseling",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Veteran-owned business support",
-            "href": "/careers-employment/veteran-owned-business-support",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Dependent benefits",
-            "href": "/careers-employment/dependent-benefits",
-            "items": []
-          }
-        ]
-      },
-      {
-        "title": "Manage benefits",
-        "open": true,
-        "items": [
-          {
-            "active": false,
-            "title": "VA Transition Assistance",
-            "href": "https://www.benefits.va.gov/tap/tap-index.asp",
-            "items": []
-          },
-          {
-            "active": true,
-            "title": "CareerScope",
-            "href": "/careers-employment/careerscope-skills-assessment",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Find a job",
-            "href": "https://www.dol.gov/veterans/findajob/",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Find VA careers and support",
-            "href": "http://localhost:3001/jobs/?utm_source=jobs_button&utm_campaign=ChooseVA_Website_Buttons",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Print Civil Service Preference Letter",
-            "href": "/records/download-va-letters/",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Get LinkedIn classes",
-            "href": "https://www.veterans.linkedin.com/",
-            "items": []
-          }
-        ]
-      },
-      {
-        "title": "More resources",
-        "open": false,
-        "items": [
-          {
-            "active": false,
-            "title": "Subsistence allowance rates",
-            "href": "https://www.benefits.va.gov/vocrehab/subsistence_allowance_rates.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "VetSuccess on Campus",
-            "href": "/careers-employment/vetsuccess-on-campus",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Program definitions",
-            "href": "https://www.benefits.va.gov/vocrehab/program_definitions.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Success stories",
-            "href": "https://www.benefits.va.gov/vocrehab/success_stories.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Veteran resources",
-            "href": "/careers-employment/veteran-resources",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Family resources",
-            "href": "/careers-employment/family-resources",
             "items": []
           }
         ]
@@ -711,6 +1101,128 @@
           },
           {
             "active": false,
+            "title": "CareerScope",
+            "href": "/careers-employment/careerscope-skills-assessment",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Find a job",
+            "href": "https://www.dol.gov/veterans/findajob/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Find VA careers and support",
+            "href": "http://localhost:3001/jobs/?utm_source=jobs_button&utm_campaign=ChooseVA_Website_Buttons",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Print Civil Service Preference Letter",
+            "href": "/records/download-va-letters/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Get LinkedIn classes",
+            "href": "https://www.veterans.linkedin.com/",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "More resources",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "Subsistence allowance rates",
+            "href": "https://www.benefits.va.gov/vocrehab/subsistence_allowance_rates.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "VetSuccess on Campus",
+            "href": "/careers-employment/vetsuccess-on-campus",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Program definitions",
+            "href": "https://www.benefits.va.gov/vocrehab/program_definitions.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Success stories",
+            "href": "https://www.benefits.va.gov/vocrehab/success_stories.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Veteran resources",
+            "href": "/careers-employment/veteran-resources",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Family resources",
+            "href": "/careers-employment/family-resources",
+            "items": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "fileName": "careers-employment/careerscope-skills-assessment/index.html",
+    "sidebarTitle": "Careers and employment",
+    "backLink": null,
+    "items": [],
+    "menus": [
+      {
+        "title": "Get benefits",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "Vocational Rehab and Employment",
+            "href": "/careers-employment/vocational-rehabilitation",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Educational and Career Counseling",
+            "href": "/careers-employment/education-and-career-counseling",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Veteran-owned business support",
+            "href": "/careers-employment/veteran-owned-business-support",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Dependent benefits",
+            "href": "/careers-employment/dependent-benefits",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Manage benefits",
+        "open": true,
+        "items": [
+          {
+            "active": false,
+            "title": "VA Transition Assistance",
+            "href": "https://www.benefits.va.gov/tap/tap-index.asp",
+            "items": []
+          },
+          {
+            "active": true,
             "title": "CareerScope",
             "href": "/careers-employment/careerscope-skills-assessment",
             "items": []
@@ -2950,6 +3462,35 @@
     "menus": []
   },
   {
+    "fileName": "burials-memorials/memorial-items/presidential-memorial-certificates/index.html",
+    "sidebarTitle": "Burials and memorials",
+    "backLink": {
+      "title": "Memorial Items",
+      "href": "/burials-memorials/memorial-items"
+    },
+    "items": [
+      {
+        "active": false,
+        "title": "Headstones, Markers or Medallions",
+        "href": "/burials-memorials/memorial-items/headstones-markers-medallions",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Burial Flags",
+        "href": "/burials-memorials/memorial-items/burial-flags",
+        "items": []
+      },
+      {
+        "active": true,
+        "title": "Presidential Memorial Certificates",
+        "href": "/burials-memorials/memorial-items/presidential-memorial-certificates",
+        "items": []
+      }
+    ],
+    "menus": []
+  },
+  {
     "fileName": "burials-memorials/memorial-items/headstones-markers-medallions/index.html",
     "sidebarTitle": "Burials and memorials",
     "backLink": {
@@ -2996,35 +3537,6 @@
       },
       {
         "active": false,
-        "title": "Presidential Memorial Certificates",
-        "href": "/burials-memorials/memorial-items/presidential-memorial-certificates",
-        "items": []
-      }
-    ],
-    "menus": []
-  },
-  {
-    "fileName": "burials-memorials/memorial-items/presidential-memorial-certificates/index.html",
-    "sidebarTitle": "Burials and memorials",
-    "backLink": {
-      "title": "Memorial Items",
-      "href": "/burials-memorials/memorial-items"
-    },
-    "items": [
-      {
-        "active": false,
-        "title": "Headstones, Markers or Medallions",
-        "href": "/burials-memorials/memorial-items/headstones-markers-medallions",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Burial Flags",
-        "href": "/burials-memorials/memorial-items/burial-flags",
-        "items": []
-      },
-      {
-        "active": true,
         "title": "Presidential Memorial Certificates",
         "href": "/burials-memorials/memorial-items/presidential-memorial-certificates",
         "items": []
@@ -5416,6 +5928,201 @@
     "menus": []
   },
   {
+    "fileName": "disability/how-to-file-claim/additional-forms/index.html",
+    "sidebarTitle": "Disability benefits",
+    "backLink": {
+      "title": "How to file a claim",
+      "href": "/disability/how-to-file-claim"
+    },
+    "items": [
+      {
+        "active": false,
+        "title": "When to file",
+        "href": "/disability/how-to-file-claim/when-to-file",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Evidence needed",
+        "href": "/disability/how-to-file-claim/evidence-needed",
+        "items": []
+      },
+      {
+        "active": true,
+        "title": "Additional forms",
+        "href": "/disability/how-to-file-claim/additional-forms",
+        "items": []
+      }
+    ],
+    "menus": []
+  },
+  {
+    "fileName": "disability/how-to-file-claim/evidence-needed/index.html",
+    "sidebarTitle": "Disability benefits",
+    "backLink": {
+      "title": "How to file a claim",
+      "href": "/disability/how-to-file-claim"
+    },
+    "items": [
+      {
+        "active": false,
+        "title": "When to file",
+        "href": "/disability/how-to-file-claim/when-to-file",
+        "items": []
+      },
+      {
+        "active": true,
+        "title": "Evidence needed",
+        "href": "/disability/how-to-file-claim/evidence-needed",
+        "items": [
+          {
+            "title": "Fully developed claims",
+            "href": "/disability/how-to-file-claim/evidence-needed/fully-developed-claims"
+          },
+          {
+            "title": "Standard claims",
+            "href": "/disability/how-to-file-claim/evidence-needed/standard-claims"
+          }
+        ]
+      },
+      {
+        "active": false,
+        "title": "Additional forms",
+        "href": "/disability/how-to-file-claim/additional-forms",
+        "items": []
+      }
+    ],
+    "menus": []
+  },
+  {
+    "fileName": "disability/how-to-file-claim/when-to-file/index.html",
+    "sidebarTitle": "Disability benefits",
+    "backLink": {
+      "title": "How to file a claim",
+      "href": "/disability/how-to-file-claim"
+    },
+    "items": [
+      {
+        "active": true,
+        "title": "When to file",
+        "href": "/disability/how-to-file-claim/when-to-file",
+        "items": [
+          {
+            "title": "Pre-discharge claim",
+            "href": "/disability/how-to-file-claim/when-to-file/pre-discharge-claim"
+          }
+        ]
+      },
+      {
+        "active": false,
+        "title": "Evidence needed",
+        "href": "/disability/how-to-file-claim/evidence-needed",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Additional forms",
+        "href": "/disability/how-to-file-claim/additional-forms",
+        "items": []
+      }
+    ],
+    "menus": []
+  },
+  {
+    "fileName": "disability/how-to-file-claim/evidence-needed/fully-developed-claims/index.html",
+    "sidebarTitle": "Disability benefits",
+    "backLink": {
+      "title": "Evidence needed",
+      "href": "/disability/how-to-file-claim/evidence-needed"
+    },
+    "items": [
+      {
+        "active": true,
+        "title": "Fully developed claims",
+        "href": "/disability/how-to-file-claim/evidence-needed/fully-developed-claims",
+        "items": [
+          {
+            "title": "FDC walkthrough",
+            "href": "https://www.benefits.va.gov/FDC/walkthrough.asp"
+          },
+          {
+            "title": "FDC checklist",
+            "href": "https://www.benefits.va.gov/FDC/checklist.asp"
+          }
+        ]
+      },
+      {
+        "active": false,
+        "title": "Standard claims",
+        "href": "/disability/how-to-file-claim/evidence-needed/standard-claims",
+        "items": []
+      }
+    ],
+    "menus": []
+  },
+  {
+    "fileName": "disability/how-to-file-claim/evidence-needed/standard-claims/index.html",
+    "sidebarTitle": "Disability benefits",
+    "backLink": {
+      "title": "Evidence needed",
+      "href": "/disability/how-to-file-claim/evidence-needed"
+    },
+    "items": [
+      {
+        "active": false,
+        "title": "Fully developed claims",
+        "href": "/disability/how-to-file-claim/evidence-needed/fully-developed-claims",
+        "items": []
+      },
+      {
+        "active": true,
+        "title": "Standard claims",
+        "href": "/disability/how-to-file-claim/evidence-needed/standard-claims",
+        "items": []
+      }
+    ],
+    "menus": []
+  },
+  {
+    "fileName": "disability/how-to-file-claim/when-to-file/pre-discharge-claim/index.html",
+    "sidebarTitle": "Disability benefits",
+    "backLink": {
+      "title": "When to file",
+      "href": "/disability/how-to-file-claim/when-to-file"
+    },
+    "items": [
+      {
+        "active": true,
+        "title": "Pre-discharge claim",
+        "href": "/disability/how-to-file-claim/when-to-file/pre-discharge-claim",
+        "items": [
+          {
+            "title": "File while overseas",
+            "href": "/disability/how-to-file-claim/when-to-file/pre-discharge-claim/file-while-overseas"
+          }
+        ]
+      }
+    ],
+    "menus": []
+  },
+  {
+    "fileName": "disability/how-to-file-claim/when-to-file/pre-discharge-claim/file-while-overseas/index.html",
+    "sidebarTitle": "Disability benefits",
+    "backLink": {
+      "title": "Pre-discharge claim",
+      "href": "/disability/how-to-file-claim/when-to-file/pre-discharge-claim"
+    },
+    "items": [
+      {
+        "active": true,
+        "title": "File while overseas",
+        "href": "/disability/how-to-file-claim/when-to-file/pre-discharge-claim/file-while-overseas",
+        "items": []
+      }
+    ],
+    "menus": []
+  },
+  {
     "fileName": "disability/eligibility/former-pows/index.html",
     "sidebarTitle": "Disability benefits",
     "backLink": {
@@ -5760,7 +6467,7 @@
     "menus": []
   },
   {
-    "fileName": "disability/eligibility/special-claims/birth-defects/index.html",
+    "fileName": "disability/eligibility/special-claims/automobile-allowance-adaptive-equipment/index.html",
     "sidebarTitle": "Disability benefits",
     "backLink": {
       "title": "Special Claims",
@@ -5768,13 +6475,13 @@
     },
     "items": [
       {
-        "active": false,
+        "active": true,
         "title": "Auto allowance and adaptive equipment",
         "href": "/disability/eligibility/special-claims/automobile-allowance-adaptive-equipment",
         "items": []
       },
       {
-        "active": true,
+        "active": false,
         "title": "Birth defects",
         "href": "/disability/eligibility/special-claims/birth-defects",
         "items": []
@@ -5825,7 +6532,7 @@
     "menus": []
   },
   {
-    "fileName": "disability/eligibility/special-claims/dental-care/index.html",
+    "fileName": "disability/eligibility/special-claims/birth-defects/index.html",
     "sidebarTitle": "Disability benefits",
     "backLink": {
       "title": "Special Claims",
@@ -5839,7 +6546,7 @@
         "items": []
       },
       {
-        "active": false,
+        "active": true,
         "title": "Birth defects",
         "href": "/disability/eligibility/special-claims/birth-defects",
         "items": []
@@ -5851,7 +6558,7 @@
         "items": []
       },
       {
-        "active": true,
+        "active": false,
         "title": "Dental care",
         "href": "/disability/eligibility/special-claims/dental-care",
         "items": []
@@ -5955,7 +6662,7 @@
     "menus": []
   },
   {
-    "fileName": "disability/eligibility/special-claims/automobile-allowance-adaptive-equipment/index.html",
+    "fileName": "disability/eligibility/special-claims/dental-care/index.html",
     "sidebarTitle": "Disability benefits",
     "backLink": {
       "title": "Special Claims",
@@ -5963,7 +6670,7 @@
     },
     "items": [
       {
-        "active": true,
+        "active": false,
         "title": "Auto allowance and adaptive equipment",
         "href": "/disability/eligibility/special-claims/automobile-allowance-adaptive-equipment",
         "items": []
@@ -5981,7 +6688,7 @@
         "items": []
       },
       {
-        "active": false,
+        "active": true,
         "title": "Dental care",
         "href": "/disability/eligibility/special-claims/dental-care",
         "items": []
@@ -6504,71 +7211,6 @@
     "menus": []
   },
   {
-    "fileName": "disability/eligibility/hazardous-materials-exposure/gulf-war-illness-afghanistan/index.html",
-    "sidebarTitle": "Disability benefits",
-    "backLink": {
-      "title": "Exposure to hazardous materials",
-      "href": "/disability/eligibility/hazardous-materials-exposure"
-    },
-    "items": [
-      {
-        "active": false,
-        "title": "Specific environmental hazards",
-        "href": "/disability/eligibility/hazardous-materials-exposure/specific-environmental-hazards",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Agent Orange",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Asbestos",
-        "href": "/disability/eligibility/hazardous-materials-exposure/asbestos",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Mustard gas or lewisite",
-        "href": "/disability/eligibility/hazardous-materials-exposure/mustard-gas-lewisite",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Camp Lejeune water contamination",
-        "href": "/disability/eligibility/hazardous-materials-exposure/camp-lejeune-water-contamination",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Radiation exposure",
-        "href": "/disability/eligibility/hazardous-materials-exposure/ionizing-radiation",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Project 112/SHAD",
-        "href": "/disability/eligibility/hazardous-materials-exposure/project-112-shad",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Gulf War Illness SW Asia",
-        "href": "/disability/eligibility/hazardous-materials-exposure/gulf-war-illness-southwest-asia",
-        "items": []
-      },
-      {
-        "active": true,
-        "title": "Gulf War Illness Afghanistan",
-        "href": "/disability/eligibility/hazardous-materials-exposure/gulf-war-illness-afghanistan",
-        "items": []
-      }
-    ],
-    "menus": []
-  },
-  {
     "fileName": "disability/eligibility/hazardous-materials-exposure/gulf-war-illness-southwest-asia/index.html",
     "sidebarTitle": "Disability benefits",
     "backLink": {
@@ -6634,7 +7276,7 @@
     "menus": []
   },
   {
-    "fileName": "disability/eligibility/hazardous-materials-exposure/ionizing-radiation/index.html",
+    "fileName": "disability/eligibility/hazardous-materials-exposure/gulf-war-illness-afghanistan/index.html",
     "sidebarTitle": "Disability benefits",
     "backLink": {
       "title": "Exposure to hazardous materials",
@@ -6672,7 +7314,7 @@
         "items": []
       },
       {
-        "active": true,
+        "active": false,
         "title": "Radiation exposure",
         "href": "/disability/eligibility/hazardous-materials-exposure/ionizing-radiation",
         "items": []
@@ -6690,7 +7332,7 @@
         "items": []
       },
       {
-        "active": false,
+        "active": true,
         "title": "Gulf War Illness Afghanistan",
         "href": "/disability/eligibility/hazardous-materials-exposure/gulf-war-illness-afghanistan",
         "items": []
@@ -6809,6 +7451,71 @@
       },
       {
         "active": true,
+        "title": "Project 112/SHAD",
+        "href": "/disability/eligibility/hazardous-materials-exposure/project-112-shad",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Gulf War Illness SW Asia",
+        "href": "/disability/eligibility/hazardous-materials-exposure/gulf-war-illness-southwest-asia",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Gulf War Illness Afghanistan",
+        "href": "/disability/eligibility/hazardous-materials-exposure/gulf-war-illness-afghanistan",
+        "items": []
+      }
+    ],
+    "menus": []
+  },
+  {
+    "fileName": "disability/eligibility/hazardous-materials-exposure/ionizing-radiation/index.html",
+    "sidebarTitle": "Disability benefits",
+    "backLink": {
+      "title": "Exposure to hazardous materials",
+      "href": "/disability/eligibility/hazardous-materials-exposure"
+    },
+    "items": [
+      {
+        "active": false,
+        "title": "Specific environmental hazards",
+        "href": "/disability/eligibility/hazardous-materials-exposure/specific-environmental-hazards",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Agent Orange",
+        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Asbestos",
+        "href": "/disability/eligibility/hazardous-materials-exposure/asbestos",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Mustard gas or lewisite",
+        "href": "/disability/eligibility/hazardous-materials-exposure/mustard-gas-lewisite",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Camp Lejeune water contamination",
+        "href": "/disability/eligibility/hazardous-materials-exposure/camp-lejeune-water-contamination",
+        "items": []
+      },
+      {
+        "active": true,
+        "title": "Radiation exposure",
+        "href": "/disability/eligibility/hazardous-materials-exposure/ionizing-radiation",
+        "items": []
+      },
+      {
+        "active": false,
         "title": "Project 112/SHAD",
         "href": "/disability/eligibility/hazardous-materials-exposure/project-112-shad",
         "items": []
@@ -7265,202 +7972,7 @@
     "menus": []
   },
   {
-    "fileName": "disability/how-to-file-claim/additional-forms/index.html",
-    "sidebarTitle": "Disability benefits",
-    "backLink": {
-      "title": "How to file a claim",
-      "href": "/disability/how-to-file-claim"
-    },
-    "items": [
-      {
-        "active": false,
-        "title": "When to file",
-        "href": "/disability/how-to-file-claim/when-to-file",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Evidence needed",
-        "href": "/disability/how-to-file-claim/evidence-needed",
-        "items": []
-      },
-      {
-        "active": true,
-        "title": "Additional forms",
-        "href": "/disability/how-to-file-claim/additional-forms",
-        "items": []
-      }
-    ],
-    "menus": []
-  },
-  {
-    "fileName": "disability/how-to-file-claim/evidence-needed/index.html",
-    "sidebarTitle": "Disability benefits",
-    "backLink": {
-      "title": "How to file a claim",
-      "href": "/disability/how-to-file-claim"
-    },
-    "items": [
-      {
-        "active": false,
-        "title": "When to file",
-        "href": "/disability/how-to-file-claim/when-to-file",
-        "items": []
-      },
-      {
-        "active": true,
-        "title": "Evidence needed",
-        "href": "/disability/how-to-file-claim/evidence-needed",
-        "items": [
-          {
-            "title": "Fully developed claims",
-            "href": "/disability/how-to-file-claim/evidence-needed/fully-developed-claims"
-          },
-          {
-            "title": "Standard claims",
-            "href": "/disability/how-to-file-claim/evidence-needed/standard-claims"
-          }
-        ]
-      },
-      {
-        "active": false,
-        "title": "Additional forms",
-        "href": "/disability/how-to-file-claim/additional-forms",
-        "items": []
-      }
-    ],
-    "menus": []
-  },
-  {
-    "fileName": "disability/how-to-file-claim/when-to-file/index.html",
-    "sidebarTitle": "Disability benefits",
-    "backLink": {
-      "title": "How to file a claim",
-      "href": "/disability/how-to-file-claim"
-    },
-    "items": [
-      {
-        "active": true,
-        "title": "When to file",
-        "href": "/disability/how-to-file-claim/when-to-file",
-        "items": [
-          {
-            "title": "Pre-discharge claim",
-            "href": "/disability/how-to-file-claim/when-to-file/pre-discharge-claim"
-          }
-        ]
-      },
-      {
-        "active": false,
-        "title": "Evidence needed",
-        "href": "/disability/how-to-file-claim/evidence-needed",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Additional forms",
-        "href": "/disability/how-to-file-claim/additional-forms",
-        "items": []
-      }
-    ],
-    "menus": []
-  },
-  {
-    "fileName": "disability/how-to-file-claim/evidence-needed/fully-developed-claims/index.html",
-    "sidebarTitle": "Disability benefits",
-    "backLink": {
-      "title": "Evidence needed",
-      "href": "/disability/how-to-file-claim/evidence-needed"
-    },
-    "items": [
-      {
-        "active": true,
-        "title": "Fully developed claims",
-        "href": "/disability/how-to-file-claim/evidence-needed/fully-developed-claims",
-        "items": [
-          {
-            "title": "FDC walkthrough",
-            "href": "https://www.benefits.va.gov/FDC/walkthrough.asp"
-          },
-          {
-            "title": "FDC checklist",
-            "href": "https://www.benefits.va.gov/FDC/checklist.asp"
-          }
-        ]
-      },
-      {
-        "active": false,
-        "title": "Standard claims",
-        "href": "/disability/how-to-file-claim/evidence-needed/standard-claims",
-        "items": []
-      }
-    ],
-    "menus": []
-  },
-  {
-    "fileName": "disability/how-to-file-claim/evidence-needed/standard-claims/index.html",
-    "sidebarTitle": "Disability benefits",
-    "backLink": {
-      "title": "Evidence needed",
-      "href": "/disability/how-to-file-claim/evidence-needed"
-    },
-    "items": [
-      {
-        "active": false,
-        "title": "Fully developed claims",
-        "href": "/disability/how-to-file-claim/evidence-needed/fully-developed-claims",
-        "items": []
-      },
-      {
-        "active": true,
-        "title": "Standard claims",
-        "href": "/disability/how-to-file-claim/evidence-needed/standard-claims",
-        "items": []
-      }
-    ],
-    "menus": []
-  },
-  {
-    "fileName": "disability/how-to-file-claim/when-to-file/pre-discharge-claim/index.html",
-    "sidebarTitle": "Disability benefits",
-    "backLink": {
-      "title": "When to file",
-      "href": "/disability/how-to-file-claim/when-to-file"
-    },
-    "items": [
-      {
-        "active": true,
-        "title": "Pre-discharge claim",
-        "href": "/disability/how-to-file-claim/when-to-file/pre-discharge-claim",
-        "items": [
-          {
-            "title": "File while overseas",
-            "href": "/disability/how-to-file-claim/when-to-file/pre-discharge-claim/file-while-overseas"
-          }
-        ]
-      }
-    ],
-    "menus": []
-  },
-  {
-    "fileName": "disability/how-to-file-claim/when-to-file/pre-discharge-claim/file-while-overseas/index.html",
-    "sidebarTitle": "Disability benefits",
-    "backLink": {
-      "title": "Pre-discharge claim",
-      "href": "/disability/how-to-file-claim/when-to-file/pre-discharge-claim"
-    },
-    "items": [
-      {
-        "active": true,
-        "title": "File while overseas",
-        "href": "/disability/how-to-file-claim/when-to-file/pre-discharge-claim/file-while-overseas",
-        "items": []
-      }
-    ],
-    "menus": []
-  },
-  {
-    "fileName": "education/about-gi-bill-benefits/index.html",
+    "fileName": "education/after-you-apply/index.html",
     "sidebarTitle": "Education and training",
     "backLink": null,
     "items": [],
@@ -7470,27 +7982,10 @@
         "open": true,
         "items": [
           {
-            "active": true,
+            "active": false,
             "title": "GI Bill",
             "href": "/education/about-gi-bill-benefits",
-            "items": [
-              {
-                "title": "Post-9/11 GI Bill",
-                "href": "/education/about-gi-bill-benefits/post-9-11"
-              },
-              {
-                "title": "Montgomery GI Bill Active Duty",
-                "href": "/education/about-gi-bill-benefits/montgomery-active-duty"
-              },
-              {
-                "title": "Montgomery GI Bill Selected Reserve",
-                "href": "/education/about-gi-bill-benefits/montgomery-selected-reserve"
-              },
-              {
-                "title": "How to use your benefits",
-                "href": "/education/about-gi-bill-benefits/how-to-use-benefits"
-              }
-            ]
+            "items": []
           },
           {
             "active": false,
@@ -7505,7 +8000,7 @@
             "items": []
           },
           {
-            "active": false,
+            "active": true,
             "title": "After you apply",
             "href": "/education/after-you-apply",
             "items": []
@@ -7659,7 +8154,7 @@
     ]
   },
   {
-    "fileName": "education/after-you-apply/index.html",
+    "fileName": "education/about-gi-bill-benefits/index.html",
     "sidebarTitle": "Education and training",
     "backLink": null,
     "items": [],
@@ -7669,10 +8164,27 @@
         "open": true,
         "items": [
           {
-            "active": false,
+            "active": true,
             "title": "GI Bill",
             "href": "/education/about-gi-bill-benefits",
-            "items": []
+            "items": [
+              {
+                "title": "Post-9/11 GI Bill",
+                "href": "/education/about-gi-bill-benefits/post-9-11"
+              },
+              {
+                "title": "Montgomery GI Bill Active Duty",
+                "href": "/education/about-gi-bill-benefits/montgomery-active-duty"
+              },
+              {
+                "title": "Montgomery GI Bill Selected Reserve",
+                "href": "/education/about-gi-bill-benefits/montgomery-selected-reserve"
+              },
+              {
+                "title": "How to use your benefits",
+                "href": "/education/about-gi-bill-benefits/how-to-use-benefits"
+              }
+            ]
           },
           {
             "active": false,
@@ -7687,7 +8199,7 @@
             "items": []
           },
           {
-            "active": true,
+            "active": false,
             "title": "After you apply",
             "href": "/education/after-you-apply",
             "items": []
@@ -9533,6 +10045,52 @@
     "menus": []
   },
   {
+    "fileName": "education/survivor-dependent-benefits/dependents-education-assistance/index.html",
+    "sidebarTitle": "Education and training",
+    "backLink": {
+      "title": "Survivor and dependent benefits",
+      "href": "/education/survivor-dependent-benefits"
+    },
+    "items": [
+      {
+        "active": false,
+        "title": "Fry Scholarship",
+        "href": "/education/survivor-dependent-benefits/fry-scholarship",
+        "items": []
+      },
+      {
+        "active": true,
+        "title": "Dependents Education Assistance (DEA)",
+        "href": "/education/survivor-dependent-benefits/dependents-education-assistance",
+        "items": []
+      }
+    ],
+    "menus": []
+  },
+  {
+    "fileName": "education/survivor-dependent-benefits/fry-scholarship/index.html",
+    "sidebarTitle": "Education and training",
+    "backLink": {
+      "title": "Survivor and dependent benefits",
+      "href": "/education/survivor-dependent-benefits"
+    },
+    "items": [
+      {
+        "active": true,
+        "title": "Fry Scholarship",
+        "href": "/education/survivor-dependent-benefits/fry-scholarship",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Dependents Education Assistance (DEA)",
+        "href": "/education/survivor-dependent-benefits/dependents-education-assistance",
+        "items": []
+      }
+    ],
+    "menus": []
+  },
+  {
     "fileName": "education/other-va-education-benefits/national-call-to-service-program/index.html",
     "sidebarTitle": "Education and training",
     "backLink": {
@@ -9614,52 +10172,6 @@
         "active": false,
         "title": "National Call to Service program",
         "href": "/education/other-va-education-benefits/national-call-to-service-program",
-        "items": []
-      }
-    ],
-    "menus": []
-  },
-  {
-    "fileName": "education/survivor-dependent-benefits/dependents-education-assistance/index.html",
-    "sidebarTitle": "Education and training",
-    "backLink": {
-      "title": "Survivor and dependent benefits",
-      "href": "/education/survivor-dependent-benefits"
-    },
-    "items": [
-      {
-        "active": false,
-        "title": "Fry Scholarship",
-        "href": "/education/survivor-dependent-benefits/fry-scholarship",
-        "items": []
-      },
-      {
-        "active": true,
-        "title": "Dependents Education Assistance (DEA)",
-        "href": "/education/survivor-dependent-benefits/dependents-education-assistance",
-        "items": []
-      }
-    ],
-    "menus": []
-  },
-  {
-    "fileName": "education/survivor-dependent-benefits/fry-scholarship/index.html",
-    "sidebarTitle": "Education and training",
-    "backLink": {
-      "title": "Survivor and dependent benefits",
-      "href": "/education/survivor-dependent-benefits"
-    },
-    "items": [
-      {
-        "active": true,
-        "title": "Fry Scholarship",
-        "href": "/education/survivor-dependent-benefits/fry-scholarship",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Dependents Education Assistance (DEA)",
-        "href": "/education/survivor-dependent-benefits/dependents-education-assistance",
         "items": []
       }
     ],
@@ -10070,23 +10582,6 @@
         "active": true,
         "title": "$600 Buy-Up program",
         "href": "/education/about-gi-bill-benefits/montgomery-active-duty/buy-up",
-        "items": []
-      }
-    ],
-    "menus": []
-  },
-  {
-    "fileName": "education/about-gi-bill-benefits/post-9-11/yellow-ribbon-program/index.html",
-    "sidebarTitle": "Education and training",
-    "backLink": {
-      "title": "Post-9/11 GI Bill",
-      "href": "/education/about-gi-bill-benefits/post-9-11"
-    },
-    "items": [
-      {
-        "active": true,
-        "title": "Yellow Ribbon Program",
-        "href": "/education/about-gi-bill-benefits/post-9-11/yellow-ribbon-program",
         "items": []
       }
     ],
@@ -10800,7 +11295,7 @@
     "menus": []
   },
   {
-    "fileName": "education/about-gi-bill-benefits/how-to-use-benefits/study-at-foreign-schools/index.html",
+    "fileName": "education/about-gi-bill-benefits/how-to-use-benefits/online-distance-learning/index.html",
     "sidebarTitle": "Education and training",
     "backLink": {
       "title": "How to use your benefits",
@@ -10814,13 +11309,13 @@
         "items": []
       },
       {
-        "active": true,
+        "active": false,
         "title": "Foreign programs",
         "href": "/education/about-gi-bill-benefits/how-to-use-benefits/study-at-foreign-schools",
         "items": []
       },
       {
-        "active": false,
+        "active": true,
         "title": "Independent and distance learning",
         "href": "/education/about-gi-bill-benefits/how-to-use-benefits/online-distance-learning",
         "items": []
@@ -10901,7 +11396,7 @@
     "menus": []
   },
   {
-    "fileName": "education/about-gi-bill-benefits/how-to-use-benefits/online-distance-learning/index.html",
+    "fileName": "education/about-gi-bill-benefits/how-to-use-benefits/study-at-foreign-schools/index.html",
     "sidebarTitle": "Education and training",
     "backLink": {
       "title": "How to use your benefits",
@@ -10915,13 +11410,13 @@
         "items": []
       },
       {
-        "active": false,
+        "active": true,
         "title": "Foreign programs",
         "href": "/education/about-gi-bill-benefits/how-to-use-benefits/study-at-foreign-schools",
         "items": []
       },
       {
-        "active": true,
+        "active": false,
         "title": "Independent and distance learning",
         "href": "/education/about-gi-bill-benefits/how-to-use-benefits/online-distance-learning",
         "items": []
@@ -11608,6 +12103,23 @@
     "menus": []
   },
   {
+    "fileName": "education/about-gi-bill-benefits/post-9-11/yellow-ribbon-program/index.html",
+    "sidebarTitle": "Education and training",
+    "backLink": {
+      "title": "Post-9/11 GI Bill",
+      "href": "/education/about-gi-bill-benefits/post-9-11"
+    },
+    "items": [
+      {
+        "active": true,
+        "title": "Yellow Ribbon Program",
+        "href": "/education/about-gi-bill-benefits/post-9-11/yellow-ribbon-program",
+        "items": []
+      }
+    ],
+    "menus": []
+  },
+  {
     "fileName": "housing-assistance/disability-housing-grants/index.html",
     "sidebarTitle": "Housing assistance",
     "backLink": null,
@@ -12255,41 +12767,6 @@
     "menus": []
   },
   {
-    "fileName": "housing-assistance/home-loans/loan-types/purchase-loan/index.html",
-    "sidebarTitle": "Housing assistance",
-    "backLink": {
-      "title": "Loan types",
-      "href": "/housing-assistance/home-loans/loan-types"
-    },
-    "items": [
-      {
-        "active": true,
-        "title": "Purchase loan",
-        "href": "/housing-assistance/home-loans/loan-types/purchase-loan",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Cash-out refinance loan",
-        "href": "/housing-assistance/home-loans/loan-types/cash-out-loan",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Native American direct loan",
-        "href": "/housing-assistance/home-loans/loan-types/native-american-direct-loan",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Interest rate reduction refinance loan",
-        "href": "/housing-assistance/home-loans/loan-types/interest-rate-reduction-loan",
-        "items": []
-      }
-    ],
-    "menus": []
-  },
-  {
     "fileName": "housing-assistance/home-loans/loan-types/native-american-direct-loan/index.html",
     "sidebarTitle": "Housing assistance",
     "backLink": {
@@ -12319,6 +12796,41 @@
             "href": "https://www.benefits.va.gov/homeloans/nadl_mou.asp"
           }
         ]
+      },
+      {
+        "active": false,
+        "title": "Interest rate reduction refinance loan",
+        "href": "/housing-assistance/home-loans/loan-types/interest-rate-reduction-loan",
+        "items": []
+      }
+    ],
+    "menus": []
+  },
+  {
+    "fileName": "housing-assistance/home-loans/loan-types/purchase-loan/index.html",
+    "sidebarTitle": "Housing assistance",
+    "backLink": {
+      "title": "Loan types",
+      "href": "/housing-assistance/home-loans/loan-types"
+    },
+    "items": [
+      {
+        "active": true,
+        "title": "Purchase loan",
+        "href": "/housing-assistance/home-loans/loan-types/purchase-loan",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Cash-out refinance loan",
+        "href": "/housing-assistance/home-loans/loan-types/cash-out-loan",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Native American direct loan",
+        "href": "/housing-assistance/home-loans/loan-types/native-american-direct-loan",
+        "items": []
       },
       {
         "active": false,
