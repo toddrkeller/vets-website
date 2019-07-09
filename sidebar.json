@@ -84,6 +84,286 @@
     "menus": []
   },
   {
+    "fileName": "pension/aid-attendance-housebound/index.html",
+    "sidebarTitle": "Pension benefits",
+    "backLink": null,
+    "items": [],
+    "menus": [
+      {
+        "title": "Get benefits",
+        "open": true,
+        "items": [
+          {
+            "active": false,
+            "title": "How to apply",
+            "href": "/pension/how-to-apply",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Apply now",
+            "href": "/pension/application/527EZ",
+            "items": []
+          },
+          {
+            "active": true,
+            "title": "Aid and Attendance benefits and Housebound allowance",
+            "href": "/pension/aid-attendance-housebound",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Manage benefits",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "Check claim or appeal status",
+            "href": "/claim-or-appeal-status/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "View VA payment history",
+            "href": "/va-payment-history/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Change your address",
+            "href": "/change-address/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Change your VA direct deposit information",
+            "href": "/change-direct-deposit/",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "More resources",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "Veterans Pension rates",
+            "href": "/pension/veterans-pension-rates",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Protected pension rates",
+            "href": "https://www.benefits.va.gov/PENSION/current_protected_pension_rate_tables.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "VA claim exam (C&P exam)",
+            "href": "/disability/va-claim-exam/",
+            "items": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "fileName": "pension/how-to-apply/index.html",
+    "sidebarTitle": "Pension benefits",
+    "backLink": null,
+    "items": [],
+    "menus": [
+      {
+        "title": "Get benefits",
+        "open": true,
+        "items": [
+          {
+            "active": true,
+            "title": "How to apply",
+            "href": "/pension/how-to-apply",
+            "items": [
+              {
+                "title": "Fully developed claim",
+                "href": "/pension/how-to-apply/fully-developed-claim"
+              }
+            ]
+          },
+          {
+            "active": false,
+            "title": "Apply now",
+            "href": "/pension/application/527EZ",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Aid and Attendance benefits and Housebound allowance",
+            "href": "/pension/aid-attendance-housebound",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Manage benefits",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "Check claim or appeal status",
+            "href": "/claim-or-appeal-status/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "View VA payment history",
+            "href": "/va-payment-history/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Change your address",
+            "href": "/change-address/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Change your VA direct deposit information",
+            "href": "/change-direct-deposit/",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "More resources",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "Veterans Pension rates",
+            "href": "/pension/veterans-pension-rates",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Protected pension rates",
+            "href": "https://www.benefits.va.gov/PENSION/current_protected_pension_rate_tables.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "VA claim exam (C&P exam)",
+            "href": "/disability/va-claim-exam/",
+            "items": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "fileName": "pension/veterans-pension-rates/index.html",
+    "sidebarTitle": "Pension benefits",
+    "backLink": null,
+    "items": [],
+    "menus": [
+      {
+        "title": "Get benefits",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "How to apply",
+            "href": "/pension/how-to-apply",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Apply now",
+            "href": "/pension/application/527EZ",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Aid and Attendance benefits and Housebound allowance",
+            "href": "/pension/aid-attendance-housebound",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Manage benefits",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "Check claim or appeal status",
+            "href": "/claim-or-appeal-status/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "View VA payment history",
+            "href": "/va-payment-history/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Change your address",
+            "href": "/change-address/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Change your VA direct deposit information",
+            "href": "/change-direct-deposit/",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "More resources",
+        "open": true,
+        "items": [
+          {
+            "active": true,
+            "title": "Veterans Pension rates",
+            "href": "/pension/veterans-pension-rates",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Protected pension rates",
+            "href": "https://www.benefits.va.gov/PENSION/current_protected_pension_rate_tables.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "VA claim exam (C&P exam)",
+            "href": "/disability/va-claim-exam/",
+            "items": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "fileName": "pension/how-to-apply/fully-developed-claim/index.html",
+    "sidebarTitle": "Pension benefits",
+    "backLink": {
+      "title": "How to apply",
+      "href": "/pension/how-to-apply"
+    },
+    "items": [
+      {
+        "active": true,
+        "title": "Fully developed claim",
+        "href": "/pension/how-to-apply/fully-developed-claim",
+        "items": []
+      }
+    ],
+    "menus": []
+  },
+  {
     "fileName": "records/download-va-letters/index.html",
     "sidebarTitle": "Records",
     "backLink": null,
@@ -138,6 +418,1365 @@
         ]
       }
     ]
+  },
+  {
+    "fileName": "careers-employment/careerscope-skills-assessment/index.html",
+    "sidebarTitle": "Careers and employment",
+    "backLink": null,
+    "items": [],
+    "menus": [
+      {
+        "title": "Get benefits",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "Vocational Rehab and Employment",
+            "href": "/careers-employment/vocational-rehabilitation",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Educational and Career Counseling",
+            "href": "/careers-employment/education-and-career-counseling",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Veteran-owned business support",
+            "href": "/careers-employment/veteran-owned-business-support",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Dependent benefits",
+            "href": "/careers-employment/dependent-benefits",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Manage benefits",
+        "open": true,
+        "items": [
+          {
+            "active": false,
+            "title": "VA Transition Assistance",
+            "href": "https://www.benefits.va.gov/tap/tap-index.asp",
+            "items": []
+          },
+          {
+            "active": true,
+            "title": "CareerScope",
+            "href": "/careers-employment/careerscope-skills-assessment",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Find a job",
+            "href": "https://www.dol.gov/veterans/findajob/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Find VA careers and support",
+            "href": "http://localhost:3001/jobs/?utm_source=jobs_button&utm_campaign=ChooseVA_Website_Buttons",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Print Civil Service Preference Letter",
+            "href": "/records/download-va-letters/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Get LinkedIn classes",
+            "href": "https://www.veterans.linkedin.com/",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "More resources",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "Subsistence allowance rates",
+            "href": "https://www.benefits.va.gov/vocrehab/subsistence_allowance_rates.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "VetSuccess on Campus",
+            "href": "/careers-employment/vetsuccess-on-campus",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Program definitions",
+            "href": "https://www.benefits.va.gov/vocrehab/program_definitions.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Success stories",
+            "href": "https://www.benefits.va.gov/vocrehab/success_stories.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Veteran resources",
+            "href": "/careers-employment/veteran-resources",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Family resources",
+            "href": "/careers-employment/family-resources",
+            "items": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "fileName": "careers-employment/dependent-benefits/index.html",
+    "sidebarTitle": "Careers and employment",
+    "backLink": null,
+    "items": [],
+    "menus": [
+      {
+        "title": "Get benefits",
+        "open": true,
+        "items": [
+          {
+            "active": false,
+            "title": "Vocational Rehab and Employment",
+            "href": "/careers-employment/vocational-rehabilitation",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Educational and Career Counseling",
+            "href": "/careers-employment/education-and-career-counseling",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Veteran-owned business support",
+            "href": "/careers-employment/veteran-owned-business-support",
+            "items": []
+          },
+          {
+            "active": true,
+            "title": "Dependent benefits",
+            "href": "/careers-employment/dependent-benefits",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Manage benefits",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "VA Transition Assistance",
+            "href": "https://www.benefits.va.gov/tap/tap-index.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "CareerScope",
+            "href": "/careers-employment/careerscope-skills-assessment",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Find a job",
+            "href": "https://www.dol.gov/veterans/findajob/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Find VA careers and support",
+            "href": "http://localhost:3001/jobs/?utm_source=jobs_button&utm_campaign=ChooseVA_Website_Buttons",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Print Civil Service Preference Letter",
+            "href": "/records/download-va-letters/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Get LinkedIn classes",
+            "href": "https://www.veterans.linkedin.com/",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "More resources",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "Subsistence allowance rates",
+            "href": "https://www.benefits.va.gov/vocrehab/subsistence_allowance_rates.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "VetSuccess on Campus",
+            "href": "/careers-employment/vetsuccess-on-campus",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Program definitions",
+            "href": "https://www.benefits.va.gov/vocrehab/program_definitions.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Success stories",
+            "href": "https://www.benefits.va.gov/vocrehab/success_stories.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Veteran resources",
+            "href": "/careers-employment/veteran-resources",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Family resources",
+            "href": "/careers-employment/family-resources",
+            "items": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "fileName": "careers-employment/education-and-career-counseling/index.html",
+    "sidebarTitle": "Careers and employment",
+    "backLink": null,
+    "items": [],
+    "menus": [
+      {
+        "title": "Get benefits",
+        "open": true,
+        "items": [
+          {
+            "active": false,
+            "title": "Vocational Rehab and Employment",
+            "href": "/careers-employment/vocational-rehabilitation",
+            "items": []
+          },
+          {
+            "active": true,
+            "title": "Educational and Career Counseling",
+            "href": "/careers-employment/education-and-career-counseling",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Veteran-owned business support",
+            "href": "/careers-employment/veteran-owned-business-support",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Dependent benefits",
+            "href": "/careers-employment/dependent-benefits",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Manage benefits",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "VA Transition Assistance",
+            "href": "https://www.benefits.va.gov/tap/tap-index.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "CareerScope",
+            "href": "/careers-employment/careerscope-skills-assessment",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Find a job",
+            "href": "https://www.dol.gov/veterans/findajob/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Find VA careers and support",
+            "href": "http://localhost:3001/jobs/?utm_source=jobs_button&utm_campaign=ChooseVA_Website_Buttons",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Print Civil Service Preference Letter",
+            "href": "/records/download-va-letters/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Get LinkedIn classes",
+            "href": "https://www.veterans.linkedin.com/",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "More resources",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "Subsistence allowance rates",
+            "href": "https://www.benefits.va.gov/vocrehab/subsistence_allowance_rates.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "VetSuccess on Campus",
+            "href": "/careers-employment/vetsuccess-on-campus",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Program definitions",
+            "href": "https://www.benefits.va.gov/vocrehab/program_definitions.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Success stories",
+            "href": "https://www.benefits.va.gov/vocrehab/success_stories.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Veteran resources",
+            "href": "/careers-employment/veteran-resources",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Family resources",
+            "href": "/careers-employment/family-resources",
+            "items": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "fileName": "careers-employment/family-resources/index.html",
+    "sidebarTitle": "Careers and employment",
+    "backLink": null,
+    "items": [],
+    "menus": [
+      {
+        "title": "Get benefits",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "Vocational Rehab and Employment",
+            "href": "/careers-employment/vocational-rehabilitation",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Educational and Career Counseling",
+            "href": "/careers-employment/education-and-career-counseling",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Veteran-owned business support",
+            "href": "/careers-employment/veteran-owned-business-support",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Dependent benefits",
+            "href": "/careers-employment/dependent-benefits",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Manage benefits",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "VA Transition Assistance",
+            "href": "https://www.benefits.va.gov/tap/tap-index.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "CareerScope",
+            "href": "/careers-employment/careerscope-skills-assessment",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Find a job",
+            "href": "https://www.dol.gov/veterans/findajob/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Find VA careers and support",
+            "href": "http://localhost:3001/jobs/?utm_source=jobs_button&utm_campaign=ChooseVA_Website_Buttons",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Print Civil Service Preference Letter",
+            "href": "/records/download-va-letters/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Get LinkedIn classes",
+            "href": "https://www.veterans.linkedin.com/",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "More resources",
+        "open": true,
+        "items": [
+          {
+            "active": false,
+            "title": "Subsistence allowance rates",
+            "href": "https://www.benefits.va.gov/vocrehab/subsistence_allowance_rates.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "VetSuccess on Campus",
+            "href": "/careers-employment/vetsuccess-on-campus",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Program definitions",
+            "href": "https://www.benefits.va.gov/vocrehab/program_definitions.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Success stories",
+            "href": "https://www.benefits.va.gov/vocrehab/success_stories.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Veteran resources",
+            "href": "/careers-employment/veteran-resources",
+            "items": []
+          },
+          {
+            "active": true,
+            "title": "Family resources",
+            "href": "/careers-employment/family-resources",
+            "items": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "fileName": "careers-employment/veteran-owned-business-support/index.html",
+    "sidebarTitle": "Careers and employment",
+    "backLink": null,
+    "items": [],
+    "menus": [
+      {
+        "title": "Get benefits",
+        "open": true,
+        "items": [
+          {
+            "active": false,
+            "title": "Vocational Rehab and Employment",
+            "href": "/careers-employment/vocational-rehabilitation",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Educational and Career Counseling",
+            "href": "/careers-employment/education-and-career-counseling",
+            "items": []
+          },
+          {
+            "active": true,
+            "title": "Veteran-owned business support",
+            "href": "/careers-employment/veteran-owned-business-support",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Dependent benefits",
+            "href": "/careers-employment/dependent-benefits",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Manage benefits",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "VA Transition Assistance",
+            "href": "https://www.benefits.va.gov/tap/tap-index.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "CareerScope",
+            "href": "/careers-employment/careerscope-skills-assessment",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Find a job",
+            "href": "https://www.dol.gov/veterans/findajob/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Find VA careers and support",
+            "href": "http://localhost:3001/jobs/?utm_source=jobs_button&utm_campaign=ChooseVA_Website_Buttons",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Print Civil Service Preference Letter",
+            "href": "/records/download-va-letters/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Get LinkedIn classes",
+            "href": "https://www.veterans.linkedin.com/",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "More resources",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "Subsistence allowance rates",
+            "href": "https://www.benefits.va.gov/vocrehab/subsistence_allowance_rates.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "VetSuccess on Campus",
+            "href": "/careers-employment/vetsuccess-on-campus",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Program definitions",
+            "href": "https://www.benefits.va.gov/vocrehab/program_definitions.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Success stories",
+            "href": "https://www.benefits.va.gov/vocrehab/success_stories.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Veteran resources",
+            "href": "/careers-employment/veteran-resources",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Family resources",
+            "href": "/careers-employment/family-resources",
+            "items": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "fileName": "careers-employment/veteran-resources/index.html",
+    "sidebarTitle": "Careers and employment",
+    "backLink": null,
+    "items": [],
+    "menus": [
+      {
+        "title": "Get benefits",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "Vocational Rehab and Employment",
+            "href": "/careers-employment/vocational-rehabilitation",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Educational and Career Counseling",
+            "href": "/careers-employment/education-and-career-counseling",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Veteran-owned business support",
+            "href": "/careers-employment/veteran-owned-business-support",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Dependent benefits",
+            "href": "/careers-employment/dependent-benefits",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Manage benefits",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "VA Transition Assistance",
+            "href": "https://www.benefits.va.gov/tap/tap-index.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "CareerScope",
+            "href": "/careers-employment/careerscope-skills-assessment",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Find a job",
+            "href": "https://www.dol.gov/veterans/findajob/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Find VA careers and support",
+            "href": "http://localhost:3001/jobs/?utm_source=jobs_button&utm_campaign=ChooseVA_Website_Buttons",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Print Civil Service Preference Letter",
+            "href": "/records/download-va-letters/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Get LinkedIn classes",
+            "href": "https://www.veterans.linkedin.com/",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "More resources",
+        "open": true,
+        "items": [
+          {
+            "active": false,
+            "title": "Subsistence allowance rates",
+            "href": "https://www.benefits.va.gov/vocrehab/subsistence_allowance_rates.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "VetSuccess on Campus",
+            "href": "/careers-employment/vetsuccess-on-campus",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Program definitions",
+            "href": "https://www.benefits.va.gov/vocrehab/program_definitions.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Success stories",
+            "href": "https://www.benefits.va.gov/vocrehab/success_stories.asp",
+            "items": []
+          },
+          {
+            "active": true,
+            "title": "Veteran resources",
+            "href": "/careers-employment/veteran-resources",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Family resources",
+            "href": "/careers-employment/family-resources",
+            "items": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "fileName": "careers-employment/vetsuccess-on-campus/index.html",
+    "sidebarTitle": "Careers and employment",
+    "backLink": null,
+    "items": [],
+    "menus": [
+      {
+        "title": "Get benefits",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "Vocational Rehab and Employment",
+            "href": "/careers-employment/vocational-rehabilitation",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Educational and Career Counseling",
+            "href": "/careers-employment/education-and-career-counseling",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Veteran-owned business support",
+            "href": "/careers-employment/veteran-owned-business-support",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Dependent benefits",
+            "href": "/careers-employment/dependent-benefits",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Manage benefits",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "VA Transition Assistance",
+            "href": "https://www.benefits.va.gov/tap/tap-index.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "CareerScope",
+            "href": "/careers-employment/careerscope-skills-assessment",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Find a job",
+            "href": "https://www.dol.gov/veterans/findajob/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Find VA careers and support",
+            "href": "http://localhost:3001/jobs/?utm_source=jobs_button&utm_campaign=ChooseVA_Website_Buttons",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Print Civil Service Preference Letter",
+            "href": "/records/download-va-letters/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Get LinkedIn classes",
+            "href": "https://www.veterans.linkedin.com/",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "More resources",
+        "open": true,
+        "items": [
+          {
+            "active": false,
+            "title": "Subsistence allowance rates",
+            "href": "https://www.benefits.va.gov/vocrehab/subsistence_allowance_rates.asp",
+            "items": []
+          },
+          {
+            "active": true,
+            "title": "VetSuccess on Campus",
+            "href": "/careers-employment/vetsuccess-on-campus",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Program definitions",
+            "href": "https://www.benefits.va.gov/vocrehab/program_definitions.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Success stories",
+            "href": "https://www.benefits.va.gov/vocrehab/success_stories.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Veteran resources",
+            "href": "/careers-employment/veteran-resources",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Family resources",
+            "href": "/careers-employment/family-resources",
+            "items": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "fileName": "careers-employment/vocational-rehabilitation/index.html",
+    "sidebarTitle": "Careers and employment",
+    "backLink": null,
+    "items": [],
+    "menus": [
+      {
+        "title": "Get benefits",
+        "open": true,
+        "items": [
+          {
+            "active": true,
+            "title": "Vocational Rehab and Employment",
+            "href": "/careers-employment/vocational-rehabilitation",
+            "items": [
+              {
+                "title": "Programs",
+                "href": "/careers-employment/vocational-rehabilitation/programs"
+              },
+              {
+                "title": "Eligibility",
+                "href": "/careers-employment/vocational-rehabilitation/eligibility"
+              },
+              {
+                "title": "How to apply",
+                "href": "/careers-employment/vocational-rehabilitation/how-to-apply"
+              },
+              {
+                "title": "Accessing VR&E through IDES",
+                "href": "/careers-employment/vocational-rehabilitation/ides"
+              }
+            ]
+          },
+          {
+            "active": false,
+            "title": "Educational and Career Counseling",
+            "href": "/careers-employment/education-and-career-counseling",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Veteran-owned business support",
+            "href": "/careers-employment/veteran-owned-business-support",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Dependent benefits",
+            "href": "/careers-employment/dependent-benefits",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Manage benefits",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "VA Transition Assistance",
+            "href": "https://www.benefits.va.gov/tap/tap-index.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "CareerScope",
+            "href": "/careers-employment/careerscope-skills-assessment",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Find a job",
+            "href": "https://www.dol.gov/veterans/findajob/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Find VA careers and support",
+            "href": "http://localhost:3001/jobs/?utm_source=jobs_button&utm_campaign=ChooseVA_Website_Buttons",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Print Civil Service Preference Letter",
+            "href": "/records/download-va-letters/",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Get LinkedIn classes",
+            "href": "https://www.veterans.linkedin.com/",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "More resources",
+        "open": false,
+        "items": [
+          {
+            "active": false,
+            "title": "Subsistence allowance rates",
+            "href": "https://www.benefits.va.gov/vocrehab/subsistence_allowance_rates.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "VetSuccess on Campus",
+            "href": "/careers-employment/vetsuccess-on-campus",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Program definitions",
+            "href": "https://www.benefits.va.gov/vocrehab/program_definitions.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Success stories",
+            "href": "https://www.benefits.va.gov/vocrehab/success_stories.asp",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Veteran resources",
+            "href": "/careers-employment/veteran-resources",
+            "items": []
+          },
+          {
+            "active": false,
+            "title": "Family resources",
+            "href": "/careers-employment/family-resources",
+            "items": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "fileName": "careers-employment/vocational-rehabilitation/eligibility/index.html",
+    "sidebarTitle": "Careers and employment",
+    "backLink": {
+      "title": "Vocational Rehab and Employment",
+      "href": "/careers-employment/vocational-rehabilitation"
+    },
+    "items": [
+      {
+        "active": false,
+        "title": "Programs",
+        "href": "/careers-employment/vocational-rehabilitation/programs",
+        "items": []
+      },
+      {
+        "active": true,
+        "title": "Eligibility",
+        "href": "/careers-employment/vocational-rehabilitation/eligibility",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "How to apply",
+        "href": "/careers-employment/vocational-rehabilitation/how-to-apply",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Accessing VR&E through IDES",
+        "href": "/careers-employment/vocational-rehabilitation/ides",
+        "items": []
+      }
+    ],
+    "menus": []
+  },
+  {
+    "fileName": "careers-employment/vocational-rehabilitation/how-to-apply/index.html",
+    "sidebarTitle": "Careers and employment",
+    "backLink": {
+      "title": "Vocational Rehab and Employment",
+      "href": "/careers-employment/vocational-rehabilitation"
+    },
+    "items": [
+      {
+        "active": false,
+        "title": "Programs",
+        "href": "/careers-employment/vocational-rehabilitation/programs",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Eligibility",
+        "href": "/careers-employment/vocational-rehabilitation/eligibility",
+        "items": []
+      },
+      {
+        "active": true,
+        "title": "How to apply",
+        "href": "/careers-employment/vocational-rehabilitation/how-to-apply",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Accessing VR&E through IDES",
+        "href": "/careers-employment/vocational-rehabilitation/ides",
+        "items": []
+      }
+    ],
+    "menus": []
+  },
+  {
+    "fileName": "careers-employment/vocational-rehabilitation/ides/index.html",
+    "sidebarTitle": "Careers and employment",
+    "backLink": {
+      "title": "Vocational Rehab and Employment",
+      "href": "/careers-employment/vocational-rehabilitation"
+    },
+    "items": [
+      {
+        "active": false,
+        "title": "Programs",
+        "href": "/careers-employment/vocational-rehabilitation/programs",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Eligibility",
+        "href": "/careers-employment/vocational-rehabilitation/eligibility",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "How to apply",
+        "href": "/careers-employment/vocational-rehabilitation/how-to-apply",
+        "items": []
+      },
+      {
+        "active": true,
+        "title": "Accessing VR&E through IDES",
+        "href": "/careers-employment/vocational-rehabilitation/ides",
+        "items": []
+      }
+    ],
+    "menus": []
+  },
+  {
+    "fileName": "careers-employment/vocational-rehabilitation/programs/index.html",
+    "sidebarTitle": "Careers and employment",
+    "backLink": {
+      "title": "Vocational Rehab and Employment",
+      "href": "/careers-employment/vocational-rehabilitation"
+    },
+    "items": [
+      {
+        "active": true,
+        "title": "Programs",
+        "href": "/careers-employment/vocational-rehabilitation/programs",
+        "items": [
+          {
+            "title": "Reemployment",
+            "href": "/careers-employment/vocational-rehabilitation/programs/reemployment"
+          },
+          {
+            "title": "Rapid Access to Employment",
+            "href": "/careers-employment/vocational-rehabilitation/programs/rapid-access-to-employment"
+          },
+          {
+            "title": "Self-Employment",
+            "href": "/careers-employment/vocational-rehabilitation/programs/self-employment"
+          },
+          {
+            "title": "Long-Term Services",
+            "href": "/careers-employment/vocational-rehabilitation/programs/long-term-services"
+          },
+          {
+            "title": "Independent Living",
+            "href": "/careers-employment/vocational-rehabilitation/programs/independent-living"
+          }
+        ]
+      },
+      {
+        "active": false,
+        "title": "Eligibility",
+        "href": "/careers-employment/vocational-rehabilitation/eligibility",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "How to apply",
+        "href": "/careers-employment/vocational-rehabilitation/how-to-apply",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Accessing VR&E through IDES",
+        "href": "/careers-employment/vocational-rehabilitation/ides",
+        "items": []
+      }
+    ],
+    "menus": []
+  },
+  {
+    "fileName": "careers-employment/vocational-rehabilitation/programs/independent-living/index.html",
+    "sidebarTitle": "Careers and employment",
+    "backLink": {
+      "title": "Programs",
+      "href": "/careers-employment/vocational-rehabilitation/programs"
+    },
+    "items": [
+      {
+        "active": false,
+        "title": "Reemployment",
+        "href": "/careers-employment/vocational-rehabilitation/programs/reemployment",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Rapid Access to Employment",
+        "href": "/careers-employment/vocational-rehabilitation/programs/rapid-access-to-employment",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Self-Employment",
+        "href": "/careers-employment/vocational-rehabilitation/programs/self-employment",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Long-Term Services",
+        "href": "/careers-employment/vocational-rehabilitation/programs/long-term-services",
+        "items": []
+      },
+      {
+        "active": true,
+        "title": "Independent Living",
+        "href": "/careers-employment/vocational-rehabilitation/programs/independent-living",
+        "items": []
+      }
+    ],
+    "menus": []
+  },
+  {
+    "fileName": "careers-employment/vocational-rehabilitation/programs/long-term-services/index.html",
+    "sidebarTitle": "Careers and employment",
+    "backLink": {
+      "title": "Programs",
+      "href": "/careers-employment/vocational-rehabilitation/programs"
+    },
+    "items": [
+      {
+        "active": false,
+        "title": "Reemployment",
+        "href": "/careers-employment/vocational-rehabilitation/programs/reemployment",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Rapid Access to Employment",
+        "href": "/careers-employment/vocational-rehabilitation/programs/rapid-access-to-employment",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Self-Employment",
+        "href": "/careers-employment/vocational-rehabilitation/programs/self-employment",
+        "items": []
+      },
+      {
+        "active": true,
+        "title": "Long-Term Services",
+        "href": "/careers-employment/vocational-rehabilitation/programs/long-term-services",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Independent Living",
+        "href": "/careers-employment/vocational-rehabilitation/programs/independent-living",
+        "items": []
+      }
+    ],
+    "menus": []
+  },
+  {
+    "fileName": "careers-employment/vocational-rehabilitation/programs/rapid-access-to-employment/index.html",
+    "sidebarTitle": "Careers and employment",
+    "backLink": {
+      "title": "Programs",
+      "href": "/careers-employment/vocational-rehabilitation/programs"
+    },
+    "items": [
+      {
+        "active": false,
+        "title": "Reemployment",
+        "href": "/careers-employment/vocational-rehabilitation/programs/reemployment",
+        "items": []
+      },
+      {
+        "active": true,
+        "title": "Rapid Access to Employment",
+        "href": "/careers-employment/vocational-rehabilitation/programs/rapid-access-to-employment",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Self-Employment",
+        "href": "/careers-employment/vocational-rehabilitation/programs/self-employment",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Long-Term Services",
+        "href": "/careers-employment/vocational-rehabilitation/programs/long-term-services",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Independent Living",
+        "href": "/careers-employment/vocational-rehabilitation/programs/independent-living",
+        "items": []
+      }
+    ],
+    "menus": []
+  },
+  {
+    "fileName": "careers-employment/vocational-rehabilitation/programs/reemployment/index.html",
+    "sidebarTitle": "Careers and employment",
+    "backLink": {
+      "title": "Programs",
+      "href": "/careers-employment/vocational-rehabilitation/programs"
+    },
+    "items": [
+      {
+        "active": true,
+        "title": "Reemployment",
+        "href": "/careers-employment/vocational-rehabilitation/programs/reemployment",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Rapid Access to Employment",
+        "href": "/careers-employment/vocational-rehabilitation/programs/rapid-access-to-employment",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Self-Employment",
+        "href": "/careers-employment/vocational-rehabilitation/programs/self-employment",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Long-Term Services",
+        "href": "/careers-employment/vocational-rehabilitation/programs/long-term-services",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Independent Living",
+        "href": "/careers-employment/vocational-rehabilitation/programs/independent-living",
+        "items": []
+      }
+    ],
+    "menus": []
+  },
+  {
+    "fileName": "careers-employment/vocational-rehabilitation/programs/self-employment/index.html",
+    "sidebarTitle": "Careers and employment",
+    "backLink": {
+      "title": "Programs",
+      "href": "/careers-employment/vocational-rehabilitation/programs"
+    },
+    "items": [
+      {
+        "active": false,
+        "title": "Reemployment",
+        "href": "/careers-employment/vocational-rehabilitation/programs/reemployment",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Rapid Access to Employment",
+        "href": "/careers-employment/vocational-rehabilitation/programs/rapid-access-to-employment",
+        "items": []
+      },
+      {
+        "active": true,
+        "title": "Self-Employment",
+        "href": "/careers-employment/vocational-rehabilitation/programs/self-employment",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Long-Term Services",
+        "href": "/careers-employment/vocational-rehabilitation/programs/long-term-services",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Independent Living",
+        "href": "/careers-employment/vocational-rehabilitation/programs/independent-living",
+        "items": []
+      }
+    ],
+    "menus": []
   },
   {
     "fileName": "burials-memorials/bereavement-counseling/index.html",
@@ -274,7 +1913,7 @@
     ]
   },
   {
-    "fileName": "burials-memorials/eligibility/index.html",
+    "fileName": "burials-memorials/dependency-indemnity-compensation/index.html",
     "sidebarTitle": "Burials and memorials",
     "backLink": null,
     "items": [],
@@ -284,15 +1923,10 @@
         "open": true,
         "items": [
           {
-            "active": true,
+            "active": false,
             "title": "Eligibility",
             "href": "/burials-memorials/eligibility",
-            "items": [
-              {
-                "title": "Burial in a Private Cemetery",
-                "href": "https://www.cem.va.gov/cem/burial_benefits/private_cemetery.asp"
-              }
-            ]
+            "items": []
           },
           {
             "active": false,
@@ -313,7 +1947,7 @@
             "items": []
           },
           {
-            "active": false,
+            "active": true,
             "title": "Survivor and Dependent Compensation (DIC)",
             "href": "/burials-memorials/dependency-indemnity-compensation",
             "items": []
@@ -413,7 +2047,7 @@
     ]
   },
   {
-    "fileName": "burials-memorials/dependency-indemnity-compensation/index.html",
+    "fileName": "burials-memorials/eligibility/index.html",
     "sidebarTitle": "Burials and memorials",
     "backLink": null,
     "items": [],
@@ -423,10 +2057,15 @@
         "open": true,
         "items": [
           {
-            "active": false,
+            "active": true,
             "title": "Eligibility",
             "href": "/burials-memorials/eligibility",
-            "items": []
+            "items": [
+              {
+                "title": "Burial in a Private Cemetery",
+                "href": "https://www.cem.va.gov/cem/burial_benefits/private_cemetery.asp"
+              }
+            ]
           },
           {
             "active": false,
@@ -447,7 +2086,7 @@
             "items": []
           },
           {
-            "active": true,
+            "active": false,
             "title": "Survivor and Dependent Compensation (DIC)",
             "href": "/burials-memorials/dependency-indemnity-compensation",
             "items": []
@@ -1394,1366 +3033,7 @@
     "menus": []
   },
   {
-    "fileName": "careers-employment/careerscope-skills-assessment/index.html",
-    "sidebarTitle": "Careers and employment",
-    "backLink": null,
-    "items": [],
-    "menus": [
-      {
-        "title": "Get benefits",
-        "open": false,
-        "items": [
-          {
-            "active": false,
-            "title": "Vocational Rehab and Employment",
-            "href": "/careers-employment/vocational-rehabilitation",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Educational and Career Counseling",
-            "href": "/careers-employment/education-and-career-counseling",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Veteran-owned business support",
-            "href": "/careers-employment/veteran-owned-business-support",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Dependent benefits",
-            "href": "/careers-employment/dependent-benefits",
-            "items": []
-          }
-        ]
-      },
-      {
-        "title": "Manage benefits",
-        "open": true,
-        "items": [
-          {
-            "active": false,
-            "title": "VA Transition Assistance",
-            "href": "https://www.benefits.va.gov/tap/tap-index.asp",
-            "items": []
-          },
-          {
-            "active": true,
-            "title": "CareerScope",
-            "href": "/careers-employment/careerscope-skills-assessment",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Find a job",
-            "href": "https://www.dol.gov/veterans/findajob/",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Find VA careers and support",
-            "href": "http://localhost:3001/jobs/?utm_source=jobs_button&utm_campaign=ChooseVA_Website_Buttons",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Print Civil Service Preference Letter",
-            "href": "/records/download-va-letters/",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Get LinkedIn classes",
-            "href": "https://www.veterans.linkedin.com/",
-            "items": []
-          }
-        ]
-      },
-      {
-        "title": "More resources",
-        "open": false,
-        "items": [
-          {
-            "active": false,
-            "title": "Subsistence allowance rates",
-            "href": "https://www.benefits.va.gov/vocrehab/subsistence_allowance_rates.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "VetSuccess on Campus",
-            "href": "/careers-employment/vetsuccess-on-campus",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Program definitions",
-            "href": "https://www.benefits.va.gov/vocrehab/program_definitions.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Success stories",
-            "href": "https://www.benefits.va.gov/vocrehab/success_stories.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Veteran resources",
-            "href": "/careers-employment/veteran-resources",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Family resources",
-            "href": "/careers-employment/family-resources",
-            "items": []
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "fileName": "careers-employment/dependent-benefits/index.html",
-    "sidebarTitle": "Careers and employment",
-    "backLink": null,
-    "items": [],
-    "menus": [
-      {
-        "title": "Get benefits",
-        "open": true,
-        "items": [
-          {
-            "active": false,
-            "title": "Vocational Rehab and Employment",
-            "href": "/careers-employment/vocational-rehabilitation",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Educational and Career Counseling",
-            "href": "/careers-employment/education-and-career-counseling",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Veteran-owned business support",
-            "href": "/careers-employment/veteran-owned-business-support",
-            "items": []
-          },
-          {
-            "active": true,
-            "title": "Dependent benefits",
-            "href": "/careers-employment/dependent-benefits",
-            "items": []
-          }
-        ]
-      },
-      {
-        "title": "Manage benefits",
-        "open": false,
-        "items": [
-          {
-            "active": false,
-            "title": "VA Transition Assistance",
-            "href": "https://www.benefits.va.gov/tap/tap-index.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "CareerScope",
-            "href": "/careers-employment/careerscope-skills-assessment",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Find a job",
-            "href": "https://www.dol.gov/veterans/findajob/",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Find VA careers and support",
-            "href": "http://localhost:3001/jobs/?utm_source=jobs_button&utm_campaign=ChooseVA_Website_Buttons",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Print Civil Service Preference Letter",
-            "href": "/records/download-va-letters/",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Get LinkedIn classes",
-            "href": "https://www.veterans.linkedin.com/",
-            "items": []
-          }
-        ]
-      },
-      {
-        "title": "More resources",
-        "open": false,
-        "items": [
-          {
-            "active": false,
-            "title": "Subsistence allowance rates",
-            "href": "https://www.benefits.va.gov/vocrehab/subsistence_allowance_rates.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "VetSuccess on Campus",
-            "href": "/careers-employment/vetsuccess-on-campus",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Program definitions",
-            "href": "https://www.benefits.va.gov/vocrehab/program_definitions.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Success stories",
-            "href": "https://www.benefits.va.gov/vocrehab/success_stories.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Veteran resources",
-            "href": "/careers-employment/veteran-resources",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Family resources",
-            "href": "/careers-employment/family-resources",
-            "items": []
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "fileName": "careers-employment/family-resources/index.html",
-    "sidebarTitle": "Careers and employment",
-    "backLink": null,
-    "items": [],
-    "menus": [
-      {
-        "title": "Get benefits",
-        "open": false,
-        "items": [
-          {
-            "active": false,
-            "title": "Vocational Rehab and Employment",
-            "href": "/careers-employment/vocational-rehabilitation",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Educational and Career Counseling",
-            "href": "/careers-employment/education-and-career-counseling",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Veteran-owned business support",
-            "href": "/careers-employment/veteran-owned-business-support",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Dependent benefits",
-            "href": "/careers-employment/dependent-benefits",
-            "items": []
-          }
-        ]
-      },
-      {
-        "title": "Manage benefits",
-        "open": false,
-        "items": [
-          {
-            "active": false,
-            "title": "VA Transition Assistance",
-            "href": "https://www.benefits.va.gov/tap/tap-index.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "CareerScope",
-            "href": "/careers-employment/careerscope-skills-assessment",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Find a job",
-            "href": "https://www.dol.gov/veterans/findajob/",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Find VA careers and support",
-            "href": "http://localhost:3001/jobs/?utm_source=jobs_button&utm_campaign=ChooseVA_Website_Buttons",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Print Civil Service Preference Letter",
-            "href": "/records/download-va-letters/",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Get LinkedIn classes",
-            "href": "https://www.veterans.linkedin.com/",
-            "items": []
-          }
-        ]
-      },
-      {
-        "title": "More resources",
-        "open": true,
-        "items": [
-          {
-            "active": false,
-            "title": "Subsistence allowance rates",
-            "href": "https://www.benefits.va.gov/vocrehab/subsistence_allowance_rates.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "VetSuccess on Campus",
-            "href": "/careers-employment/vetsuccess-on-campus",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Program definitions",
-            "href": "https://www.benefits.va.gov/vocrehab/program_definitions.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Success stories",
-            "href": "https://www.benefits.va.gov/vocrehab/success_stories.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Veteran resources",
-            "href": "/careers-employment/veteran-resources",
-            "items": []
-          },
-          {
-            "active": true,
-            "title": "Family resources",
-            "href": "/careers-employment/family-resources",
-            "items": []
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "fileName": "careers-employment/education-and-career-counseling/index.html",
-    "sidebarTitle": "Careers and employment",
-    "backLink": null,
-    "items": [],
-    "menus": [
-      {
-        "title": "Get benefits",
-        "open": true,
-        "items": [
-          {
-            "active": false,
-            "title": "Vocational Rehab and Employment",
-            "href": "/careers-employment/vocational-rehabilitation",
-            "items": []
-          },
-          {
-            "active": true,
-            "title": "Educational and Career Counseling",
-            "href": "/careers-employment/education-and-career-counseling",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Veteran-owned business support",
-            "href": "/careers-employment/veteran-owned-business-support",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Dependent benefits",
-            "href": "/careers-employment/dependent-benefits",
-            "items": []
-          }
-        ]
-      },
-      {
-        "title": "Manage benefits",
-        "open": false,
-        "items": [
-          {
-            "active": false,
-            "title": "VA Transition Assistance",
-            "href": "https://www.benefits.va.gov/tap/tap-index.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "CareerScope",
-            "href": "/careers-employment/careerscope-skills-assessment",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Find a job",
-            "href": "https://www.dol.gov/veterans/findajob/",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Find VA careers and support",
-            "href": "http://localhost:3001/jobs/?utm_source=jobs_button&utm_campaign=ChooseVA_Website_Buttons",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Print Civil Service Preference Letter",
-            "href": "/records/download-va-letters/",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Get LinkedIn classes",
-            "href": "https://www.veterans.linkedin.com/",
-            "items": []
-          }
-        ]
-      },
-      {
-        "title": "More resources",
-        "open": false,
-        "items": [
-          {
-            "active": false,
-            "title": "Subsistence allowance rates",
-            "href": "https://www.benefits.va.gov/vocrehab/subsistence_allowance_rates.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "VetSuccess on Campus",
-            "href": "/careers-employment/vetsuccess-on-campus",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Program definitions",
-            "href": "https://www.benefits.va.gov/vocrehab/program_definitions.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Success stories",
-            "href": "https://www.benefits.va.gov/vocrehab/success_stories.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Veteran resources",
-            "href": "/careers-employment/veteran-resources",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Family resources",
-            "href": "/careers-employment/family-resources",
-            "items": []
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "fileName": "careers-employment/veteran-resources/index.html",
-    "sidebarTitle": "Careers and employment",
-    "backLink": null,
-    "items": [],
-    "menus": [
-      {
-        "title": "Get benefits",
-        "open": false,
-        "items": [
-          {
-            "active": false,
-            "title": "Vocational Rehab and Employment",
-            "href": "/careers-employment/vocational-rehabilitation",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Educational and Career Counseling",
-            "href": "/careers-employment/education-and-career-counseling",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Veteran-owned business support",
-            "href": "/careers-employment/veteran-owned-business-support",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Dependent benefits",
-            "href": "/careers-employment/dependent-benefits",
-            "items": []
-          }
-        ]
-      },
-      {
-        "title": "Manage benefits",
-        "open": false,
-        "items": [
-          {
-            "active": false,
-            "title": "VA Transition Assistance",
-            "href": "https://www.benefits.va.gov/tap/tap-index.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "CareerScope",
-            "href": "/careers-employment/careerscope-skills-assessment",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Find a job",
-            "href": "https://www.dol.gov/veterans/findajob/",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Find VA careers and support",
-            "href": "http://localhost:3001/jobs/?utm_source=jobs_button&utm_campaign=ChooseVA_Website_Buttons",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Print Civil Service Preference Letter",
-            "href": "/records/download-va-letters/",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Get LinkedIn classes",
-            "href": "https://www.veterans.linkedin.com/",
-            "items": []
-          }
-        ]
-      },
-      {
-        "title": "More resources",
-        "open": true,
-        "items": [
-          {
-            "active": false,
-            "title": "Subsistence allowance rates",
-            "href": "https://www.benefits.va.gov/vocrehab/subsistence_allowance_rates.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "VetSuccess on Campus",
-            "href": "/careers-employment/vetsuccess-on-campus",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Program definitions",
-            "href": "https://www.benefits.va.gov/vocrehab/program_definitions.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Success stories",
-            "href": "https://www.benefits.va.gov/vocrehab/success_stories.asp",
-            "items": []
-          },
-          {
-            "active": true,
-            "title": "Veteran resources",
-            "href": "/careers-employment/veteran-resources",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Family resources",
-            "href": "/careers-employment/family-resources",
-            "items": []
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "fileName": "careers-employment/veteran-owned-business-support/index.html",
-    "sidebarTitle": "Careers and employment",
-    "backLink": null,
-    "items": [],
-    "menus": [
-      {
-        "title": "Get benefits",
-        "open": true,
-        "items": [
-          {
-            "active": false,
-            "title": "Vocational Rehab and Employment",
-            "href": "/careers-employment/vocational-rehabilitation",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Educational and Career Counseling",
-            "href": "/careers-employment/education-and-career-counseling",
-            "items": []
-          },
-          {
-            "active": true,
-            "title": "Veteran-owned business support",
-            "href": "/careers-employment/veteran-owned-business-support",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Dependent benefits",
-            "href": "/careers-employment/dependent-benefits",
-            "items": []
-          }
-        ]
-      },
-      {
-        "title": "Manage benefits",
-        "open": false,
-        "items": [
-          {
-            "active": false,
-            "title": "VA Transition Assistance",
-            "href": "https://www.benefits.va.gov/tap/tap-index.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "CareerScope",
-            "href": "/careers-employment/careerscope-skills-assessment",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Find a job",
-            "href": "https://www.dol.gov/veterans/findajob/",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Find VA careers and support",
-            "href": "http://localhost:3001/jobs/?utm_source=jobs_button&utm_campaign=ChooseVA_Website_Buttons",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Print Civil Service Preference Letter",
-            "href": "/records/download-va-letters/",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Get LinkedIn classes",
-            "href": "https://www.veterans.linkedin.com/",
-            "items": []
-          }
-        ]
-      },
-      {
-        "title": "More resources",
-        "open": false,
-        "items": [
-          {
-            "active": false,
-            "title": "Subsistence allowance rates",
-            "href": "https://www.benefits.va.gov/vocrehab/subsistence_allowance_rates.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "VetSuccess on Campus",
-            "href": "/careers-employment/vetsuccess-on-campus",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Program definitions",
-            "href": "https://www.benefits.va.gov/vocrehab/program_definitions.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Success stories",
-            "href": "https://www.benefits.va.gov/vocrehab/success_stories.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Veteran resources",
-            "href": "/careers-employment/veteran-resources",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Family resources",
-            "href": "/careers-employment/family-resources",
-            "items": []
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "fileName": "careers-employment/vetsuccess-on-campus/index.html",
-    "sidebarTitle": "Careers and employment",
-    "backLink": null,
-    "items": [],
-    "menus": [
-      {
-        "title": "Get benefits",
-        "open": false,
-        "items": [
-          {
-            "active": false,
-            "title": "Vocational Rehab and Employment",
-            "href": "/careers-employment/vocational-rehabilitation",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Educational and Career Counseling",
-            "href": "/careers-employment/education-and-career-counseling",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Veteran-owned business support",
-            "href": "/careers-employment/veteran-owned-business-support",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Dependent benefits",
-            "href": "/careers-employment/dependent-benefits",
-            "items": []
-          }
-        ]
-      },
-      {
-        "title": "Manage benefits",
-        "open": false,
-        "items": [
-          {
-            "active": false,
-            "title": "VA Transition Assistance",
-            "href": "https://www.benefits.va.gov/tap/tap-index.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "CareerScope",
-            "href": "/careers-employment/careerscope-skills-assessment",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Find a job",
-            "href": "https://www.dol.gov/veterans/findajob/",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Find VA careers and support",
-            "href": "http://localhost:3001/jobs/?utm_source=jobs_button&utm_campaign=ChooseVA_Website_Buttons",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Print Civil Service Preference Letter",
-            "href": "/records/download-va-letters/",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Get LinkedIn classes",
-            "href": "https://www.veterans.linkedin.com/",
-            "items": []
-          }
-        ]
-      },
-      {
-        "title": "More resources",
-        "open": true,
-        "items": [
-          {
-            "active": false,
-            "title": "Subsistence allowance rates",
-            "href": "https://www.benefits.va.gov/vocrehab/subsistence_allowance_rates.asp",
-            "items": []
-          },
-          {
-            "active": true,
-            "title": "VetSuccess on Campus",
-            "href": "/careers-employment/vetsuccess-on-campus",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Program definitions",
-            "href": "https://www.benefits.va.gov/vocrehab/program_definitions.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Success stories",
-            "href": "https://www.benefits.va.gov/vocrehab/success_stories.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Veteran resources",
-            "href": "/careers-employment/veteran-resources",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Family resources",
-            "href": "/careers-employment/family-resources",
-            "items": []
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "fileName": "careers-employment/vocational-rehabilitation/index.html",
-    "sidebarTitle": "Careers and employment",
-    "backLink": null,
-    "items": [],
-    "menus": [
-      {
-        "title": "Get benefits",
-        "open": true,
-        "items": [
-          {
-            "active": true,
-            "title": "Vocational Rehab and Employment",
-            "href": "/careers-employment/vocational-rehabilitation",
-            "items": [
-              {
-                "title": "Programs",
-                "href": "/careers-employment/vocational-rehabilitation/programs"
-              },
-              {
-                "title": "Eligibility",
-                "href": "/careers-employment/vocational-rehabilitation/eligibility"
-              },
-              {
-                "title": "How to apply",
-                "href": "/careers-employment/vocational-rehabilitation/how-to-apply"
-              },
-              {
-                "title": "Accessing VR&E through IDES",
-                "href": "/careers-employment/vocational-rehabilitation/ides"
-              }
-            ]
-          },
-          {
-            "active": false,
-            "title": "Educational and Career Counseling",
-            "href": "/careers-employment/education-and-career-counseling",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Veteran-owned business support",
-            "href": "/careers-employment/veteran-owned-business-support",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Dependent benefits",
-            "href": "/careers-employment/dependent-benefits",
-            "items": []
-          }
-        ]
-      },
-      {
-        "title": "Manage benefits",
-        "open": false,
-        "items": [
-          {
-            "active": false,
-            "title": "VA Transition Assistance",
-            "href": "https://www.benefits.va.gov/tap/tap-index.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "CareerScope",
-            "href": "/careers-employment/careerscope-skills-assessment",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Find a job",
-            "href": "https://www.dol.gov/veterans/findajob/",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Find VA careers and support",
-            "href": "http://localhost:3001/jobs/?utm_source=jobs_button&utm_campaign=ChooseVA_Website_Buttons",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Print Civil Service Preference Letter",
-            "href": "/records/download-va-letters/",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Get LinkedIn classes",
-            "href": "https://www.veterans.linkedin.com/",
-            "items": []
-          }
-        ]
-      },
-      {
-        "title": "More resources",
-        "open": false,
-        "items": [
-          {
-            "active": false,
-            "title": "Subsistence allowance rates",
-            "href": "https://www.benefits.va.gov/vocrehab/subsistence_allowance_rates.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "VetSuccess on Campus",
-            "href": "/careers-employment/vetsuccess-on-campus",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Program definitions",
-            "href": "https://www.benefits.va.gov/vocrehab/program_definitions.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Success stories",
-            "href": "https://www.benefits.va.gov/vocrehab/success_stories.asp",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Veteran resources",
-            "href": "/careers-employment/veteran-resources",
-            "items": []
-          },
-          {
-            "active": false,
-            "title": "Family resources",
-            "href": "/careers-employment/family-resources",
-            "items": []
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "fileName": "careers-employment/vocational-rehabilitation/eligibility/index.html",
-    "sidebarTitle": "Careers and employment",
-    "backLink": {
-      "title": "Vocational Rehab and Employment",
-      "href": "/careers-employment/vocational-rehabilitation"
-    },
-    "items": [
-      {
-        "active": false,
-        "title": "Programs",
-        "href": "/careers-employment/vocational-rehabilitation/programs",
-        "items": []
-      },
-      {
-        "active": true,
-        "title": "Eligibility",
-        "href": "/careers-employment/vocational-rehabilitation/eligibility",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "How to apply",
-        "href": "/careers-employment/vocational-rehabilitation/how-to-apply",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Accessing VR&E through IDES",
-        "href": "/careers-employment/vocational-rehabilitation/ides",
-        "items": []
-      }
-    ],
-    "menus": []
-  },
-  {
-    "fileName": "careers-employment/vocational-rehabilitation/how-to-apply/index.html",
-    "sidebarTitle": "Careers and employment",
-    "backLink": {
-      "title": "Vocational Rehab and Employment",
-      "href": "/careers-employment/vocational-rehabilitation"
-    },
-    "items": [
-      {
-        "active": false,
-        "title": "Programs",
-        "href": "/careers-employment/vocational-rehabilitation/programs",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Eligibility",
-        "href": "/careers-employment/vocational-rehabilitation/eligibility",
-        "items": []
-      },
-      {
-        "active": true,
-        "title": "How to apply",
-        "href": "/careers-employment/vocational-rehabilitation/how-to-apply",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Accessing VR&E through IDES",
-        "href": "/careers-employment/vocational-rehabilitation/ides",
-        "items": []
-      }
-    ],
-    "menus": []
-  },
-  {
-    "fileName": "careers-employment/vocational-rehabilitation/ides/index.html",
-    "sidebarTitle": "Careers and employment",
-    "backLink": {
-      "title": "Vocational Rehab and Employment",
-      "href": "/careers-employment/vocational-rehabilitation"
-    },
-    "items": [
-      {
-        "active": false,
-        "title": "Programs",
-        "href": "/careers-employment/vocational-rehabilitation/programs",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Eligibility",
-        "href": "/careers-employment/vocational-rehabilitation/eligibility",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "How to apply",
-        "href": "/careers-employment/vocational-rehabilitation/how-to-apply",
-        "items": []
-      },
-      {
-        "active": true,
-        "title": "Accessing VR&E through IDES",
-        "href": "/careers-employment/vocational-rehabilitation/ides",
-        "items": []
-      }
-    ],
-    "menus": []
-  },
-  {
-    "fileName": "careers-employment/vocational-rehabilitation/programs/index.html",
-    "sidebarTitle": "Careers and employment",
-    "backLink": {
-      "title": "Vocational Rehab and Employment",
-      "href": "/careers-employment/vocational-rehabilitation"
-    },
-    "items": [
-      {
-        "active": true,
-        "title": "Programs",
-        "href": "/careers-employment/vocational-rehabilitation/programs",
-        "items": [
-          {
-            "title": "Reemployment",
-            "href": "/careers-employment/vocational-rehabilitation/programs/reemployment"
-          },
-          {
-            "title": "Rapid Access to Employment",
-            "href": "/careers-employment/vocational-rehabilitation/programs/rapid-access-to-employment"
-          },
-          {
-            "title": "Self-Employment",
-            "href": "/careers-employment/vocational-rehabilitation/programs/self-employment"
-          },
-          {
-            "title": "Long-Term Services",
-            "href": "/careers-employment/vocational-rehabilitation/programs/long-term-services"
-          },
-          {
-            "title": "Independent Living",
-            "href": "/careers-employment/vocational-rehabilitation/programs/independent-living"
-          }
-        ]
-      },
-      {
-        "active": false,
-        "title": "Eligibility",
-        "href": "/careers-employment/vocational-rehabilitation/eligibility",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "How to apply",
-        "href": "/careers-employment/vocational-rehabilitation/how-to-apply",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Accessing VR&E through IDES",
-        "href": "/careers-employment/vocational-rehabilitation/ides",
-        "items": []
-      }
-    ],
-    "menus": []
-  },
-  {
-    "fileName": "careers-employment/vocational-rehabilitation/programs/independent-living/index.html",
-    "sidebarTitle": "Careers and employment",
-    "backLink": {
-      "title": "Programs",
-      "href": "/careers-employment/vocational-rehabilitation/programs"
-    },
-    "items": [
-      {
-        "active": false,
-        "title": "Reemployment",
-        "href": "/careers-employment/vocational-rehabilitation/programs/reemployment",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Rapid Access to Employment",
-        "href": "/careers-employment/vocational-rehabilitation/programs/rapid-access-to-employment",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Self-Employment",
-        "href": "/careers-employment/vocational-rehabilitation/programs/self-employment",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Long-Term Services",
-        "href": "/careers-employment/vocational-rehabilitation/programs/long-term-services",
-        "items": []
-      },
-      {
-        "active": true,
-        "title": "Independent Living",
-        "href": "/careers-employment/vocational-rehabilitation/programs/independent-living",
-        "items": []
-      }
-    ],
-    "menus": []
-  },
-  {
-    "fileName": "careers-employment/vocational-rehabilitation/programs/long-term-services/index.html",
-    "sidebarTitle": "Careers and employment",
-    "backLink": {
-      "title": "Programs",
-      "href": "/careers-employment/vocational-rehabilitation/programs"
-    },
-    "items": [
-      {
-        "active": false,
-        "title": "Reemployment",
-        "href": "/careers-employment/vocational-rehabilitation/programs/reemployment",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Rapid Access to Employment",
-        "href": "/careers-employment/vocational-rehabilitation/programs/rapid-access-to-employment",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Self-Employment",
-        "href": "/careers-employment/vocational-rehabilitation/programs/self-employment",
-        "items": []
-      },
-      {
-        "active": true,
-        "title": "Long-Term Services",
-        "href": "/careers-employment/vocational-rehabilitation/programs/long-term-services",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Independent Living",
-        "href": "/careers-employment/vocational-rehabilitation/programs/independent-living",
-        "items": []
-      }
-    ],
-    "menus": []
-  },
-  {
-    "fileName": "careers-employment/vocational-rehabilitation/programs/rapid-access-to-employment/index.html",
-    "sidebarTitle": "Careers and employment",
-    "backLink": {
-      "title": "Programs",
-      "href": "/careers-employment/vocational-rehabilitation/programs"
-    },
-    "items": [
-      {
-        "active": false,
-        "title": "Reemployment",
-        "href": "/careers-employment/vocational-rehabilitation/programs/reemployment",
-        "items": []
-      },
-      {
-        "active": true,
-        "title": "Rapid Access to Employment",
-        "href": "/careers-employment/vocational-rehabilitation/programs/rapid-access-to-employment",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Self-Employment",
-        "href": "/careers-employment/vocational-rehabilitation/programs/self-employment",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Long-Term Services",
-        "href": "/careers-employment/vocational-rehabilitation/programs/long-term-services",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Independent Living",
-        "href": "/careers-employment/vocational-rehabilitation/programs/independent-living",
-        "items": []
-      }
-    ],
-    "menus": []
-  },
-  {
-    "fileName": "careers-employment/vocational-rehabilitation/programs/reemployment/index.html",
-    "sidebarTitle": "Careers and employment",
-    "backLink": {
-      "title": "Programs",
-      "href": "/careers-employment/vocational-rehabilitation/programs"
-    },
-    "items": [
-      {
-        "active": true,
-        "title": "Reemployment",
-        "href": "/careers-employment/vocational-rehabilitation/programs/reemployment",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Rapid Access to Employment",
-        "href": "/careers-employment/vocational-rehabilitation/programs/rapid-access-to-employment",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Self-Employment",
-        "href": "/careers-employment/vocational-rehabilitation/programs/self-employment",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Long-Term Services",
-        "href": "/careers-employment/vocational-rehabilitation/programs/long-term-services",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Independent Living",
-        "href": "/careers-employment/vocational-rehabilitation/programs/independent-living",
-        "items": []
-      }
-    ],
-    "menus": []
-  },
-  {
-    "fileName": "careers-employment/vocational-rehabilitation/programs/self-employment/index.html",
-    "sidebarTitle": "Careers and employment",
-    "backLink": {
-      "title": "Programs",
-      "href": "/careers-employment/vocational-rehabilitation/programs"
-    },
-    "items": [
-      {
-        "active": false,
-        "title": "Reemployment",
-        "href": "/careers-employment/vocational-rehabilitation/programs/reemployment",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Rapid Access to Employment",
-        "href": "/careers-employment/vocational-rehabilitation/programs/rapid-access-to-employment",
-        "items": []
-      },
-      {
-        "active": true,
-        "title": "Self-Employment",
-        "href": "/careers-employment/vocational-rehabilitation/programs/self-employment",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Long-Term Services",
-        "href": "/careers-employment/vocational-rehabilitation/programs/long-term-services",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Independent Living",
-        "href": "/careers-employment/vocational-rehabilitation/programs/independent-living",
-        "items": []
-      }
-    ],
-    "menus": []
-  },
-  {
-    "fileName": "life-insurance/manage-your-policy/index.html",
+    "fileName": "life-insurance/file-appeal-for-tsgli/index.html",
     "sidebarTitle": "Life insurance",
     "backLink": null,
     "items": [],
@@ -2787,7 +3067,7 @@
         "open": true,
         "items": [
           {
-            "active": true,
+            "active": false,
             "title": "Access your policy online",
             "href": "/life-insurance/manage-your-policy",
             "items": []
@@ -2817,7 +3097,7 @@
             "items": []
           },
           {
-            "active": false,
+            "active": true,
             "title": "File a TSGLI appeal",
             "href": "/life-insurance/file-appeal-for-tsgli",
             "items": []
@@ -2893,7 +3173,7 @@
     ]
   },
   {
-    "fileName": "life-insurance/file-appeal-for-tsgli/index.html",
+    "fileName": "life-insurance/manage-your-policy/index.html",
     "sidebarTitle": "Life insurance",
     "backLink": null,
     "items": [],
@@ -2927,7 +3207,7 @@
         "open": true,
         "items": [
           {
-            "active": false,
+            "active": true,
             "title": "Access your policy online",
             "href": "/life-insurance/manage-your-policy",
             "items": []
@@ -2957,7 +3237,7 @@
             "items": []
           },
           {
-            "active": true,
+            "active": false,
             "title": "File a TSGLI appeal",
             "href": "/life-insurance/file-appeal-for-tsgli",
             "items": []
@@ -3749,14 +4029,14 @@
           },
           {
             "active": false,
-            "title": "File additional forms for your disability claim",
-            "href": "/disability/how-to-file-claim/additional-forms/",
+            "title": "Change your address",
+            "href": "/change-address/",
             "items": []
           },
           {
             "active": false,
-            "title": "Change your address",
-            "href": "/change-address/",
+            "title": "File additional forms for your disability claim",
+            "href": "/disability/how-to-file-claim/additional-forms/",
             "items": []
           },
           {
@@ -3904,14 +4184,14 @@
           },
           {
             "active": false,
-            "title": "File additional forms for your disability claim",
-            "href": "/disability/how-to-file-claim/additional-forms/",
+            "title": "Change your address",
+            "href": "/change-address/",
             "items": []
           },
           {
             "active": false,
-            "title": "Change your address",
-            "href": "/change-address/",
+            "title": "File additional forms for your disability claim",
+            "href": "/disability/how-to-file-claim/additional-forms/",
             "items": []
           },
           {
@@ -4050,14 +4330,14 @@
           },
           {
             "active": false,
-            "title": "File additional forms for your disability claim",
-            "href": "/disability/how-to-file-claim/additional-forms/",
+            "title": "Change your address",
+            "href": "/change-address/",
             "items": []
           },
           {
             "active": false,
-            "title": "Change your address",
-            "href": "/change-address/",
+            "title": "File additional forms for your disability claim",
+            "href": "/disability/how-to-file-claim/additional-forms/",
             "items": []
           },
           {
@@ -4217,14 +4497,14 @@
           },
           {
             "active": false,
-            "title": "File additional forms for your disability claim",
-            "href": "/disability/how-to-file-claim/additional-forms/",
+            "title": "Change your address",
+            "href": "/change-address/",
             "items": []
           },
           {
             "active": false,
-            "title": "Change your address",
-            "href": "/change-address/",
+            "title": "File additional forms for your disability claim",
+            "href": "/disability/how-to-file-claim/additional-forms/",
             "items": []
           },
           {
@@ -4372,14 +4652,14 @@
           },
           {
             "active": false,
-            "title": "File additional forms for your disability claim",
-            "href": "/disability/how-to-file-claim/additional-forms/",
+            "title": "Change your address",
+            "href": "/change-address/",
             "items": []
           },
           {
             "active": false,
-            "title": "Change your address",
-            "href": "/change-address/",
+            "title": "File additional forms for your disability claim",
+            "href": "/disability/how-to-file-claim/additional-forms/",
             "items": []
           },
           {
@@ -4518,14 +4798,14 @@
           },
           {
             "active": false,
-            "title": "File additional forms for your disability claim",
-            "href": "/disability/how-to-file-claim/additional-forms/",
+            "title": "Change your address",
+            "href": "/change-address/",
             "items": []
           },
           {
             "active": false,
-            "title": "Change your address",
-            "href": "/change-address/",
+            "title": "File additional forms for your disability claim",
+            "href": "/disability/how-to-file-claim/additional-forms/",
             "items": []
           },
           {
@@ -4677,14 +4957,14 @@
           },
           {
             "active": false,
-            "title": "File additional forms for your disability claim",
-            "href": "/disability/how-to-file-claim/additional-forms/",
+            "title": "Change your address",
+            "href": "/change-address/",
             "items": []
           },
           {
             "active": false,
-            "title": "Change your address",
-            "href": "/change-address/",
+            "title": "File additional forms for your disability claim",
+            "href": "/disability/how-to-file-claim/additional-forms/",
             "items": []
           },
           {
@@ -4823,14 +5103,14 @@
           },
           {
             "active": false,
-            "title": "File additional forms for your disability claim",
-            "href": "/disability/how-to-file-claim/additional-forms/",
+            "title": "Change your address",
+            "href": "/change-address/",
             "items": []
           },
           {
             "active": false,
-            "title": "Change your address",
-            "href": "/change-address/",
+            "title": "File additional forms for your disability claim",
+            "href": "/disability/how-to-file-claim/additional-forms/",
             "items": []
           },
           {
@@ -4969,14 +5249,14 @@
           },
           {
             "active": false,
-            "title": "File additional forms for your disability claim",
-            "href": "/disability/how-to-file-claim/additional-forms/",
+            "title": "Change your address",
+            "href": "/change-address/",
             "items": []
           },
           {
             "active": false,
-            "title": "Change your address",
-            "href": "/change-address/",
+            "title": "File additional forms for your disability claim",
+            "href": "/disability/how-to-file-claim/additional-forms/",
             "items": []
           },
           {
@@ -5044,52 +5324,6 @@
     ]
   },
   {
-    "fileName": "disability/file-an-appeal/board-of-veterans-appeals/index.html",
-    "sidebarTitle": "Disability benefits",
-    "backLink": {
-      "title": "File an appeal",
-      "href": "/disability/file-an-appeal"
-    },
-    "items": [
-      {
-        "active": true,
-        "title": "Board of Veterans' Appeals hearing",
-        "href": "/disability/file-an-appeal/board-of-veterans-appeals",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Request a priority review",
-        "href": "/disability/file-an-appeal/request-priority-review",
-        "items": []
-      }
-    ],
-    "menus": []
-  },
-  {
-    "fileName": "disability/file-an-appeal/request-priority-review/index.html",
-    "sidebarTitle": "Disability benefits",
-    "backLink": {
-      "title": "File an appeal",
-      "href": "/disability/file-an-appeal"
-    },
-    "items": [
-      {
-        "active": false,
-        "title": "Board of Veterans' Appeals hearing",
-        "href": "/disability/file-an-appeal/board-of-veterans-appeals",
-        "items": []
-      },
-      {
-        "active": true,
-        "title": "Request a priority review",
-        "href": "/disability/file-an-appeal/request-priority-review",
-        "items": []
-      }
-    ],
-    "menus": []
-  },
-  {
     "fileName": "disability/about-disability-ratings/after-you-get-a-rating/index.html",
     "sidebarTitle": "Disability benefits",
     "backLink": {
@@ -5130,6 +5364,52 @@
         "active": false,
         "title": "After you get a rating",
         "href": "/disability/about-disability-ratings/after-you-get-a-rating",
+        "items": []
+      }
+    ],
+    "menus": []
+  },
+  {
+    "fileName": "disability/file-an-appeal/board-of-veterans-appeals/index.html",
+    "sidebarTitle": "Disability benefits",
+    "backLink": {
+      "title": "File an appeal",
+      "href": "/disability/file-an-appeal"
+    },
+    "items": [
+      {
+        "active": true,
+        "title": "Board of Veterans' Appeals hearing",
+        "href": "/disability/file-an-appeal/board-of-veterans-appeals",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Request a priority review",
+        "href": "/disability/file-an-appeal/request-priority-review",
+        "items": []
+      }
+    ],
+    "menus": []
+  },
+  {
+    "fileName": "disability/file-an-appeal/request-priority-review/index.html",
+    "sidebarTitle": "Disability benefits",
+    "backLink": {
+      "title": "File an appeal",
+      "href": "/disability/file-an-appeal"
+    },
+    "items": [
+      {
+        "active": false,
+        "title": "Board of Veterans' Appeals hearing",
+        "href": "/disability/file-an-appeal/board-of-veterans-appeals",
+        "items": []
+      },
+      {
+        "active": true,
+        "title": "Request a priority review",
+        "href": "/disability/file-an-appeal/request-priority-review",
         "items": []
       }
     ],
@@ -5480,7 +5760,7 @@
     "menus": []
   },
   {
-    "fileName": "disability/eligibility/special-claims/automobile-allowance-adaptive-equipment/index.html",
+    "fileName": "disability/eligibility/special-claims/birth-defects/index.html",
     "sidebarTitle": "Disability benefits",
     "backLink": {
       "title": "Special Claims",
@@ -5488,13 +5768,13 @@
     },
     "items": [
       {
-        "active": true,
+        "active": false,
         "title": "Auto allowance and adaptive equipment",
         "href": "/disability/eligibility/special-claims/automobile-allowance-adaptive-equipment",
         "items": []
       },
       {
-        "active": false,
+        "active": true,
         "title": "Birth defects",
         "href": "/disability/eligibility/special-claims/birth-defects",
         "items": []
@@ -5545,7 +5825,7 @@
     "menus": []
   },
   {
-    "fileName": "disability/eligibility/special-claims/birth-defects/index.html",
+    "fileName": "disability/eligibility/special-claims/dental-care/index.html",
     "sidebarTitle": "Disability benefits",
     "backLink": {
       "title": "Special Claims",
@@ -5559,7 +5839,7 @@
         "items": []
       },
       {
-        "active": true,
+        "active": false,
         "title": "Birth defects",
         "href": "/disability/eligibility/special-claims/birth-defects",
         "items": []
@@ -5571,7 +5851,7 @@
         "items": []
       },
       {
-        "active": false,
+        "active": true,
         "title": "Dental care",
         "href": "/disability/eligibility/special-claims/dental-care",
         "items": []
@@ -5675,7 +5955,7 @@
     "menus": []
   },
   {
-    "fileName": "disability/eligibility/special-claims/dental-care/index.html",
+    "fileName": "disability/eligibility/special-claims/automobile-allowance-adaptive-equipment/index.html",
     "sidebarTitle": "Disability benefits",
     "backLink": {
       "title": "Special Claims",
@@ -5683,7 +5963,7 @@
     },
     "items": [
       {
-        "active": false,
+        "active": true,
         "title": "Auto allowance and adaptive equipment",
         "href": "/disability/eligibility/special-claims/automobile-allowance-adaptive-equipment",
         "items": []
@@ -5701,7 +5981,7 @@
         "items": []
       },
       {
-        "active": true,
+        "active": false,
         "title": "Dental care",
         "href": "/disability/eligibility/special-claims/dental-care",
         "items": []
@@ -6027,32 +6307,20 @@
             "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/related-diseases"
           },
           {
-            "title": "Non-Hodgkin's lymphoma",
-            "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/non-hodgkins-lymphoma"
+            "title": "Service in Vietnam or Korea",
+            "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/service-in-vietnam-korea"
           },
           {
-            "title": "C-123 aircraft",
-            "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/c-123-aircraft"
+            "title": "Navy or Coast Guard ships in Vietnam",
+            "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/navy-coast-guard-ships-vietnam"
           },
           {
             "title": "Thailand military bases",
             "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/thailand-military-bases"
           },
           {
-            "title": "Vietnam waters",
-            "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/vietnam-waters"
-          },
-          {
-            "title": "Service in Vietnam or Korea",
-            "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/service-in-vietnam-korea"
-          },
-          {
-            "title": "Service outside Vietnam or Korea",
-            "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/service-outside-vietnam-korea"
-          },
-          {
-            "title": "Navy or Coast Guard ships in Vietnam",
-            "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/navy-coast-guard-ships-vietnam"
+            "title": "C-123 aircraft",
+            "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/c-123-aircraft"
           },
           {
             "title": "Testing and storage",
@@ -6647,14 +6915,14 @@
       },
       {
         "active": false,
-        "title": "Non-Hodgkin's lymphoma",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/non-hodgkins-lymphoma",
+        "title": "Service in Vietnam or Korea",
+        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/service-in-vietnam-korea",
         "items": []
       },
       {
-        "active": true,
-        "title": "C-123 aircraft",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/c-123-aircraft",
+        "active": false,
+        "title": "Navy or Coast Guard ships in Vietnam",
+        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/navy-coast-guard-ships-vietnam",
         "items": []
       },
       {
@@ -6664,27 +6932,9 @@
         "items": []
       },
       {
-        "active": false,
-        "title": "Vietnam waters",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/vietnam-waters",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Service in Vietnam or Korea",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/service-in-vietnam-korea",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Service outside Vietnam or Korea",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/service-outside-vietnam-korea",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Navy or Coast Guard ships in Vietnam",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/navy-coast-guard-ships-vietnam",
+        "active": true,
+        "title": "C-123 aircraft",
+        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/c-123-aircraft",
         "items": []
       },
       {
@@ -6718,38 +6968,8 @@
       },
       {
         "active": false,
-        "title": "Non-Hodgkin's lymphoma",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/non-hodgkins-lymphoma",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "C-123 aircraft",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/c-123-aircraft",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Thailand military bases",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/thailand-military-bases",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Vietnam waters",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/vietnam-waters",
-        "items": []
-      },
-      {
-        "active": false,
         "title": "Service in Vietnam or Korea",
         "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/service-in-vietnam-korea",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Service outside Vietnam or Korea",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/service-outside-vietnam-korea",
         "items": []
       },
       {
@@ -6760,73 +6980,14 @@
       },
       {
         "active": false,
-        "title": "Testing and storage",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/testing-storage-areas",
-        "items": []
-      }
-    ],
-    "menus": []
-  },
-  {
-    "fileName": "disability/eligibility/hazardous-materials-exposure/agent-orange/non-hodgkins-lymphoma/index.html",
-    "sidebarTitle": "Disability benefits",
-    "backLink": {
-      "title": "Agent Orange",
-      "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange"
-    },
-    "items": [
-      {
-        "active": false,
-        "title": "Registry health exam",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/registry-health-exam",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Related diseases",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/related-diseases",
-        "items": []
-      },
-      {
-        "active": true,
-        "title": "Non-Hodgkin's lymphoma",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/non-hodgkins-lymphoma",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "C-123 aircraft",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/c-123-aircraft",
-        "items": []
-      },
-      {
-        "active": false,
         "title": "Thailand military bases",
         "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/thailand-military-bases",
         "items": []
       },
       {
         "active": false,
-        "title": "Vietnam waters",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/vietnam-waters",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Service in Vietnam or Korea",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/service-in-vietnam-korea",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Service outside Vietnam or Korea",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/service-outside-vietnam-korea",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Navy or Coast Guard ships in Vietnam",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/navy-coast-guard-ships-vietnam",
+        "title": "C-123 aircraft",
+        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/c-123-aircraft",
         "items": []
       },
       {
@@ -6860,14 +7021,14 @@
       },
       {
         "active": false,
-        "title": "Non-Hodgkin's lymphoma",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/non-hodgkins-lymphoma",
+        "title": "Service in Vietnam or Korea",
+        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/service-in-vietnam-korea",
         "items": []
       },
       {
         "active": false,
-        "title": "C-123 aircraft",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/c-123-aircraft",
+        "title": "Navy or Coast Guard ships in Vietnam",
+        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/navy-coast-guard-ships-vietnam",
         "items": []
       },
       {
@@ -6878,26 +7039,8 @@
       },
       {
         "active": false,
-        "title": "Vietnam waters",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/vietnam-waters",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Service in Vietnam or Korea",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/service-in-vietnam-korea",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Service outside Vietnam or Korea",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/service-outside-vietnam-korea",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Navy or Coast Guard ships in Vietnam",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/navy-coast-guard-ships-vietnam",
+        "title": "C-123 aircraft",
+        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/c-123-aircraft",
         "items": []
       },
       {
@@ -6931,14 +7074,14 @@
       },
       {
         "active": false,
-        "title": "Non-Hodgkin's lymphoma",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/non-hodgkins-lymphoma",
+        "title": "Service in Vietnam or Korea",
+        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/service-in-vietnam-korea",
         "items": []
       },
       {
         "active": false,
-        "title": "C-123 aircraft",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/c-123-aircraft",
+        "title": "Navy or Coast Guard ships in Vietnam",
+        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/navy-coast-guard-ships-vietnam",
         "items": []
       },
       {
@@ -6949,26 +7092,8 @@
       },
       {
         "active": false,
-        "title": "Vietnam waters",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/vietnam-waters",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Service in Vietnam or Korea",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/service-in-vietnam-korea",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Service outside Vietnam or Korea",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/service-outside-vietnam-korea",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Navy or Coast Guard ships in Vietnam",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/navy-coast-guard-ships-vietnam",
+        "title": "C-123 aircraft",
+        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/c-123-aircraft",
         "items": []
       },
       {
@@ -7001,39 +7126,9 @@
         "items": []
       },
       {
-        "active": false,
-        "title": "Non-Hodgkin's lymphoma",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/non-hodgkins-lymphoma",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "C-123 aircraft",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/c-123-aircraft",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Thailand military bases",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/thailand-military-bases",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Vietnam waters",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/vietnam-waters",
-        "items": []
-      },
-      {
         "active": true,
         "title": "Service in Vietnam or Korea",
         "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/service-in-vietnam-korea",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Service outside Vietnam or Korea",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/service-outside-vietnam-korea",
         "items": []
       },
       {
@@ -7044,73 +7139,14 @@
       },
       {
         "active": false,
-        "title": "Testing and storage",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/testing-storage-areas",
-        "items": []
-      }
-    ],
-    "menus": []
-  },
-  {
-    "fileName": "disability/eligibility/hazardous-materials-exposure/agent-orange/service-outside-vietnam-korea/index.html",
-    "sidebarTitle": "Disability benefits",
-    "backLink": {
-      "title": "Agent Orange",
-      "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange"
-    },
-    "items": [
-      {
-        "active": false,
-        "title": "Registry health exam",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/registry-health-exam",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Related diseases",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/related-diseases",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Non-Hodgkin's lymphoma",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/non-hodgkins-lymphoma",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "C-123 aircraft",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/c-123-aircraft",
-        "items": []
-      },
-      {
-        "active": false,
         "title": "Thailand military bases",
         "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/thailand-military-bases",
         "items": []
       },
       {
         "active": false,
-        "title": "Vietnam waters",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/vietnam-waters",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Service in Vietnam or Korea",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/service-in-vietnam-korea",
-        "items": []
-      },
-      {
-        "active": true,
-        "title": "Service outside Vietnam or Korea",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/service-outside-vietnam-korea",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Navy or Coast Guard ships in Vietnam",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/navy-coast-guard-ships-vietnam",
+        "title": "C-123 aircraft",
+        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/c-123-aircraft",
         "items": []
       },
       {
@@ -7144,14 +7180,14 @@
       },
       {
         "active": false,
-        "title": "Non-Hodgkin's lymphoma",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/non-hodgkins-lymphoma",
+        "title": "Service in Vietnam or Korea",
+        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/service-in-vietnam-korea",
         "items": []
       },
       {
         "active": false,
-        "title": "C-123 aircraft",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/c-123-aircraft",
+        "title": "Navy or Coast Guard ships in Vietnam",
+        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/navy-coast-guard-ships-vietnam",
         "items": []
       },
       {
@@ -7162,26 +7198,8 @@
       },
       {
         "active": false,
-        "title": "Vietnam waters",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/vietnam-waters",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Service in Vietnam or Korea",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/service-in-vietnam-korea",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Service outside Vietnam or Korea",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/service-outside-vietnam-korea",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Navy or Coast Guard ships in Vietnam",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/navy-coast-guard-ships-vietnam",
+        "title": "C-123 aircraft",
+        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/c-123-aircraft",
         "items": []
       },
       {
@@ -7215,14 +7233,14 @@
       },
       {
         "active": false,
-        "title": "Non-Hodgkin's lymphoma",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/non-hodgkins-lymphoma",
+        "title": "Service in Vietnam or Korea",
+        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/service-in-vietnam-korea",
         "items": []
       },
       {
         "active": false,
-        "title": "C-123 aircraft",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/c-123-aircraft",
+        "title": "Navy or Coast Guard ships in Vietnam",
+        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/navy-coast-guard-ships-vietnam",
         "items": []
       },
       {
@@ -7233,97 +7251,8 @@
       },
       {
         "active": false,
-        "title": "Vietnam waters",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/vietnam-waters",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Service in Vietnam or Korea",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/service-in-vietnam-korea",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Service outside Vietnam or Korea",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/service-outside-vietnam-korea",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Navy or Coast Guard ships in Vietnam",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/navy-coast-guard-ships-vietnam",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Testing and storage",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/testing-storage-areas",
-        "items": []
-      }
-    ],
-    "menus": []
-  },
-  {
-    "fileName": "disability/eligibility/hazardous-materials-exposure/agent-orange/vietnam-waters/index.html",
-    "sidebarTitle": "Disability benefits",
-    "backLink": {
-      "title": "Agent Orange",
-      "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange"
-    },
-    "items": [
-      {
-        "active": false,
-        "title": "Registry health exam",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/registry-health-exam",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Related diseases",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/related-diseases",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Non-Hodgkin's lymphoma",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/non-hodgkins-lymphoma",
-        "items": []
-      },
-      {
-        "active": false,
         "title": "C-123 aircraft",
         "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/c-123-aircraft",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Thailand military bases",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/thailand-military-bases",
-        "items": []
-      },
-      {
-        "active": true,
-        "title": "Vietnam waters",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/vietnam-waters",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Service in Vietnam or Korea",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/service-in-vietnam-korea",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Service outside Vietnam or Korea",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/service-outside-vietnam-korea",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Navy or Coast Guard ships in Vietnam",
-        "href": "/disability/eligibility/hazardous-materials-exposure/agent-orange/navy-coast-guard-ships-vietnam",
         "items": []
       },
       {
@@ -7531,7 +7460,7 @@
     "menus": []
   },
   {
-    "fileName": "education/after-you-apply/index.html",
+    "fileName": "education/about-gi-bill-benefits/index.html",
     "sidebarTitle": "Education and training",
     "backLink": null,
     "items": [],
@@ -7541,10 +7470,27 @@
         "open": true,
         "items": [
           {
-            "active": false,
+            "active": true,
             "title": "GI Bill",
             "href": "/education/about-gi-bill-benefits",
-            "items": []
+            "items": [
+              {
+                "title": "Post-9/11 GI Bill",
+                "href": "/education/about-gi-bill-benefits/post-9-11"
+              },
+              {
+                "title": "Montgomery GI Bill Active Duty",
+                "href": "/education/about-gi-bill-benefits/montgomery-active-duty"
+              },
+              {
+                "title": "Montgomery GI Bill Selected Reserve",
+                "href": "/education/about-gi-bill-benefits/montgomery-selected-reserve"
+              },
+              {
+                "title": "How to use your benefits",
+                "href": "/education/about-gi-bill-benefits/how-to-use-benefits"
+              }
+            ]
           },
           {
             "active": false,
@@ -7559,7 +7505,7 @@
             "items": []
           },
           {
-            "active": true,
+            "active": false,
             "title": "After you apply",
             "href": "/education/after-you-apply",
             "items": []
@@ -7713,7 +7659,7 @@
     ]
   },
   {
-    "fileName": "education/about-gi-bill-benefits/index.html",
+    "fileName": "education/after-you-apply/index.html",
     "sidebarTitle": "Education and training",
     "backLink": null,
     "items": [],
@@ -7723,27 +7669,10 @@
         "open": true,
         "items": [
           {
-            "active": true,
+            "active": false,
             "title": "GI Bill",
             "href": "/education/about-gi-bill-benefits",
-            "items": [
-              {
-                "title": "Post-9/11 GI Bill",
-                "href": "/education/about-gi-bill-benefits/post-9-11"
-              },
-              {
-                "title": "Montgomery GI Bill Active Duty",
-                "href": "/education/about-gi-bill-benefits/montgomery-active-duty"
-              },
-              {
-                "title": "Montgomery GI Bill Selected Reserve",
-                "href": "/education/about-gi-bill-benefits/montgomery-selected-reserve"
-              },
-              {
-                "title": "How to use your benefits",
-                "href": "/education/about-gi-bill-benefits/how-to-use-benefits"
-              }
-            ]
+            "items": []
           },
           {
             "active": false,
@@ -7758,7 +7687,7 @@
             "items": []
           },
           {
-            "active": false,
+            "active": true,
             "title": "After you apply",
             "href": "/education/after-you-apply",
             "items": []
@@ -9208,14 +9137,14 @@
     ]
   },
   {
-    "fileName": "education/transfer-post-9-11-gi-bill-benefits/index.html",
+    "fileName": "education/survivor-dependent-benefits/index.html",
     "sidebarTitle": "Education and training",
     "backLink": null,
     "items": [],
     "menus": [
       {
         "title": "Get benefits",
-        "open": false,
+        "open": true,
         "items": [
           {
             "active": false,
@@ -9254,10 +9183,19 @@
             "items": []
           },
           {
-            "active": false,
+            "active": true,
             "title": "Survivor and dependent benefits",
             "href": "/education/survivor-dependent-benefits",
-            "items": []
+            "items": [
+              {
+                "title": "Fry Scholarship",
+                "href": "/education/survivor-dependent-benefits/fry-scholarship"
+              },
+              {
+                "title": "Dependents Education Assistance (DEA)",
+                "href": "/education/survivor-dependent-benefits/dependents-education-assistance"
+              }
+            ]
           },
           {
             "active": false,
@@ -9269,7 +9207,7 @@
       },
       {
         "title": "Manage benefits",
-        "open": true,
+        "open": false,
         "items": [
           {
             "active": false,
@@ -9284,7 +9222,7 @@
             "items": []
           },
           {
-            "active": true,
+            "active": false,
             "title": "Transfer Post-9/11 GI Bill benefits",
             "href": "/education/transfer-post-9-11-gi-bill-benefits",
             "items": []
@@ -9390,14 +9328,14 @@
     ]
   },
   {
-    "fileName": "education/survivor-dependent-benefits/index.html",
+    "fileName": "education/transfer-post-9-11-gi-bill-benefits/index.html",
     "sidebarTitle": "Education and training",
     "backLink": null,
     "items": [],
     "menus": [
       {
         "title": "Get benefits",
-        "open": true,
+        "open": false,
         "items": [
           {
             "active": false,
@@ -9436,19 +9374,10 @@
             "items": []
           },
           {
-            "active": true,
+            "active": false,
             "title": "Survivor and dependent benefits",
             "href": "/education/survivor-dependent-benefits",
-            "items": [
-              {
-                "title": "Fry Scholarship",
-                "href": "/education/survivor-dependent-benefits/fry-scholarship"
-              },
-              {
-                "title": "Dependents Education Assistance (DEA)",
-                "href": "/education/survivor-dependent-benefits/dependents-education-assistance"
-              }
-            ]
+            "items": []
           },
           {
             "active": false,
@@ -9460,7 +9389,7 @@
       },
       {
         "title": "Manage benefits",
-        "open": false,
+        "open": true,
         "items": [
           {
             "active": false,
@@ -9475,7 +9404,7 @@
             "items": []
           },
           {
-            "active": false,
+            "active": true,
             "title": "Transfer Post-9/11 GI Bill benefits",
             "href": "/education/transfer-post-9-11-gi-bill-benefits",
             "items": []
@@ -10141,6 +10070,23 @@
         "active": true,
         "title": "$600 Buy-Up program",
         "href": "/education/about-gi-bill-benefits/montgomery-active-duty/buy-up",
+        "items": []
+      }
+    ],
+    "menus": []
+  },
+  {
+    "fileName": "education/about-gi-bill-benefits/post-9-11/yellow-ribbon-program/index.html",
+    "sidebarTitle": "Education and training",
+    "backLink": {
+      "title": "Post-9/11 GI Bill",
+      "href": "/education/about-gi-bill-benefits/post-9-11"
+    },
+    "items": [
+      {
+        "active": true,
+        "title": "Yellow Ribbon Program",
+        "href": "/education/about-gi-bill-benefits/post-9-11/yellow-ribbon-program",
         "items": []
       }
     ],
@@ -10854,7 +10800,7 @@
     "menus": []
   },
   {
-    "fileName": "education/about-gi-bill-benefits/how-to-use-benefits/online-distance-learning/index.html",
+    "fileName": "education/about-gi-bill-benefits/how-to-use-benefits/study-at-foreign-schools/index.html",
     "sidebarTitle": "Education and training",
     "backLink": {
       "title": "How to use your benefits",
@@ -10868,13 +10814,13 @@
         "items": []
       },
       {
-        "active": false,
+        "active": true,
         "title": "Foreign programs",
         "href": "/education/about-gi-bill-benefits/how-to-use-benefits/study-at-foreign-schools",
         "items": []
       },
       {
-        "active": true,
+        "active": false,
         "title": "Independent and distance learning",
         "href": "/education/about-gi-bill-benefits/how-to-use-benefits/online-distance-learning",
         "items": []
@@ -10955,7 +10901,7 @@
     "menus": []
   },
   {
-    "fileName": "education/about-gi-bill-benefits/how-to-use-benefits/study-at-foreign-schools/index.html",
+    "fileName": "education/about-gi-bill-benefits/how-to-use-benefits/online-distance-learning/index.html",
     "sidebarTitle": "Education and training",
     "backLink": {
       "title": "How to use your benefits",
@@ -10969,13 +10915,13 @@
         "items": []
       },
       {
-        "active": true,
+        "active": false,
         "title": "Foreign programs",
         "href": "/education/about-gi-bill-benefits/how-to-use-benefits/study-at-foreign-schools",
         "items": []
       },
       {
-        "active": false,
+        "active": true,
         "title": "Independent and distance learning",
         "href": "/education/about-gi-bill-benefits/how-to-use-benefits/online-distance-learning",
         "items": []
@@ -11460,107 +11406,6 @@
     "menus": []
   },
   {
-    "fileName": "education/about-gi-bill-benefits/how-to-use-benefits/vettec-high-tech-program/index.html",
-    "sidebarTitle": "Education and training",
-    "backLink": {
-      "title": "How to use your benefits",
-      "href": "/education/about-gi-bill-benefits/how-to-use-benefits"
-    },
-    "items": [
-      {
-        "active": false,
-        "title": "Undergraduate and graduate degrees",
-        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/undergraduate-graduate-programs",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Foreign programs",
-        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/study-at-foreign-schools",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Independent and distance learning",
-        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/online-distance-learning",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Accelerated payments",
-        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/accelerated-payments",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Correspondence training",
-        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/correspondence-training",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Tutorial assistance",
-        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/tutor-assistance",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Test fees",
-        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/test-fees",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Non-college degree programs",
-        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/non-college-degree-programs",
-        "items": []
-      },
-      {
-        "active": true,
-        "title": "VET TEC program",
-        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/vettec-high-tech-program",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Flight training",
-        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/flight-training",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Entrepreneurship training",
-        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/entrepreneurship-training",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Work study",
-        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/work-study",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Co-op training",
-        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/co-op-training",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "On-the-job training",
-        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/on-the-job-training-apprenticeships",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Tuition Assistance Top-Up",
-        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/tuition-assistance-top-up",
-        "items": []
-      }
-    ],
-    "menus": []
-  },
-  {
     "fileName": "education/about-gi-bill-benefits/how-to-use-benefits/work-study/index.html",
     "sidebarTitle": "Education and training",
     "backLink": {
@@ -11662,17 +11507,101 @@
     "menus": []
   },
   {
-    "fileName": "education/about-gi-bill-benefits/post-9-11/yellow-ribbon-program/index.html",
+    "fileName": "education/about-gi-bill-benefits/how-to-use-benefits/vettec-high-tech-program/index.html",
     "sidebarTitle": "Education and training",
     "backLink": {
-      "title": "Post-9/11 GI Bill",
-      "href": "/education/about-gi-bill-benefits/post-9-11"
+      "title": "How to use your benefits",
+      "href": "/education/about-gi-bill-benefits/how-to-use-benefits"
     },
     "items": [
       {
+        "active": false,
+        "title": "Undergraduate and graduate degrees",
+        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/undergraduate-graduate-programs",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Foreign programs",
+        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/study-at-foreign-schools",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Independent and distance learning",
+        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/online-distance-learning",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Accelerated payments",
+        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/accelerated-payments",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Correspondence training",
+        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/correspondence-training",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Tutorial assistance",
+        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/tutor-assistance",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Test fees",
+        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/test-fees",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Non-college degree programs",
+        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/non-college-degree-programs",
+        "items": []
+      },
+      {
         "active": true,
-        "title": "Yellow Ribbon Program",
-        "href": "/education/about-gi-bill-benefits/post-9-11/yellow-ribbon-program",
+        "title": "VET TEC program",
+        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/vettec-high-tech-program",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Flight training",
+        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/flight-training",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Entrepreneurship training",
+        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/entrepreneurship-training",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Work study",
+        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/work-study",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Co-op training",
+        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/co-op-training",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "On-the-job training",
+        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/on-the-job-training-apprenticeships",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Tuition Assistance Top-Up",
+        "href": "/education/about-gi-bill-benefits/how-to-use-benefits/tuition-assistance-top-up",
         "items": []
       }
     ],
@@ -11690,7 +11619,7 @@
         "items": [
           {
             "active": false,
-            "title": "VA-backed Home Loans",
+            "title": "VA-backed home loans",
             "href": "/housing-assistance/home-loans",
             "items": []
           }
@@ -11731,7 +11660,7 @@
         "items": [
           {
             "active": true,
-            "title": "VA-backed Home Loans",
+            "title": "VA-backed home loans",
             "href": "/housing-assistance/home-loans",
             "items": [
               {
@@ -11827,7 +11756,7 @@
     "fileName": "housing-assistance/home-loans/eligibility/index.html",
     "sidebarTitle": "Housing assistance",
     "backLink": {
-      "title": "VA-backed Home Loans",
+      "title": "VA-backed home loans",
       "href": "/housing-assistance/home-loans"
     },
     "items": [
@@ -11910,7 +11839,7 @@
     "fileName": "housing-assistance/home-loans/how-to-apply/index.html",
     "sidebarTitle": "Housing assistance",
     "backLink": {
-      "title": "VA-backed Home Loans",
+      "title": "VA-backed home loans",
       "href": "/housing-assistance/home-loans"
     },
     "items": [
@@ -11993,7 +11922,7 @@
     "fileName": "housing-assistance/home-loans/loan-types/index.html",
     "sidebarTitle": "Housing assistance",
     "backLink": {
-      "title": "VA-backed Home Loans",
+      "title": "VA-backed home loans",
       "href": "/housing-assistance/home-loans"
     },
     "items": [
@@ -12093,7 +12022,7 @@
     "fileName": "housing-assistance/home-loans/surviving-spouse/index.html",
     "sidebarTitle": "Housing assistance",
     "backLink": {
-      "title": "VA-backed Home Loans",
+      "title": "VA-backed home loans",
       "href": "/housing-assistance/home-loans"
     },
     "items": [
@@ -12176,7 +12105,7 @@
     "fileName": "housing-assistance/home-loans/trouble-making-payments/index.html",
     "sidebarTitle": "Housing assistance",
     "backLink": {
-      "title": "VA-backed Home Loans",
+      "title": "VA-backed home loans",
       "href": "/housing-assistance/home-loans"
     },
     "items": [
@@ -12326,6 +12255,41 @@
     "menus": []
   },
   {
+    "fileName": "housing-assistance/home-loans/loan-types/purchase-loan/index.html",
+    "sidebarTitle": "Housing assistance",
+    "backLink": {
+      "title": "Loan types",
+      "href": "/housing-assistance/home-loans/loan-types"
+    },
+    "items": [
+      {
+        "active": true,
+        "title": "Purchase loan",
+        "href": "/housing-assistance/home-loans/loan-types/purchase-loan",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Cash-out refinance loan",
+        "href": "/housing-assistance/home-loans/loan-types/cash-out-loan",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Native American direct loan",
+        "href": "/housing-assistance/home-loans/loan-types/native-american-direct-loan",
+        "items": []
+      },
+      {
+        "active": false,
+        "title": "Interest rate reduction refinance loan",
+        "href": "/housing-assistance/home-loans/loan-types/interest-rate-reduction-loan",
+        "items": []
+      }
+    ],
+    "menus": []
+  },
+  {
     "fileName": "housing-assistance/home-loans/loan-types/native-american-direct-loan/index.html",
     "sidebarTitle": "Housing assistance",
     "backLink": {
@@ -12355,41 +12319,6 @@
             "href": "https://www.benefits.va.gov/homeloans/nadl_mou.asp"
           }
         ]
-      },
-      {
-        "active": false,
-        "title": "Interest rate reduction refinance loan",
-        "href": "/housing-assistance/home-loans/loan-types/interest-rate-reduction-loan",
-        "items": []
-      }
-    ],
-    "menus": []
-  },
-  {
-    "fileName": "housing-assistance/home-loans/loan-types/purchase-loan/index.html",
-    "sidebarTitle": "Housing assistance",
-    "backLink": {
-      "title": "Loan types",
-      "href": "/housing-assistance/home-loans/loan-types"
-    },
-    "items": [
-      {
-        "active": true,
-        "title": "Purchase loan",
-        "href": "/housing-assistance/home-loans/loan-types/purchase-loan",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Cash-out refinance loan",
-        "href": "/housing-assistance/home-loans/loan-types/cash-out-loan",
-        "items": []
-      },
-      {
-        "active": false,
-        "title": "Native American direct loan",
-        "href": "/housing-assistance/home-loans/loan-types/native-american-direct-loan",
-        "items": []
       },
       {
         "active": false,
