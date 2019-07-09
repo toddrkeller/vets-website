@@ -14,6 +14,7 @@ import { scrollToFirstError } from 'platform/forms-system/src/js/utilities/ui';
 import { setArrayRecordTouched } from 'platform/forms-system/src/js/helpers';
 import { errorSchemaIsValid } from 'platform/forms-system/src/js/validation';
 import { getClassification } from '../../all-claims/form-components/autoClassification';
+import { classificationHelp } from '../../all-claims/content/addDisabilities';
 
 const Element = Scroll.Element;
 const scroller = Scroll.scroller;
@@ -300,6 +301,11 @@ export default class ArrayField extends React.Component {
 
     const isOnlyItem = items.length < 2;
 
+    const showClassificationHelp =
+      Object.keys(this.props.formContext.touched).length > 0 &&
+      items.length > 0 &&
+      (items[0] || {}).condition;
+
     return (
       <div className={containerClassNames}>
         {hasTitleOrDescription && (
@@ -413,6 +419,9 @@ export default class ArrayField extends React.Component {
               </div>
             );
           })}
+          <div className="classification-help-text">
+            {showClassificationHelp && classificationHelp}
+          </div>
           <button
             type="button"
             className={classNames(

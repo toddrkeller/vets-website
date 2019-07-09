@@ -12,6 +12,21 @@ export const autoSuggestTitle = (
   </p>
 );
 
+export const classificationHelp = (
+  <div>
+    <AdditionalInfo triggerText="What if the disability assignment looks wrong?">
+      <p>
+        If the disability assignment looks wrong, you can choose to use your
+        disability description instead of the assigned disability.
+      </p>
+      <p>
+        We'll only send your disability description with your claim if you
+        remove the assigned disability.
+      </p>
+    </AdditionalInfo>
+  </div>
+);
+
 export const descriptionInfo = (
   <div>
     <AdditionalInfo triggerText="What if I don’t know the name of my condition?">
