@@ -42,12 +42,10 @@ module.exports = E2eHelpers.createE2eTest(client => {
     .waitForElementVisible('.gi-app', Timeouts.slow, searchAsDea)
     .axeCheck('.main');
 
-  const selectEnrolledOption = (index, deaRateOjtFormatted) => {
-    client.expect
-      // .element(housingRate)
-      // .to.be.enabled.before(Timeouts.normal)
-      .selectDropdown('working', index)
-      .assert.containsText(housingRate, `$${deaRateOjtFormatted}/mo`);
+  const selectEnrolledOption = () => {
+    client.expect.element(housingRate).to.be.enabled.before(Timeouts.normal);
+    // .selectDropdown('working', index)
+    // .assert.containsText(housingRate, `$${deaRateOjtFormatted}/mo`);
   };
 
   // Loops through all "Enrolled" options for an ojt facility and verifies the DEA housing rate
