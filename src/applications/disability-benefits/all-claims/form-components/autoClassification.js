@@ -88,7 +88,7 @@ export const schema = {
 
 export const getClassification = claimText =>
   apiRequest(
-    'http://198.199.119.238:8000/api/v1.0/classification',
+    'https://dev.hyperlog.co/api/v1.0/classification',
     // eslint-disable-next-line camelcase
     {
       method: 'POST',
