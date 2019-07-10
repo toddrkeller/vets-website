@@ -69,6 +69,11 @@ export default class ArrayField extends React.Component {
           ),
         ),
       );
+      // if empty item is added per above; set proper state for first item
+      // eslint-disable-next-line react/no-did-mount-set-state
+      this.setState({
+        editing: [true],
+      });
     }
   }
 
