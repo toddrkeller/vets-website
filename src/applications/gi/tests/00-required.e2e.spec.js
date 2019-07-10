@@ -6,10 +6,10 @@ const firstResult =
   '#react-root > div > div > div > div.search-page > div:nth-child(2) > div.search-results.small-12.usa-width-three-fourths.medium-9.columns.opened > div:nth-child(2) > div:nth-child(1) > div > div > div:nth-child(1) > div.small-12.usa-width-seven-twelfths.medium-7.columns > h2 > a';
 const firstResultRate =
   '#react-root > div > div > div > div.search-page > div:nth-child(2) > div.search-results.small-12.usa-width-three-fourths.medium-9.columns.opened > div:nth-child(2) > div:nth-child(1) > div > div > div:nth-child(1) > div.small-12.usa-width-five-twelfths.medium-5.columns.estimated-benefits > div:nth-child(3) > div > h4 > div';
-// const secondResult =
-//   '#react-root > div > div > div > div.search-page > div:nth-child(2) > div.search-results.small-12.usa-width-three-fourths.medium-9.columns.opened > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(1) > div.small-12.usa-width-seven-twelfths.medium-7.columns > h2 > a';
-// const secondResultRate =
-//   '#react-root > div > div > div > div.search-page > div:nth-child(2) > div.search-results.small-12.usa-width-three-fourths.medium-9.columns.opened > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(1) > div.small-12.usa-width-five-twelfths.medium-5.columns.estimated-benefits > div:nth-child(3) > div > h4 > div';
+const secondResult =
+  '#react-root > div > div > div > div.search-page > div:nth-child(2) > div.search-results.small-12.usa-width-three-fourths.medium-9.columns.opened > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(1) > div.small-12.usa-width-seven-twelfths.medium-7.columns > h2 > a';
+const secondResultRate =
+  '#react-root > div > div > div > div.search-page > div:nth-child(2) > div.search-results.small-12.usa-width-three-fourths.medium-9.columns.opened > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(1) > div.small-12.usa-width-five-twelfths.medium-5.columns.estimated-benefits > div:nth-child(3) > div > h4 > div';
 // const thirdResult =
 //   '#react-root > div > div > div > div.search-page > div:nth-child(2) > div.search-results.small-12.usa-width-three-fourths.medium-9.columns.opened > div:nth-child(2) > div:nth-child(3) > div > div > div:nth-child(1) > div.small-12.usa-width-seven-twelfths.medium-7.columns > h2 > a';
 // const onlineOnlyRadio = '#radio-buttons-2-0';
@@ -64,15 +64,20 @@ module.exports = E2eHelpers.createE2eTest(client => {
   //   selectEnrolledOption(client, i, deaRateOjtFormatted);
   // }
 
-  // client.openUrl(`${E2eHelpers.baseUrl}/gi-bill-comparison-tool/`);
-  //
-  // GiHelpers.searchAsDEA(
-  //   client,
-  //   secondResult,
-  //   secondResultRate,
-  //   GiHelpers.formatCurrency(GiHelpers.calculatorConstantsList.DEARATEFULLTIME),
-  // );
-  //
+  startComparisonTool();
+
+  const searchAsDea2 = GiHelpers.searchAsDEA(
+    client,
+    secondResult,
+    secondResultRate,
+    GiHelpers.formatCurrency(GiHelpers.calculatorConstantsList.DEARATEFULLTIME),
+  );
+
+  client
+    .waitForElementVisible('body', Timeouts.normal)
+    .waitForElementVisible('.gi-app', Timeouts.slow, searchAsDea2)
+    .axeCheck('.main');
+
   // GiHelpers.verifyDEA(
   //   client,
   //   'full',
