@@ -25,7 +25,11 @@ const housingRate = '#gbct_housing_allowance > div.small-6.columns.value > h5';
 module.exports = E2eHelpers.createE2eTest(client => {
   GiHelpers.initApplicationMock();
 
-  client.openUrl(`${E2eHelpers.baseUrl}/gi-bill-comparison-tool/`);
+  const startComparisonTool = () => {
+    client.openUrl(`${E2eHelpers.baseUrl}/gi-bill-comparison-tool/`);
+  };
+
+  startComparisonTool();
 
   E2eHelpers.overrideSmoothScrolling(client);
   client.timeoutsAsyncScript(2000);
@@ -50,6 +54,8 @@ module.exports = E2eHelpers.createE2eTest(client => {
     // .selectDropdown('working', index)
     // .assert.containsText(housingRate, `$${deaRateOjtFormatted}/mo`);
   };
+
+  startComparisonTool();
 
   // Loops through all "Enrolled" options for an ojt facility and verifies the DEA housing rate
   for (let i = 2; i <= deaEnrolledMax; i += 2) {
