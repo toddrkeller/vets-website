@@ -84,8 +84,11 @@ function searchAsDEA(client, expectedResult, resultRate, expectedRate) {
 function verifyDEA(client, enrolledOption, expectedDEA) {
   client
     .selectDropdown('enrolledOld', enrolledOption)
-    .waitForElementVisible(housingRate, Timeouts.normal)
-    .assert.containsText(housingRate, expectedDEA);
+    .waitForElementVisible(
+      housingRate,
+      Timeouts.normal,
+      validateRates(client, housingRate, expectedDEA),
+    );
 }
 
 const schools = {
