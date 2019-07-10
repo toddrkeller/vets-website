@@ -78,13 +78,16 @@ module.exports = E2eHelpers.createE2eTest(client => {
     .waitForElementVisible('.gi-app', Timeouts.slow, searchAsDea2)
     .axeCheck('.main');
 
-  // GiHelpers.verifyDEA(
-  //   client,
-  //   'full',
-  //   `${GiHelpers.formatCurrency(
-  //     GiHelpers.calculatorConstantsList.DEARATEFULLTIME,
-  //   )}/mo`,
-  // );
+  const verifyDeaRateFullTime = GiHelpers.verifyDEA(
+    client,
+    'full',
+    `${GiHelpers.formatCurrency(
+      GiHelpers.calculatorConstantsList.DEARATEFULLTIME,
+    )}/mo`,
+  );
+
+  verifyDeaRateFullTime();
+
   // GiHelpers.verifyDEA(
   //   client,
   //   'three quarters',
