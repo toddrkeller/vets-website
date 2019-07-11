@@ -103,7 +103,8 @@ export const getClassification = claimText =>
     response => {
       // eslint-disable-next-line no-console
       console.log('got response ', response.prediction);
-      return response.prediction.classification;
+      // SHAPE: classification: "administrative issue", code: 8925, probability: 19}
+      return response.prediction;
     },
     () => {
       // eslint-disable-next-line no-console

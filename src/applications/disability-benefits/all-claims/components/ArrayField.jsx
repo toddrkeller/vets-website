@@ -148,6 +148,24 @@ export default class ArrayField extends React.Component {
     );
   }
 
+  fetchClassification(indexToUpdate) {
+    getClassification(this.props.formData[indexToUpdate].condition).then(
+      resp => {
+        // add classification to formData
+        // only add classification if prediction is 70% or higher
+        if (resp && resp.probability >= 70) {
+          this.props.onChange(
+            _.set(
+              [indexToUpdate, 'classification'],
+              resp.classification,
+              this.props.formData,
+            ),
+          );
+        }
+      },
+    );
+  }
+
   /*
    * Clicking Update on an item that’s not last and is in edit mode
    */
@@ -162,12 +180,7 @@ export default class ArrayField extends React.Component {
         (this.state.oldData[index] || {}).condition !==
           this.props.formData[index].condition
       ) {
-        getClassification(this.props.formData[index].condition).then(value => {
-          // add classification to formData
-          this.props.onChange(
-            _.set([index, 'classification'], value, this.props.formData),
-          );
-        });
+        this.fetchClassification(index);
       }
     } else {
       // Set all the fields for this item as touched, so we show errors
@@ -198,14 +211,7 @@ export default class ArrayField extends React.Component {
         (this.state.oldData[lastIndex] || {}).condition !==
           this.props.formData[lastIndex].condition
       ) {
-        getClassification(this.props.formData[lastIndex].condition).then(
-          value => {
-            // add classification to formData
-            this.props.onChange(
-              _.set([lastIndex, 'classification'], value, this.props.formData),
-            );
-          },
-        );
+        this.fetchClassification(lastIndex);
       }
     } else {
       const touched = setArrayRecordTouched(this.props.idSchema.$id, lastIndex);
