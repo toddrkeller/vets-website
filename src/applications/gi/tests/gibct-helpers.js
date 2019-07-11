@@ -59,9 +59,7 @@ const searchClick = (
       validateRates(client, resultRate, expectedRate, expectedResult),
     )
     .expect.element(expectedResult)
-    .to.be.enabled.before(Timeouts.normal)
-    .click(expectedResult)
-    .waitForElementVisible('.profile-page', Timeouts.normal);
+    .to.be.enabled.before(Timeouts.normal);
 };
 
 // Selects DEA as benefit type, searches for schools in washington dc, checks the housing rate of the expected result, and clicks the expected result
@@ -79,7 +77,9 @@ function searchAsDEA(client, expectedResult, resultRate, expectedRate) {
         expectedRate,
         'washington dc',
       ),
-    );
+    )
+    .click(expectedResult)
+    .waitForElementVisible('.profile-page', Timeouts.normal);
 }
 
 // Verify the expected DEA housing rate for the selected "Enrolled" option
