@@ -82,11 +82,14 @@ function searchAsDEA(client, expectedResult, resultRate, expectedRate) {
 
 // Verify the expected DEA housing rate for the selected "Enrolled" option
 function verifyDEA(client, enrolledOption) {
-  client.selectDropdown('enrolledOld', enrolledOption).waitForElementVisible(
-    housingRate,
-    Timeouts.normal,
-    // validateRates(client, housingRate, expectedDEA),
-  );
+  client
+    .waitForElementVisible('.search-page', Timeouts.normal)
+    .selectDropdown('enrolledOld', enrolledOption)
+    .waitForElementVisible(
+      housingRate,
+      Timeouts.normal,
+      // validateRates(client, housingRate, expectedDEA),
+    );
 }
 
 const schools = {
