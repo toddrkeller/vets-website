@@ -83,7 +83,14 @@ module.exports = E2eHelpers.createE2eTest(client => {
 
   loadMainPage(searchAsDea2);
 
-  GiHelpers.verifyDEA(client, 'full', secondResult);
+  GiHelpers.verifyDEA(
+    client,
+    'full',
+    secondResult,
+    `${GiHelpers.formatCurrency(
+      GiHelpers.calculatorConstantsList.DEARATEFULLTIME,
+    )}/mo`,
+  );
 
   // client
   //   .waitForElementVisible('body', Timeouts.normal)
