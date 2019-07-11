@@ -41,7 +41,7 @@ function verifyCh33(client, vaOrDodRadio, expectedRate) {
 const selectProfilePage = (client, expectedResult) => {
   client
     .click(expectedResult)
-    .waitForElementVisible('.profile-page', Timeouts.normal);
+    .waitForElementVisible('.profile-page', Timeouts.slow);
 };
 
 const validateRates = (client, resultRate, expectedRate) => {
