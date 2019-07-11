@@ -29,6 +29,13 @@ module.exports = E2eHelpers.createE2eTest(client => {
     client.openUrl(`${E2eHelpers.baseUrl}/gi-bill-comparison-tool/`);
   };
 
+  const loadMainPage = callback => {
+    client
+      .waitForElementVisible('body', Timeouts.normal)
+      .waitForElementVisible('.gi-app', Timeouts.slow, callback)
+      .axeCheck('.main');
+  };
+
   startComparisonTool();
 
   E2eHelpers.overrideSmoothScrolling(client);
@@ -41,10 +48,11 @@ module.exports = E2eHelpers.createE2eTest(client => {
     GiHelpers.formatCurrency(GiHelpers.calculatorConstantsList.DEARATEOJT),
   );
 
-  client
-    .waitForElementVisible('body', Timeouts.normal)
-    .waitForElementVisible('.gi-app', Timeouts.slow, searchAsDea)
-    .axeCheck('.main');
+  loadMainPage(searchAsDea);
+  // client
+  //   .waitForElementVisible('body', Timeouts.normal)
+  //   .waitForElementVisible('.gi-app', Timeouts.slow, searchAsDea)
+  //   .axeCheck('.main');
 
   // const selectEnrolledOption = (index, deaRateOjtFormatted) => {
   //   client
@@ -73,20 +81,21 @@ module.exports = E2eHelpers.createE2eTest(client => {
     GiHelpers.formatCurrency(GiHelpers.calculatorConstantsList.DEARATEFULLTIME),
   );
 
-  client
-    .waitForElementVisible('body', Timeouts.normal)
-    .waitForElementVisible('.gi-app', Timeouts.slow, searchAsDea2)
-    .axeCheck('.main');
+  loadMainPage(searchAsDea2);
+  // client
+  //   .waitForElementVisible('body', Timeouts.normal)
+  //   .waitForElementVisible('.gi-app', Timeouts.slow, searchAsDea2)
+  //   .axeCheck('.main');
 
-  const verifyDeaRateFullTime = GiHelpers.verifyDEA(
-    client,
-    'full',
-    `${GiHelpers.formatCurrency(
-      GiHelpers.calculatorConstantsList.DEARATEFULLTIME,
-    )}/mo`,
-  );
-
-  verifyDeaRateFullTime();
+  // const verifyDeaRateFullTime = GiHelpers.verifyDEA(
+  //   client,
+  //   'full',
+  //   `${GiHelpers.formatCurrency(
+  //     GiHelpers.calculatorConstantsList.DEARATEFULLTIME,
+  //   )}/mo`,
+  // );
+  //
+  // verifyDeaRateFullTime();
 
   // GiHelpers.verifyDEA(
   //   client,
