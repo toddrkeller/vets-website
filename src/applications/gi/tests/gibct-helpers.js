@@ -38,6 +38,12 @@ function verifyCh33(client, vaOrDodRadio, expectedRate) {
     .assert.containsText(housingRate, expectedRate);
 }
 
+const selectProfilePage = (client, expectedResult) => {
+  client
+    .click(expectedResult)
+    .waitForElementVisible('.profile-page', Timeouts.normal);
+};
+
 const validateRates = (client, resultRate, expectedRate) => {
   client.assert.containsText(resultRate, expectedRate);
 };
@@ -77,21 +83,17 @@ function searchAsDEA(client, expectedResult, resultRate, expectedRate) {
         expectedRate,
         'washington dc',
       ),
-    )
-    .click(expectedResult)
-    .waitForElementVisible('.profile-page', Timeouts.normal);
+    );
 }
 
 // Verify the expected DEA housing rate for the selected "Enrolled" option
-function verifyDEA(client, enrolledOption) {
-  client
-    .waitForElementVisible('.search-page', Timeouts.normal)
-    .selectDropdown('enrolledOld', enrolledOption)
-    .waitForElementVisible(
-      housingRate,
-      Timeouts.normal,
-      // validateRates(client, housingRate, expectedDEA),
-    );
+function verifyDEA(client, enrolledOption, expectedResult) {
+  selectProfilePage(client, expectedResult);
+  client.selectDropdown('enrolledOld', enrolledOption).waitForElementVisible(
+    housingRate,
+    Timeouts.normal,
+    // validateRates(client, housingRate, expectedDEA),
+  );
 }
 
 const schools = {

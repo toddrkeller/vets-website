@@ -82,6 +82,9 @@ module.exports = E2eHelpers.createE2eTest(client => {
   );
 
   loadMainPage(searchAsDea2);
+
+  GiHelpers.verifyDEA(client, 'full', secondResult);
+
   // client
   //   .waitForElementVisible('body', Timeouts.normal)
   //   .waitForElementVisible('.gi-app', Timeouts.slow, searchAsDea2)
