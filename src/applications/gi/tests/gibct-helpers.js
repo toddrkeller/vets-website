@@ -38,11 +38,8 @@ function verifyCh33(client, vaOrDodRadio, expectedRate) {
     .assert.containsText(housingRate, expectedRate);
 }
 
-const validateRates = (client, resultRate, expectedRate, expectedResult) => {
-  client.assert
-    .containsText(resultRate, expectedRate)
-    .click(expectedResult)
-    .waitForElementVisible('.profile-page', Timeouts.normal);
+const validateRates = (client, resultRate, expectedRate) => {
+  client.assert.containsText(resultRate, expectedRate);
 };
 
 const searchClick = (
@@ -62,7 +59,9 @@ const searchClick = (
       validateRates(client, resultRate, expectedRate, expectedResult),
     )
     .expect.element(expectedResult)
-    .to.be.enabled.before(Timeouts.normal);
+    .to.be.enabled.before(Timeouts.normal)
+    .click(expectedResult)
+    .waitForElementVisible('.profile-page', Timeouts.normal);
 };
 
 // Selects DEA as benefit type, searches for schools in washington dc, checks the housing rate of the expected result, and clicks the expected result
