@@ -83,7 +83,7 @@ module.exports = E2eHelpers.createE2eTest(client => {
 
   loadMainPage(searchAsDea2);
 
-  GiHelpers.selectProfilePage(client, secondResult);
+  GiHelpers.findProfileLink(client, secondResult);
 
   GiHelpers.verifyDEA(
     client,

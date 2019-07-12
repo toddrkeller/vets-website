@@ -40,9 +40,16 @@ function verifyCh33(client, vaOrDodRadio, expectedRate) {
 
 const selectProfilePage = (client, expectedResult) => {
   client
-    .waitForElementVisible(expectedResult, Timeouts.normal)
     .click(expectedResult)
     .waitForElementVisible('.profile-page', Timeouts.slow);
+};
+
+const findProfileLink = (client, expectedResult) => {
+  client.waitForElementVisible(
+    expectedResult,
+    Timeouts.normal,
+    selectProfilePage(client, expectedResult),
+  );
 };
 
 const validateRates = (client, resultRate, expectedRate) => {
@@ -1006,4 +1013,5 @@ module.exports = {
   searchCh33,
   verifyCh33,
   selectProfilePage,
+  selectFindProfileLink: findProfileLink,
 };
