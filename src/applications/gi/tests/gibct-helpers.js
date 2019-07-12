@@ -42,7 +42,7 @@ const selectProfilePage = (client, expectedResult) => {
   client
     .waitForElementVisible(expectedResult, Timeouts.normal)
     .click(expectedResult)
-    .waitForElementVisible('.profile-page', Timeouts.slow);
+    .waitForElementVisible('.profile-page', Timeouts.verySlow);
 };
 
 const validateRates = (client, resultRate, expectedRate) => {
