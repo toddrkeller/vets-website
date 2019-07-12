@@ -94,13 +94,13 @@ module.exports = E2eHelpers.createE2eTest(client => {
     )}/mo`,
   );
 
-  GiHelpers.verifyDEA(
-    client,
-    'three quarters',
-    `${GiHelpers.formatCurrency(
-      GiHelpers.calculatorConstantsList.DEARATETHREEQUARTERS,
-    )}/mo`,
-  );
+  // GiHelpers.verifyDEA(
+  //   client,
+  //   'three quarters',
+  //   `${GiHelpers.formatCurrency(
+  //     GiHelpers.calculatorConstantsList.DEARATETHREEQUARTERS,
+  //   )}/mo`,
+  // );
 
   // GiHelpers.verifyDEA(
   //   client,
