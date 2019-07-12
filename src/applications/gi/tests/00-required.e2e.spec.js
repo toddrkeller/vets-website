@@ -102,21 +102,21 @@ module.exports = E2eHelpers.createE2eTest(client => {
     )}/mo`,
   );
 
-  GiHelpers.verifyDEA(
-    client,
-    'half',
-    `${GiHelpers.formatCurrency(
-      GiHelpers.calculatorConstantsList.DEARATEONEHALF,
-    )}/mo`,
-  );
-
-  GiHelpers.verifyDEA(
-    client,
-    'quarter',
-    `${GiHelpers.formatCurrency(
-      GiHelpers.calculatorConstantsList.DEARATEUPTOONEQUARTER,
-    )}/mo`,
-  );
+  // GiHelpers.verifyDEA(
+  //   client,
+  //   'half',
+  //   `${GiHelpers.formatCurrency(
+  //     GiHelpers.calculatorConstantsList.DEARATEONEHALF,
+  //   )}/mo`,
+  // );
+  //
+  // GiHelpers.verifyDEA(
+  //   client,
+  //   'quarter',
+  //   `${GiHelpers.formatCurrency(
+  //     GiHelpers.calculatorConstantsList.DEARATEUPTOONEQUARTER,
+  //   )}/mo`,
+  // );
   //
   // // check Foreign DOD and VA rate for online only
   // GiHelpers.searchCh33(
