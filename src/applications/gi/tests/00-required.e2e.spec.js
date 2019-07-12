@@ -94,49 +94,29 @@ module.exports = E2eHelpers.createE2eTest(client => {
     )}/mo`,
   );
 
-  // client
-  //   .waitForElementVisible('body', Timeouts.normal)
-  //   .waitForElementVisible('.gi-app', Timeouts.slow, searchAsDea2)
-  //   .axeCheck('.main');
+  GiHelpers.verifyDEA(
+    client,
+    'three quarters',
+    `${GiHelpers.formatCurrency(
+      GiHelpers.calculatorConstantsList.DEARATETHREEQUARTERS,
+    )}/mo`,
+  );
 
-  // const verifyDeaRateFullTime = GiHelpers.verifyDEA(
-  //   client,
-  //   'full',
-  //   `${GiHelpers.formatCurrency(
-  //     GiHelpers.calculatorConstantsList.DEARATEFULLTIME,
-  //   )}/mo`,
-  // );
-  //
-  // verifyDeaRateFullTime();
+  GiHelpers.verifyDEA(
+    client,
+    'half',
+    `${GiHelpers.formatCurrency(
+      GiHelpers.calculatorConstantsList.DEARATEONEHALF,
+    )}/mo`,
+  );
 
-  // GiHelpers.verifyDEA(
-  //   client,
-  //   'three quarters',
-  //   `${GiHelpers.formatCurrency(
-  //     GiHelpers.calculatorConstantsList.DEARATETHREEQUARTERS,
-  //   )}/mo`,
-  // );
-  // GiHelpers.verifyDEA(
-  //   client,
-  //   'half',
-  //   `${GiHelpers.formatCurrency(
-  //     GiHelpers.calculatorConstantsList.DEARATEONEHALF,
-  //   )}/mo`,
-  // );
-  // GiHelpers.verifyDEA(
-  //   client,
-  //   'less than half',
-  //   `${GiHelpers.formatCurrency(
-  //     GiHelpers.calculatorConstantsList.DEARATEUPTOONEHALF,
-  //   )}/mo`,
-  // );
-  // GiHelpers.verifyDEA(
-  //   client,
-  //   'quarter',
-  //   `${GiHelpers.formatCurrency(
-  //     GiHelpers.calculatorConstantsList.DEARATEUPTOONEQUARTER,
-  //   )}/mo`,
-  // );
+  GiHelpers.verifyDEA(
+    client,
+    'quarter',
+    `${GiHelpers.formatCurrency(
+      GiHelpers.calculatorConstantsList.DEARATEUPTOONEQUARTER,
+    )}/mo`,
+  );
   //
   // // check Foreign DOD and VA rate for online only
   // GiHelpers.searchCh33(
