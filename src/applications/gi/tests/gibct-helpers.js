@@ -40,6 +40,7 @@ function verifyCh33(client, vaOrDodRadio, expectedRate) {
 
 const selectProfilePage = (client, expectedResult) => {
   client
+    .waitForElementVisible(expectedResult, Timeouts.normal)
     .click(expectedResult)
     .waitForElementVisible('.profile-page', Timeouts.slow);
 };
