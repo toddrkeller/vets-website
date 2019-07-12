@@ -1013,5 +1013,5 @@ module.exports = {
   searchCh33,
   verifyCh33,
   selectProfilePage,
-  selectFindProfileLink: findProfileLink,
+  findProfileLink,
 };
