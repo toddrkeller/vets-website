@@ -40,9 +40,8 @@ function verifyCh33(client, vaOrDodRadio, expectedRate) {
 
 const selectProfilePage = (client, expectedResult) => {
   client
-    .click(expectedResult)
-    .waitForElementVisible('.search-page', Timeouts.normal);
-  // .waitForElementVisible('.profile-page', Timeouts.verySlow);
+    .click(`${expectedResult} a.first`)
+    .waitForElementVisible('.profile-page', Timeouts.normal);
 };
 
 const findProfileLink = (client, expectedResult) => {
