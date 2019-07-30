@@ -43,7 +43,7 @@ class LandingPageTypeOfInstitutionFilter extends React.Component {
         </span>
       );
       options.push({
-        value: 'vettec',
+        value: 'vetTec',
         label: vetTecLabel,
       });
     }
