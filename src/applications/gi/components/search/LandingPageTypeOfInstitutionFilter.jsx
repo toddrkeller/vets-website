@@ -28,7 +28,7 @@ class LandingPageTypeOfInstitutionFilter extends React.Component {
             Learn More)
             <br />
           </a>
-          {this.props.category === 'vettec' && (
+          {this.props.category === 'vetTec' && (
             <span className="vads-u-margin-x--neg5">
               {' '}
               <img
