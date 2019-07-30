@@ -1,4 +1,5 @@
 import React from 'react';
+import recordEvent from 'platform/monitoring/record-event';
 
 export const VetTecAdditionalResourcesLinks = () => (
   <div>
