@@ -86,13 +86,11 @@ function webpackDevServerPlugin(config, opts) {
 
     server = new WebpackDevServer(compiler, options);
 
-    server.listen(options.port || 8081, options.host, () => {
+    server.listen(options.port || 8081, '0.0.0.0', () => {
       console.log(
         chalk.blue('[metalsmith-webpack-dev-server]: ') +
           chalk.green(
-            `Running webpack dev server at http://${options.host}:${
-              options.port
-            }`,
+            `Running webpack dev server at http://localhost:${options.port}`,
           ),
       );
       done();
