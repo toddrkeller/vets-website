@@ -22,7 +22,7 @@ class LandingPageTypeOfInstitutionFilter extends React.Component {
     ];
     if (this.props.displayVetTecOption) {
       const vetTecLabel = (
-        <span className="vads-u-padding-top--1 vads-u-margin-left--0p5">
+        <span className="vads-u-padding-top--1 vads-u-margin-left--0p5 learnMoreLabel">
           {' '}
           <button
             aria-label="VET TEC training providers only learn more"
