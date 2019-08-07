@@ -31,7 +31,7 @@ class LandingPageTypeOfInstitutionFilter extends React.Component {
             onClick={() => this.props.showModal('vetTec')}
           >
             (Learn more)
-          </button>
+          </button>{' '}
         </span>
       );
 
