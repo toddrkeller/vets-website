@@ -35,14 +35,13 @@ export const renderPreferredProviderFlag = result => {
 
 export const renderLearnMoreLabel = ({ text, modal, showModal, component }) => (
   <span>
-    {text} (
+    {text}{' '}
     <button
       type="button"
       className="va-button-link learn-more-button"
       onClick={showModal.bind(component, modal)}
     >
-      Learn more
+      (Learn more)
     </button>
-    )
   </span>
 );
