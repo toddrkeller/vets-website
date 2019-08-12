@@ -1,6 +1,6 @@
-import { apiRequest } from '../../../../../platform/utilities/api';
-import { refreshProfile } from '../../../../../platform/user/profile/actions';
-import recordEvent from '../../../../../platform/monitoring/record-event';
+import { apiRequest } from 'platform/utilities/api';
+import { refreshProfile } from 'platform/user/profile/actions';
+import recordEvent from 'platform/monitoring/record-event';
 
 import localVet360, { isVet360Configured } from '../util/local-vet360';
 import {
@@ -90,7 +90,11 @@ export function refreshTransaction(
         const forceCacheClear = true;
         await dispatch(refreshProfile(forceCacheClear));
         dispatch(clearTransaction(transactionRefreshed));
-        recordEvent({ event: 'profile-saved' });
+        recordEvent({
+          event: 'profile-saved',
+          'profile-action': 'save-success',
+          'profile-section': analyticsSectionName,
+        });
       } else {
         dispatch({
           type: VET360_TRANSACTION_UPDATED,

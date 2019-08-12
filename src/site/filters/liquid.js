@@ -44,13 +44,7 @@ module.exports = function registerFilters() {
     return string;
   };
 
-  liquid.filters.fileType = data => {
-    const string = data
-      .split('.')
-      .slice(-1)
-      .pop();
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  };
+  liquid.filters.fileSize = data => `${(data / 1000000).toFixed(2)}MB`;
 
   liquid.filters.fileExt = data => {
     const string = data
@@ -77,15 +71,16 @@ module.exports = function registerFilters() {
     // Change phone to tap to dial.
     const replacePattern = /(?:(?:\+?([1-9]|[0-9][0-9]|[0-9][0-9][0-9])\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([0-9][1-9]|[0-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?/;
 
-    if (data) {
-      const number = data.match(replacePattern);
+    if (data.match(replacePattern)) {
+      const number = data.match(replacePattern)[0];
       const replacedText = data.replace(
         replacePattern,
-        `<a href="tel:${number}">Phone: ${number}</a>`,
+        `<a target="_blank" href="tel:${number}">Phone: ${number}</a>`,
       );
 
       return replacedText;
     }
+
     return data;
   };
 
@@ -100,6 +95,53 @@ module.exports = function registerFilters() {
           output += `${element}`;
         }
       });
+    }
+    return output;
+  };
+  liquid.filters.benefitTerms = data => {
+    let output = 'General benefits information';
+    if (data != null) {
+      switch (data) {
+        case 'general':
+          output = 'General benefits information';
+          break;
+        case 'burial':
+          output = 'Burials and memorials';
+          break;
+        case 'careers':
+          output = 'Careers and employment';
+          break;
+        case 'disability':
+          output = 'Disability';
+          break;
+        case 'education':
+          output = 'Education and training';
+          break;
+        case 'family':
+          output = 'Family member benefits';
+          break;
+        case 'healthcare':
+          output = 'Health care';
+          break;
+        case 'housing':
+          output = 'Housing assistance';
+          break;
+        case 'insurance':
+          output = 'Life insurance';
+          break;
+        case 'pension':
+          output = 'Pension';
+          break;
+        case 'service':
+          output = 'Service member benefits';
+          break;
+        case 'records':
+          output = 'Records';
+          break;
+        default:
+          output = 'General benefits information';
+          break;
+      }
     }
     return output;
   };
@@ -219,6 +261,17 @@ module.exports = function registerFilters() {
       : null;
   };
 
+  liquid.filters.featureSingleValueFieldLink = fieldLink => {
+    if (
+      fieldLink &&
+      enabledFeatureFlags[featureFlags.FEATURE_SINGLE_VALUE_FIELD_LINK]
+    ) {
+      return fieldLink[0];
+    }
+
+    return fieldLink;
+  };
+
   // used to get a base url path of a health care region from entityUrl.path
   liquid.filters.regionBasePath = path => path.split('/')[1];
 
@@ -233,6 +286,10 @@ module.exports = function registerFilters() {
 
   // check if this is an about menu page
   liquid.filters.isAboutItem = (menuArray, path) => {
+    const outreachPattern = new RegExp('outreach');
+    if (outreachPattern.test(path)) {
+      return false;
+    }
     const paths = _.flatMap(menuArray, getPath);
     const inMenu = _.indexOf(paths, path);
     return inMenu !== -1;
@@ -247,4 +304,22 @@ module.exports = function registerFilters() {
   // get a value from a path of an object in an array
   liquid.filters.getValueFromArrayObjPath = (entities, index, path) =>
     _.get(entities[index], path);
+
+  // needed until all environments have the "Health Service API ID" feature flag
+  // when this is no longer needed, simply use
+  // `serviceTaxonomy.fieldHealthServiceApiId` as the
+  // `data-service` prop for the
+  // react component `facility-appointment-wait-times-widget`
+  // (line 22 in src/site/facilities/facility_health_service.drupal.liquid)
+  liquid.filters.healthServiceApiId = serviceTaxonomy =>
+    enabledFeatureFlags[featureFlags.FEATURE_HEALTH_SERVICE_API_ID]
+      ? serviceTaxonomy.fieldHealthServiceApiId
+      : serviceTaxonomy.name;
+
+  // finds if a page is a child of a certain page using the entityUrl attribute
+  // returns true or false
+  liquid.filters.isChildPageOf = (childPageEntityUrl, parentPage) =>
+    !!childPageEntityUrl.breadcrumb.find(
+      b => b.text.toLowerCase() === parentPage.toLowerCase(),
+    );
 };

@@ -60,6 +60,13 @@ Example data:
           <div class="va-introtext vads-u-margin-bottom--4">
             {{ fieldIntroTextNewsStories.processed }}
           </div>
+          {% if paginator.prev == null %}
+          {% for storyFeature in newsStoryTeasers.entities %}
+            {% if forloop.first == true %}
+              {% include "src/site/teasers/news_story_page_feature.drupal.liquid" with node = storyFeature %}
+            {% endif %}
+          {% endfor %}
+          {% endif %}
           {% for story in pagedItems %}
               {% include "src/site/teasers/news_story_page.drupal.liquid" with node = story %}
           {% endfor %}
