@@ -7,9 +7,35 @@ const {
   generateBreadCrumbs,
 } = require('./page');
 
+const _ = require('lodash');
+
 // Creates the facility pages
 function createHealthCareRegionListPages(page, drupalPagePath, files) {
   const sidebar = page.facilitySidebar;
+
+  // Create the top-level facilities status page for Health Care Regions
+  const statusEntityUrl = createEntityUrlObj(drupalPagePath);
+  const statusObj = {
+    mainFacilities: page.reverseFieldRegionPageNode,
+    facilitySidebar: sidebar,
+    entityUrl: statusEntityUrl,
+    alert: page.alert,
+    title: page.title,
+  };
+
+  const statusPage = updateEntityUrlObj(
+    statusObj,
+    drupalPagePath,
+    'Operating status',
+  );
+  const statusPath = statusPage.entityUrl.path;
+  statusPage.regionOrOffice = page.title;
+  statusPage.entityUrl = generateBreadCrumbs(statusPath);
+
+  files[`${drupalPagePath}/status/index.html`] = createFileObj(
+    statusPage,
+    'health_care_facility_status.drupal.liquid',
+  );
 
   // Create the top-level locations page for Health Care Regions
   const locEntityUrl = createEntityUrlObj(drupalPagePath);
@@ -33,27 +59,23 @@ function createHealthCareRegionListPages(page, drupalPagePath, files) {
     'health_care_region_locations_page.drupal.liquid',
   );
 
-  // Create A-Z Services Page
+  // Create "A-Z Services" || "Our health services" Page
+  // sort and group health services by their weight in drupal
+  const clinicalHealthServices = _(page.fieldClinicalHealthServices.entities)
+    .sortBy('fieldServiceNameAndDescripti.entity.weight')
+    .sortBy('fieldServiceNameAndDescripti.entity.parent[0].entity.weight')
+    .groupBy('fieldServiceNameAndDescripti.entity.parent[0].entity.name')
+    .value();
+
   const hsEntityUrl = createEntityUrlObj(drupalPagePath);
   const hsObj = {
-    socialProgramsPatientFamilyServices:
-      page.socialProgramsPatientFamilyServices,
-    healthWellnessPatientFamilyServices:
-      page.healthWellnessPatientFamilyServices,
-    specialtyCareHealthServices: page.specialtyCareHealthServices,
-    primaryCareHealthServices: page.primaryCareHealthServices,
-    mentalHealthServices: page.mentalHealthServices,
-    extendedCareHealthServices: page.extendedCareHealthServices,
-    homelessHealthServices: page.homelessHealthServices,
-    genomicMedicineHealthServices: page.genomicMedicineHealthServices,
-    veteranCareHealthServices: page.veteranCareHealthServices,
-    otherHealthServices: page.otherHealthServices,
     fieldClinicalHealthServi: page.fieldClinicalHealthCareServi,
     featuredContentHealthServices: page.fieldFeaturedContentHealthser,
     facilitySidebar: sidebar,
     entityUrl: hsEntityUrl,
     alert: page.alert,
     title: page.title,
+    clinicalHealthServices,
   };
   const hsPage = updateEntityUrlObj(
     hsObj,
@@ -97,6 +119,7 @@ function createHealthCareRegionListPages(page, drupalPagePath, files) {
   const nsEntityUrl = createEntityUrlObj(drupalPagePath);
   const nsObj = {
     allNewsStoryTeasers: page.allNewsStoryTeasers,
+    newsStoryTeasers: page.newsStoryTeasers,
     fieldIntroTextNewsStories: page.fieldIntroTextNewsStories,
     facilitySidebar: sidebar,
     entityUrl: nsEntityUrl,
@@ -125,6 +148,7 @@ function createHealthCareRegionListPages(page, drupalPagePath, files) {
   const eventEntityUrl = createEntityUrlObj(drupalPagePath);
   const eventObj = Object.assign(
     { allEventTeasers: page.allEventTeasers },
+    { eventTeasers: page.eventTeasers },
     { fieldIntroTextEventsPage: page.fieldIntroTextEventsPage },
     { facilitySidebar: sidebar },
     { entityUrl: eventEntityUrl },

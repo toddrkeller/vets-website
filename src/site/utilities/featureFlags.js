@@ -25,6 +25,10 @@ const featureFlags = {
   FEATURE_REGION_DETAIL_PAGE_TOC: 'featureRegionDetailPageTOC',
   FEATURE_FEATURED_HEALTH_SERVICE_CONTENT:
     'featureFeaturedHealthServiceContent',
+  FEATURE_FIELD_OPERATING_STATUS_FACILITY: 'fieldOperatingStatusFacility',
+  FEATURE_FIELD_COMPLETE_BIOGRAPHY: 'fieldCompleteBiography',
+  FEATURE_HEALTH_SERVICE_API_ID: 'featureHealthServiceApiId',
+  FEATURE_DOWNLOADABLE_FILE: 'featureDownloadableFile',
 };
 
 // Edit this to turn flags on or off
@@ -45,6 +49,10 @@ const flagsByBuildtype = {
     featureFlags.FEATURE_REGION_PAGE_LINKS,
     featureFlags.FEATURE_REGION_DETAIL_PAGE_TOC,
     featureFlags.FEATURE_FEATURED_HEALTH_SERVICE_CONTENT,
+    featureFlags.FEATURE_FIELD_OPERATING_STATUS_FACILITY,
+    featureFlags.FEATURE_FIELD_COMPLETE_BIOGRAPHY,
+    featureFlags.FEATURE_HEALTH_SERVICE_API_ID,
+    featureFlags.FEATURE_DOWNLOADABLE_FILE,
   ],
   vagovdev: [
     featureFlags.FEATURE_FIELD_ASSET_LIBRARY_DESCRIPTION,
@@ -62,6 +70,10 @@ const flagsByBuildtype = {
     featureFlags.FEATURE_REGION_PAGE_LINKS,
     featureFlags.FEATURE_REGION_DETAIL_PAGE_TOC,
     featureFlags.FEATURE_FEATURED_HEALTH_SERVICE_CONTENT,
+    featureFlags.FEATURE_FIELD_OPERATING_STATUS_FACILITY,
+    featureFlags.FEATURE_FIELD_COMPLETE_BIOGRAPHY,
+    featureFlags.FEATURE_HEALTH_SERVICE_API_ID,
+    featureFlags.FEATURE_DOWNLOADABLE_FILE,
   ],
   vagovstaging: [
     featureFlags.FEATURE_FIELD_ADDITIONAL_INFO,
@@ -74,7 +86,12 @@ const flagsByBuildtype = {
     featureFlags.FEATURE_FIELD_LINKS,
     featureFlags.FEATURE_REGION_DETAIL_PAGE_FEATURED_CONTENT,
     featureFlags.FEATURE_REGION_PAGE_LINKS,
+    featureFlags.FEATURE_REGION_DETAIL_PAGE_TOC,
     featureFlags.FEATURE_FEATURED_HEALTH_SERVICE_CONTENT,
+    featureFlags.FEATURE_FIELD_OPERATING_STATUS_FACILITY,
+    featureFlags.FEATURE_FIELD_COMPLETE_BIOGRAPHY,
+    featureFlags.FEATURE_HEALTH_SERVICE_API_ID,
+    featureFlags.FEATURE_DOWNLOADABLE_FILE,
   ],
   vagovprod: [
     featureFlags.FEATURE_FIELD_ADDITIONAL_INFO,

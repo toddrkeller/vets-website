@@ -26,7 +26,7 @@ const {
 
 const { educationType, serviceBefore1977 } = fullSchema1995.definitions;
 
-export const newChapters = {
+export const chapters = {
   applicantInformation: {
     title: 'Applicant Information',
     pages: {
@@ -46,14 +46,14 @@ export const newChapters = {
     title: 'Education Benefit',
     pages: {
       benefitSelection: {
-        title: 'Education benefit',
+        title: 'Education benefit selection',
         path: 'benefits/eligibility',
         uiSchema: benefitSelection.uiSchema,
         schema: benefitSelection.schema,
       },
       // related to 1995-STEM
       stem: {
-        title: 'Education benefit',
+        title: 'The Rogers STEM Scholarship',
         path: 'benefits/stem',
         uiSchema: stem.uiSchema,
         schema: stem.schema,
