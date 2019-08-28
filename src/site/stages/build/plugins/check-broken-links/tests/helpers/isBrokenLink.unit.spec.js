@@ -24,12 +24,23 @@ describe('isBrokenLink', () => {
   ];
 
   for (const badLink of badLinks) {
-    it(`returns true for invalid link value - ${badLink}`, () => {
-      const result = isBrokenLink(badLink, page, files);
+    it(`returns true for invalid link value for href - ${badLink}`, () => {
+      const isHref = true;
+      const result = isBrokenLink(badLink, page, files, isHref);
       expect(result).to.be.true;
     });
   }
-
+  for (const badLink of badLinks) {
+    it(`returns true for invalid link value for href - ${badLink}`, () => {
+      const isHref = false;
+      const result = isBrokenLink(badLink, page, files, isHref);
+      if (!badLink) {
+        expect(result).to.be.false;
+      } else {
+        expect(result).to.be.true;
+      }
+    });
+  }
   const goodLinks = [
     '/',
     '/health-care',

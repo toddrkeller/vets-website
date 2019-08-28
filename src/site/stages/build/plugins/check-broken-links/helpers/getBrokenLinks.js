@@ -18,14 +18,15 @@ function getBrokenLinks(file, allPaths, isBrokenLink = _isBrokenLink) {
     const $node = $(node);
 
     let target = null;
-
+    let isHref = false;
     if ($node.is('a')) {
       target = $node.attr('href');
+      isHref = true;
     } else if ($node.is('img')) {
       target = $node.attr('src') || $node.attr('data-src');
     }
 
-    const isBroken = isBrokenLink(target, currentPath, allPaths);
+    const isBroken = isBrokenLink(target, currentPath, allPaths, isHref);
 
     if (isBroken) {
       const html = cheerio.html($node);

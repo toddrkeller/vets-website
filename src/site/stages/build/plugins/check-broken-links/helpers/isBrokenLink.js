@@ -6,10 +6,13 @@ const url = require('url');
  * @param {*} link The HREF/SRC value to be validated.
  * @param {string} pagePath The path of the HTML page containing the link. This is unlikely to be used, but would be used in the case of relative paths in the link.
  * @param {Set<string>} allPaths The paths of all files in the website. Used to confirm the existence of a file.
+ * @param {Boolean} isHref If the link being checked is an anchor tag.
  */
-function isBrokenLink(link, pagePath, allPaths) {
-  if (!link) return true;
-
+function isBrokenLink(link, pagePath, allPaths, isHref) {
+  if (!link) {
+    // Empty link is valid href for an anchor not an image src.
+    return isHref;
+  }
   const parsed = url.parse(link);
   const isExternal = !!parsed.protocol;
 
