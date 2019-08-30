@@ -149,9 +149,12 @@ function generateBreadCrumbs(pathString) {
   let previous = '';
   let trimmedValue;
 
-  for (const value of pathArray) {
+  for (let value of pathArray) {
     trimmedValue = _.trim(value, '/');
     if (value) {
+      if (value === 'health-services') {
+        value = 'our-health-services';
+      }
       const dehandlized =
         value === 'pittsburgh-health-care'
           ? 'VA Pittsburgh health care'
