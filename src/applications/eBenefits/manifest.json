@@ -1,0 +1,7 @@
+{
+  "appName": "eBenefits-test-one",
+  "entryFile": "./app-entry.jsx",
+  "entryName": "eBenefits",
+  "rootUrl": "/ebenefits",
+  "production": false
+}
