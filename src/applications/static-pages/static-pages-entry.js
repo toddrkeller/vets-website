@@ -20,6 +20,7 @@ import createDisabilityFormWizard from '../disability-benefits/wizard/createWiza
 import createDisabilityRatingCalculator from '../disability-benefits/disability-rating-calculator/createCalculator';
 import createEducationApplicationStatus from '../edu-benefits/components/createEducationApplicationStatus';
 import createOptOutApplicationStatus from '../edu-benefits/components/createOptOutApplicationStatus';
+import createRatedDisabilitiesTable from '../disability-benefits/rated-disabilities-table/createRatedDisabilitiesTable';
 
 // No-react styles.
 import './sass/static-pages.scss';
@@ -83,6 +84,8 @@ createDisabilityRatingCalculator(
   store,
   widgetTypes.DISABILITY_RATING_CALCULATOR,
 );
+
+createRatedDisabilitiesTable(store, widgetTypes.RATED_DISABILITIES_TABLE);
 
 createFacilityListWidget();
 createOtherFacilityListWidget();

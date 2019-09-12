@@ -21,6 +21,8 @@ import PaymentInformationTOCItem from '../containers/PaymentInformationTOCItem';
 import IdentityVerification from './IdentityVerification';
 import MVIError from './MVIError';
 
+import RatedDisabilitiesTable from '../../../disability-benefits/rated-disabilities-table/components/RatedDisabilitiesTable';
+
 const ProfileTOC = ({ militaryInformation }) => (
   <>
     <h2 className="vads-u-font-size--h3">On this page</h2>
@@ -37,6 +39,9 @@ const ProfileTOC = ({ militaryInformation }) => (
           <a href="#military-information">Military service information</a>
         </li>
       )}
+      <li>
+        <a href="#rated-disabilities">Rated Disabilities Information</a>
+      </li>
     </ul>
   </>
 );
@@ -121,6 +126,12 @@ class ProfileView extends React.Component {
                 fetchPersonalInformation={fetchPersonalInformation}
                 personalInformation={personalInformation}
               />
+              <div
+                id="rated-disabilities"
+                data-widget-type="rated-disabilities-table"
+              >
+                <RatedDisabilitiesTable />
+              </div>
               {militaryInformation && <div id="military-information" />}
               <MilitaryInformation
                 veteranStatus={user.profile.veteranStatus}

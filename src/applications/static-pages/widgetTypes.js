@@ -7,4 +7,5 @@ export default {
   OPT_OUT_APP_STATUS: 'opt-out-app-status',
   DISABILITY_APP_STATUS: 'disability-app-status',
   DISABILITY_RATING_CALCULATOR: 'disability-rating-calculator',
+  RATED_DISABILITIES_TABLE: 'rated-disabilities-table',
 };
