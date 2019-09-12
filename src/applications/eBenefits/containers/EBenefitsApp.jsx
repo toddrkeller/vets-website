@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import backendServices from 'platform/user/profile/constants/backendServices';
-import { fetchPersonalInformation } from '../actions';
+import get from '../../../platform/utilities/data/get';
 
 import RequiredLoginView from 'platform/user/authorization/components/RequiredLoginView';
 import RatedDisabilitiesView from '../components/RatedDisabilities';
@@ -18,7 +18,10 @@ class EBenefitsApp extends React.Component {
           loginUrl={this.props.loginUrl}
           verifyUrl={this.props.verifyUrl}
         >
-          <RatedDisabilitiesView user={this.props.user} />
+          <RatedDisabilitiesView
+            user={this.props.user}
+            currentState={this.props.currentState}
+          />
         </RequiredLoginView>
       </div>
     );
@@ -27,15 +30,9 @@ class EBenefitsApp extends React.Component {
 
 const mapStateToProps = state => ({
   user: state.user,
+  currentState: state,
 });
 
-const mapDispatchToProps = {
-  fetchPersonalInformation,
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(EBenefitsApp);
+export default connect(mapStateToProps)(EBenefitsApp);
 
 export { EBenefitsApp };

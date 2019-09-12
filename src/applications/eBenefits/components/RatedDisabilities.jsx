@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 class RatedDisabilitiesVew extends React.Component {
   static propTypes = {
-    fetchPersonalInformation: PropTypes.func.isRequired,
     user: PropTypes.object,
   };
 
@@ -12,7 +11,7 @@ class RatedDisabilitiesVew extends React.Component {
   }
 
   render() {
-    return <h1>Gated Disabilities Content</h1>;
+    return <h1>Rated Disabilities Content Here</h1>;
   }
 }
 
