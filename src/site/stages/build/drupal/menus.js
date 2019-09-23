@@ -264,21 +264,25 @@ function makeSection(hostUrl, hub, arrayDepth, promo, pages) {
  * @return {Array} headerData - Menu information formatted for the megaMenu React widget.
  */
 function formatHeaderData(buildOptions, contentData) {
-  let menuLinks = contentData.data.menuLinkContentQuery.entities;
+  const menuLinks = contentData.data.menuLinkContentQuery.entities;
   const pages = contentData.data.nodeQuery.entities;
   const headerData = [];
   const { hostUrl } = buildOptions;
 
+  let headerLinks = menuLinks.filter(
+    item => item.menuName === 'header-megamenu',
+  );
+
   // Sort by menu weight so we don't have do any sorting later.
-  menuLinks.sort((a, b) => a.weight - b.weight);
+  headerLinks.sort((a, b) => a.weight - b.weight);
 
   // To create the desired json schema, we'll need a hierarchical
   // list of menu links, rather than the flat list that Drupal/GraphQL
   // provide.
-  menuLinks = sortMenuLinksWithDepth(menuLinks);
+  headerLinks = sortMenuLinksWithDepth(headerLinks);
 
   // Top-level.
-  menuLinks.forEach(link => {
+  headerLinks.forEach(link => {
     const linkObj = { title: link.title };
 
     // If this top-level item has a link, add it.
@@ -335,4 +339,23 @@ function formatHeaderData(buildOptions, contentData) {
   return headerData;
 }
 
-module.exports = { formatHeaderData };
+function formatFooterData(buildOptions, contentData) {
+  const menuLinks = contentData.data.menuLinkContentQuery.entities;
+  const footerData = [];
+
+  // Sort by menu weight so we don't have do any sorting later.
+  menuLinks.sort((a, b) => a.weight - b.weight);
+
+  const footerLinks = menuLinks.filter(item => item.menuName === 'footer');
+
+  const footerRailLinks = menuLinks.filter(
+    item => item.menuName === 'footer-bottom-rail',
+  );
+
+  // eslint-disable-next-line no-console
+  console.log(footerLinks, footerRailLinks);
+
+  return footerData;
+}
+
+module.exports = { formatHeaderData, formatFooterData };

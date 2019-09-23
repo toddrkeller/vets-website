@@ -5,6 +5,7 @@
  */
 
 const headerQuery = require('./header.nav.graphql');
+const footerQuery = require('./footer.nav.graphql');
 
 module.exports = `
   menuLinkContentQuery(limit: 1000, filter: {conditions: [{field: "enabled", value: "1"}]}) {
@@ -12,6 +13,7 @@ module.exports = `
       entityId
       entityLabel
       ${headerQuery}
+      ${footerQuery}
     }
   }
 `;
