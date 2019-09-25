@@ -2,7 +2,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const yaml = require('js-yaml');
 
-const footerData = require('../../../../platform/static-data/footer-links.json');
+let footerData = require('../../../../platform/static-data/footer-links.json');
 
 const { applyFragments } = require('./apply-fragments');
 
@@ -11,6 +11,7 @@ const DRUPALS = require('../../../constants/drupals');
 
 const {
   formatHeaderData: convertDrupalHeaderData,
+  formatFooterData: convertDrupalFooterData,
 } = require('../drupal/menus');
 
 function replaceWithDrupalLinks(data, files) {
@@ -82,15 +83,28 @@ function createHeaderFooterData(buildOptions) {
     );
     let megaMenuData = megaMenuFromVagovContent;
 
-    const shouldLoadFromDrupal = global.cmsFeatureFlags.FEATURE_HEADER_MEGAMENU;
+    const shouldLoadHeaderFromDrupal =
+      global.cmsFeatureFlags.FEATURE_HEADER_MEGAMENU;
 
-    if (shouldLoadFromDrupal) {
+    if (shouldLoadHeaderFromDrupal) {
       const megaMenuFromDrupal = convertDrupalHeaderData(
         buildOptions,
         buildOptions.drupalData,
       );
 
       megaMenuData = megaMenuFromDrupal;
+    }
+
+    // The following footer code merely replicates the process for converting header data
+    // above. This was created with the purpose of being able to quickly code and test
+    // convertDrupalFooterData(), and may need to be rewritten in the future.
+    const shouldLoadFooterFromDrupal =
+      global.cmsFeatureFlags.FEATURE_FOOTER_MENU;
+    if (shouldLoadFooterFromDrupal) {
+      footerData = convertDrupalFooterData(
+        buildOptions,
+        buildOptions.drupalData,
+      );
     }
 
     const headerFooter = {

@@ -341,7 +341,7 @@ function formatHeaderData(buildOptions, contentData) {
 
 function formatFooterData(buildOptions, contentData) {
   const menuLinks = contentData.data.menuLinkContentQuery.entities;
-  const footerData = [];
+  let footerData = [];
 
   // Sort by menu weight so we don't have do any sorting later.
   menuLinks.sort((a, b) => a.weight - b.weight);
@@ -354,6 +354,8 @@ function formatFooterData(buildOptions, contentData) {
 
   // eslint-disable-next-line no-console
   console.log(footerLinks, footerRailLinks);
+
+  footerData = [...footerLinks, ...footerRailLinks];
 
   return footerData;
 }
