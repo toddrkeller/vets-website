@@ -23,6 +23,6 @@ export const directDepositWarning = (
       1-888-224-2950
     </a>
     . They will address any questions or concerns you may have and encourage
-    your participation in EFT.
+    your participation in EFT test test test.
   </div>
 );
