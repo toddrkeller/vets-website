@@ -1,0 +1,7 @@
+{
+  "appName": "686-test-app",
+  "entryFile": "./app-entry.jsx",
+  "entryName": "686-test-app",
+  "rootUrl": "/686-test-app",
+  "production": false
+}
