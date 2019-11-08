@@ -1,1 +1,77 @@
-<div>Hello there</div>
+{% comment %} {% include "src/site/includes/header.html" with drupalTags = true %}
+{% include "src/site/includes/alerts.drupal.liquid" %}
+{% include "src/site/includes/preview-edit.drupal.liquid" %}
+{% include "src/site/includes/breadcrumbs.drupal.liquid" %} {% endcomment %}
+
+<div id="content" class="interior">
+  <main class="va-l-detail-page">
+    <div class="usa-grid usa-grid-full">
+
+    {% comment %} {% include 'src/site/navigation/sidebar_nav.drupal.liquid' with sidebar %} {% endcomment %}
+
+    <div class="usa-width-three-fourths">
+        {% comment %} {% include "src/site/components/navigation-sidebar-trigger.html" with menuId = "va-detailpage-sidebar" %} {% endcomment %}
+
+        {% if !entityPublished %}
+          <div class="usa-alert usa-alert-info" >
+            <div class="usa-alert-body">
+              <p class="usa-alert-text">You are viewing a draft.</p>
+            </div>
+          </div>
+        {% endif %}
+
+        <article class="usa-content">
+          <h1>{{ title }}</h1>
+          <div class="va-introtext">
+            <p>{{ fieldIntroText }}</p>
+          </div>
+
+          {% if fieldAlert.length %}
+            {% for alert in fieldAlert %}
+              {% if alert.entity != empty %}
+                {% comment %} {% include "src/site/blocks/alert.drupal.liquid" with alert = alert.entity %} {% endcomment %}
+              {% endif %}
+            {% endfor %}
+          {% else %}
+            {% if fieldAlert.entity != empty %}
+              {% comment %} {% include "src/site/blocks/alert.drupal.liquid" with alert = fieldAlert.entity %} {% endcomment %}
+            {% endif %}
+          {% endif %}
+
+          {% assign featureCount = fieldFeaturedContent | size  %}
+          {% if featureCount > 0 %}
+          <div class="feature">
+          {% for block in fieldFeaturedContent %}
+            {% assign bundleComponent = "src/site/paragraphs/" | append: block.entity.entityBundle %}
+            {% assign bundleComponentWithExtension = bundleComponent | append: ".drupal.liquid" %}
+            {% comment %} {% include {{ bundleComponentWithExtension }} with entity = block.entity %} {% endcomment %}
+          {% endfor %}
+          </div>
+          {% endif %}
+
+          {% for block in fieldContentBlock %}
+            {% assign bundleComponent = "src/site/paragraphs/" | append: block.entity.entityBundle %}
+            {% assign bundleComponentWithExtension = bundleComponent | append: ".drupal.liquid" %}
+            {% comment %} {% include {{ bundleComponentWithExtension }} with entity = block.entity %} {% endcomment %}
+          {% endfor %}
+          {% if fieldRelatedLinks != empty %}
+          <div class="row">
+            <div class="usa-content columns">
+              <aside class="va-nav-linkslist va-nav-linkslist--related">
+                {% comment %} {% include 'src/site/paragraphs/list_of_link_teasers.drupal.liquid' entity = fieldRelatedLinks.entity %} {% endcomment %}
+              </aside>
+            </div>
+          </div>
+          {%  endif %}
+        </article>
+
+        <div class="last-updated usa-content">
+            Last updated: <time datetime="{{ changed | dateFromUnix: 'YYYY-MM-DD'}}">{{ changed | humanizeTimestamp }}</time>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+{% comment %} {% include "src/site/includes/footer.html" %}
+{% include "src/site/includes/debug.drupal.liquid" %} {% endcomment %}
