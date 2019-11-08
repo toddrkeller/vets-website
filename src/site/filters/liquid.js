@@ -10,9 +10,18 @@ function getPath(obj) {
 module.exports = function registerFilters() {
   const { cmsFeatureFlags } = global;
 
+  liquid.filters.getNestedValue = property => _.get(property, '[0].value');
+
+  liquid.filters.isPublished = property =>
+    _.get(property, '[0].value') !== 'published';
+
+  liquid.filters.getNestedDate = property => _.get(property, '[0].value');
+
   // Custom liquid filter(s)
-  liquid.filters.humanizeDate = dt =>
-    moment(dt, 'YYYY-MM-DD').format('MMMM D, YYYY');
+  liquid.filters.formatDate = (dt, format = 'MMMM D, YYYY') =>
+    moment(dt).format(format);
+
+  liquid.filters.dateFromUnix = (dt, format) => moment.unix(dt).format(format);
 
   liquid.filters.humanizeTime = dt => moment(dt).format('LT');
 
@@ -71,8 +80,6 @@ module.exports = function registerFilters() {
 
     return replaced;
   };
-
-  liquid.filters.dateFromUnix = (dt, format) => moment.unix(dt).format(format);
 
   liquid.filters.unixFromDate = data => new Date(data).getTime();
 
