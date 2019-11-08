@@ -57,22 +57,22 @@ export const totalRatingMessage = totalDisabilityRating => (
     <div className="total-rated-disabilities">
       <div className="vads-l-row">
         <div className="vads-l-col--12">
-          <h1>Your disability rating</h1>
+          <h1>Your VA disability rating</h1>
         </div>
       </div>
       <div className="vads-l-row medium-screen:vads-u-padding-bottom--2p5">
-        <div className="vads-l-col--12 medium-screen:vads-l-col--6 small-desktop-screen:vads-l-col--9 vads-u-padding-right--1p5">
+        <div className="vads-l-col--12 medium-screen:vads-l-col--8 small-desktop-screen:vads-l-col--9 vads-u-padding-right--1p5">
           <p>
             <strong>
-              Your combined disability rating is {totalDisabilityRating}%
+              Your combined disability rating is {totalDisabilityRating}%.&nbsp;
             </strong>
-            . This rating doesn't include disabilities for your claims that are
+            This rating doesn't include disabilities for your claims that are
             still pending. You can check the status of your disability claims or
             appeals with the Claim Status tool.
           </p>
           <a href="/claim-or-appeal-status/">Check your claims or appeals</a>
         </div>
-        <div className="vads-u-margin-top--2p5 medium-screen:vads-u-margin-top--0 vads-l-col--12 medium-screen:vads-l-col--6 small-desktop-screen:vads-l-col--3 medium-screen:vads-u-padding-top--2p5">
+        <div className="vads-u-margin-top--2p5 medium-screen:vads-u-margin-top--0 vads-l-col--12 medium-screen:vads-l-col--4 small-desktop-screen:vads-l-col--3 medium-screen:vads-u-padding-top--2p5">
           <PercetnageCalloutBox
             value={totalDisabilityRating}
             isPercentage

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 const PercentageCalloutBox = props => {
   const { value, isPercentage, label } = props;
   return (
-    <div className="vads-u-background-color--gray-lightest vads-u-border-top--2px vads-u-text-align--center medium-screen:vads-u-text-align--right">
+    <div className="vads-u-background-color--gray-lightest vads-u-border-top--3px vads-u-text-align--center xsmall-screen:vads-u-margin-y--3 medium-screen:vads-u-margin-y--0 medium-screen:vads-u-text-align--right" tabindex="0">
       <p className="vads-u-padding-right--1p5 vads-u-padding-top--1p5 vads-u-margin--0 total-label">
         {label}
       </p>
