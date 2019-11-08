@@ -11,6 +11,8 @@ const markdown = require('metalsmith-markdownit');
 const navigation = require('metalsmith-navigation');
 const permalinks = require('metalsmith-permalinks');
 
+const assembleEntityFactory = require('./process-cms-exports');
+const { contentDir, readEntity } = require('./process-cms-exports/helpers');
 const getOptions = require('./options');
 const registerLiquidFilters = require('../../filters/liquid');
 const { getDrupalContent } = require('./drupal/metalsmith-drupal');
@@ -94,6 +96,25 @@ function defaultBuild(BUILD_OPTIONS) {
 
   smith.use(createReactPages(BUILD_OPTIONS), 'Create React pages');
   smith.use(getDrupalContent(BUILD_OPTIONS), 'Get Drupal content');
+  smith.use(files => {
+    // Derive the entity.
+    const rawEntity = readEntity(
+      contentDir,
+      'node',
+      '0065aff0-bb57-4fd3-a341-57ccf1acc50c',
+    );
+    const entity = assembleEntityFactory()(rawEntity);
+
+    // Pass the file the properties it needs.
+    // eslint-disable-next-line no-param-reassign
+    files[`test${entity.path[0].alias}/index.html`] = {
+      entity,
+      contents: Buffer.from(''),
+      layout: 'page.raw_cms.liquid',
+    };
+
+    // Update the template in src/site/layouts/raw-cms-export/test.drupal.liquid
+  }, 'Insert raw cms templates');
   smith.use(addDrupalPrefix(BUILD_OPTIONS), 'Add Drupal Prefix');
   smith.use(
     createOutreachAssetsData(BUILD_OPTIONS),
@@ -140,6 +161,7 @@ function defaultBuild(BUILD_OPTIONS) {
     inPlace({ engine: 'liquid', pattern: '*.{md,html}' }),
     'Plug the content into the templates',
   );
+  // Add testing plugin here for current templates === new tome-sync templates.
   smith.use(
     markdown({
       typographer: true,

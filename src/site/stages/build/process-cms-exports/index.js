@@ -1,12 +1,14 @@
 const chalk = require('chalk');
-
-const { getFilteredEntity } = require('./filters');
-const { transformEntity } = require('./transform');
-const { typeProperties, toId, readEntity } = require('./helpers');
+const {
+  contentDir: defaultDir,
+  typeProperties,
+  toId,
+  readEntity,
+} = require('./helpers');
 
 const validateEntity = require('./schema-validation');
 
-const entityAssemblerFactory = contentDir => {
+const entityAssemblerFactory = (contentDir = defaultDir) => {
   /**
    * Takes an entity type and uuid, reads the corresponding file,
    * searches for references to other entities, and replaces the
@@ -42,12 +44,10 @@ const entityAssemblerFactory = contentDir => {
       process.exit(1);
     }
 
-    const filteredEntity = getFilteredEntity(entity);
-
     // Iterate over all whitelisted properties in an entity, look for
     // references to other identities recursively, and replace the
     // reference with the entity contents.
-    for (const [key, prop] of Object.entries(filteredEntity)) {
+    for (const [key, prop] of Object.entries(entity)) {
       // eslint-disable-next-line no-continue
       if (typeProperties.includes(key)) continue;
 
@@ -58,7 +58,8 @@ const entityAssemblerFactory = contentDir => {
 
           // We found a reference! Override it with the expanded entity.
           if (targetUuid && targetType) {
-            filteredEntity[key][index] = assembleEntityTree(
+            // eslint-disable-next-line
+            entity[key][index] = assembleEntityTree(
               readEntity(contentDir, targetType, targetUuid),
               parents.concat([toId(entity)]),
             );
@@ -67,7 +68,7 @@ const entityAssemblerFactory = contentDir => {
       }
     }
 
-    return transformEntity(filteredEntity);
+    return entity;
   };
 
   return assembleEntityTree;

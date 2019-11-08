@@ -15,7 +15,7 @@ const contentDir = path.join(
  * The sub-type can be found in a few different properties, depending
  * on the entity
  */
-const typeProperties = ['type', 'bundle', 'vid'];
+const typeProperties = ['type', 'bundle', 'vid', 'roles'];
 
 /**
  * Get the content model type of an entity. This is used for
@@ -62,7 +62,7 @@ module.exports = {
    *
    * @return {Object} - The contents of the file.
    */
-  readEntity(dir, baseType, uuid) {
+  readEntity(dir = contentDir, baseType, uuid) {
     const entity = JSON.parse(
       fs
         .readFileSync(path.join(dir, `${baseType}.${uuid}.json`))
