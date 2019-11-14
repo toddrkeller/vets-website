@@ -25,6 +25,8 @@
     "nightwatch-sauce": "nightwatch -c config/nightwatch-sauce.js",
     "nightwatch-visual": "node src/platform/testing/visual-regression/index.js",
     "install-repos": "./script/install-repos.sh",
+    "pact:publish": "node script/publish-pact.js",
+    "pact:can-i-deploy": "pact-broker can-i-deploy --pacticipant 'VA.gov' --broker-base-url http://localhost:9292 --latest",
     "postinstall": "npm rebuild node-sass",
     "reset:env": "./script/reset-environment.sh",
     "security-check": "node ./script/security-check.js",
