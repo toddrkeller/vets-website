@@ -7,8 +7,10 @@ import classNames from 'classnames';
 
 import {
   clearAutocompleteSuggestions,
-  fetchAutocompleteSuggestions,
-  fetchSearchResults,
+  fetchInstitutionAutocompleteSuggestions,
+  fetchInstitutionSearchResults,
+  fetchProgramAutocompleteSuggestions,
+  fetchProgramSearchResults,
   institutionFilterChange,
   setPageTitle,
   toggleFilter,
@@ -22,10 +24,12 @@ import Pagination from '@department-of-veterans-affairs/formation-react/Paginati
 import { getScrollOptions, focusElement } from 'platform/utilities/ui';
 import SearchResult from '../components/search/SearchResult';
 import VetTecSearchResult from '../components/vet-tec/VetTecSearchResult';
+import VetTecProgramSearchResult from '../components/vet-tec/VetTecProgramSearchResult';
 import InstitutionSearchForm from '../components/search/InstitutionSearchForm';
 import VetTecSearchForm from '../components/vet-tec/VetTecSearchForm';
 import { isVetTecSelected } from '../utils/helpers';
 import { renderVetTecLogo } from '../utils/render';
+import environment from 'platform/utilities/environment';
 
 const { Element: ScrollElement, scroller } = Scroll;
 
@@ -104,7 +108,13 @@ export class SearchPage extends React.Component {
     });
 
     this.props.institutionFilterChange(institutionFilter);
-    this.props.fetchSearchResults(query);
+
+    // prod flag for story 19734
+    if (!environment.isProduction() && isVetTecSelected(institutionFilter)) {
+      this.props.fetchProgramSearchResults(query);
+    } else {
+      this.props.fetchInstitutionSearchResults(query);
+    }
   };
 
   handlePageSelect = page => {
@@ -184,11 +194,22 @@ export class SearchPage extends React.Component {
           <div>
             {search.results.map(result => {
               if (isVetTecSelected(filters)) {
+                // prod flag for story 19734
+                if (environment.isProduction()) {
+                  return (
+                    <VetTecSearchResult
+                      version={this.props.location.query.version}
+                      key={result.facilityCode}
+                      result={result}
+                    />
+                  );
+                }
                 return (
-                  <VetTecSearchResult
+                  <VetTecProgramSearchResult
                     version={this.props.location.query.version}
-                    key={result.facilityCode}
+                    key={`${result.facilityCode}-${result.description}`}
                     result={result}
+                    constants={this.props.constants}
                   />
                 );
               }
@@ -260,7 +281,9 @@ export class SearchPage extends React.Component {
         autocomplete={this.props.autocomplete}
         location={this.props.location}
         clearAutocompleteSuggestions={this.props.clearAutocompleteSuggestions}
-        fetchAutocompleteSuggestions={this.props.fetchAutocompleteSuggestions}
+        fetchAutocompleteSuggestions={
+          this.props.fetchProgramAutocompleteSuggestions
+        }
         handleFilterChange={this.handleFilterChange}
         updateAutocompleteSearchTerm={this.props.updateAutocompleteSearchTerm}
         filters={this.props.filters}
@@ -284,7 +307,9 @@ export class SearchPage extends React.Component {
         autocomplete={this.props.autocomplete}
         location={this.props.location}
         clearAutocompleteSuggestions={this.props.clearAutocompleteSuggestions}
-        fetchAutocompleteSuggestions={this.props.fetchAutocompleteSuggestions}
+        fetchAutocompleteSuggestions={
+          this.props.fetchInstitutionAutocompleteSuggestions
+        }
         handleFilterChange={this.handleFilterChange}
         updateAutocompleteSearchTerm={this.props.updateAutocompleteSearchTerm}
         filters={this.props.filters}
@@ -327,6 +352,7 @@ SearchPage.defaultProps = {};
 
 const mapStateToProps = state => ({
   autocomplete: state.autocomplete,
+  constants: state.constants.constants,
   filters: state.filters,
   search: state.search,
   eligibility: state.eligibility,
@@ -334,8 +360,10 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   clearAutocompleteSuggestions,
-  fetchAutocompleteSuggestions,
-  fetchSearchResults,
+  fetchProgramAutocompleteSuggestions,
+  fetchInstitutionAutocompleteSuggestions,
+  fetchInstitutionSearchResults,
+  fetchProgramSearchResults,
   institutionFilterChange,
   setPageTitle,
   toggleFilter,

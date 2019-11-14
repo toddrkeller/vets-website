@@ -7,7 +7,7 @@ import moment from 'moment';
 import { DefinitionTester } from 'platform/testing/unit/schemaform-utils';
 
 import formConfig from '../../config/form';
-import { schema, uiSchema } from '../../pages/contactInformation';
+import contactInfo from '../../pages/contactInformation';
 
 import {
   STATE_VALUES,
@@ -23,13 +23,13 @@ describe('Higher-Level Review 0996 contact information', () => {
     const form = mount(
       <DefinitionTester
         definitions={formConfig.defaultDefinitions}
-        schema={schema}
+        schema={contactInfo.schema}
         data={{
           mailingAddress: {},
           phoneEmailCard: {},
         }}
         formData={{}}
-        uiSchema={uiSchema}
+        uiSchema={contactInfo.uiSchema}
       />,
     );
 
@@ -44,17 +44,15 @@ describe('Higher-Level Review 0996 contact information', () => {
     const form = mount(
       <DefinitionTester
         definitions={formConfig.defaultDefinitions}
-        schema={schema}
+        schema={contactInfo.schema}
         data={{
-          veteran: {
-            mailingAddress: {
-              country: 'USA',
-            },
-            phoneEmailCard: {},
+          mailingAddress: {
+            country: 'USA',
           },
+          phoneEmailCard: {},
         }}
         formData={{}}
-        uiSchema={uiSchema}
+        uiSchema={contactInfo.uiSchema}
       />,
     );
     // country, state
@@ -68,17 +66,15 @@ describe('Higher-Level Review 0996 contact information', () => {
     const form = mount(
       <DefinitionTester
         definitions={formConfig.defaultDefinitions}
-        schema={schema}
+        schema={contactInfo.schema}
         data={{
-          veteran: {
-            mailingAddress: {
-              country: 'Afghanistan',
-            },
-            phoneEmailCard: {},
+          mailingAddress: {
+            country: 'Afghanistan',
           },
+          phoneEmailCard: {},
         }}
         formData={{}}
-        uiSchema={uiSchema}
+        uiSchema={contactInfo.uiSchema}
       />,
     );
 
@@ -93,23 +89,21 @@ describe('Higher-Level Review 0996 contact information', () => {
     const form = mount(
       <DefinitionTester
         definitions={formConfig.defaultDefinitions}
-        schema={schema}
+        schema={contactInfo.schema}
         data={{
-          veteran: {
-            mailingAddress: {
-              country: 'USA',
-              city: 'APO',
-            },
-            phoneEmailCard: {},
+          mailingAddress: {
+            country: 'USA',
+            city: 'APO',
           },
+          phoneEmailCard: {},
         }}
         formData={{}}
-        uiSchema={uiSchema}
+        uiSchema={contactInfo.uiSchema}
       />,
     );
 
     const stateDropdownOptions = form.find(
-      '#root_veteran_mailingAddress_state > option',
+      '#root_mailingAddress_state > option',
     );
     // The `+1` is for the empty option in the dropdown
     expect(stateDropdownOptions.length).to.equal(
@@ -122,23 +116,21 @@ describe('Higher-Level Review 0996 contact information', () => {
     const form = mount(
       <DefinitionTester
         definitions={formConfig.defaultDefinitions}
-        schema={schema}
+        schema={contactInfo.schema}
         data={{
-          veteran: {
-            mailingAddress: {
-              country: 'USA',
-              city: 'Detroit',
-            },
-            phoneEmailCard: {},
+          mailingAddress: {
+            country: 'USA',
+            city: 'Detroit',
           },
+          phoneEmailCard: {},
         }}
         formData={{}}
-        uiSchema={uiSchema}
+        uiSchema={contactInfo.uiSchema}
       />,
     );
 
     const stateDropdownOptions = form.find(
-      '#root_veteran_mailingAddress_state > option',
+      '#root_mailingAddress_state > option',
     );
     // The `+1` is for the empty option in the dropdown
     expect(stateDropdownOptions.length).to.equal(STATE_VALUES.length + 1);
@@ -150,24 +142,22 @@ describe('Higher-Level Review 0996 contact information', () => {
     const form = mount(
       <DefinitionTester
         definitions={formConfig.defaultDefinitions}
-        schema={schema}
+        schema={contactInfo.schema}
         data={{
-          veteran: {
-            phoneEmailCard: {
-              phone: '1231231231', // primaryPhone
-              emailAddress: 'a@b.co',
-            },
-            mailingAddress: {
-              country: 'USA',
-              addressLine1: '123 Any Street',
-              city: 'APO',
-              state: 'TX',
-              zipCode: '12345',
-            },
+          phoneEmailCard: {
+            phone: '1231231231', // primaryPhone
+            emailAddress: 'a@b.co',
+          },
+          mailingAddress: {
+            country: 'USA',
+            addressLine1: '123 Any Street',
+            city: 'APO',
+            state: 'TX',
+            zipCode: '12345',
           },
         }}
         formData={{}}
-        uiSchema={uiSchema}
+        uiSchema={contactInfo.uiSchema}
         onSubmit={onSubmit}
       />,
     );
@@ -183,24 +173,22 @@ describe('Higher-Level Review 0996 contact information', () => {
     const form = mount(
       <DefinitionTester
         definitions={formConfig.defaultDefinitions}
-        schema={schema}
+        schema={contactInfo.schema}
         data={{
-          veteran: {
-            phoneEmailCard: {
-              phone: '1231231231',
-              emailAddress: 'a@b.co',
-            },
-            mailingAddress: {
-              country: 'USA',
-              addressLine1: '123 Any Street',
-              city: 'Anytown',
-              state: 'AA',
-              zipCode: '12345',
-            },
+          phoneEmailCard: {
+            phone: '1231231231',
+            emailAddress: 'a@b.co',
+          },
+          mailingAddress: {
+            country: 'USA',
+            addressLine1: '123 Any Street',
+            city: 'Anytown',
+            state: 'AA',
+            zipCode: '12345',
           },
         }}
         formData={{}}
-        uiSchema={uiSchema}
+        uiSchema={contactInfo.uiSchema}
         onSubmit={onSubmit}
       />,
     );
@@ -215,23 +203,21 @@ describe('Higher-Level Review 0996 contact information', () => {
     const form = mount(
       <DefinitionTester
         definitions={formConfig.defaultDefinitions}
-        schema={schema}
+        schema={contactInfo.schema}
         data={{
-          veteran: {
-            'view:hasForwardingAddress': true,
-            mailingAddress: {
-              country: '',
-              addressLine1: '',
-            },
-            forwardingAddress: {
-              country: '',
-              addressLine1: '',
-            },
-            phoneEmailCard: {},
+          'view:hasForwardingAddress': true,
+          mailingAddress: {
+            country: '',
+            addressLine1: '',
           },
+          forwardingAddress: {
+            country: '',
+            addressLine1: '',
+          },
+          phoneEmailCard: {},
         }}
         formData={{}}
-        uiSchema={uiSchema}
+        uiSchema={contactInfo.uiSchema}
       />,
     );
 
@@ -247,35 +233,33 @@ describe('Higher-Level Review 0996 contact information', () => {
     const form = mount(
       <DefinitionTester
         definitions={formConfig.defaultDefinitions}
-        schema={schema}
+        schema={contactInfo.schema}
         data={{
-          veteran: {
-            phoneEmailCard: {
-              phone: '1231231231',
-              emailAddress: 'a@b.co',
+          phoneEmailCard: {
+            phone: '1231231231',
+            emailAddress: 'a@b.co',
+          },
+          mailingAddress: {
+            country: 'USA',
+            addressLine1: '123 Any Street',
+            city: 'Anytown',
+            state: 'MI',
+            zipCode: '12345',
+          },
+          'view:hasForwardingAddress': true,
+          forwardingAddress: {
+            effectiveDates: {
+              from: NEXT_YEAR,
             },
-            mailingAddress: {
-              country: 'USA',
-              addressLine1: '123 Any Street',
-              city: 'Anytown',
-              state: 'MI',
-              zipCode: '12345',
-            },
-            'view:hasForwardingAddress': true,
-            forwardingAddress: {
-              effectiveDates: {
-                from: NEXT_YEAR,
-              },
-              country: 'USA',
-              addressLine1: '123 Any Street',
-              city: 'APO',
-              state: 'TX',
-              zipCode: '12345',
-            },
+            country: 'USA',
+            addressLine1: '123 Any Street',
+            city: 'APO',
+            state: 'TX',
+            zipCode: '12345',
           },
         }}
         formData={{}}
-        uiSchema={uiSchema}
+        uiSchema={contactInfo.uiSchema}
         onSubmit={onSubmit}
       />,
     );
@@ -291,35 +275,33 @@ describe('Higher-Level Review 0996 contact information', () => {
     const form = mount(
       <DefinitionTester
         definitions={formConfig.defaultDefinitions}
-        schema={schema}
+        schema={contactInfo.schema}
         data={{
-          veteran: {
-            phoneEmailCard: {
-              phone: '1231231231',
-              emailAddress: 'a@b.co',
+          phoneEmailCard: {
+            phone: '1231231231',
+            emailAddress: 'a@b.co',
+          },
+          mailingAddress: {
+            country: 'USA',
+            addressLine1: '123 Any Street',
+            city: 'Anytown',
+            state: 'MI',
+            zipCode: '12345',
+          },
+          'view:hasForwardingAddress': true,
+          forwardingAddress: {
+            effectiveDates: {
+              from: NEXT_YEAR,
             },
-            mailingAddress: {
-              country: 'USA',
-              addressLine1: '123 Any Street',
-              city: 'Anytown',
-              state: 'MI',
-              zipCode: '12345',
-            },
-            'view:hasForwardingAddress': true,
-            forwardingAddress: {
-              effectiveDates: {
-                from: NEXT_YEAR,
-              },
-              country: 'USA',
-              addressLine1: '123 Any Street',
-              city: 'Anytown',
-              state: 'AA',
-              zipCode: '12345',
-            },
+            country: 'USA',
+            addressLine1: '123 Any Street',
+            city: 'Anytown',
+            state: 'AA',
+            zipCode: '12345',
           },
         }}
         formData={{}}
-        uiSchema={uiSchema}
+        uiSchema={contactInfo.uiSchema}
         onSubmit={onSubmit}
       />,
     );
@@ -335,35 +317,33 @@ describe('Higher-Level Review 0996 contact information', () => {
     const form = mount(
       <DefinitionTester
         definitions={formConfig.defaultDefinitions}
-        schema={schema}
+        schema={contactInfo.schema}
         data={{
-          veteran: {
-            phoneEmailCard: {
-              phone: '1231231231',
-              emailAddress: 'a@b.co',
+          phoneEmailCard: {
+            phone: '1231231231',
+            emailAddress: 'a@b.co',
+          },
+          mailingAddress: {
+            country: 'USA',
+            addressLine1: '123 Any Street',
+            city: 'Anytown',
+            state: 'MI',
+            zipCode: '12345',
+          },
+          'view:hasForwardingAddress': true,
+          forwardingAddress: {
+            effectiveDates: {
+              from: '2018-10-12',
             },
-            mailingAddress: {
-              country: 'USA',
-              addressLine1: '123 Any Street',
-              city: 'Anytown',
-              state: 'MI',
-              zipCode: '12345',
-            },
-            'view:hasForwardingAddress': true,
-            forwardingAddress: {
-              effectiveDates: {
-                from: '2018-10-12',
-              },
-              country: 'USA',
-              addressLine1: '123 Any Street',
-              city: 'Detroit',
-              state: 'MI',
-              zipCode: '12345',
-            },
+            country: 'USA',
+            addressLine1: '123 Any Street',
+            city: 'Detroit',
+            state: 'MI',
+            zipCode: '12345',
           },
         }}
         formData={{}}
-        uiSchema={uiSchema}
+        uiSchema={contactInfo.uiSchema}
         onSubmit={onSubmit}
       />,
     );
@@ -379,36 +359,34 @@ describe('Higher-Level Review 0996 contact information', () => {
     const form = mount(
       <DefinitionTester
         definitions={formConfig.defaultDefinitions}
-        schema={schema}
+        schema={contactInfo.schema}
         data={{
-          veteran: {
-            phoneEmailCard: {
-              phone: '1231231231',
-              emailAddress: 'a@b.co',
+          phoneEmailCard: {
+            phone: '1231231231',
+            emailAddress: 'a@b.co',
+          },
+          mailingAddress: {
+            country: 'USA',
+            addressLine1: '123 Any Street',
+            city: 'Anytown',
+            state: 'MI',
+            zipCode: '12345',
+          },
+          'view:hasForwardingAddress': true,
+          forwardingAddress: {
+            effectiveDates: {
+              from: '2099-10-12',
+              to: '2099-10-12',
             },
-            mailingAddress: {
-              country: 'USA',
-              addressLine1: '123 Any Street',
-              city: 'Anytown',
-              state: 'MI',
-              zipCode: '12345',
-            },
-            'view:hasForwardingAddress': true,
-            forwardingAddress: {
-              effectiveDates: {
-                from: '2099-10-12',
-                to: '2099-10-12',
-              },
-              country: 'USA',
-              addressLine1: '123 Any Street',
-              city: 'Detroit',
-              state: 'MI',
-              zipCode: '12345',
-            },
+            country: 'USA',
+            addressLine1: '123 Any Street',
+            city: 'Detroit',
+            state: 'MI',
+            zipCode: '12345',
           },
         }}
         formData={{}}
-        uiSchema={uiSchema}
+        uiSchema={contactInfo.uiSchema}
         onSubmit={onSubmit}
       />,
     );
@@ -424,32 +402,30 @@ describe('Higher-Level Review 0996 contact information', () => {
     const form = mount(
       <DefinitionTester
         definitions={formConfig.defaultDefinitions}
-        schema={schema}
+        schema={contactInfo.schema}
         data={{
-          veteran: {
-            phoneEmailCard: {
-              phone: '',
-              emailAddress: '',
+          phoneEmailCard: {
+            phone: '',
+            emailAddress: '',
+          },
+          mailingAddress: {
+            country: '',
+            addressLine1: '',
+            city: '',
+          },
+          'view:hasForwardingAddress': true,
+          forwardingAddress: {
+            effectiveDates: {
+              from: '',
             },
-            mailingAddress: {
-              country: '',
-              addressLine1: '',
-              city: '',
-            },
-            'view:hasForwardingAddress': true,
-            forwardingAddress: {
-              effectiveDates: {
-                from: '',
-              },
-              country: '',
-              addressLine1: '',
-              city: '',
-            },
+            country: '',
+            addressLine1: '',
+            city: '',
           },
         }}
         formData={{}}
         onSubmit={onSubmit}
-        uiSchema={uiSchema}
+        uiSchema={contactInfo.uiSchema}
       />,
     );
 
@@ -464,36 +440,34 @@ describe('Higher-Level Review 0996 contact information', () => {
     const form = mount(
       <DefinitionTester
         definitions={formConfig.defaultDefinitions}
-        schema={schema}
+        schema={contactInfo.schema}
         data={{
-          veteran: {
-            phoneEmailCard: {
-              phone: '1231231231',
-              emailAddress: 'a@b.co',
+          phoneEmailCard: {
+            phone: '1231231231',
+            emailAddress: 'a@b.co',
+          },
+          mailingAddress: {
+            country: 'USA',
+            addressLine1: '123 Any Street',
+            city: 'Anytown',
+            state: 'MI',
+            zipCode: '12345',
+          },
+          'view:hasForwardingAddress': true,
+          forwardingAddress: {
+            effectiveDates: {
+              from: NEXT_YEAR,
             },
-            mailingAddress: {
-              country: 'USA',
-              addressLine1: '123 Any Street',
-              city: 'Anytown',
-              state: 'MI',
-              zipCode: '12345',
-            },
-            'view:hasForwardingAddress': true,
-            forwardingAddress: {
-              effectiveDates: {
-                from: NEXT_YEAR,
-              },
-              country: 'USA',
-              addressLine1: '234 Maple St.',
-              city: 'Detroit',
-              state: 'MI',
-              zipCode: '234563453',
-            },
+            country: 'USA',
+            addressLine1: '234 Maple St.',
+            city: 'Detroit',
+            state: 'MI',
+            zipCode: '234563453',
           },
         }}
         formData={{}}
         onSubmit={onSubmit}
-        uiSchema={uiSchema}
+        uiSchema={contactInfo.uiSchema}
       />,
     );
 

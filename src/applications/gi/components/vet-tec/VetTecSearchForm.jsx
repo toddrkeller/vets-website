@@ -6,6 +6,7 @@ import { addAllOption } from '../../utils/helpers';
 import PropTypes from 'prop-types';
 import Dropdown from '../Dropdown';
 import VetTecFilterBy from './VetTecFilterBy';
+import environment from 'platform/utilities/environment';
 
 class VetTecSearchForm extends React.Component {
   static propTypes = {
@@ -19,11 +20,17 @@ class VetTecSearchForm extends React.Component {
     clearAutocompleteSuggestions: PropTypes.func.isRequired,
     fetchAutocompleteSuggestions: PropTypes.func.isRequired,
     handleFilterChange: PropTypes.func.isRequired,
+    handleProviderFilterChange: PropTypes.func.isRequired,
     updateAutocompleteSearchTerm: PropTypes.func.isRequired,
     toggleFilter: PropTypes.func.isRequired,
     searchResults: PropTypes.object.isRequired,
     eligibility: PropTypes.object.isRequired,
   };
+
+  searchLabel = () =>
+    environment.isProduction()
+      ? 'City, school, or employer'
+      : 'City, VET TEC program or provider';
 
   handleDropdownChange = e => {
     const { name: field, value } = e.target;
@@ -115,7 +122,9 @@ class VetTecSearchForm extends React.Component {
     <VetTecFilterBy
       showModal={this.props.showModal}
       filters={this.props.filters}
+      providers={this.props.search.facets.provider}
       handleFilterChange={this.props.handleFilterChange}
+      handleProviderFilterChange={this.props.handleProviderFilterChange}
     />
   );
 
@@ -128,7 +137,7 @@ class VetTecSearchForm extends React.Component {
             <h2>Refine search</h2>
             <KeywordSearch
               autocomplete={this.props.autocomplete}
-              label="City, school, or training provider"
+              label={this.searchLabel()}
               location={this.props.location}
               onClearAutocompleteSuggestions={
                 this.props.clearAutocompleteSuggestions
@@ -144,7 +153,8 @@ class VetTecSearchForm extends React.Component {
 
             {this.renderCountryFilter()}
             {this.renderStateFilter()}
-            {this.renderLearningFormat()}
+            {/* prod flag for story 19734 */}
+            {environment.isProduction() && this.renderLearningFormat()}
             {this.renderFilterBy()}
           </div>
           <div className="results-button">

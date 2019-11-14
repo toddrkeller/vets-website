@@ -1,8 +1,10 @@
 import { expect } from 'chai';
 
-import { checkDateRange } from '../../validations';
+import { checkDateRange, checkConferenceTimes } from '../../validations';
 import { addXMonths } from '../../helpers';
 import { errorMessages } from '../../constants';
+
+const mockFormData = { informalConferenceChoice: 'me' };
 
 describe('From Date validations', () => {
   it('should allow start dates after today', () => {
@@ -10,7 +12,7 @@ describe('From Date validations', () => {
     const errors = {
       from: {
         addError: message => {
-          errorMessage = message;
+          errorMessage = message || '';
         },
       },
     };
@@ -26,7 +28,7 @@ describe('From Date validations', () => {
     const errors = {
       from: {
         addError: message => {
-          errorMessage = message;
+          errorMessage = message || '';
         },
       },
     };
@@ -42,7 +44,7 @@ describe('From Date validations', () => {
     const errors = {
       to: {
         addError: message => {
-          errorMessage = message;
+          errorMessage = message || '';
         },
       },
     };
@@ -58,7 +60,7 @@ describe('From Date validations', () => {
     const errors = {
       to: {
         addError: message => {
-          errorMessage = message;
+          errorMessage = message || '';
         },
       },
     };
@@ -75,7 +77,7 @@ describe('From Date validations', () => {
     const errors = {
       to: {
         addError: message => {
-          errorMessage = message;
+          errorMessage = message || '';
         },
       },
     };
@@ -85,5 +87,61 @@ describe('From Date validations', () => {
     };
     checkDateRange(errors, dates);
     expect(errorMessage).to.equal(errorMessages.endDateBeforeStart);
+  });
+});
+
+describe('Informal conference time validation', () => {
+  it('should show an error if no times are selected', () => {
+    let errorMessage = '';
+    const errors = {
+      addError: message => {
+        errorMessage = message || '';
+      },
+    };
+    const times = {
+      a: undefined,
+      b: undefined,
+      c: undefined,
+      d: undefined,
+    };
+    checkConferenceTimes(errors, times, mockFormData);
+    expect(errorMessage).to.equal(errorMessages.informalConferenceTimesMin);
+    expect(checkConferenceTimes(null, times)).to.be.false;
+  });
+
+  it('should show an error if too many times are selected', () => {
+    let errorMessage = '';
+    const errors = {
+      addError: message => {
+        errorMessage = message || '';
+      },
+    };
+    const times = {
+      a: true,
+      b: true,
+      c: true,
+      d: true,
+    };
+    checkConferenceTimes(errors, times, mockFormData);
+    expect(errorMessage).to.equal(errorMessages.informalConferenceTimesMax);
+    expect(checkConferenceTimes(null, times)).to.be.false;
+  });
+
+  it('should not show an error if a single time is selected', () => {
+    let errorMessage = '';
+    const errors = {
+      addError: message => {
+        errorMessage = message || '';
+      },
+    };
+    const times = {
+      a: undefined,
+      b: true,
+      c: undefined,
+      d: undefined,
+    };
+    checkConferenceTimes(errors, times, mockFormData);
+    expect(errorMessage).to.equal('');
+    expect(checkConferenceTimes(null, times)).to.be.true;
   });
 });

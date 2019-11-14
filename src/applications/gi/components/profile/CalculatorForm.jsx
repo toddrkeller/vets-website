@@ -11,7 +11,6 @@ import {
 } from '../../utils/helpers';
 import ErrorableTextInput from '@department-of-veterans-affairs/formation-react/ErrorableTextInput';
 import OnlineClassesFilter from '../search/OnlineClassesFilter';
-import environment from 'platform/utilities/environment';
 import Checkbox from '../Checkbox';
 import recordEvent from 'platform/monitoring/record-event';
 import { ariaLabels } from '../../constants';
@@ -640,13 +639,10 @@ class CalculatorForm extends React.Component {
       const errorMessageCheck =
         errorMessage !== '' ? errorMessage : inputs.beneficiaryZIPError;
 
-      // Prod Flag for 19703
-      if (environment.isProduction() || !inputs.classesOutsideUS) {
-        // Prod Flag for 19703
-        const label =
-          this.isCountryInternational() && !environment.isProduction()
-            ? "If you're taking classes in the U.S., enter the location's zip code"
-            : "Please enter the zip code where you'll take your classes";
+      if (!inputs.classesOutsideUS) {
+        const label = this.isCountryInternational()
+          ? "If you're taking classes in the U.S., enter the location's zip code"
+          : "Please enter the zip code where you'll take your classes";
 
         amountInput = (
           <div>
@@ -668,8 +664,8 @@ class CalculatorForm extends React.Component {
           </p>
         );
       }
-      // Prod Flag for 19703
-      internationalCheckbox = !environment.isProduction() && (
+
+      internationalCheckbox = (
         <div>
           <Checkbox
             label={
@@ -691,6 +687,8 @@ class CalculatorForm extends React.Component {
             <span>
               {'Where will you take the majority of your classes? '}
               <button
+                aria-live="polite"
+                aria-atomic="true"
                 type="button"
                 className="va-button-link learn-more-button"
                 onClick={onShowModal.bind(
@@ -807,7 +805,7 @@ class CalculatorForm extends React.Component {
   render() {
     if (!this.props.displayedInputs) return null;
     return (
-      <div className="calculator-form" role="dialog">
+      <div className="calculator-form">
         {this.renderInState()}
         {this.renderTuition()}
         {this.renderBooks()}

@@ -60,9 +60,13 @@ export class Calculator extends React.Component {
         >
           {expanded ? 'Hide' : 'Edit'} eligibility details
         </button>
-        <div aria-live="off">
+        <div>
           {expanded ? (
-            <EligibilityForm eligibilityChange={this.props.eligibilityChange} />
+            <form>
+              <EligibilityForm
+                eligibilityChange={this.props.eligibilityChange}
+              />
+            </form>
           ) : null}
         </div>
       </div>
@@ -78,7 +82,7 @@ export class Calculator extends React.Component {
     const expanded = this.state.showCalculatorForm;
 
     return (
-      <div className="calculator-inputs">
+      <div aria-live="off" className="calculator-inputs">
         <button
           aria-expanded={expanded}
           onClick={this.toggleCalculatorForm}
@@ -86,18 +90,22 @@ export class Calculator extends React.Component {
         >
           {expanded ? 'Hide' : 'Edit'} calculator fields
         </button>
-        <div aria-live="off">
+        <div>
           {expanded ? (
-            <CalculatorForm
-              profile={profile}
-              eligibility={this.props.eligibility}
-              eligibilityChange={this.props.eligibilityChange}
-              inputs={inputs}
-              displayedInputs={displayed}
-              onShowModal={this.props.showModal}
-              onInputChange={this.props.calculatorInputChange}
-              onBeneficiaryZIPCodeChanged={this.props.beneficiaryZIPCodeChanged}
-            />
+            <form>
+              <CalculatorForm
+                profile={profile}
+                eligibility={this.props.eligibility}
+                eligibilityChange={this.props.eligibilityChange}
+                inputs={inputs}
+                displayedInputs={displayed}
+                onShowModal={this.props.showModal}
+                onInputChange={this.props.calculatorInputChange}
+                onBeneficiaryZIPCodeChanged={
+                  this.props.beneficiaryZIPCodeChanged
+                }
+              />
+            </form>
           ) : null}
         </div>
       </div>
@@ -172,10 +180,7 @@ export class Calculator extends React.Component {
           {this.renderCalculatorForm()}
         </div>
         <div className="medium-1 columns">&nbsp;</div>
-        <div
-          className="usa-width-one-half medium-6 columns your-estimated-benefits"
-          role="dialog"
-        >
+        <div className="usa-width-one-half medium-6 columns your-estimated-benefits">
           <h3>Your estimated benefits</h3>
           <div className="out-of-pocket-tuition">
             <CalculatorResultRow

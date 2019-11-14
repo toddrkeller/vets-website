@@ -29,10 +29,10 @@ const {
   forwardingAddress,
   emailAddress,
   phone,
-} = fullSchema.properties.veteran.properties;
+} = fullSchema.properties;
 
-export const uiSchema = {
-  veteran: {
+const contactInfo = {
+  uiSchema: {
     'ui:title': 'Contact Information',
     'ui:description': () =>
       contactInfoDescription({
@@ -69,7 +69,7 @@ export const uiSchema = {
       },
     },
     mailingAddress: merge(
-      addressUISchema('veteran.mailingAddress', 'Mailing address', true),
+      addressUISchema('mailingAddress', 'Mailing address', true),
       {
         addressLine1: {
           'ui:errorMessages': {
@@ -101,7 +101,7 @@ export const uiSchema = {
       'ui:title': forwardingAddressCheckboxLabel,
     },
     forwardingAddress: merge(
-      addressUISchema('veteran.forwardingAddress', 'Forwarding address', true),
+      addressUISchema('forwardingAddress', 'Forwarding address', true),
       {
         'ui:order': [
           'effectiveDates',
@@ -113,7 +113,7 @@ export const uiSchema = {
           'state',
           'zipCode',
         ],
-        'ui:description': ForwardingAddressDescription,
+        'ui:subtitle': ForwardingAddressDescription,
         'ui:options': {
           viewComponent: ForwardingAddressViewField,
           expandUnder: 'view:hasForwardingAddress',
@@ -174,32 +174,29 @@ export const uiSchema = {
       'ui:description': contactInfoUpdateHelp,
     },
   },
-};
 
-export const schema = {
-  type: 'object',
-  properties: {
-    veteran: {
-      type: 'object',
-      properties: {
-        phoneEmailCard: {
-          type: 'object',
-          required: ['phone', 'emailAddress'],
-          properties: {
-            phone,
-            emailAddress,
-          },
+  schema: {
+    type: 'object',
+    properties: {
+      phoneEmailCard: {
+        type: 'object',
+        required: ['phone', 'emailAddress'],
+        properties: {
+          phone,
+          emailAddress,
         },
-        mailingAddress,
-        'view:hasForwardingAddress': {
-          type: 'boolean',
-        },
-        forwardingAddress,
-        'view:contactInfoDescription': {
-          type: 'object',
-          properties: {},
-        },
+      },
+      mailingAddress,
+      'view:hasForwardingAddress': {
+        type: 'boolean',
+      },
+      forwardingAddress,
+      'view:contactInfoDescription': {
+        type: 'object',
+        properties: {},
       },
     },
   },
 };
+
+export default contactInfo;

@@ -62,7 +62,7 @@ class IntroductionPage extends React.Component {
     const isLoggedIn = user.login?.currentlyLoggedIn;
 
     return (
-      <article id="form0996" className="schemaform-intro">
+      <article className="schemaform-intro">
         <FormTitle title="Request a Higher-Level Review" />
         <p>Equal to VA Form 20-0996 (Higher-Level Review).</p>
         {isLoggedIn && this.state.isInLegacySystem ? (
@@ -86,11 +86,11 @@ class IntroductionPage extends React.Component {
             </CallToActionWidget>
             <p>
               After you click the button to start the Higher-Level Review
-              application, you'll need to opt out (withdraw) from the old
+              application, you’ll need to opt out (withdraw) from the old
               appeals process. This switch triggers us to formally withdraw your
               claim or appeal from the old appeal system and process it under
               the new system. Once you opt in to the new appeals process, the
-              decision is permanent and you can't return to the old appeals
+              decision is permanent and you can’t return to the old appeals
               process.
             </p>
             <aside className="process schemaform-process">
@@ -99,7 +99,7 @@ class IntroductionPage extends React.Component {
               <ol>
                 <li className="process-step list-one">
                   <h5>Prepare</h5>
-                  <h6>To fill out this application, you’ll need your:</h6>
+                  <p>To fill out this application, you’ll need your:</p>
                   <ul>
                     <li>
                       Primary address (or forwarding address if you'll be moving
@@ -114,7 +114,9 @@ class IntroductionPage extends React.Component {
                   <p>
                     When you request a Higher-Level Review, you won't be able to
                     submit new evidence. If you have new evidence to submit,
-                    you'll need to select another review option.{' '}
+                    you'll need to select another review option.
+                  </p>
+                  <p>
                     <a href="/decision-reviews">
                       Learn more about review options
                     </a>
