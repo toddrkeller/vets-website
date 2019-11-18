@@ -9,5 +9,5 @@ The React components in the Rated Disabilities page are wrapped in a `DowntimeNo
 When the Rated Disabilities front end components load, two API calls to the EVSS service are initiated from the React Components. These calls are made inside the `componentDidMount` lifecycle hooks when the respective components load so these calls are made asyncronously. The calls are
 
 | Calling Component | URL Called | Data returned |
---------------------------------------------------
-| <TotalRatedDisabilities /> | /disability_compensation_form/find_rating_info_pid | Total Disability Rating |
+| --------------------|------------|------------------|
+| TotalRatedDisabilities | disability_compensation_form/find_rating_info_pid | Total Disability Rating |
