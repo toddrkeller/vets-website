@@ -11,3 +11,4 @@ When the Rated Disabilities front end components load, two API calls to the EVSS
 | Calling Component | URL Called | Data returned |
 | --------------------|------------|------------------|
 | TotalRatedDisabilities | disability_compensation_form/find_rating_info_pid | Total Disability Rating |
+| RatedDisabilityList | disability_compensation_form/rated_disabilities | Individual Disability Ratings |
