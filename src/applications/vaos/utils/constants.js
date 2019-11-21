@@ -219,7 +219,7 @@ export const TYPE_OF_VISIT = [
   },
   {
     id: 'telehealth',
-    name: 'VA Video Connect',
+    name: 'Telehealth',
   },
 ];
 

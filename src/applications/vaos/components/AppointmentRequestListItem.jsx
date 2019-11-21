@@ -5,7 +5,6 @@ import {
   getAppointmentLocation,
   getRequestDateOptions,
   getRequestTimeToCall,
-  sentenceCase,
 } from '../utils/appointment';
 import { APPOINTMENT_TYPES } from '../utils/constants';
 
@@ -104,7 +103,7 @@ export default class AppointmentRequestListItem extends React.Component {
           id={`card-${index}`}
           className="vads-u-font-size--h3 vads-u-margin-top--0 vads-u-margin-bottom--2"
         >
-          {sentenceCase(appointment.appointmentType)} appointment
+          {appointment.appointmentType} appointment
         </h2>
         <div className="vads-u-flex--1 vads-u-margin-bottom--2">
           <dl className="vads-u-margin--0">
