@@ -1,7 +1,7 @@
 $veteran-banner-desktop-width: 1280px;
 
 .veteran-banner {
-  @include linear-gradient-background($white, $mm-gray);
+  @include linear-gradient-background($color-white, $mm-gray);
   margin: 1.5em auto 0;
   padding: 0 0.5em;
   @include media($small-desktop-screen) {
