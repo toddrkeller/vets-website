@@ -1,13 +1,13 @@
 {
   "appName": "10-10CG Application for Comprehensive Assistance for Family Caregivers Program",
-  "entryFile": "./burials-entry.jsx",
-  "entryName": "burials",
-  "rootUrl": "/burials-and-memorials/application/530",
+  "entryFile": "./caregivers-entry.js",
+  "entryName": "caregivers",
+  "rootUrl": "/caregivers/application/1010CG",
   "template": {
-    "title": "Apply for Burial Benefits (VA Form 21P-530)",
+    "title": "Apply for Veteran benefits as a Caregiver (VA Form 10-10CG)",
     "display_title": "Apply Now",
     "layout": "page-react.html",
-    "description": "Use VA Form 21P-530 to apply for VA burial benefits online now. Get step-by-step instructions, and consider signing in to save your in-progress application if you need to come back to finish filling it out later.",
+    "description": "Use VA Form 10-10CG to apply for VA burial benefits online now. Get step-by-step instructions, and consider signing in to save your in-progress application if you need to come back to finish filling it out later.",
     "order": 1
   }
 }
