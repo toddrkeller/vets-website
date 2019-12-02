@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  type: 
+  legArm: 
+  leftRightTop: 
+  widthTop: 1.5
+  widthToe: 1.5
+  length: 1.5
+  tSize: 
+  order: one
+
+two:
+  type: 
+  legArm: 
+  leftRightTop: 
+  widthTop: 1.5
+  widthToe: 1.5
+  length: 1.5
+  tSize: 
+  order: two
