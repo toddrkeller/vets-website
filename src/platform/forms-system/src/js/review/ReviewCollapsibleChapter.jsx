@@ -149,6 +149,9 @@ export default class ReviewCollapsibleChapter extends React.Component {
               'vads-u-margin-bottom--0':
                 !pageSchema && arrayFields.length === 0,
             });
+
+            // 3506 NOTES: title is passed as a function for the childrenInformation Page. See src/applications/disability-benefits/686/config/form.js:887
+            // 3506 NOTES: title is passed as a function for the childrenAddress Page. See src/applications/disability-benefits/686/config/form.js:1007
             const title = page.reviewTitle || page.title || '';
 
             return (

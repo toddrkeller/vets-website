@@ -885,7 +885,7 @@ const formConfig = {
         childrenInformation: {
           path: 'unmarried-children/information/:index',
           title: item =>
-            `${item.fullName.first || ''} ${item.fullName.last ||
+            `${item.fullName.first || ''} ${item.fullName.last || // 3506 NOTES: this doesn't actually seem to be called anywhere.
               ''} information`,
           showPagePerItem: true,
           arrayPath: 'dependents',
@@ -1005,7 +1005,7 @@ const formConfig = {
         childrenAddress: {
           path: 'unmarried-children/address/:index',
           title: item =>
-            `${item.fullName.first || ''} ${item.fullName.last || ''} address`,
+            `${item.fullName.first || ''} ${item.fullName.last || ''} address`, // 3605 NOTES: this doesn't seem to be called anywhere.
           showPagePerItem: true,
           arrayPath: 'dependents',
           schema: {
