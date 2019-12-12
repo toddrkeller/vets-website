@@ -58,6 +58,8 @@ export function transformFormToVARequest(state) {
     purposeOfVisit: PURPOSE_TEXT.find(
       purpose => purpose.id === data.reasonForAppointment,
     )?.serviceName,
+    otherPurposeOfVisit:
+      data.reasonForAppointment === 'other' ? 'See message' : null,
     visitType: TYPE_OF_VISIT.find(type => type.id === data.visitType)
       ?.serviceName,
     phoneNumber: data.phoneNumber,
@@ -88,27 +90,31 @@ export function transformFormToVARequest(state) {
 
 export function transformFormToCCRequest(state) {
   const data = getFormData(state);
-  const preferredProviders = data.hasCommunityCareProvider
-    ? [
-        {
-          address: {
-            city: '',
-            state: '',
-            street: '',
-            zipCode: data.communityCareProvider.address.postalCode,
-          },
-          firstName: data.communityCareProvider.firstName,
-          lastName: data.communityCareProvider.lastName,
-          practiceName: data.communityCareProvider.practiceName,
-          providerStreet: `${data.communityCareProvider.address.street}, ${
-            data.communityCareProvider.address.street2
-          }`,
-          providerCity: data.communityCareProvider.address.city,
-          providerState: data.communityCareProvider.address.state,
-          providerZipCode1: data.communityCareProvider.address.postalCode,
+  let preferredProviders = [];
+
+  if (data.hasCommunityCareProvider) {
+    const street = `${data.communityCareProvider.address.street}, ${
+      data.communityCareProvider.address.street2
+    }`;
+    preferredProviders = [
+      {
+        address: {
+          street,
+          city: data.communityCareProvider.address.city,
+          state: data.communityCareProvider.address.state,
+          zipCode: data.communityCareProvider.address.postalCode,
         },
-      ]
-    : [];
+        firstName: data.communityCareProvider.firstName,
+        lastName: data.communityCareProvider.lastName,
+        practiceName: data.communityCareProvider.practiceName,
+        providerStreet: street,
+        providerCity: data.communityCareProvider.address.city,
+        providerState: data.communityCareProvider.address.state,
+        providerZipCode1: data.communityCareProvider.address.postalCode,
+      },
+    ];
+  }
+
   const residentialAddress = selectVet360ResidentialAddress(state);
   const system = getSystems(state).find(
     sys => sys.institutionCode === data.communityCareSystemId,

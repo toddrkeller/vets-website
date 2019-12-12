@@ -1,12 +1,15 @@
 import * as Sentry from '@sentry/browser';
 import moment from 'moment';
+
+import recordEvent from 'platform/monitoring/record-event';
+
 import {
   selectVet360EmailAddress,
   selectVet360HomePhoneString,
   selectVet360MobilePhoneString,
 } from 'platform/user/selectors';
 import newAppointmentFlow from '../newAppointmentFlow';
-import { getTypeOfCare } from '../utils/selectors';
+import { getTypeOfCare, vaosDirectScheduling } from '../utils/selectors';
 import {
   getSystemIdentifiers,
   getSystemDetails,
@@ -23,6 +26,7 @@ import {
   FACILITY_TYPES,
   FLOW_TYPES,
   REASON_MAX_CHARS,
+  GA_PREFIX,
 } from '../utils/constants';
 import {
   transformFormToVARequest,
@@ -92,6 +96,8 @@ export const FORM_SUBMIT_SUCCEEDED = 'newAppointment/FORM_SUBMIT_SUCCEEDED';
 export const FORM_SUBMIT_FAILED = 'newAppointment/FORM_SUBMIT_FAILED';
 export const FORM_UPDATE_CC_ELIGIBILITY =
   'newAppointment/FORM_UPDATE_CC_ELIGIBILITY';
+export const FORM_CLOSED_CONFIRMATION_PAGE =
+  'newAppointment/FORM_CLOSED_CONFIRMATION_PAGE';
 
 export function openFormPage(page, uiSchema, schema) {
   return {
@@ -102,9 +108,9 @@ export function openFormPage(page, uiSchema, schema) {
   };
 }
 
-export function resetForm() {
+export function closeConfirmationPage() {
   return {
-    type: FORM_RESET,
+    type: FORM_CLOSED_CONFIRMATION_PAGE,
   };
 }
 
@@ -177,6 +183,7 @@ export function openTypeOfCarePage(page, uiSchema, schema) {
 
 export function openFacilityPage(page, uiSchema, schema) {
   return async (dispatch, getState) => {
+    const directSchedulingEnabled = vaosDirectScheduling(getState());
     const newAppointment = getState().newAppointment;
     let systems = newAppointment.systems;
     let facilities = null;
@@ -218,6 +225,7 @@ export function openFacilityPage(page, uiSchema, schema) {
           facilityId,
           typeOfCareId,
           systemId,
+          directSchedulingEnabled,
         );
       }
 
@@ -242,6 +250,7 @@ export function openFacilityPage(page, uiSchema, schema) {
 
 export function updateFacilityPageData(page, uiSchema, data) {
   return async (dispatch, getState) => {
+    const directSchedulingEnabled = vaosDirectScheduling(getState());
     const previousNewAppointmentState = getState().newAppointment;
     const typeOfCareId = getTypeOfCare(data)?.id;
     let facilities =
@@ -297,6 +306,7 @@ export function updateFacilityPageData(page, uiSchema, data) {
           data.vaFacility,
           typeOfCareId,
           data.vaSystem,
+          directSchedulingEnabled,
         );
 
         dispatch({
@@ -471,6 +481,9 @@ export function submitAppointmentOrRequest(router) {
     });
 
     if (newAppointment.flowType === FLOW_TYPES.DIRECT) {
+      recordEvent({
+        event: `${GA_PREFIX}-direct-submission`,
+      });
       try {
         const appointmentBody = transformFormToAppointment(getState());
         await submitAppointment(appointmentBody);
@@ -487,21 +500,33 @@ export function submitAppointmentOrRequest(router) {
           type: FORM_SUBMIT_SUCCEEDED,
         });
 
+        recordEvent({
+          event: `${GA_PREFIX}-direct-submission-successful`,
+        });
         router.push('/new-appointment/confirmation');
       } catch (error) {
         Sentry.captureException(error);
         dispatch({
           type: FORM_SUBMIT_FAILED,
         });
+        recordEvent({
+          event: `${GA_PREFIX}-direct-submission-failed`,
+        });
       }
     } else {
+      const isCommunityCare =
+        newAppointment.data.facilityType === FACILITY_TYPES.COMMUNITY_CARE;
+      const eventType = isCommunityCare ? 'community-care' : 'request';
+
+      recordEvent({
+        event: `${GA_PREFIX}-${eventType}-submission`,
+      });
+
       try {
         let requestBody;
         let requestData;
 
-        if (
-          newAppointment.data.facilityType === FACILITY_TYPES.COMMUNITY_CARE
-        ) {
+        if (isCommunityCare) {
           requestBody = transformFormToCCRequest(getState());
           requestData = await submitRequest('cc', requestBody);
         } else {
@@ -511,11 +536,8 @@ export function submitAppointmentOrRequest(router) {
 
         try {
           await buildPreferencesDataAndUpdate(newAppointment);
-          const messageBody = createMessageBody(
-            requestData.uniqueId,
-            newAppointment,
-          );
-          await sendRequestMessage(requestData.uniqueId, messageBody);
+          const messageBody = createMessageBody(requestData.id, newAppointment);
+          await sendRequestMessage(requestData.id, messageBody);
         } catch (error) {
           // These are ancillary updates, the request went through if the first submit
           // succeeded
@@ -526,11 +548,17 @@ export function submitAppointmentOrRequest(router) {
           type: FORM_SUBMIT_SUCCEEDED,
         });
 
+        recordEvent({
+          event: `${GA_PREFIX}-${eventType}-submission-successful`,
+        });
         router.push('/new-appointment/confirmation');
       } catch (error) {
         Sentry.captureException(error);
         dispatch({
           type: FORM_SUBMIT_FAILED,
+        });
+        recordEvent({
+          event: `${GA_PREFIX}-${eventType}-submission-failed`,
         });
       }
     }
