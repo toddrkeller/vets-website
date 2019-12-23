@@ -69,7 +69,11 @@ module.exports = {
       .selectDropdown('root_communityCareProvider_address_state', 'IL')
       .setValue('#root_communityCareProvider_address_postalCode', '60613')
       .setValue('#root_communityCareProvider_phone', '1234567890')
-      .click('.rjsf [type="submit"]')
+      .click('.rjsf [type="submit"]');
+
+    client.expect.element('.usa-input-error').to.not.be.present;
+
+    client
       .waitForElementPresent('#root_reasonForAppointment_0', Timeouts.slow)
       .assert.containsText('h1', 'Reason for appointment');
   },
