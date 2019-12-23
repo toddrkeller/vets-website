@@ -51,6 +51,7 @@ module.exports = {
     );
   },
   'Share your community care provider preferences': client => {
+    client.assert.urlContains('community-care-preferences');
     client
       .waitForElementPresent('#root_communityCareSystemId_0', Timeouts.slow)
       .selectRadio('root_communityCareSystemId', '983')
