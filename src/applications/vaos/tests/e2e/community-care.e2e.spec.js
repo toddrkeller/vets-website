@@ -72,12 +72,12 @@ module.exports = {
       .click('.form-progress-buttons .usa-button-primary');
 
     client.expect.element('.usa-input-error').to.not.be.present;
-
+    client.assert.urlContains('reason-appointment');
+  },
+  'Reason for appointment': client => {
     client
       .waitForElementPresent('#root_reasonForAppointment_0', Timeouts.slow)
       .assert.containsText('h1', 'Reason for appointment');
-  },
-  'Reason for appointment': client => {
     VAOSHelpers.appointmentReasonTest(client, 'Contact information');
   },
   'Contact information': client => {
