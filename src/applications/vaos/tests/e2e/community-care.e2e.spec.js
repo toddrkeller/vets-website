@@ -69,7 +69,7 @@ module.exports = {
       .selectDropdown('root_communityCareProvider_address_state', 'IL')
       .setValue('#root_communityCareProvider_address_postalCode', '60613')
       .setValue('#root_communityCareProvider_phone', '1234567890')
-      .click('.rjsf [type="submit"]');
+      .click('.form-progress-buttons .usa-button-primary');
 
     client.expect.element('.usa-input-error').to.not.be.present;
 
