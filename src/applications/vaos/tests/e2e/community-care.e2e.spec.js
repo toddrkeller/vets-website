@@ -51,9 +51,11 @@ module.exports = {
     );
   },
   'Share your community care provider preferences': client => {
-    client.assert.urlContains('community-care-preferences');
     client
       .waitForElementPresent('#root_communityCareSystemId_0', Timeouts.slow)
+      .assert.urlContains('community-care-preferences');
+
+    client
       .selectRadio('root_communityCareSystemId', '983')
       .selectDropdown('root_preferredLanguage', 'english')
       .selectYesNo('root_hasCommunityCareProvider', true)
@@ -71,14 +73,13 @@ module.exports = {
       .setValue('#root_communityCareProvider_address_postalCode', '60613')
       .setValue('#root_communityCareProvider_phone', '1234567890')
       .click('.form-progress-buttons .usa-button-primary');
-
-    client.expect.element('.usa-input-error').to.not.be.present;
-    client.assert.urlContains('reason-appointment');
   },
   'Reason for appointment': client => {
     client
       .waitForElementPresent('#root_reasonForAppointment_0', Timeouts.slow)
-      .assert.containsText('h1', 'Reason for appointment');
+      .assert.urlContains('reason-appointment');
+
+    client.assert.containsText('h1', 'Reason for appointment');
     VAOSHelpers.appointmentReasonTest(client, 'Contact information');
   },
   'Contact information': client => {
