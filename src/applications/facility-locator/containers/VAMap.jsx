@@ -609,23 +609,8 @@ class VAMap extends Component {
 
         <div className="facility-introtext">
           <p>
-            Find VA locations near you with our facility locator tool. You can
-            search for your nearest VA medical center as well as other health
-            facilities, benefit offices, cemeteries, community care providers
-            and Vet Centers. You can also filter your results by service type to
-            find locations that offer the specific service you’re looking for.
-          </p>
-          <p>
-            <strong>Need same-day care for a minor illness or injury?</strong>{' '}
-            Search for your nearest VA health facility. Or find{' '}
-            <a
-              href="https://vaurgentcarelocator.triwest.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              VA-approved urgent care locations and pharmacies
-            </a>{' '}
-            near you.
+            Find one of VA's more than 2,000 health care, counseling, benefits, and cemeteries facilities, plus VA's nationwide
+            network of community health care providers.
           </p>
         </div>
         {isMobile.any ? this.renderMobileView() : this.renderDesktopView()}

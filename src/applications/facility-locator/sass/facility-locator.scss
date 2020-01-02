@@ -23,16 +23,29 @@ $color-info-bubble-text: #818a8d;
   }
 
   .title-section {
-    padding: 0.5rem 0;
-
-    h1:first-child {
-      margin-top: 0;
-      padding: 0 0 0 1.5rem;
-    }
+    width: 366px;
+    height: 52px;
+    font-family: Bitter;
+    font-size: 40px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.3;
+    letter-spacing: normal;
+    color: #323a45;
   }
 
   .facility-introtext {
-    padding: 0 15px 15px;
+    width: 754px;
+    height: 48px;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.5;
+    letter-spacing: normal;
+    color: #323a45;
+    margin-bottom: 32px;
   }
 
   .flex-center {
