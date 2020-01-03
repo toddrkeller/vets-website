@@ -468,7 +468,20 @@ class VAMap extends Component {
         ? urgentCareLink
         : otherToolsLink;
     return (
-      <div>
+      <div className="mobile-container">
+        <div>
+          <div className="title-section">
+            <h1>Find VA Locations</h1>
+          </div>
+
+          <div className="facility-introtext">
+            <p>
+              Find one of VA's more than 2,000 health care, counseling,
+              benefits, and cemeteries facilities, plus VA's nationwide
+              community health care providers.
+            </p>
+          </div>
+        </div>
         <div className="columns small-12">
           <SearchControls
             currentQuery={currentQuery}
@@ -542,66 +555,6 @@ class VAMap extends Component {
         : otherToolsLink;
 
     return (
-      <div className="desktop-container">
-        <div>
-          <SearchControls
-            currentQuery={currentQuery}
-            onChange={this.props.updateSearchQuery}
-            onSubmit={this.handleSearch}
-            showCommunityCares={showCommunityCares}
-          />
-        </div>
-        <div className="row">
-          <div
-            className="columns usa-width-one-third medium-4 small-12"
-            style={{ maxHeight: '75vh', overflowY: 'auto' }}
-            id="searchResultsContainer"
-          >
-            <div
-              aria-live="polite"
-              aria-relevant="additions text"
-              className="facility-search-results"
-            >
-              <div>
-                <ResultsList updateUrlParams={this.updateUrlParams} />
-              </div>
-            </div>
-          </div>
-          <div
-            className="columns usa-width-two-thirds medium-8 small-12"
-            style={{ minHeight: '75vh' }}
-          >
-            {externalLink}
-            <Map
-              ref="map"
-              center={position}
-              zoomSnap={1}
-              zoomDelta={1}
-              zoom={parseInt(currentQuery.zoomLevel, 10)}
-              style={{ minHeight: '75vh', width: '100%' }}
-              scrollWheelZoom={false}
-              onMoveEnd={this.handleBoundsChanged}
-            >
-              <TileLayer
-                url={`https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/256/{z}/{x}/{y}?access_token=${mapboxToken}`}
-                attribution="Map data &copy; <a href=&quot;http://openstreetmap.org&quot;>OpenStreetMap</a> contributors, \
-                  <a href=&quot;http://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, \
-                  Imagery © <a href=&quot;http://mapbox.com&quot;>Mapbox</a>"
-              />
-              {facilityLocatorMarkers.length > 0 && (
-                <FeatureGroup ref="facilityMarkers">
-                  {facilityLocatorMarkers}
-                </FeatureGroup>
-              )}
-            </Map>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  render() {
-    return (
       <div>
         <div className="title-section">
           <h1>Find VA Locations</h1>
@@ -609,13 +562,72 @@ class VAMap extends Component {
 
         <div className="facility-introtext">
           <p>
-            Find one of VA's more than 2,000 health care, counseling, benefits, and cemeteries facilities, plus VA's nationwide
-            network of community health care providers.
+            Find one of VA's more than 2,000 health care, counseling, benefits,
+            and cemeteries facilities, plus VA's nationwide network of community
+            health care providers.
           </p>
         </div>
-        {isMobile.any ? this.renderMobileView() : this.renderDesktopView()}
+        <div className="desktop-container">
+          <div>
+            <SearchControls
+              currentQuery={currentQuery}
+              onChange={this.props.updateSearchQuery}
+              onSubmit={this.handleSearch}
+              showCommunityCares={showCommunityCares}
+            />
+          </div>
+          <div className="row">
+            <div
+              className="columns usa-width-one-third medium-4 small-12"
+              style={{ maxHeight: '75vh', overflowY: 'auto' }}
+              id="searchResultsContainer"
+            >
+              <div
+                aria-live="polite"
+                aria-relevant="additions text"
+                className="facility-search-results"
+              >
+                <div>
+                  <ResultsList updateUrlParams={this.updateUrlParams} />
+                </div>
+              </div>
+            </div>
+            <div
+              className="columns usa-width-two-thirds medium-8 small-12"
+              style={{ minHeight: '75vh' }}
+            >
+              {externalLink}
+              <Map
+                ref="map"
+                center={position}
+                zoomSnap={1}
+                zoomDelta={1}
+                zoom={parseInt(currentQuery.zoomLevel, 10)}
+                style={{ minHeight: '75vh', width: '100%' }}
+                scrollWheelZoom={false}
+                onMoveEnd={this.handleBoundsChanged}
+              >
+                <TileLayer
+                  url={`https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/256/{z}/{x}/{y}?access_token=${mapboxToken}`}
+                  attribution="Map data &copy; <a href=&quot;http://openstreetmap.org&quot;>OpenStreetMap</a> contributors, \
+                  <a href=&quot;http://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, \
+                  Imagery © <a href=&quot;http://mapbox.com&quot;>Mapbox</a>"
+                />
+                {facilityLocatorMarkers.length > 0 && (
+                  <FeatureGroup ref="facilityMarkers">
+                    {facilityLocatorMarkers}
+                  </FeatureGroup>
+                )}
+              </Map>
+            </div>
+          </div>
+        </div>
       </div>
     );
+  };
+
+  render() {
+    return isMobile.any ? this.renderMobileView() : this.renderDesktopView();
   }
 }
 

@@ -23,29 +23,13 @@ $color-info-bubble-text: #818a8d;
   }
 
   .title-section {
-    width: 366px;
-    height: 52px;
-    font-family: Bitter;
-    font-size: 40px;
-    font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.3;
-    letter-spacing: normal;
-    color: #323a45;
+    h1:first-child {
+      margin-top: 0;
+    }
   }
 
   .facility-introtext {
-    width: 754px;
-    height: 48px;
-    font-size: 16px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.5;
-    letter-spacing: normal;
-    color: #323a45;
-    margin-bottom: 32px;
+    margin-bottom: 3.2rem;
   }
 
   .flex-center {
@@ -90,6 +74,11 @@ $color-info-bubble-text: #818a8d;
   .desktop-container {
     margin-bottom: 3em;
     border-bottom: solid thin $color-gray-lightest;
+    width: 984px;
+  }
+
+  .mobile-container {
+    padding: 0 0 0 1.5rem;
   }
 
   .search-result-title:focus {
@@ -327,11 +316,38 @@ $color-info-bubble-text: #818a8d;
     clear: both;
   }
 
-  .search-controls-container {
+  .desktop-size {
+    width: 984px;
+    height: 178px;
+  }
+
+  .desktop-align {
+    margin-left: 24px;
+    width: 396px !important;
+  }
+
+  .desktop-align-2 {
+    margin-left: 120px;
+    width: 396px !important;
+  }
+
+  .desktop-align-3 {
+    width: 396px !important;
+  }
+
+  .desktop-align-4 {
+    margin-left: 110px;
+  }
+
+
+  .search-main-container{
     padding: 1.4rem 0.9rem;
     border: solid thin $color-gray-lightest;
     margin-bottom: 2rem;
     background: $color-gray-lightest;
+  }
+
+  .search-controls-container {
 
     #facility-search-controls {
       display: flex;

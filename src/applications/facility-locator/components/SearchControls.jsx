@@ -48,6 +48,7 @@ class SearchControls extends Component {
 
   renderServiceTypeDropdown = () => {
     const { facilityType, serviceType } = this.props.currentQuery;
+    const { isMobile } = this.props;
     const disabled = ![
       LocationType.HEALTH,
       LocationType.BENEFITS,
@@ -89,9 +90,10 @@ class SearchControls extends Component {
 
     return (
       <span>
-        <label htmlFor="service-type-dropdown">Service type (optional)</label>
+        <label htmlFor="service-type-dropdown">Choose a service type</label>
         <select
           id="service-type-dropdown"
+          className={isMobile ? null : 'desktop-align-3'}
           disabled={disabled}
           value={serviceType || ''}
           onChange={this.handleServiceTypeChange}
@@ -116,43 +118,70 @@ class SearchControls extends Component {
     }
 
     return (
-      <div className="search-controls-container clearfix">
-        <form
-          id="facility-search-controls"
-          className="row"
-          onSubmit={this.handleSubmit}
-        >
-          <div className="columns medium-3-5">
-            <label
-              htmlFor="street-city-state-zip"
-              id="street-city-state-zip-label"
+      <div
+        className={
+          isMobile
+            ? 'search-main-container'
+            : 'search-main-container desktop-size'
+        }
+      >
+        <div className={isMobile ? null : 'desktop-align'}>
+          <label
+            htmlFor="street-city-state-zip"
+            id="street-city-state-zip-label"
+          >
+            Search by city, state or ZIP Code
+          </label>
+          <input
+            id="street-city-state-zip"
+            name="street-city-state-zip"
+            type="text"
+            onChange={this.handleQueryChange}
+            value={currentQuery.searchString}
+            title="Your location: Street, City, State or Zip"
+            required
+          />
+        </div>
+        <div className="search-controls-container clearfix">
+          <form
+            id="facility-search-controls"
+            className="row"
+            onSubmit={this.handleSubmit}
+          >
+            <div
+              className={
+                isMobile
+                  ? 'columns medium-3-5'
+                  : ' columns medium-3-5 desktop-align'
+              }
             >
-              Search city, state, or postal code
-            </label>
-            <input
-              id="street-city-state-zip"
-              name="street-city-state-zip"
-              type="text"
-              onChange={this.handleQueryChange}
-              value={currentQuery.searchString}
-              title="Your location: Street, City, State or Zip"
-              required
-            />
-          </div>
-          <div className="columns medium-3-5">
-            <FacilityTypeDropdown
-              facilityType={this.props.currentQuery.facilityType}
-              onChange={this.handleFacilityTypeChange}
-              showCommunityCares={showCommunityCares}
-            />
-          </div>
-          <div className="columns medium-3-4">
-            {this.renderServiceTypeDropdown()}
-          </div>
-          <div className="columns medium-1-2">
-            <input type="submit" value="Search" />
-          </div>
-        </form>
+              <FacilityTypeDropdown
+                isMobile={this.props.isMobile}
+                facilityType={this.props.currentQuery.facilityType}
+                onChange={this.handleFacilityTypeChange}
+                showCommunityCares={showCommunityCares}
+              />
+            </div>
+            <div
+              className={
+                isMobile
+                  ? 'columns medium-3-5'
+                  : 'columns medium-3-5 desktop-align-2'
+              }
+            >
+              {this.renderServiceTypeDropdown()}
+            </div>
+            <div
+              className={
+                isMobile
+                  ? 'columns medium-1-2'
+                  : 'columns medium-3-5 desktop-align-4'
+              }
+            >
+              <input type="submit" value="Search" />
+            </div>
+          </form>
+        </div>
       </div>
     );
   }

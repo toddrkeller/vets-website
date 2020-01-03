@@ -80,6 +80,7 @@ class FacilityTypeDropdown extends Component {
         );
     const facilityType = this.props.facilityType || 'all';
     const highlightIndex = locationOptions.indexOf(facilityType);
+    const { isMobile } = this.props;
 
     return (
       <Downshift
@@ -124,16 +125,19 @@ class FacilityTypeDropdown extends Component {
           return (
             <div>
               <div className="row">
-                <div className="columns medium-4">
+                <div className="columns ">
                   <label
                     htmlFor="facility-dropdown-toggle"
                     id="facility-dropdown-label"
                   >
-                    Search for
+                    Choose a VA facility type
                   </label>
                 </div>
               </div>
-              <div id="facility-dropdown" className="row">
+              <div
+                id="facility-dropdown"
+                className={isMobile ? 'row' : 'row desktop-align'}
+              >
                 <button
                   {...getButtonProps({
                     id: 'facility-dropdown-toggle',
@@ -154,52 +158,6 @@ class FacilityTypeDropdown extends Component {
                   </ul>
                 )}
               </div>
-              {/* <div className="columns medium-8">
-                {selectedItem === LocationType.CC_PROVIDER && (
-                  <span className="cc-info-link-span">
-                    <button
-                      onClick={this.toggleCCInfo}
-                      title="Click for More Information"
-                      aria-label="Click for more information about the Community Care Program"
-                      className="cc-info-link"
-                      ref={this.setCCInfoRef}
-                    >
-                      <i className="fa fa-info-circle cc-info-link-icon" />
-                    </button>
-                  </span>
-                )}
-                {this.state.showBubble && (
-                  <div
-                    aria-live="polite"
-                    aria-relevant="additions"
-                    id="infoBubble"
-                  >
-                    <button
-                      className="cc-info-close-btn"
-                      type="button"
-                      aria-label="Close info bubble"
-                      onClick={this.toggleCCInfo}
-                      ref={this.setCCInfoCloseRef}
-                    >
-                      <i className="fas fa-times-circle cc-info-close-btn-icon" />
-                    </button>
-                    <h6>What Is Community Care and Am I Eligible?</h6>
-                    <p>
-                      The Veterans Choice Program is one of several programs
-                      through which a Veteran can receive care from a community
-                      provider, paid for by the Department of Veterans Affairs.
-                      <br />
-                      <a
-                        href="https://www.va.gov/COMMUNITYCARE/programs/veterans/VCP/index.asp"
-                        rel="noopener noreferrer"
-                        target="_blank"
-                      >
-                        Read More
-                      </a>
-                    </p>
-                  </div>
-                )}
-              </div> */}
             </div>
           );
         }}
