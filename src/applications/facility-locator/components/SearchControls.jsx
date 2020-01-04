@@ -94,6 +94,7 @@ class SearchControls extends Component {
         <select
           id="service-type-dropdown"
           className={isMobile ? null : 'desktop-align-3'}
+          style={{ 'font-weight': 'bold' }}
           disabled={disabled}
           value={serviceType || ''}
           onChange={this.handleServiceTypeChange}
@@ -133,9 +134,11 @@ class SearchControls extends Component {
             Search by city, state or ZIP Code
           </label>
           <input
+            form="facility-search-controls"
             id="street-city-state-zip"
             name="street-city-state-zip"
             type="text"
+            style={{ 'font-weight': 'bold' }}
             onChange={this.handleQueryChange}
             value={currentQuery.searchString}
             title="Your location: Street, City, State or Zip"
