@@ -141,7 +141,7 @@ class FacilityTypeDropdown extends Component {
                 <button
                   {...getButtonProps({
                     id: 'facility-dropdown-toggle',
-                    className: facilityOptionClasses(selectedItem),
+                    className: 'dropdown-option',
                     onKeyDown: handleKeyDown,
                     tabIndex: 0,
                     type: 'button',

@@ -83,7 +83,7 @@ class ResultsList extends Component {
     if (error) {
       // For some reason, an error can be an HTTP response, or just a string.
       if (Array.isArray(error)) {
-        const timedOut = error.find(err => TIMEOUTS.has(err.code));
+        /* const timedOut = error.find(err => TIMEOUTS.has(err.code));
         if (timedOut) {
           return (
             <div
@@ -113,7 +113,7 @@ class ResultsList extends Component {
               </p>
             </div>
           );
-        }
+        */
       }
 
       return (
