@@ -545,15 +545,15 @@ class VAMap extends Component {
 
   renderDesktopView = () => {
     // defaults to White House coordinates initially
-    const { currentQuery, showCommunityCares } = this.props;
+    const { currentQuery, showCommunityCares, results } = this.props;
     const coords = this.props.currentQuery.position;
     const position = [coords.latitude, coords.longitude];
     const facilityLocatorMarkers = this.renderFacilityMarkers();
     const externalLink =
       currentQuery.facilityType === LocationType.CC_PROVIDER
         ? urgentCareLink
-        : otherToolsLink;
-
+        : otherToolsLink; // TODO use this logic for dialog
+    console.log(this.props);
     return (
       <div>
         <div className="title-section">
@@ -576,6 +576,23 @@ class VAMap extends Component {
               showCommunityCares={showCommunityCares}
             />
           </div>
+
+          <div className="desk-marg-left-1">
+            {results.length > 0 ? (
+              <p className="search-result-title">
+                <strong>{this.props.pagination.totalEntries} results</strong>
+                {` for `}
+                <strong>
+                  {facilityTypes[this.props.currentQuery.facilityType]}
+                </strong>
+                {` near `}
+                <strong>“{this.props.currentQuery.context}”</strong>
+              </p>
+            ) : (
+              ''
+            )}
+          </div>
+
           <div className="row">
             <div
               className="columns usa-width-one-third medium-4 small-12"
@@ -596,7 +613,6 @@ class VAMap extends Component {
               className="columns usa-width-two-thirds medium-8 small-12"
               style={{ minHeight: '75vh' }}
             >
-              {externalLink}
               <Map
                 ref="map"
                 center={position}
