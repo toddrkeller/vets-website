@@ -110,10 +110,7 @@ class FacilityTypeDropdown extends Component {
               key={item}
               {...getItemProps({
                 item,
-                className: facilityOptionClasses(
-                  item,
-                  index === highlightedIndex,
-                ),
+                className: 'dropdown-option',
                 role: 'option',
                 'aria-selected': index === highlightedIndex,
               })}
@@ -121,7 +118,6 @@ class FacilityTypeDropdown extends Component {
               {itemToString(item)}
             </li>
           ));
-
           return (
             <div>
               <div className="row">
