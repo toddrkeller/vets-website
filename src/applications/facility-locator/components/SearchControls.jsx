@@ -83,7 +83,7 @@ class SearchControls extends Component {
 
     // Create option elements for each VA service type.
     const options = Object.keys(services).map(service => (
-      <option key={service} value={service}>
+      <option key={service} value={service} style={{ fontWeight: 'bold' }}>
         {services[service]}
       </option>
     ));
