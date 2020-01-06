@@ -29,6 +29,8 @@ import { LocationType, FacilityType, BOUNDING_RADIUS } from '../constants';
 import { areGeocodeEqual /* areBoundsEqual */ } from '../utils/helpers';
 import { facilityLocatorShowCommunityCares } from '../utils/selectors';
 import { isProduction } from 'platform/site-wide/feature-toggles/selectors';
+import Pagination from '@department-of-veterans-affairs/formation-react/Pagination';
+import AlertBox from '@department-of-veterans-affairs/formation-react/AlertBox';
 
 const otherToolsLink = (
   <p>
@@ -45,6 +47,28 @@ const urgentCareLink = (
       Find VA-approved urgent care locations and pharmacies near you
     </a>
   </p>
+);
+
+// In order to get urgent care with in-VA network providers, you need this PDF
+const urgentCareDialogPdf = (
+  <AlertBox status="warning">
+    <h3 className="usa-alert-heading" tabIndex="-1">
+      In order to get urgent care with in-VA network providers, you need this PDF
+    </h3>
+    <p>Warning text would go here. This is an example.</p>
+    <button
+      className="usa-button-primary vads-u-margin-y--0"
+      // onClick={onRemove}
+    >
+      Download PDF
+    </button>
+    <button
+      className="usa-button-secondary vads-u-margin-y--0"
+      // onClick={hideConfirmation}
+    >
+      Print PDF
+    </button>
+  </AlertBox>
 );
 
 class VAMap extends Component {
@@ -309,6 +333,17 @@ class VAMap extends Component {
     });
   };
 
+  handlePageSelect = page => {
+    const { currentQuery } = this.props;
+
+    this.props.searchWithBounds({
+      bounds: currentQuery.bounds,
+      facilityType: currentQuery.facilityType,
+      serviceType: currentQuery.serviceType,
+      page,
+    });
+  };
+
   handleSearch = () => {
     const { currentQuery } = this.props;
     this.updateUrlParams({
@@ -545,15 +580,22 @@ class VAMap extends Component {
 
   renderDesktopView = () => {
     // defaults to White House coordinates initially
-    const { currentQuery, showCommunityCares, results } = this.props;
+    const {
+      currentQuery,
+      showCommunityCares,
+      results,
+      pagination: { currentPage, totalPages },
+    } = this.props;
     const coords = this.props.currentQuery.position;
     const position = [coords.latitude, coords.longitude];
     const facilityLocatorMarkers = this.renderFacilityMarkers();
-    const externalLink =
-      currentQuery.facilityType === LocationType.CC_PROVIDER
-        ? urgentCareLink
-        : otherToolsLink; // TODO use this logic for dialog
-    console.log(this.props);
+    const showDialog =
+      currentQuery.facilityType === LocationType.URGENT_CARE_FARMACIES ||
+      (currentQuery.facilityType === LocationType.URGENT_CARE &&
+        currentQuery.serviceType === 'InVANetwork')
+        ? urgentCareDialogPdf
+        : null;
+    // console.log(this.props);
     return (
       <div>
         <div className="title-section">
@@ -576,6 +618,8 @@ class VAMap extends Component {
               showCommunityCares={showCommunityCares}
             />
           </div>
+          {showDialog}
+          <div />
 
           <div className="desk-marg-left-1">
             {results.length > 0 ? (
@@ -637,6 +681,11 @@ class VAMap extends Component {
               </Map>
             </div>
           </div>
+          <Pagination
+            onPageSelect={this.handlePageSelect}
+            page={currentPage}
+            pages={totalPages}
+          />
         </div>
       </div>
     );

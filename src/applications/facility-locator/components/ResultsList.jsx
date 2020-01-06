@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import AlertBox from '@department-of-veterans-affairs/formation-react/AlertBox';
 import LoadingIndicator from '@department-of-veterans-affairs/formation-react/LoadingIndicator';
-import Pagination from '@department-of-veterans-affairs/formation-react/Pagination';
+// import Pagination from '@department-of-veterans-affairs/formation-react/Pagination';
 
 import { facilityTypes } from '../config';
 
@@ -50,7 +50,7 @@ class ResultsList extends Component {
 
   render() {
     const {
-      context,
+      // context,
       facilityTypeName,
       inProgress,
       position,
@@ -206,11 +206,6 @@ class ResultsList extends Component {
               ),
           )}
         </div>
-        <Pagination
-          onPageSelect={this.handlePageSelect}
-          page={currentPage}
-          pages={totalPages}
-        />
       </div>
     );
   }

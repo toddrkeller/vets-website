@@ -3,7 +3,13 @@ import FacilityTypeDropdown from './FacilityTypeDropdown';
 import ServiceTypeAhead from './ServiceTypeAhead';
 import recordEvent from '../../../platform/monitoring/record-event';
 import { LocationType } from '../constants';
-import { healthServices, benefitsServices, vetCenterServices } from '../config';
+import {
+  healthServices,
+  benefitsServices,
+  vetCenterServices,
+  urgentCareServices,
+  pharmacies,
+} from '../config';
 import { focusElement } from 'platform/utilities/ui';
 
 class SearchControls extends Component {
@@ -54,11 +60,19 @@ class SearchControls extends Component {
       LocationType.BENEFITS,
       LocationType.VET_CENTER,
       LocationType.CC_PROVIDER,
+      LocationType.URGENT_CARE,
+      LocationType.URGENT_CARE_FARMACIES,
     ].includes(facilityType);
 
     let services;
     // Determine what service types to display for the location type (if any).
     switch (facilityType) {
+      case LocationType.URGENT_CARE:
+        services = urgentCareServices;
+        break;
+      case LocationType.URGENT_CARE_FARMACIES:
+        services = pharmacies;
+        break;
       case LocationType.HEALTH:
         services = healthServices;
         break;

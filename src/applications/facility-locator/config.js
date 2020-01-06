@@ -30,6 +30,8 @@ export const ccLocatorEnabled = () => true;
 export const facilityTypes = {
   // [LocationType.ALL]: 'All Facilities',
   [FacilityType.VA_HEALTH_FACILITY]: 'VA health',
+  [FacilityType.URGENT_CARE]: 'VA urgent care',
+  [FacilityType.URGENT_CARE_FARMACIES]: 'In-VA-network urgent care pharmacies',
   [FacilityType.VA_CEMETARY]: 'Cemetery',
   [FacilityType.VA_BENEFITS_FACILITY]: 'Benefits',
   [FacilityType.VET_CENTER]: 'Vet Centers',
@@ -82,6 +84,12 @@ export const benefitsServices = {
 };
 
 export const urgentCareServices = {
+  All: 'All urgent care services',
+  VAUrgentCare: 'VA urgent care',
+  InVANetwork: 'In-VA network providers',
+};
+
+export const pharmacies = {
   All: 'All urgent care services',
   VAUrgentCare: 'VA urgent care',
   InVANetwork: 'In-VA network providers',
