@@ -2,7 +2,7 @@
  * Enum for the type attribute of a Facility/Provider search result
  */
 export const LocationType = {
-  ALL: 'all',
+  // ALL: 'all',
   VA_FACILITIES: 'va_facilities',
   CC_PROVIDER: 'cc_provider',
   // Subtypes of VA_FACILITIES
@@ -10,6 +10,7 @@ export const LocationType = {
   BENEFITS: 'benefits',
   CEMETARY: 'cemetery',
   VET_CENTER: 'vet_center',
+  URGENT_CARE: 'urgent_care',
 };
 
 /**
@@ -20,6 +21,7 @@ export const FacilityType = {
   VA_CEMETARY: 'va_cemetery',
   VA_BENEFITS_FACILITY: 'va_benefits_facility',
   VET_CENTER: 'vet_center',
+  URGENT_CARE: 'urgent_care',
 };
 
 /**
@@ -31,6 +33,7 @@ export const PinNames = {
   [FacilityType.VA_CEMETARY]: 'cemetery',
   [FacilityType.VA_BENEFITS_FACILITY]: 'benefits',
   [FacilityType.VET_CENTER]: 'vet-centers',
+  [FacilityType.URGENT_CARE]: 'urgent-care',
   [LocationType.CC_PROVIDER]: 'cc-provider',
 };
 
@@ -38,9 +41,10 @@ export const PinNames = {
  * Defines the options available for the Location Type Dropdown
  */
 export const LOCATION_OPTIONS = [
-  LocationType.ALL,
+  // LocationType.ALL,
   LocationType.HEALTH,
   LocationType.CC_PROVIDER,
+  LocationType.HEALTH,
   LocationType.BENEFITS,
   LocationType.CEMETARY,
   LocationType.VET_CENTER,

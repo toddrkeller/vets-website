@@ -28,19 +28,19 @@ export const api = {
 export const ccLocatorEnabled = () => true;
 
 export const facilityTypes = {
-  [LocationType.ALL]: 'All Facilities',
-  [FacilityType.VA_HEALTH_FACILITY]: 'VA Health',
+  // [LocationType.ALL]: 'All Facilities',
+  [FacilityType.VA_HEALTH_FACILITY]: 'VA health',
   [FacilityType.VA_CEMETARY]: 'Cemetery',
   [FacilityType.VA_BENEFITS_FACILITY]: 'Benefits',
-  [FacilityType.VET_CENTER]: 'Vet Center',
-  [LocationType.HEALTH]: 'VA Health',
-  [LocationType.CC_PROVIDER]: 'Community Care (Non-VA Health)',
-  [LocationType.CEMETARY]: 'Cemetery',
-  [LocationType.BENEFITS]: 'Benefits',
+  [FacilityType.VET_CENTER]: 'Vet Centers',
+  [LocationType.HEALTH]: 'VA health',
+  [LocationType.CC_PROVIDER]: 'Non-VA health',
+  [LocationType.CEMETARY]: 'VA cemeteries',
+  [LocationType.BENEFITS]: 'VA benefits',
 };
 
 export const healthServices = {
-  All: 'Show all facilities',
+  All: 'All VA health services',
   PrimaryCare: 'Primary Care',
   MentalHealthCare: 'Mental Health Care',
   DentalServices: 'Dental Services',
@@ -79,6 +79,12 @@ export const benefitsServices = {
   UpdatingDirectDepositInformation: 'Updating direct deposit information',
   VocationalRehabilitationAndEmploymentAssistance:
     'Vocational Rehabilitation and Employment (VR&E) help',
+};
+
+export const urgentCareServices = {
+  All: 'All urgent care services',
+  VAUrgentCare: 'VA urgent care',
+  InVANetwork: 'In-VA network providers',
 };
 
 export const vetCenterServices = [
