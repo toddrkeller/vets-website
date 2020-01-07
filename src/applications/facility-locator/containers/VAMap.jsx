@@ -53,7 +53,8 @@ const urgentCareLink = (
 const urgentCareDialogPdf = (
   <AlertBox status="warning">
     <h3 className="usa-alert-heading" tabIndex="-1">
-      In order to get urgent care with in-VA network providers, you need this PDF
+      In order to get urgent care with in-VA network providers, you need this
+      PDF
     </h3>
     <p>Warning text would go here. This is an example.</p>
     <button
@@ -590,9 +591,9 @@ class VAMap extends Component {
     const position = [coords.latitude, coords.longitude];
     const facilityLocatorMarkers = this.renderFacilityMarkers();
     const showDialog =
-      currentQuery.facilityType === LocationType.URGENT_CARE_FARMACIES ||
-      (currentQuery.facilityType === LocationType.URGENT_CARE &&
-        currentQuery.serviceType === 'InVANetwork')
+      (currentQuery.facilityType === LocationType.URGENT_CARE_FARMACIES ||
+        currentQuery.facilityType === LocationType.URGENT_CARE) &&
+      currentQuery.serviceType === 'InVANetwork'
         ? urgentCareDialogPdf
         : null;
     // console.log(this.props);
@@ -633,7 +634,7 @@ class VAMap extends Component {
                 <strong>“{this.props.currentQuery.context}”</strong>
               </p>
             ) : (
-              ''
+              <br />
             )}
           </div>
 
