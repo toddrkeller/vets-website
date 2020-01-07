@@ -58,7 +58,7 @@ class ResultsList extends Component {
       results,
       error,
       isMobile,
-      pagination: { currentPage, totalPages, totalEntries },
+      // pagination: { currentPage, totalPages, totalEntries },
     } = this.props;
 
     if (inProgress) {
@@ -166,15 +166,15 @@ class ResultsList extends Component {
           </div>
         );
       }
-      return (
-        <div
-          className="search-result-title facility-result"
-          ref={this.searchResultTitle}
-        >
-          No facilities found. Please try entering a different search term
-          (Street, City, State or Zip) and click search to find facilities.
-        </div>
-      );
+      // return (
+      //  <div
+      //   className="search-result-title facility-result"
+      //    ref={this.searchResultTitle}
+      //  >
+      //    No facilities found. Please try entering a different search term
+      //    (Street, City, State or Zip) and click search to find facilities.
+      //  </div>
+      // );
     }
 
     const currentLocation = position;

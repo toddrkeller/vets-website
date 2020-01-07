@@ -596,7 +596,6 @@ class VAMap extends Component {
       currentQuery.serviceType === 'InVANetwork'
         ? urgentCareDialogPdf
         : null;
-    // console.log(this.props);
     return (
       <div>
         <div className="title-section">
@@ -621,7 +620,6 @@ class VAMap extends Component {
           </div>
           {showDialog}
           <div />
-
           <div className="desk-marg-left-1">
             {results.length > 0 ? (
               <p className="search-result-title">
@@ -647,7 +645,9 @@ class VAMap extends Component {
               <div
                 aria-live="polite"
                 aria-relevant="additions text"
-                className="facility-search-results"
+                className={
+                  results.length > 0 ? 'facility-search-results' : null
+                }
               >
                 <div>
                   <ResultsList updateUrlParams={this.updateUrlParams} />

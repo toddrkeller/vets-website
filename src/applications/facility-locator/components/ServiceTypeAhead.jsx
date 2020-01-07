@@ -54,6 +54,7 @@ class ServiceTypeAhead extends Component {
   render() {
     const { defaultSelectedItem, services } = this.state;
     const renderService = s => (s && s.name ? s.name.trim() : '');
+    const { isMobile } = this.props;
 
     return (
       <Downshift
@@ -83,6 +84,7 @@ class ServiceTypeAhead extends Component {
             </label>
             <span id="service-typeahead">
               <input
+                className={isMobile ? null : 'desktop-align-3'}
                 {...getInputProps({
                   placeholder: 'Like primary care, cardiology',
                 })}
