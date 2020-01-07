@@ -58,13 +58,13 @@ const urgentCareDialogPdf = (
     <p>Warning text would go here. This is an example.</p>
     <button
       className="usa-button-primary vads-u-margin-y--0"
-      // onClick={onRemove}
+      // onClick={}
     >
       Download PDF
     </button>
     <button
-      className="usa-button-secondary vads-u-margin-y--0"
-      // onClick={hideConfirmation}
+      className="usa-button-primary vads-u-margin-y--0"
+      // onClick={}
     >
       Print PDF
     </button>
