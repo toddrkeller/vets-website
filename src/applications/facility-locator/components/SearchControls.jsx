@@ -8,7 +8,6 @@ import {
   benefitsServices,
   vetCenterServices,
   urgentCareServices,
-  pharmacies,
 } from '../config';
 import { focusElement } from 'platform/utilities/ui';
 
@@ -68,9 +67,6 @@ class SearchControls extends Component {
     switch (facilityType) {
       case LocationType.URGENT_CARE:
         services = urgentCareServices;
-        break;
-      case LocationType.URGENT_CARE_FARMACIES:
-        services = pharmacies;
         break;
       case LocationType.HEALTH:
         services = healthServices;

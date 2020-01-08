@@ -88,8 +88,6 @@ export const urgentCareServices = {
   InVANetwork: 'In-VA network providers',
 };
 
-export const pharmacies = {};
-
 export const vetCenterServices = [
   'Individual and group counseling for Veterans, service members, and their families',
   'Family counseling for military related issues',

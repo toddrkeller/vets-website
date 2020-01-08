@@ -78,13 +78,13 @@ class FacilityTypeDropdown extends Component {
       : this.props.locationOptions.filter(
           item => item !== LocationType.CC_PROVIDER,
         );
-    const facilityType = this.props.facilityType || 'all';
+    const facilityType = this.props.facilityType || 'health';
     const highlightIndex = locationOptions.indexOf(facilityType);
     const { isMobile } = this.props;
 
     return (
       <Downshift
-        defaultSelectedItem="all"
+        defaultSelectedItem="health"
         defaultHighlightedIndex={highlightIndex}
         itemToString={itemToString}
         onChange={this.props.onChange}
