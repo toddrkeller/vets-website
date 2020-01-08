@@ -61,7 +61,6 @@ class SearchControls extends Component {
       LocationType.VET_CENTER,
       LocationType.CC_PROVIDER,
       LocationType.URGENT_CARE,
-      LocationType.URGENT_CARE_FARMACIES,
     ].includes(facilityType);
 
     let services;

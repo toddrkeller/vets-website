@@ -591,9 +591,9 @@ class VAMap extends Component {
     const position = [coords.latitude, coords.longitude];
     const facilityLocatorMarkers = this.renderFacilityMarkers();
     const showDialog =
-      (currentQuery.facilityType === LocationType.URGENT_CARE_FARMACIES ||
-        currentQuery.facilityType === LocationType.URGENT_CARE) &&
-      currentQuery.serviceType === 'InVANetwork'
+      currentQuery.facilityType === LocationType.URGENT_CARE_FARMACIES ||
+      (currentQuery.facilityType === LocationType.URGENT_CARE &&
+        currentQuery.serviceType === 'InVANetwork')
         ? urgentCareDialogPdf
         : null;
     return (

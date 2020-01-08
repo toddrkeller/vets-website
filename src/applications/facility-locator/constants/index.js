@@ -11,7 +11,7 @@ export const LocationType = {
   CEMETARY: 'cemetery',
   VET_CENTER: 'vet_center',
   URGENT_CARE: 'urgent_care',
-  URGENT_CARE_FARMACIES: 'cc_pharmacies',
+  URGENT_CARE_FARMACIES: 'cc_pharmacy',
 };
 
 /**
@@ -23,7 +23,7 @@ export const FacilityType = {
   VA_BENEFITS_FACILITY: 'va_benefits_facility',
   VET_CENTER: 'vet_center',
   URGENT_CARE: 'urgent_care',
-  URGENT_CARE_FARMACIES: 'cc_pharmacies',
+  URGENT_CARE_FARMACIES: 'cc_pharmacy',
 };
 
 /**
@@ -37,7 +37,7 @@ export const PinNames = {
   [FacilityType.VET_CENTER]: 'vet-centers',
   [FacilityType.URGENT_CARE]: 'urgent-care',
   [LocationType.CC_PROVIDER]: 'cc-provider',
-  [LocationType.URGENT_CARE_FARMACIES]: 'cc_pharmacies',
+  [LocationType.URGENT_CARE_FARMACIES]: 'cc-pharmacy',
 };
 
 /**
@@ -46,11 +46,11 @@ export const PinNames = {
 export const LOCATION_OPTIONS = [
   LocationType.HEALTH,
   LocationType.URGENT_CARE,
+  LocationType.URGENT_CARE_FARMACIES,
   LocationType.CC_PROVIDER,
   LocationType.BENEFITS,
   LocationType.CEMETARY,
   LocationType.VET_CENTER,
-  LocationType.URGENT_CARE_FARMACIES,
 ];
 
 /**
