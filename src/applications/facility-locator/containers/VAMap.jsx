@@ -31,6 +31,8 @@ import { facilityLocatorShowCommunityCares } from '../utils/selectors';
 import { isProduction } from 'platform/site-wide/feature-toggles/selectors';
 import Pagination from '@department-of-veterans-affairs/formation-react/Pagination';
 import AlertBox from '@department-of-veterans-affairs/formation-react/AlertBox';
+import LoadingIndicator from '@department-of-veterans-affairs/formation-react/LoadingIndicator';
+import DelayedRender from 'platform/utilities/ui/DelayedRender';
 
 const otherToolsLink = (
   <p>
@@ -585,6 +587,7 @@ class VAMap extends Component {
       currentQuery,
       showCommunityCares,
       results,
+      inProgress,
       pagination: { currentPage, totalPages },
     } = this.props;
     const coords = this.props.currentQuery.position;
@@ -596,6 +599,56 @@ class VAMap extends Component {
         currentQuery.serviceType === 'InVANetwork')
         ? urgentCareDialogPdf
         : null;
+
+    if (inProgress) {
+      return (
+        <div>
+          <div className="title-section">
+            <h1>Find VA Locations</h1>
+          </div>
+
+          <div className="facility-introtext">
+            <p>
+              Find one of VA's more than 2,000 health care, counseling,
+              benefits, and cemeteries facilities, plus VA's nationwide network
+              of community health care providers.
+            </p>
+          </div>
+          <div className="desktop-container">
+            <div>
+              <SearchControls
+                currentQuery={currentQuery}
+                onChange={this.props.updateSearchQuery}
+                onSubmit={this.handleSearch}
+                showCommunityCares={showCommunityCares}
+              />
+            </div>
+            <div>
+              <LoadingIndicator
+                message={
+                  <p className="search-result-title">
+                    {`Searching for for `}
+                    <strong>
+                      {facilityTypes[this.props.currentQuery.facilityType]}
+                    </strong>
+                    {` near `}
+                    <strong>“{this.props.currentQuery.context}”</strong>
+                  </p>
+                }
+              />
+              <DelayedRender>
+                <AlertBox
+                  isVisible
+                  status="info"
+                  headline="Please wait"
+                  content="Your results should appear in less than a minute. Thank you for your patience."
+                />
+              </DelayedRender>
+            </div>
+          </div>
+        </div>
+      );
+    }
     return (
       <div>
         <div className="title-section">

@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import AlertBox from '@department-of-veterans-affairs/formation-react/AlertBox';
-import LoadingIndicator from '@department-of-veterans-affairs/formation-react/LoadingIndicator';
+// import AlertBox from '@department-of-veterans-affairs/formation-react/AlertBox';
+// import LoadingIndicator from '@department-of-veterans-affairs/formation-react/LoadingIndicator';
 // import Pagination from '@department-of-veterans-affairs/formation-react/Pagination';
 
 import { facilityTypes } from '../config';
@@ -15,7 +15,7 @@ import { setFocus } from '../utils/helpers';
 import { updateSearchQuery, searchWithBounds } from '../actions';
 
 import SearchResult from './SearchResult';
-import DelayedRender from 'platform/utilities/ui/DelayedRender';
+// import DelayedRender from 'platform/utilities/ui/DelayedRender';
 
 const TIMEOUTS = new Set(['408', '504', '503']);
 
@@ -51,34 +51,33 @@ class ResultsList extends Component {
   render() {
     const {
       // context,
-      facilityTypeName,
-      inProgress,
+      // facilityTypeName,
+      // inProgress,
       position,
-      searchString,
+      // searchString,
       results,
       error,
       isMobile,
       // pagination: { currentPage, totalPages, totalEntries },
     } = this.props;
 
-    if (inProgress) {
-      return (
-        <div>
-          <LoadingIndicator
-            message={`Searching for ${facilityTypeName}
-            in ${searchString}`}
-          />
-          <DelayedRender>
-            <AlertBox
-              isVisible
-              status="info"
-              headline="Please wait"
-              content="Your results should appear in less than a minute. Thank you for your patience."
-            />
-          </DelayedRender>
-        </div>
-      );
-    }
+    // if (inProgress) {
+    //  return (
+    //    <div>
+    //      <LoadingIndicator
+    //        message={`Searching for ${facilityTypeName}
+    //        in ${searchString}`}
+    //      />
+    //      <DelayedRender>
+    //        <AlertBox
+    //          isVisible
+    //          status="info"
+    //          headline="Please wait"
+    //          content="Your results should appear in less than a minute. Thank you for your patience."
+    //        />
+    //      </DelayedRender>
+    //    </div>
+    //  );
 
     if (error) {
       // For some reason, an error can be an HTTP response, or just a string.
