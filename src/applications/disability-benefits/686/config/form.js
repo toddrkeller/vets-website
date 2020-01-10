@@ -514,6 +514,8 @@ const formConfig = {
                 ),
                 'view:pastMarriage': {
                   'ui:options': {
+                    // this should be removed to address the scenario where a veteran may be married but separated,
+                    // in which case they would need to fill out fields 13A and 13B for their current marriage.
                     hideIf: isCurrentMarriage,
                   },
                   dateOfSeparation: _.assign(
@@ -678,6 +680,7 @@ const formConfig = {
                   'liveWithSpouse',
                 ],
                 properties: {
+                  // 4640 Note: spouseHasNoSsnReason should be able to be added similar to va file number on line 394.
                   spouseDateOfBirth,
                   spouseSocialSecurityNumber: veteranSocialSecurityNumber,
                   spouseIsVeteran,
