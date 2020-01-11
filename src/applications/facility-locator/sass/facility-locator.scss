@@ -339,6 +339,9 @@ $color-info-bubble-text: #818a8d;
         .medium-3-5 {
           width: 31% !important;
         }
+        .large-1-2 {
+          width: 396px !important;
+        }
       }
 
       select:disabled {
@@ -726,6 +729,10 @@ $color-info-bubble-text: #818a8d;
 
 .no-marg-right {
   margin-right: 0 !important;
+}
+
+.marg-left {
+  margin-left: 26px !important;
 }
 
 .pull-right {
