@@ -684,6 +684,11 @@ $color-info-bubble-text: #818a8d;
   font-weight: bold;
 }
 
+.scroller-left{
+  position: fixed;
+  left: 0;
+  background:#CCC;
+}
 
 #infoBubble {
   background-color: $color-aqua-lightest;

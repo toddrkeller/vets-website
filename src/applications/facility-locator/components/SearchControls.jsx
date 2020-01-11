@@ -119,7 +119,7 @@ class SearchControls extends Component {
       <div className="search-controls-container clearfix">
         <form id="facility-search-controls" onSubmit={this.handleSubmit}>
           <div className="row">
-            <div className="columns marg-left">
+            <div className={isMobile ? 'columns' : 'columns marg-left'}>
               <div className="row">
                 <div className="columns large-1-2">
                   <label

@@ -194,10 +194,6 @@ class ResultsList extends Component {
 
     return (
       <div>
-        <p className="search-result-title" ref={this.searchResultTitle}>
-          {`${totalEntries} results for ${facilityTypeName} near `}
-          <strong>“{context}”</strong>
-        </p>
         <div>
           {sortedResults.map(
             r =>
@@ -210,11 +206,6 @@ class ResultsList extends Component {
               ),
           )}
         </div>
-        <Pagination
-          onPageSelect={this.handlePageSelect}
-          page={currentPage}
-          pages={totalPages}
-        />
       </div>
     );
   }
