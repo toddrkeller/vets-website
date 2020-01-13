@@ -8,8 +8,8 @@ import LocationDirectionsLink from './search-results/LocationDirectionsLink';
 const SearchResult = ({ result }) => (
   <div className="facility-result" id={result.id}>
     <LocationInfoBlock location={result} />
-    <LocationPhoneLink location={result} />
     <LocationDirectionsLink location={result} />
+    <LocationPhoneLink location={result} />
   </div>
 );
 

@@ -13,32 +13,39 @@ const LocationInfoBlock = ({ location }) => {
 
   return (
     <div>
+      {distance && (
+        <p>
+          <span>
+            <img
+              src="https://i.ibb.co/YfF36cy/icons8-circled-2-20.png"
+              alt="alt text"
+              style={{ float: 'left', 'padding-right': 7 }}
+            />
+            {distance.toFixed(1)} miles
+          </span>
+        </p>
+      )}
       {isProvider ? (
         <span>
+          <ProviderServiceDescription provider={location} />
           <h2 className="vads-u-font-size--h5">
             <Link to={`provider/${location.id}`}>{name}</Link>
           </h2>
           {location.attributes.orgName && (
             <h6>{location.attributes.orgName}</h6>
           )}
-          <ProviderServiceDescription provider={location} />
         </span>
       ) : (
         <span>
+          <FacilityTypeDescription location={location} />
           <h2 className="vads-u-font-size--h5">
             <Link to={`facility/${location.id}`}>{name}</Link>
           </h2>
-          <FacilityTypeDescription location={location} />
         </span>
       )}
       <p>
         <LocationAddress location={location} />
       </p>
-      {distance && (
-        <p>
-          <strong>Distance:</strong> {distance.toFixed(1)} miles
-        </p>
-      )}
     </div>
   );
 };
