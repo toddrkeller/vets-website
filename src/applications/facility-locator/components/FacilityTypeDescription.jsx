@@ -2,17 +2,12 @@ import React from 'react';
 import { facilityTypes } from '../config';
 
 const FacilityTypeDescription = ({ location }) => {
-  const { facilityType, classification } = location.attributes;
-  const typeName =
-    facilityType === 'va_cemetery'
-      ? classification
-      : facilityTypes[facilityType];
+  const { facilityType } = location.attributes;
+  const typeName = facilityTypes[facilityType || location.type];
 
   return (
     <p>
-      <span>
-        <strong>Facility type:</strong> {typeName}
-      </span>
+      <span>{typeName.toUpperCase()}</span>
     </p>
   );
 };

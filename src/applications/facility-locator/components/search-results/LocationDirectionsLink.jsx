@@ -21,8 +21,8 @@ class LocationDirectionsLink extends Component {
           href={`https://maps.google.com?saddr=Current+Location&daddr=${address}`}
           rel="noopener noreferrer"
           target="_blank"
+          style={{ 'text-decoration': 'underline' }}
         >
-          <i className="fa fa-road" />
           Directions
         </a>
       </span>

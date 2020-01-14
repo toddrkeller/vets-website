@@ -19,7 +19,7 @@ const LocationInfoBlock = ({ location }) => {
             <img
               src="https://i.ibb.co/YfF36cy/icons8-circled-2-20.png"
               alt="alt text"
-              style={{ float: 'left', 'padding-right': 7 }}
+              style={{ float: 'left', paddingRight: 7 }}
             />
             {distance.toFixed(1)} miles
           </span>
@@ -27,7 +27,7 @@ const LocationInfoBlock = ({ location }) => {
       )}
       {isProvider ? (
         <span>
-          <ProviderServiceDescription provider={location} />
+          <FacilityTypeDescription location={location} />
           <h2 className="vads-u-font-size--h5">
             <Link to={`provider/${location.id}`}>{name}</Link>
           </h2>
