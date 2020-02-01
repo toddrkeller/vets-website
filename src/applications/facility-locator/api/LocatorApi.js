@@ -1,5 +1,5 @@
 import compact from 'lodash/compact';
-import { api, resolveParamsWithUrl } from '../config';
+import { api /* resolveParamsWithUrl */ } from '../config';
 import { fetchAndUpdateSessionExpiration as fetch } from 'platform/utilities/api';
 
 class LocatorApi {
