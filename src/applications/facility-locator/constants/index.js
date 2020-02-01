@@ -14,8 +14,9 @@ export const LocationType = {
   URGENT_CARE_FARMACIES: 'cc_pharmacy',
 };
 
-/**
+/** *
  * Enum for the various Facility Types (inside the `attributes` object of a result)
+ *
  */
 export const FacilityType = {
   VA_HEALTH_FACILITY: 'va_health_facility',
