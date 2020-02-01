@@ -1,3 +1,4 @@
+import compact from 'lodash/compact';
 import { api, resolveParamsWithUrl } from '../config';
 import { fetchAndUpdateSessionExpiration as fetch } from 'platform/utilities/api';
 
@@ -22,16 +23,22 @@ class LocatorApi {
     serviceType,
     page,
   ) {
-    const { params, url } = resolveParamsWithUrl(
-      address,
-      locationType,
-      serviceType,
-      page,
-      bounds,
-    );
+    const filterableLocations = ['health', 'benefits', 'cc_provider'];
+    const params = compact([
+      address ? `address=${address}` : null,
+      ...bounds.map(c => `bbox[]=${c}`),
+      locationType ? `type=${locationType}` : null,
+      filterableLocations.includes(locationType) && serviceType
+        ? `services[]=${serviceType}`
+        : null,
+      `page=${page}`,
+      `per_page=20`,
+      `trim=true`,
+    ]).join('&');
+    const url = `${api.url}?${params}`;
 
     return new Promise((resolve, reject) => {
-      fetch(`${url}?${params}`, api.settings)
+      fetch(url, api.settings)
         .then(res => res.json())
         .then(data => resolve(data), error => reject(error));
     });
