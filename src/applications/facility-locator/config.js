@@ -29,6 +29,7 @@ export const api = {
 /**
  * Feature Flag Function
  *
+ *
  * Determines, based on enviornment type, whether or not to
  * enable Community Care Provider Locator features of the
  * existing Facility Locator App.
