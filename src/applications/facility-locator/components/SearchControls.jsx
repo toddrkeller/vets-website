@@ -3,7 +3,12 @@ import FacilityTypeDropdown from './FacilityTypeDropdown';
 import ServiceTypeAhead from './ServiceTypeAhead';
 import recordEvent from '../../../platform/monitoring/record-event';
 import { LocationType } from '../constants';
-import { healthServices, benefitsServices, vetCenterServices } from '../config';
+import {
+  healthServices,
+  benefitsServices,
+  vetCenterServices,
+  urgentCareServices,
+} from '../config';
 import { focusElement } from 'platform/utilities/ui';
 
 class SearchControls extends Component {
@@ -50,6 +55,7 @@ class SearchControls extends Component {
     const { facilityType, serviceType } = this.props.currentQuery;
     const disabled = ![
       LocationType.HEALTH,
+      LocationType.URGENT_CARE,
       LocationType.BENEFITS,
       LocationType.VET_CENTER,
       LocationType.CC_PROVIDER,
@@ -60,6 +66,9 @@ class SearchControls extends Component {
     switch (facilityType) {
       case LocationType.HEALTH:
         services = healthServices;
+        break;
+      case LocationType.URGENT_CARE:
+        services = urgentCareServices;
         break;
       case LocationType.BENEFITS:
         services = benefitsServices;
@@ -82,19 +91,21 @@ class SearchControls extends Component {
 
     // Create option elements for each VA service type.
     const options = Object.keys(services).map(service => (
-      <option key={service} value={service}>
+      <option key={service} value={service} style={{ fontWeight: 'bold' }}>
         {services[service]}
       </option>
     ));
 
     return (
       <span>
-        <label htmlFor="service-type-dropdown">Service type (optional)</label>
+        <label htmlFor="service-type-dropdown">Choose a service type</label>
         <select
           id="service-type-dropdown"
           disabled={disabled}
           value={serviceType || ''}
+          className="bor-rad"
           onChange={this.handleServiceTypeChange}
+          style={{ fontWeight: 'bold' }}
         >
           {options}
         </select>
@@ -117,40 +128,46 @@ class SearchControls extends Component {
 
     return (
       <div className="search-controls-container clearfix">
-        <form
-          id="facility-search-controls"
-          className="row"
-          onSubmit={this.handleSubmit}
-        >
-          <div className="columns medium-3-5">
-            <label
-              htmlFor="street-city-state-zip"
-              id="street-city-state-zip-label"
-            >
-              Search city, state, or postal code
-            </label>
-            <input
-              id="street-city-state-zip"
-              name="street-city-state-zip"
-              type="text"
-              onChange={this.handleQueryChange}
-              value={currentQuery.searchString}
-              title="Your location: Street, City, State or Zip"
-              required
-            />
-          </div>
-          <div className="columns medium-3-5">
-            <FacilityTypeDropdown
-              facilityType={this.props.currentQuery.facilityType}
-              onChange={this.handleFacilityTypeChange}
-              showCommunityCares={showCommunityCares}
-            />
-          </div>
-          <div className="columns medium-3-4">
-            {this.renderServiceTypeDropdown()}
-          </div>
-          <div className="columns medium-1-2">
-            <input type="submit" value="Search" />
+        <form id="facility-search-controls" onSubmit={this.handleSubmit}>
+          <div className="row">
+            <div className={isMobile ? 'columns' : 'columns marg-left'}>
+              <div className="row">
+                <div className="columns large-1-2">
+                  <label
+                    htmlFor="street-city-state-zip"
+                    id="street-city-state-zip-label"
+                  >
+                    Search by city, state or postal Code
+                  </label>
+                  <input
+                    id="street-city-state-zip"
+                    name="street-city-state-zip"
+                    style={{ fontWeight: 'bold' }}
+                    type="text"
+                    onChange={this.handleQueryChange}
+                    value={currentQuery.searchString}
+                    title="Your location: Street, City, State or Postal code"
+                    required
+                  />
+                </div>
+              </div>
+              <div className="row">
+                <div className="columns large-1-2">
+                  <FacilityTypeDropdown
+                    facilityType={this.props.currentQuery.facilityType}
+                    onChange={this.handleFacilityTypeChange}
+                    showCommunityCares={showCommunityCares}
+                    style={{ fontWeight: 'bold' }}
+                  />
+                </div>
+                <div className="columns large-1-2">
+                  {this.renderServiceTypeDropdown()}
+                </div>
+                <div className="columns medium-1-2">
+                  <input type="submit" value="Search" />
+                </div>
+              </div>
+            </div>
           </div>
         </form>
       </div>

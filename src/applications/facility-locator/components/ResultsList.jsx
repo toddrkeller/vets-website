@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 
 import AlertBox from '@department-of-veterans-affairs/formation-react/AlertBox';
 import LoadingIndicator from '@department-of-veterans-affairs/formation-react/LoadingIndicator';
-import Pagination from '@department-of-veterans-affairs/formation-react/Pagination';
 
 import { facilityTypes } from '../config';
 
@@ -37,20 +36,8 @@ class ResultsList extends Component {
     }
   }
 
-  handlePageSelect = page => {
-    const { currentQuery } = this.props;
-
-    this.props.searchWithBounds({
-      bounds: currentQuery.bounds,
-      facilityType: currentQuery.facilityType,
-      serviceType: currentQuery.serviceType,
-      page,
-    });
-  };
-
   render() {
     const {
-      context,
       facilityTypeName,
       inProgress,
       position,
@@ -58,7 +45,7 @@ class ResultsList extends Component {
       results,
       error,
       isMobile,
-      pagination: { currentPage, totalPages, totalEntries },
+      query,
     } = this.props;
 
     if (inProgress) {
@@ -172,7 +159,8 @@ class ResultsList extends Component {
           ref={this.searchResultTitle}
         >
           No facilities found. Please try entering a different search term
-          (Street, City, State or Zip) and click search to find facilities.
+          (Street, City, State or Postal code) and click search to find
+          facilities.
         </div>
       );
     }
@@ -194,27 +182,18 @@ class ResultsList extends Component {
 
     return (
       <div>
-        <p className="search-result-title" ref={this.searchResultTitle}>
-          {`${totalEntries} results for ${facilityTypeName} near `}
-          <strong>“{context}”</strong>
-        </p>
         <div>
           {sortedResults.map(
             r =>
               isMobile ? (
                 <div key={r.id} className="mobile-search-result">
-                  <SearchResult result={r} />
+                  <SearchResult result={r} query={query} />
                 </div>
               ) : (
-                <SearchResult key={r.id} result={r} />
+                <SearchResult key={r.id} result={r} query={query} />
               ),
           )}
         </div>
-        <Pagination
-          onPageSelect={this.handlePageSelect}
-          page={currentPage}
-          pages={totalPages}
-        />
       </div>
     );
   }

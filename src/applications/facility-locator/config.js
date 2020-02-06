@@ -1,5 +1,7 @@
 import environment from '../../platform/utilities/environment';
+import compact from 'lodash/compact';
 import { LocationType, FacilityType } from './constants';
+import manifest from './manifest.json';
 
 // TODO: Remove me when done bug fixing
 // const environment = {
@@ -10,10 +12,16 @@ import { LocationType, FacilityType } from './constants';
 export const api = {
   baseUrl: `${environment.API_URL}/v0/facilities`,
   url: `${environment.API_URL}/v0/facilities/va`,
+  ccUrl: `${environment.API_URL}/v0/facilities/ccp`,
   settings: {
     credentials: 'include',
     headers: {
       'X-Key-Inflection': 'camel',
+
+      // Pull app name directly from manifest since this config is defined
+      // before startApp, and using window.appName here would result in
+      // undefined for all requests that use this config.
+      'Source-App-Name': manifest.entryName,
     },
   },
 };
@@ -27,20 +35,75 @@ export const api = {
  */
 export const ccLocatorEnabled = () => true;
 
+/**
+ * Build parameters and URL for facilities API calls
+ *
+ */
+export const resolveParamsWithUrl = (
+  address,
+  locationType,
+  serviceType,
+  page,
+  bounds,
+) => {
+  const filterableLocations = ['health', 'benefits', 'cc_provider'];
+  let facility;
+  let service;
+  let url;
+  switch (locationType) {
+    case 'urgent_care':
+      if (serviceType === 'NonVAUrgentCare') {
+        facility = 'health';
+        service = 'UrgentCare';
+        url = api.url;
+      } else {
+        facility = 'cc_urgent_care';
+        url = api.ccUrl;
+      }
+      break;
+    case 'cc_pharmacy':
+      facility = locationType;
+      service = serviceType;
+      url = api.ccUrl;
+      break;
+    default:
+      facility = locationType;
+      service = serviceType;
+      url = api.url;
+  }
+
+  return {
+    url,
+    params: compact([
+      address ? `address=${address}` : null,
+      ...bounds.map(c => `bbox[]=${c}`),
+      facility ? `type=${facility}` : null,
+      filterableLocations.includes(facility) && service
+        ? `services[]=${service}`
+        : null,
+      `page=${page}`,
+      `per_page=20`,
+      url === api.ccUrl ? `trim=true` : null,
+    ]).join('&'),
+  };
+};
+
 export const facilityTypes = {
-  [LocationType.ALL]: 'All Facilities',
-  [FacilityType.VA_HEALTH_FACILITY]: 'VA Health',
-  [FacilityType.VA_CEMETARY]: 'Cemetery',
+  [FacilityType.VA_HEALTH_FACILITY]: 'VA health',
+  [FacilityType.URGENT_CARE]: 'Urgent care',
+  [FacilityType.URGENT_CARE_FARMACIES]:
+    'Community pharmacies (in VA’s network)',
+  [FacilityType.VA_CEMETARY]: 'VA cemeteries',
   [FacilityType.VA_BENEFITS_FACILITY]: 'Benefits',
-  [FacilityType.VET_CENTER]: 'Vet Center',
-  [LocationType.HEALTH]: 'VA Health',
-  [LocationType.CC_PROVIDER]: 'Community Care (Non-VA Health)',
-  [LocationType.CEMETARY]: 'Cemetery',
-  [LocationType.BENEFITS]: 'Benefits',
+  [FacilityType.VET_CENTER]: 'Vet Centers',
+  [LocationType.HEALTH]: 'VA health',
+  [LocationType.CC_PROVIDER]: 'Community providers (in VA’s network)',
+  [LocationType.CEMETARY]: 'VA cemeteries',
+  [LocationType.BENEFITS]: 'VA benefits',
 };
 
 export const healthServices = {
-  All: 'Show all facilities',
+  All: 'All VA health services',
   PrimaryCare: 'Primary Care',
   MentalHealthCare: 'Mental Health Care',
   DentalServices: 'Dental Services',
@@ -58,8 +121,13 @@ export const healthServices = {
   WomensHealth: "Women's Health",
 };
 
+export const urgentCareServices = {
+  UrgentCare: 'Urgent care',
+  NonVAUrgentCare: 'Community urgent care providers (in VA’s network)',
+};
+
 export const benefitsServices = {
-  All: 'Show all facilities',
+  All: 'All VA benefit services',
   ApplyingForBenefits: 'Applying for benefits',
   BurialClaimAssistance: 'Burial claim help',
   DisabilityClaimAssistance: 'Disability claim help',

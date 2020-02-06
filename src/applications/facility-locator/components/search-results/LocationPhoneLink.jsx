@@ -8,6 +8,7 @@ const renderPhoneNumber = (
   phone,
   icon = 'fw',
   altPhone,
+  from,
 ) => {
   if (!phone) {
     return null;
@@ -17,24 +18,28 @@ const renderPhoneNumber = (
 
   return (
     <div>
-      <i className={`fa fa-${icon}`} />
-      <strong>{title}:</strong>
+      {from === 'FacilityDetail' && <i className={`fa fa-${icon}`} />}
+      <strong>{title}: </strong>
+      {phone.replace(re, '$1-$2-$3 $4$5').replace(/x$/, '')}
       <br />
-      <i className="fa fa-fw" />
+      {from === 'FacilityDetail' && <i className="fa fa-fw" />}
       {subTitle}
-      <a
-        href={`tel:${phone.replace(/[ ]?x/, '')}`}
-        className={altPhone && 'facility-phone-alt'}
-      >
-        {phone.replace(re, '$1-$2-$3 $4$5').replace(/x$/, '')}
-      </a>
+
+      {from === 'FacilityDetail' ? (
+        <a
+          href={`tel:${phone.replace(/[ ]?x/, '')}`}
+          className={altPhone && 'facility-phone-alt'}
+        >
+          {phone.replace(re, '$1-$2-$3 $4$5').replace(/x$/, '')}
+        </a>
+      ) : null}
     </div>
   );
 };
 
-const LocationPhoneLink = ({ location }) => {
+const LocationPhoneLink = ({ location, from, query }) => {
   const isProvider = location.type === LocationType.CC_PROVIDER;
-
+  const isCCProvider = query && query.facilityType === LocationType.CC_PROVIDER;
   if (isProvider) {
     const { caresitePhone: phone } = location.attributes;
     return (
@@ -46,9 +51,11 @@ const LocationPhoneLink = ({ location }) => {
           'phone',
           true,
         )}
-        <p>
-          If you don’t have a referral, contact your local VA medical center.
-        </p>
+        {isCCProvider && (
+          <p>
+            If you don’t have a referral, contact your local VA medical center.
+          </p>
+        )}
       </div>
     );
   }
@@ -58,8 +65,14 @@ const LocationPhoneLink = ({ location }) => {
   } = location;
   return (
     <div>
-      {renderPhoneNumber('Main Number', null, phone.main, 'phone')}
-      {renderPhoneNumber('Mental Health', null, phone.mentalHealthClinic)}
+      {renderPhoneNumber('Main Number', null, phone.main, 'phone', null, from)}
+      {renderPhoneNumber(
+        'Mental Health',
+        null,
+        phone.mentalHealthClinic,
+        null,
+        from,
+      )}
     </div>
   );
 };
