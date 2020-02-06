@@ -2,6 +2,7 @@ import React from 'react';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
 import moment from '../../utils/moment-tz';
+import { getAppointmentDate } from '../../utils/appointment';
 
 import AddToCalendar from '../../components/AddToCalendar';
 
@@ -76,7 +77,7 @@ describe('VAOS <AddToCalendar>', () => {
 
     it('should have an aria label', () => {
       expect(link.props()['aria-label']).to.equal(
-        `Add to calendar on ${moment(now).format('MMMM D, YYYY')}`,
+        `Add to calendar on ${getAppointmentDate(communityCareAppointment)}`,
       );
     });
 
@@ -107,7 +108,9 @@ describe('VAOS <AddToCalendar>', () => {
 
     it('should have an aria label', () => {
       expect(link.props()['aria-label']).to.equal(
-        `Add to calendar on ${moment(now).format('MMMM D, YYYY')}`,
+        `Add to calendar on ${getAppointmentDate(
+          communityCareAppointmentRequest,
+        )}`,
       );
     });
 
