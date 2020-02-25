@@ -7,6 +7,7 @@ const OpenMyHealtheVet = ({
   toolName,
   primaryButtonHandler,
 }) => {
+  // TODO pass in cerner patient flag and update content to reflect this
   const content = {
     heading: `My HealtheVet will open in a new tab where you can ${serviceDescription}`,
     alertText: (
