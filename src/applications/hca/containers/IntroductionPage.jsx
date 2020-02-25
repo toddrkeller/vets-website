@@ -152,7 +152,7 @@ class IntroductionPage extends React.Component {
     return (
       <div className="schemaform-intro">
         <h1>Testing</h1>
-        <h3>Accessibility</h3>
+        <h3 aria-labelledby="xxxxfoo">Accessibility</h3>
         <FormTitle title="Apply for health care benefits" />
         <p>Equal to VA Form 10-10EZ (Application for Health Benefits).</p>
         {showMainLoader && <LoadingIndicator />}
