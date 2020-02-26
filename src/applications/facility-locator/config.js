@@ -1,13 +1,12 @@
-// import environment from '../../platform/utilities/environment';
+import environment from '../../platform/utilities/environment';
 import compact from 'lodash/compact';
 import { LocationType, FacilityType } from './constants';
 import manifest from './manifest.json';
 
-// TODO: Remove me when done bug fixing
-const environment = {
-  API_URL:
-    'http://c45bc4bda93801f49252a96808809b19-api.review.vetsgov-internal',
-};
+// eslint-disable-next-line no-console
+console.log(`CUSTOM_API ${environment.CUSTOM_API}`);
+// eslint-disable-next-line no-console
+console.log(`is Localhost ${environment.isLocalhost()}`);
 
 // Base URL to be used in API requests.
 export const api = {
