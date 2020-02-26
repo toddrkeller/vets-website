@@ -10,9 +10,15 @@ console.log(`is Localhost ${environment.isLocalhost()}`);
 
 // Base URL to be used in API requests.
 export const api = {
-  baseUrl: `${environment.API_URL}/v0/facilities`,
-  url: `${environment.API_URL}/v0/facilities/va`,
-  ccUrl: `${environment.API_URL}/v0/facilities/ccp`,
+  baseUrl: `${
+    environment.CUSTOM_API ? 'http://localhost:3000' : environment.API_URL
+  }/v0/facilities`,
+  url: `${
+    environment.CUSTOM_API ? 'http://localhost:3000' : environment.API_URL
+  }/v0/facilities/va`,
+  ccUrl: `${
+    environment.CUSTOM_API ? 'http://localhost:3000' : environment.API_URL
+  }/v0/facilities/ccp`,
   settings: {
     credentials: 'include',
     headers: {
