@@ -16,6 +16,7 @@ import createApplicationStatus from './createApplicationStatus';
 import createCallToActionWidget from './createCallToActionWidget';
 import createMyVALoginWidget from './createMyVALoginWidget';
 import renderHomepageBanner from './renderHomepageBanner';
+import renderHealtheLifeContent from './renderHealtheLifeContent';
 import createDisabilityFormWizard from '../disability-benefits/wizard/createWizard';
 import createDisabilityRatingCalculator from '../disability-benefits/disability-rating-calculator/createCalculator';
 import createEducationApplicationStatus from '../edu-benefits/components/createEducationApplicationStatus';
@@ -115,6 +116,8 @@ createScoEventsWidget();
 createScoAnnouncementsWidget();
 
 createFindVaForms(store, widgetTypes.FIND_VA_FORMS);
+
+renderHealtheLifeContent();
 
 // homepage widgets
 if (location.pathname === '/') {
