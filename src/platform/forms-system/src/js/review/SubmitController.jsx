@@ -6,10 +6,19 @@ import { withRouter } from 'react-router';
 
 import SubmitButtons from './SubmitButtons';
 import { PreSubmitSection } from '../components/PreSubmitSection';
-import { isValidForm } from '../validation';
 import { createPageListByChapter, getActiveExpandedPages } from '../helpers';
 import recordEvent from 'platform/monitoring/record-event';
-import { setPreSubmit, setSubmission, submitForm } from '../actions';
+import { isValidForm } from '../validation';
+import { reduceErrors } from '../utilities/data/reduceErrors';
+
+import {
+  setPreSubmit,
+  setSubmission,
+  submitForm,
+  setFormErrors,
+  openReviewChapter,
+  setEditMode,
+} from '../actions';
 
 class SubmitController extends React.Component {
   // eslint-disable-next-line
@@ -22,6 +31,15 @@ class SubmitController extends React.Component {
     ) {
       const newRoute = `${nextProps.formConfig.urlPrefix}confirmation`;
       this.props.router.push(newRoute);
+    }
+  }
+
+  componentDidUpdate() {
+    const errorFocus = document.querySelector('.error-message-focus');
+    if (errorFocus && !errorFocus.classList.contains('has-focused')) {
+      // focus on legend immediately above error links
+      errorFocus.focus();
+      errorFocus.classList.add('has-focused');
     }
   }
 
@@ -58,6 +76,11 @@ class SubmitController extends React.Component {
     // Validation errors in this situation are not visible, so we’d
     // like to know if they’re common
     const { isValid, errors } = isValidForm(form, pageList);
+    // eslint-disable-next-line no-unused-expressions
+    this.props.setFormErrors?.({
+      rawErrors: errors,
+      errors: reduceErrors(errors, pageList),
+    });
     if (!isValid) {
       recordEvent({
         event: `${trackingPrefix}-validation-failed`,
@@ -113,7 +136,7 @@ class SubmitController extends React.Component {
   };
 
   render() {
-    const { form, renderErrorMessage } = this.props;
+    const { form, renderErrorMessage, formErrors = [] } = this.props;
     // Render inside SubmitButtons by using `preSubmitSection` so the alert is _above_ the submit button;
     // helps with accessibility
 
@@ -124,6 +147,9 @@ class SubmitController extends React.Component {
         submission={form.submission}
         renderErrorMessage={renderErrorMessage}
         preSubmitSection={this.RenderPreSubmitSection()}
+        formErrors={formErrors}
+        openReviewChapter={this.props.openReviewChapter}
+        setEditMode={this.props.setEditMode}
       />
     );
   }
@@ -138,6 +164,7 @@ function mapStateToProps(state, ownProps) {
   const trackingPrefix = formConfig.trackingPrefix;
   const submission = form.submission;
   const showPreSubmitError = submission.hasAttemptedSubmit;
+  const formErrors = form.formErrors;
 
   return {
     form,
@@ -149,6 +176,7 @@ function mapStateToProps(state, ownProps) {
     submission,
     showPreSubmitError,
     trackingPrefix,
+    formErrors,
   };
 }
 
@@ -156,6 +184,9 @@ const mapDispatchToProps = {
   setPreSubmit,
   setSubmission,
   submitForm,
+  setFormErrors,
+  openReviewChapter,
+  setEditMode,
 };
 
 SubmitController.propTypes = {
@@ -170,6 +201,9 @@ SubmitController.propTypes = {
   submitForm: PropTypes.func.isRequired,
   submission: PropTypes.object.isRequired,
   trackingPrefix: PropTypes.string.isRequired,
+  setFormErrors: PropTypes.func.isRequired,
+  openReviewChapter: PropTypes.func,
+  setEditMode: PropTypes.func,
 };
 
 export default withRouter(

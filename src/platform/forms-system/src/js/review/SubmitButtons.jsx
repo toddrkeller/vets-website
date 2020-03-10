@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
 import ProgressButton from '../components/ProgressButton';
 import { timeFromNow } from '../utilities/date';
+import { focusAndScrollToReviewElement } from '../utilities/ui';
+import environment from 'platform/utilities/environment';
 
 export default function SubmitButtons(props) {
   const {
@@ -12,7 +14,14 @@ export default function SubmitButtons(props) {
     preSubmitSection,
     renderErrorMessage,
     submission,
+    formErrors = [],
   } = props;
+
+  const [hadErrors, setHadErrors] = useState(false);
+  if (!hadErrors && formErrors.errors?.length > 0) {
+    setHadErrors(true);
+  }
+
   let submitButton;
   let submitMessage;
   if (submission.status === false) {
@@ -86,6 +95,10 @@ export default function SubmitButtons(props) {
       </div>
     );
   } else if (submission.status === 'validationError') {
+    // Needs evaluation & testing before production
+    const errors = formErrors?.errors || [];
+    const errLen = errors.length;
+    const renderErrors = errLen > 0 && !environment.isProduction();
     submitButton = (
       <ProgressButton
         onButtonClick={onSubmit}
@@ -93,25 +106,74 @@ export default function SubmitButtons(props) {
         buttonClass="usa-button-primary"
       />
     );
-    submitMessage = (
-      <div className="usa-alert usa-alert-error schemaform-failure-alert">
-        <div className="usa-alert-body">
-          <p className="schemaform-warning-header">
-            <strong>
-              We’re sorry. Some information in your application is missing or
-              not valid.
+    submitMessage =
+      hadErrors && errLen === 0 ? (
+        <div className="usa-alert usa-alert-warning schemaform-failure-alert">
+          <div className="usa-alert-body">
+            <strong className="schemaform-warning-header">
+              The information in your application now appears to be valid,
+              please try resubmitting it now.
             </strong>
-          </p>
-          <p>
-            Please check each section of your application to make sure you’ve
-            filled out all the information that is required.
-          </p>
+          </div>
         </div>
-      </div>
-    );
+      ) : (
+        <div className="usa-alert usa-alert-error schemaform-failure-alert">
+          <div className="usa-alert-body">
+            <p className="schemaform-warning-header">
+              <strong>
+                We’re sorry. Some information in your application is missing or
+                not valid.
+              </strong>
+            </p>
+            {renderErrors && (
+              <fieldset>
+                <legend
+                  className="error-message-focus vads-u-font-size--base"
+                  tabIndex={-1}
+                >
+                  The following required
+                  {errLen === 1 ? ' item is ' : ' items are '}
+                  preventing submission:
+                </legend>
+                <ul className="vads-u-margin-left--3">
+                  {errors.map(error => (
+                    <li key={error.name} className="error-message-list-item">
+                      {error.chapterKey ? (
+                        <a
+                          href="#"
+                          className="error-message-list-link"
+                          onClick={event => {
+                            event.preventDefault();
+                            props.openReviewChapter(error.chapterKey);
+                            props.setEditMode(
+                              error.pageKey,
+                              true, // enable edit mode
+                              error.index || null,
+                            );
+                            // props.formContext.onError();
+                            focusAndScrollToReviewElement(error);
+                          }}
+                        >
+                          {error.message}
+                        </a>
+                      ) : (
+                        error.message
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </fieldset>
+            )}
+            <p>
+              Please check each section of your application to make sure you’ve
+              filled out all the information that is required.
+            </p>
+          </div>
+        </div>
+      );
   } else {
     if (renderErrorMessage) {
-      submitMessage = renderErrorMessage();
+      submitMessage = renderErrorMessage(formErrors?.errors);
     } else {
       submitMessage = (
         <div className="usa-alert usa-alert-error schemaform-failure-alert">
