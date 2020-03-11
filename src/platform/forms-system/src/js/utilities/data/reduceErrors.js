@@ -1,6 +1,14 @@
 import numberToWords from './numberToWords';
 // Process JSON-schema error messages for viewing
 
+// Convert array zero-baed number `test[0]` into a word `first test`
+const replaceNumberWithWord = (_, word, number) => {
+  const num = parseFloat(number);
+  return `${
+    isNaN(num) || !isFinite(num) ? number : numberToWords(num + 1)
+  } ${word}`;
+};
+
 // Change jsonschema validation hard-coded error messages. For example, changes
 // `requires property "someCamelCasedProperty1"` to `Some camel cased property 1`
 // Array type properties need to get special treatment,
@@ -12,11 +20,7 @@ const formatErrors = message =>
   message
     .replace(/(requires property|instance\.?)\s*/g, '')
     .replace(/(view:|ui:|")/g, '')
-    // convert array numbering `test[1]` to a numbered word `first test`
-    .replace(
-      /(\w+)(\[\d+\])/,
-      (_, word, number) => `${numberToWords(number, +1)} ${word}`,
-    )
+    .replace(/(\w+)\[(\d+)\]/, replaceNumberWithWord)
     // Change camel case variable names into something readable.
     .replace(/[A-Z]/g, str => ` ${str.toLowerCase()}`)
     // Separate numbers (e.g. "address1" -> "address 1")
