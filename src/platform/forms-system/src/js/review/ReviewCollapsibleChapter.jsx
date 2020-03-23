@@ -74,10 +74,10 @@ export default class ReviewCollapsibleChapter extends React.Component {
       form,
       formContext,
       pageKeys,
+      checkValidation,
       showUnviewedPageWarning,
       viewedPages,
     } = this.props;
-
     const ChapterDescription = chapterFormConfig.reviewDescription;
     let chapterTitle = chapterFormConfig.title;
     if (typeof chapterFormConfig.title === 'function') {
@@ -196,6 +196,7 @@ export default class ReviewCollapsibleChapter extends React.Component {
                       <ProgressButton
                         submitButton
                         onButtonClick={() => {
+                          checkValidation();
                           focusOnChange(
                             `${page.pageKey}${
                               typeof page.index === 'number' ? page.index : ''
@@ -214,6 +215,7 @@ export default class ReviewCollapsibleChapter extends React.Component {
                       pageKey={page.pageKey}
                       pageTitle={page.title}
                       arrayData={_.get(arrayField.path, form.data)}
+                      editing={editing}
                       formData={form.data}
                       appStateData={page.appStateData}
                       formContext={formContext}
@@ -259,7 +261,10 @@ export default class ReviewCollapsibleChapter extends React.Component {
                 {chapterTitle || ''}
               </button>
               {showUnviewedPageWarning && (
-                <span className="schemaform-review-chapter-warning-icon" />
+                <span
+                  role="presentation"
+                  className="schemaform-review-chapter-warning-icon"
+                />
               )}
             </div>
             <div id={`collapsible-${this.id}`}>{pageContent}</div>
