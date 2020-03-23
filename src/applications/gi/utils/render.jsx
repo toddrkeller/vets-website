@@ -7,7 +7,7 @@ export const renderSchoolClosingAlert = result => {
   if (!schoolClosing) return null;
   return (
     <AlertBox
-      content={<p>Upcoming campus closure</p>}
+      content={<p>A campus at this school will be closing soon</p>}
       headline="A campus is closing soon"
       isVisible={!!schoolClosing}
       status="warning"
