@@ -95,9 +95,9 @@ export default function SubmitButtons(props) {
       </div>
     );
   } else if (submission.status === 'validationError') {
-    // Needs evaluation & testing before production
     const errors = formErrors?.errors || [];
     const errLen = errors.length;
+    // Needs evaluation & testing before production
     const renderErrors = errLen > 0 && !environment.isProduction();
     submitButton = (
       <ProgressButton

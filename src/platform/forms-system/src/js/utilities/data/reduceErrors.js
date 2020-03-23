@@ -9,13 +9,18 @@ const replaceNumberWithWord = (_, word, number) => {
   } ${word}`;
 };
 
-// Change jsonschema validation hard-coded error messages. For example, changes
-// `requires property "someCamelCasedProperty1"` to `Some camel cased property 1`
-// Array type properties need to get special treatment,
-// `"instance.newDisabilities[0] requires property "cause"` is modified into
-// `First new disabilities cause`. Both methods use the schema property name,
-// which isn't ideal, because the uiSchema may have an empty title and/or
-// description, or it may be a string or React component
+// Make hard-coded jsonschema validation error messages _more_ readable. E.g.
+// * Changes`requires property "someCamelCasedProperty1"` is changed to
+//   `Some camel cased property 1`
+// * Array type properties need to get special treatment,
+//   `"instance.newDisabilities[0] requires property "cause"` is modified into
+//   `First new disabilities cause`.
+// Both of these methods use the schema property name, which also isn't ideal,
+// Sadly, the form validator is external to react-jsonschema-form and doesn't
+// collect the error messages. Also we can't use the title because the uiSchema
+// may have an empty title and/or empty or really long description. Also, we
+// would have to detect & process the title as either a string or React
+// component
 const formatErrors = message =>
   message
     .replace(/(requires property|instance\.?)\s*/g, '')
