@@ -1,25 +1,14 @@
 import React from 'react';
-import environment from 'platform/utilities/environment';
+
 import AlertBox from '@department-of-veterans-affairs/formation-react/AlertBox';
 
 export const renderSchoolClosingAlert = result => {
   const { schoolClosing } = result;
-
   if (!schoolClosing) return null;
-  if (!environment.isProduction()) {
-    return (
-      <AlertBox
-        content={<p>Upcoming campus closure</p>}
-        headline="A campus is closing soon"
-        isVisible={!!schoolClosing}
-        status="warning"
-      />
-    );
-  }
   return (
     <AlertBox
       content={<p>Upcoming campus closure</p>}
-      headline="School closure"
+      headline="A campus is closing soon"
       isVisible={!!schoolClosing}
       status="warning"
     />
@@ -48,24 +37,14 @@ const renderReasons = cautionFlags => {
 export const renderCautionAlert = result => {
   const { cautionFlags } = result;
   if (cautionFlags.length === 0) return null;
-  if (!environment.isProduction()) {
-    return (
-      <AlertBox
-        content={renderReasons(cautionFlags)}
-        headline={
-          cautionFlags.length > 1
-            ? 'This school has cautionary warnings'
-            : 'This school has a cautionary warning'
-        }
-        isVisible={cautionFlags.length > 0}
-        status="warning"
-      />
-    );
-  }
   return (
     <AlertBox
-      content={<p>This school has cautionary warnings</p>}
-      headline="Caution"
+      content={renderReasons(cautionFlags)}
+      headline={
+        cautionFlags.length > 1
+          ? 'This school has cautionary warnings'
+          : 'This school has a cautionary warning'
+      }
       isVisible={cautionFlags.length > 0}
       status="warning"
     />
