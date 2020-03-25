@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import Modal from '@department-of-veterans-affairs/formation-react/Modal';
+import environment from 'platform/utilities/environment';
 
 export class Modals extends React.Component {
   calcBeneficiaryLocationQuestionContent = () => (
@@ -169,8 +170,8 @@ export class Modals extends React.Component {
         <p>
           If you attend your training program in person, your housing stipend
           will be equal to the monthly military Basic Allowance for Housing
-          (BAH) for an E-5 with dependents. This is based on the zip code where
-          you attend your training.
+          (BAH) for an E-5 with dependents. This is based on the postal code
+          where you attend your training.
         </p>
         <p>
           If you participate in an online program, your stipend will be half of
@@ -655,6 +656,17 @@ export class Modals extends React.Component {
           or legal scrutiny to this program. VA will display other categories of
           caution flags in future versions of the GI Bill Comparison Tool.
         </p>
+        {!environment.isProduction() && (
+          <p>
+            <a
+              href="https://www.benefits.va.gov/gibill/comparison_tool/about_this_tool.asp#phoenix"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Suspension of VA Benefits to Five Schools for Deceptive Practices
+            </a>
+          </p>
+        )}
         <p>
           <a
             href="https://studentaid.ed.gov/sa/about/data-center/school/hcm"
@@ -1034,14 +1046,16 @@ export class Modals extends React.Component {
               <h3>VET TEC</h3>
             </strong>
           </div>
-
-          <p>
-            Veteran Employment Through Technology Education Courses (VET TEC) is
-            a 5-year pilot program that matches Veterans with high-tech training
-            providers. Veterans can start or advance their career in the
-            high-tech industry with a training program that’ll take months—or
-            just weeks—to complete.
-          </p>
+          {
+            <p>
+              Veteran Employment Through Technology Education Courses (VET TEC)
+              is a 5-year pilot program that matches Veterans with high-tech
+              training providers. Veterans can start or advance their career in
+              the high-tech industry with a training program that’ll take
+              months—or just weeks—to complete. The pilot program started in
+              2019 and runs through March 31, 2024.
+            </p>
+          }
           <p>
             <a
               href="https://www.va.gov/education/about-gi-bill-benefits/how-to-use-benefits/vettec-high-tech-program/"

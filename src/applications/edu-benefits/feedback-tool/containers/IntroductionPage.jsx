@@ -35,7 +35,6 @@ class IntroductionPage extends React.Component {
         <SaveInProgressIntro
           messages={this.props.route.formConfig.savedFormMessages}
           pageList={this.props.route.pageList}
-          downtime={this.props.route.formConfig.downtime}
           prefillEnabled={this.props.route.formConfig.prefillEnabled}
           startText="Submit Your Feedback"
         />

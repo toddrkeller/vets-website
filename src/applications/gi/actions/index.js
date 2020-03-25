@@ -1,9 +1,8 @@
-import _ from 'lodash';
 import appendQuery from 'append-query';
 
 import recordEvent from 'platform/monitoring/record-event';
 import { api } from '../config';
-import { snakeCaseKeys } from '../utils/helpers';
+import { rubyifyKeys } from '../utils/helpers';
 import { fetchAndUpdateSessionExpiration as fetch } from 'platform/utilities/api';
 
 export const UPDATE_ROUTE = 'UPDATE_ROUTE';
@@ -97,16 +96,24 @@ function withPreview(dispatch, action) {
 export function fetchConstants(version) {
   const queryString = version ? `?version=${version}` : '';
   const url = `${api.url}/calculator_constants${queryString}`;
-
   return dispatch => {
     dispatch({ type: FETCH_CONSTANTS_STARTED });
     return fetch(url, api.settings)
-      .then(res => res.json())
-      .then(
-        payload =>
-          withPreview(dispatch, { type: FETCH_CONSTANTS_SUCCEEDED, payload }),
-        err => dispatch({ type: FETCH_CONSTANTS_FAILED, err }),
-      );
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw new Error(res.statusText);
+      })
+      .then(payload => {
+        withPreview(dispatch, { type: FETCH_CONSTANTS_SUCCEEDED, payload });
+      })
+      .catch(err => {
+        dispatch({
+          type: FETCH_CONSTANTS_FAILED,
+          payload: err.message,
+        });
+      });
   };
 }
 
@@ -117,32 +124,58 @@ export function updateAutocompleteSearchTerm(searchTerm) {
   };
 }
 
-export function fetchInstitutionAutocompleteSuggestions(term, version) {
+export function fetchInstitutionAutocompleteSuggestions(
+  term,
+  filterFields,
+  version,
+) {
   const url = appendQuery(`${api.url}/institutions/autocomplete`, {
     term,
+    ...rubyifyKeys(filterFields),
     version,
   });
   return dispatch =>
     fetch(url, api.settings)
-      .then(res => res.json())
-      .then(
-        payload => dispatch({ type: AUTOCOMPLETE_SUCCEEDED, payload }),
-        err => dispatch({ type: AUTOCOMPLETE_FAILED, err }),
-      );
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        }
+
+        return res.json().then(({ errors }) => {
+          throw new Error(errors[0].title);
+        });
+      })
+      .then(payload => dispatch({ type: AUTOCOMPLETE_SUCCEEDED, payload }))
+      .catch(err => {
+        dispatch({ type: AUTOCOMPLETE_FAILED, err });
+      });
 }
 
-export function fetchProgramAutocompleteSuggestions(term, version) {
+export function fetchProgramAutocompleteSuggestions(
+  term,
+  filterFields,
+  version,
+) {
   const url = appendQuery(`${api.url}/institution_programs/autocomplete`, {
     term,
+    ...rubyifyKeys(filterFields),
     version,
   });
   return dispatch =>
     fetch(url, api.settings)
-      .then(res => res.json())
-      .then(
-        payload => dispatch({ type: AUTOCOMPLETE_SUCCEEDED, payload }),
-        err => dispatch({ type: AUTOCOMPLETE_FAILED, err }),
-      );
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        }
+
+        return res.json().then(({ errors }) => {
+          throw new Error(errors[0].title);
+        });
+      })
+      .then(payload => dispatch({ type: AUTOCOMPLETE_SUCCEEDED, payload }))
+      .catch(err => {
+        dispatch({ type: AUTOCOMPLETE_FAILED, err });
+      });
 }
 
 export function clearAutocompleteSuggestions() {
@@ -169,43 +202,63 @@ export function institutionFilterChange(filter) {
 }
 
 export function fetchInstitutionSearchResults(query = {}) {
-  const url = appendQuery(
-    `${api.url}/institutions/search`,
-    snakeCaseKeys(query),
-  );
+  const url = appendQuery(`${api.url}/institutions/search`, rubyifyKeys(query));
 
   return dispatch => {
     dispatch({ type: SEARCH_STARTED, query });
 
     return fetch(url, api.settings)
-      .then(res => res.json())
-      .then(
-        payload =>
-          withPreview(dispatch, {
-            type: INSTITUTION_SEARCH_SUCCEEDED,
-            payload,
-          }),
-        err => dispatch({ type: SEARCH_FAILED, err }),
-      );
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        }
+
+        throw new Error(res.statusText);
+      })
+      .then(payload =>
+        withPreview(dispatch, {
+          type: INSTITUTION_SEARCH_SUCCEEDED,
+          payload,
+        }),
+      )
+      .catch(err => {
+        dispatch({
+          type: SEARCH_FAILED,
+          payload: err.message,
+        });
+      });
   };
 }
 
 export function fetchProgramSearchResults(query = {}) {
   const url = appendQuery(
     `${api.url}/institution_programs/search`,
-    snakeCaseKeys(query),
+    rubyifyKeys(query),
   );
 
   return dispatch => {
     dispatch({ type: SEARCH_STARTED, query });
 
     return fetch(url, api.settings)
-      .then(res => res.json())
-      .then(
-        payload =>
-          withPreview(dispatch, { type: PROGRAM_SEARCH_SUCCEEDED, payload }),
-        err => dispatch({ type: SEARCH_FAILED, err }),
-      );
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        }
+
+        throw new Error(res.statusText);
+      })
+      .then(payload =>
+        withPreview(dispatch, {
+          type: PROGRAM_SEARCH_SUCCEEDED,
+          payload,
+        }),
+      )
+      .catch(err => {
+        dispatch({
+          type: SEARCH_FAILED,
+          payload: err.message,
+        });
+      });
   };
 }
 
@@ -221,35 +274,24 @@ export function fetchProfile(facilityCode, version) {
         if (res.ok) {
           return res.json();
         }
-
-        return res.json().then(errors => {
-          throw new Error(errors);
-        });
+        throw new Error(res.statusText);
       })
       .then(institution => {
-        const institutionZIP = _.get(institution, 'data.attributes.zip');
-        const bahUrl = `${api.url}/zipcode_rates/${institutionZIP}`;
-
-        return (
-          fetch(bahUrl, api.settings)
-            .then(res => res.json())
-            // if there's an error from the zipRatesPayload the reducer will just use the values from the institution end point.
-            .then(zipRatesPayload => {
-              const { AVGVABAH, AVGDODBAH } = getState().constants.constants;
-              withPreview(dispatch, {
-                type: FETCH_PROFILE_SUCCEEDED,
-                payload: {
-                  ...institution,
-                  AVGVABAH,
-                  AVGDODBAH,
-                },
-                zipRatesPayload,
-              });
-            })
-        );
+        const { AVGVABAH, AVGDODBAH } = getState().constants.constants;
+        return withPreview(dispatch, {
+          type: FETCH_PROFILE_SUCCEEDED,
+          payload: {
+            ...institution,
+            AVGVABAH,
+            AVGDODBAH,
+          },
+        });
       })
       .catch(err => {
-        dispatch({ type: FETCH_PROFILE_FAILED, err });
+        dispatch({
+          type: FETCH_PROFILE_FAILED,
+          payload: err.message,
+        });
       });
   };
 }

@@ -11,18 +11,47 @@ import {
   VET360_TRANSACTION_UPDATE_REQUESTED,
   VET360_TRANSACTION_UPDATE_FAILED,
   VET360_CLEAR_TRANSACTION_STATUS,
+  ADDRESS_VALIDATION_CONFIRM,
+  ADDRESS_VALIDATION_ERROR,
+  ADDRESS_VALIDATION_RESET,
+  UPDATE_SELECTED_ADDRESS,
+  ADDRESS_VALIDATION_INITIALIZE,
+  ADDRESS_VALIDATION_UPDATE,
 } from '../actions';
 
 import { isFailedTransaction } from '../util/transactions';
 
+const initialAddressValidationState = {
+  addressValidationType: '',
+  suggestedAddresses: [],
+  confirmedSuggestions: [],
+  addressFromUser: {
+    addressLine1: '',
+    addressLine2: '',
+    addressLine3: '',
+    city: '',
+    stateCode: '',
+    zipCode: '',
+    countryCodeIso3: '',
+  },
+  addressValidationError: false,
+  validationKey: null,
+  selectedAddress: {},
+  selectedAddressId: null,
+};
+
 const initialState = {
   modal: null,
+  modalData: null,
   formFields: {},
   transactions: [],
   fieldTransactionMap: {},
   transactionsAwaitingUpdate: [],
   metadata: {
     mostRecentErroredTransactionId: '',
+  },
+  addressValidation: {
+    ...initialAddressValidationState,
   },
   transactionStatus: '',
 };
@@ -182,7 +211,87 @@ export default function vet360(state = initialState, action) {
     }
 
     case OPEN_MODAL:
-      return { ...state, modal: action.modal };
+      return { ...state, modal: action.modal, modalData: action.modalData };
+
+    case ADDRESS_VALIDATION_INITIALIZE:
+      return {
+        ...state,
+        addressValidation: {
+          ...initialAddressValidationState,
+        },
+        fieldTransactionMap: {
+          ...state.fieldTransactionMap,
+          [action.fieldName]: { isPending: true },
+        },
+      };
+
+    case ADDRESS_VALIDATION_CONFIRM:
+      return {
+        ...state,
+        fieldTransactionMap: {
+          ...state.fieldTransactionMap,
+          [action.addressValidationType]: { isPending: false },
+        },
+        addressValidation: {
+          ...state.addressValidation,
+          addressFromUser: action.addressFromUser,
+          addressValidationType: action.addressValidationType,
+          suggestedAddresses: action.suggestedAddresses,
+          validationKey: action.validationKey,
+          selectedAddress: action.selectedAddress,
+          selectedAddressId: action.selectedAddressId,
+          confirmedSuggestions: action.confirmedSuggestions,
+          addressValidationError: false,
+        },
+        modal: 'addressValidation',
+      };
+
+    case ADDRESS_VALIDATION_ERROR:
+      return {
+        ...state,
+        fieldTransactionMap: {
+          ...state.fieldTransactionMap,
+          [action.fieldName]: {
+            ...state.fieldTransactionMap[action.fieldName],
+            isPending: false,
+            isFailed: true,
+            error: action.error,
+          },
+        },
+        addressValidation: {
+          ...initialAddressValidationState,
+          addressValidationError: action.addressValidationError,
+          addressValidationType: action.fieldName,
+          validationKey: action.validationKey || null,
+          addressFromUser: action.addressFromUser,
+        },
+        modal: action.fieldName,
+      };
+
+    case ADDRESS_VALIDATION_RESET:
+      return {
+        ...state,
+        addressValidation: { ...initialAddressValidationState },
+      };
+
+    case ADDRESS_VALIDATION_UPDATE:
+      return {
+        ...state,
+        fieldTransactionMap: {
+          ...state.fieldTransactionMap,
+          [action.fieldName]: { isPending: true },
+        },
+      };
+
+    case UPDATE_SELECTED_ADDRESS:
+      return {
+        ...state,
+        addressValidation: {
+          ...state.addressValidation,
+          selectedAddress: action.selectedAddress,
+          selectedAddressId: action.selectedAddressId,
+        },
+      };
 
     default:
       return state;

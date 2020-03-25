@@ -9,6 +9,7 @@ import {
   routeToPreviousAppointmentPage,
 } from '../actions/newAppointment.js';
 import { getFormPageInfo } from '../utils/selectors';
+import { scrollAndFocus } from '../utils/scrollAndFocus';
 import { TYPES_OF_SLEEP_CARE } from '../utils/constants';
 
 const initialSchema = {
@@ -59,10 +60,13 @@ const uiSchema = {
 };
 
 const pageKey = 'typeOfSleepCare';
+const pageTitle = 'Choose the type of sleep care you need';
 
 export class TypeOfSleepCarePage extends React.Component {
   componentDidMount() {
     this.props.openFormPage(pageKey, uiSchema, initialSchema);
+    document.title = `${pageTitle} | Veterans Affairs`;
+    scrollAndFocus();
   }
 
   goBack = () => {
@@ -78,9 +82,7 @@ export class TypeOfSleepCarePage extends React.Component {
 
     return (
       <div className="vaos-form__detailed-radio">
-        <h1 className="vads-u-font-size--h2">
-          Choose the type of sleep care you need
-        </h1>
+        <h1 className="vads-u-font-size--h2">{pageTitle}</h1>
         <SchemaForm
           name="Type of sleep care"
           title="Type of sleep care"

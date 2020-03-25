@@ -13,7 +13,10 @@ const { compilePage, createFileObj } = require('./page');
 const {
   createHealthCareRegionListPages,
   addGetUpdatesFields,
+  addPager,
+  sortServices,
 } = require('./health-care-region');
+
 const { addHubIconField } = require('./benefit-hub');
 const { addHomeContent } = require('./home');
 
@@ -23,8 +26,11 @@ const DRUPAL_HUB_NAV_FILENAME = 'hubNavNames.json';
 // If "--pull-drupal" is passed into the build args, then the build
 // should pull the latest Drupal data.
 const PULL_DRUPAL_BUILD_ARG = 'pull-drupal';
+// If "--use-cms-export" is passed into the build args, then the build
+// should use the files in the tome-sync export directory
+const USE_CMS_EXPORT_BUILD_ARG = 'use-cms-export';
 
-// We need to pull the Drupal content if we have --pull-drupal OR if
+// We need to pull the Drupal content if we have --pull-drupal or --use-cms-export, OR if
 // the content is not available in the cache.
 const shouldPullDrupal = buildOptions => {
   const drupalCache = path.join(
@@ -34,6 +40,7 @@ const shouldPullDrupal = buildOptions => {
   const isDrupalAvailableInCache = fs.existsSync(drupalCache);
   return (
     buildOptions[PULL_DRUPAL_BUILD_ARG] ||
+    buildOptions[USE_CMS_EXPORT_BUILD_ARG] ||
     (!isDrupalAvailableInCache &&
       buildOptions.buildtype !== ENVIRONMENTS.LOCALHOST) // Don't require a cache to build locally.
   );
@@ -80,6 +87,56 @@ function pipeDrupalPagesIntoMetalsmith(contentData, files) {
         break;
       case 'health_care_region_detail_page':
         addGetUpdatesFields(pageCompiled, pages);
+        break;
+      case 'event_listing':
+        pageCompiled.allEventTeasers = pageCompiled.fieldOffice.entity
+          .reverseFieldOfficeNode.entities.length
+          ? pageCompiled.fieldOffice.entity.reverseFieldOfficeNode
+          : pageCompiled.reverseFieldOfficeNode;
+        addPager(
+          pageCompiled,
+          files,
+          pageCompiled.allEventTeasers,
+          'event_listing.drupal.liquid',
+          'event',
+        );
+        break;
+      case 'story_listing':
+        pageCompiled.allNewsStoryTeasers =
+          page.fieldOffice.entity.reverseFieldOfficeNode;
+        addPager(
+          pageCompiled,
+          files,
+          pageCompiled.allNewsStoryTeasers,
+          'story_listing.drupal.liquid',
+          'story',
+        );
+        break;
+      case 'press_releases_listing':
+        pageCompiled.allPressReleaseTeasers =
+          page.fieldOffice.entity.reverseFieldOfficeNode;
+        addPager(
+          pageCompiled,
+          files,
+          pageCompiled.allPressReleaseTeasers,
+          'press_releases_listing.drupal.liquid',
+          'press_release',
+        );
+        break;
+      case 'health_services_listing':
+        pageCompiled.clinicalHealthServices = sortServices(
+          pageCompiled.fieldOffice.entity.reverseFieldRegionPageNode.entities,
+        );
+        break;
+      case 'leaderships_listing':
+        pageCompiled.allStaffProfiles = page.fieldLeadership;
+        addPager(
+          pageCompiled,
+          files,
+          pageCompiled.allStaffProfiles,
+          'leadership_listing.drupal.liquid',
+          'bio',
+        );
         break;
       case 'page':
         addHubIconField(pageCompiled, pages);
@@ -138,7 +195,14 @@ async function loadDrupal(buildOptions) {
 
     console.time(drupalTimer);
 
-    drupalPages = await contentApi.getAllPages();
+    if (buildOptions[USE_CMS_EXPORT_BUILD_ARG]) {
+      drupalPages = await contentApi.getNonNodeContent();
+      drupalPages.data.nodeQuery = {
+        entities: contentApi.getExportedPages(),
+      };
+    } else {
+      drupalPages = await contentApi.getAllPages();
+    }
 
     console.timeEnd(drupalTimer);
 

@@ -13,7 +13,7 @@ import {
 const beneficiaryZIPRegExTester = /^\d{1,5}$/;
 
 const INITIAL_STATE = {
-  beneficiaryLocationQuestion: 'yes',
+  beneficiaryLocationQuestion: null,
   beneficiaryZIP: '',
   extension: '',
   inState: 'yes',
@@ -75,6 +75,7 @@ export default function(state = INITIAL_STATE, action) {
           ...newState,
           vetTecProgramName: value.vetTecProgramName,
           vetTecTuitionFees: value.vetTecTuitionFees,
+          vetTecProgramFacilityCode: value.vetTecProgramFacilityCode,
         };
       }
 
@@ -168,7 +169,7 @@ export default function(state = INITIAL_STATE, action) {
       // institution and zipcode_rates endpoints both return this generic error
       const errorMessage =
         error.message === 'Record not found'
-          ? 'No rates for this zip code found. Try another zip code'
+          ? 'No rates for this postal code found. Try another postal code'
           : 'Something went wrong. Try again';
 
       // response mismatch - do nothing
@@ -243,7 +244,7 @@ export default function(state = INITIAL_STATE, action) {
         beneficiaryZIP !== '' &&
         !beneficiaryZIPRegExTester.exec(beneficiaryZIP)
       ) {
-        beneficiaryZIPError = 'Zip code must be a 5-digit number';
+        beneficiaryZIPError = 'Postal code must be a 5-digit number';
       } else {
         beneficiaryZIPError = '';
       }
@@ -331,6 +332,19 @@ export default function(state = INITIAL_STATE, action) {
             ? 'no'
             : 'yes';
       }
+
+      const vetTecProgramName =
+        state.vetTecProgramFacilityCode ===
+        camelPayload.data.attributes.facilityCode
+          ? state.vetTecProgramName
+          : INITIAL_STATE.vetTecProgramName;
+
+      const vetTecTuitionFees =
+        state.vetTecProgramFacilityCode ===
+        camelPayload.data.attributes.facilityCode
+          ? state.vetTecTuitionFees
+          : INITIAL_STATE.vetTecTuitionFees;
+
       return {
         ...INITIAL_STATE,
         giBillBenefit,
@@ -352,6 +366,8 @@ export default function(state = INITIAL_STATE, action) {
         yellowRibbonMaxNumberOfStudents,
         yellowRibbonPrograms,
         yellowRibbonProgramIndex,
+        vetTecProgramName,
+        vetTecTuitionFees,
       };
     }
 

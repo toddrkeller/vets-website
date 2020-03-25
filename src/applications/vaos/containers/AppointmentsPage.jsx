@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import LoadingIndicator from '@department-of-veterans-affairs/formation-react/LoadingIndicator';
+import recordEvent from 'platform/monitoring/record-event';
 import AlertBox from '@department-of-veterans-affairs/formation-react/AlertBox';
+import environment from 'platform/utilities/environment';
 import Breadcrumbs from '../components/Breadcrumbs';
 import ConfirmedAppointmentListItem from '../components/ConfirmedAppointmentListItem';
 import AppointmentRequestListItem from '../components/AppointmentRequestListItem';
@@ -12,17 +14,46 @@ import {
   cancelAppointment,
   confirmCancelAppointment,
   closeCancelAppointment,
+  fetchRequestMessages,
+  startNewAppointmentFlow,
 } from '../actions/appointments';
-import { getAppointmentType } from '../utils/appointment';
-import { FETCH_STATUS, APPOINTMENT_TYPES } from '../utils/constants';
+import { getAppointmentType, getRealFacilityId } from '../utils/appointment';
+import { FETCH_STATUS, APPOINTMENT_TYPES, GA_PREFIX } from '../utils/constants';
 import CancelAppointmentModal from '../components/CancelAppointmentModal';
-import { getCancelInfo, vaosCancel, vaosRequests } from '../utils/selectors';
+import {
+  getCancelInfo,
+  vaosCancel,
+  vaosRequests,
+  vaosPastAppts,
+  isWelcomeModalDismissed,
+} from '../utils/selectors';
 import { scrollAndFocus } from '../utils/scrollAndFocus';
+import NeedHelp from '../components/NeedHelp';
+
+const pageTitle = 'VA appointments';
 
 export class AppointmentsPage extends Component {
   componentDidMount() {
-    scrollAndFocus();
+    if (this.props.isWelcomeModalDismissed) {
+      scrollAndFocus();
+    }
     this.props.fetchFutureAppointments();
+    document.title = `${pageTitle} | Veterans Affairs`;
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.isWelcomeModalDismissed &&
+      !prevProps.isWelcomeModalDismissed
+    ) {
+      scrollAndFocus();
+    }
+  }
+
+  recordStartEvent() {
+    recordEvent({
+      event: `${GA_PREFIX}-schedule-appointment-button-clicked`,
+    });
   }
 
   render() {
@@ -31,8 +62,15 @@ export class AppointmentsPage extends Component {
       cancelInfo,
       showCancelButton,
       showScheduleButton,
+      showPastAppointments,
     } = this.props;
-    const { future, futureStatus } = appointments;
+    const {
+      future,
+      futureStatus,
+      facilityData,
+      requestMessages,
+      systemClinicToFacilityMap,
+    } = appointments;
 
     let content;
 
@@ -43,12 +81,12 @@ export class AppointmentsPage extends Component {
     if (loading) {
       content = (
         <div className="vads-u-margin-y--8">
-          <LoadingIndicator setFocus message="Loading your appointments..." />
+          <LoadingIndicator message="Loading your appointments..." />
         </div>
       );
     } else if (hasAppointments) {
       content = (
-        <ul className="usa-unstyled-list">
+        <ul className="usa-unstyled-list" id="appointments-list">
           {future.map((appt, index) => {
             const type = getAppointmentType(appt);
 
@@ -61,8 +99,15 @@ export class AppointmentsPage extends Component {
                     index={index}
                     appointment={appt}
                     type={type}
+                    facility={
+                      facilityData[
+                        getRealFacilityId(appt.facility?.facilityCode)
+                      ]
+                    }
                     showCancelButton={showCancelButton}
                     cancelAppointment={this.props.cancelAppointment}
+                    fetchMessages={this.props.fetchRequestMessages}
+                    messages={requestMessages}
                   />
                 );
               case APPOINTMENT_TYPES.ccAppointment:
@@ -73,6 +118,11 @@ export class AppointmentsPage extends Component {
                     index={index}
                     appointment={appt}
                     type={type}
+                    facility={
+                      systemClinicToFacilityMap[
+                        `${appt.facilityId}_${appt.clinicId}`
+                      ]
+                    }
                     showCancelButton={showCancelButton}
                     cancelAppointment={this.props.cancelAppointment}
                   />
@@ -108,18 +158,20 @@ export class AppointmentsPage extends Component {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  VA Medical center
+                  VA medical center
                 </a>{' '}
                 to schedule an appointment.
               </p>
-              <Link to="new-appointment">
-                <button
-                  type="button"
-                  className="usa-button vads-u-margin-x--0 vads-u-margin-bottom--1p5"
-                  name="newAppointment"
-                >
-                  Schedule an appointment
-                </button>
+              <Link
+                id="new-appointment"
+                className="va-button-link vads-u-font-weight--bold vads-u-font-size--md"
+                to="/new-appointment"
+                onClick={() => {
+                  this.recordStartEvent();
+                  this.props.startNewAppointmentFlow();
+                }}
+              >
+                Schedule an appointment
               </Link>
             </>
           )}
@@ -147,27 +199,54 @@ export class AppointmentsPage extends Component {
         <Breadcrumbs />
         <div className="vads-l-row">
           <div className="vads-l-col--12 medium-screen:vads-l-col--8 vads-u-margin-bottom--2">
-            <h1 className="vads-u-flex--1">VA appointments</h1>
+            <h1 className="vads-u-flex--1">{pageTitle}</h1>
             {showScheduleButton && (
               <div className="vads-u-padding-y--3 vads-u-border-top--1px vads-u-border-bottom--1px vads-u-border-color--gray-lighter">
                 <h2 className="vads-u-font-size--h3 vads-u-margin-y--0">
                   Create a new appointment
                 </h2>
                 <p className="vads-u-margin-top--1">
-                  Schedule a new appointment at a VA Medical center, clinic, or
-                  Community care facility
+                  Schedule an appointment at a VA medical center, clinic, or
+                  Community Care facility.
                 </p>
-                <Link to="/new-appointment">
-                  <button className="usa-button vads-u-margin--0 vads-u-font-weight--bold vads-u-font-size--md">
-                    Schedule an appointment
-                  </button>
+                <Link
+                  id="new-appointment"
+                  className="usa-button vads-u-font-weight--bold vads-u-font-size--md"
+                  to="/new-appointment"
+                  onClick={() => {
+                    this.recordStartEvent();
+                    this.props.startNewAppointmentFlow();
+                  }}
+                >
+                  Schedule an appointment
                 </Link>
               </div>
             )}
             <h2 className="vads-u-font-size--h3 vads-u-margin-bottom--2">
               Upcoming appointments
             </h2>
+            {!showPastAppointments && (
+              <p>
+                To view past appointments you’ve made,{' '}
+                <a
+                  href={`https://${
+                    !environment.isProduction() ? 'mhv-syst' : 'www'
+                  }.myhealth.va.gov/mhv-portal-web/appointments`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() =>
+                    recordEvent({
+                      event: 'vaos-past-appointments-legacy-link-clicked',
+                    })
+                  }
+                >
+                  go to My HealtheVet
+                </a>
+                .
+              </p>
+            )}
             {content}
+            <NeedHelp />
           </div>
         </div>
         <CancelAppointmentModal
@@ -189,15 +268,19 @@ function mapStateToProps(state) {
     appointments: state.appointments,
     cancelInfo: getCancelInfo(state),
     showCancelButton: vaosCancel(state),
+    showPastAppointments: vaosPastAppts(state),
     showScheduleButton: vaosRequests(state),
+    isWelcomeModalDismissed: isWelcomeModalDismissed(state),
   };
 }
 
 const mapDispatchToProps = {
   fetchFutureAppointments,
+  fetchRequestMessages,
   cancelAppointment,
   confirmCancelAppointment,
   closeCancelAppointment,
+  startNewAppointmentFlow,
 };
 
 export default connect(

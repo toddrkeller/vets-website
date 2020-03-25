@@ -35,7 +35,7 @@ describe('VAOS <ContactInfoPage>', () => {
 
     form.find('form').simulate('submit');
 
-    expect(form.find('.usa-input-error').length).to.equal(2);
+    expect(form.find('.usa-input-error').length).to.equal(3);
     expect(router.push.called).to.be.false;
     form.unmount();
   });
@@ -70,7 +70,13 @@ describe('VAOS <ContactInfoPage>', () => {
       <ContactInfoPage
         openFormPage={openFormPage}
         routeToNextAppointmentPage={routeToNextAppointmentPage}
-        data={{ phoneNumber: '5555555555', email: 'fake@va.gov' }}
+        data={{
+          phoneNumber: '5555555555',
+          email: 'fake@va.gov',
+          bestTimeToCall: {
+            morning: true,
+          },
+        }}
       />,
     );
 
@@ -78,6 +84,19 @@ describe('VAOS <ContactInfoPage>', () => {
 
     expect(form.find('.usa-input-error').length).to.equal(0);
     expect(routeToNextAppointmentPage.called).to.be.true;
+    form.unmount();
+  });
+
+  it('document title should match h1 text', () => {
+    const openFormPage = sinon.spy();
+    const pageTitle = 'Your contact information';
+
+    const form = mount(
+      <ContactInfoPage openFormPage={openFormPage} data={{}} />,
+    );
+
+    expect(form.find('h1').text()).to.equal(pageTitle);
+    expect(document.title).contain(pageTitle);
     form.unmount();
   });
 });

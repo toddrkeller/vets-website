@@ -9,7 +9,12 @@ describe('<VetTecFilterBy>', () => {
       filters: {
         provider: [],
       },
-      providers: { Test: 1 },
+      providers: [
+        {
+          name: 'PROVIDER 1',
+          count: 1,
+        },
+      ],
       showModal: () => {},
       handleProviderFilterChange: () => {},
       handleFilterChange: () => {},
@@ -17,23 +22,62 @@ describe('<VetTecFilterBy>', () => {
 
     const wrapper = mount(<VetTecFilterBy {...props} />);
     expect(wrapper.find('input')).to.have.lengthOf(2);
-    expect(wrapper.find('input[name="Test"]')).to.have.lengthOf(1);
+    expect(wrapper.find('input[name="PROVIDER 1"]')).to.have.lengthOf(1);
     wrapper.unmount();
   });
 
-  it('sets selected provider filter as checked', () => {
+  it('sorts provider filters correctly', () => {
     const props = {
       filters: {
-        provider: ['Test'],
+        provider: [],
       },
-      providers: { Test: 1 },
+      providers: [
+        {
+          name: 'C PROVIDER',
+          count: 1,
+        },
+        {
+          name: 'A PROVIDER',
+          count: 2,
+        },
+      ],
       showModal: () => {},
       handleProviderFilterChange: () => {},
       handleFilterChange: () => {},
     };
 
     const wrapper = mount(<VetTecFilterBy {...props} />);
-    expect(wrapper.find('input[name="Test"]').props().checked).to.eq(true);
+
+    expect(wrapper.find('.vet-tec-provider-filters input')).to.have.lengthOf(2);
+    expect(
+      wrapper
+        .find('.vet-tec-provider-filters label')
+        .at(0)
+        .text(),
+    ).to.eq('A PROVIDER (2)');
+    wrapper.unmount();
+  });
+
+  it('sets selected provider filter as checked', () => {
+    const props = {
+      filters: {
+        provider: ['PROVIDER 1'],
+      },
+      providers: [
+        {
+          name: 'PROVIDER 1',
+          count: 1,
+        },
+      ],
+      showModal: () => {},
+      handleProviderFilterChange: () => {},
+      handleFilterChange: () => {},
+    };
+
+    const wrapper = mount(<VetTecFilterBy {...props} />);
+    expect(wrapper.find('input[name="PROVIDER 1"]').props().checked).to.eq(
+      true,
+    );
     wrapper.unmount();
   });
 
@@ -41,9 +85,18 @@ describe('<VetTecFilterBy>', () => {
     let selectedVal;
     const props = {
       filters: {
-        provider: ['Provider 2'],
+        provider: ['PROVIDER 2'],
       },
-      providers: { 'Provider 1': 1, 'Provider 2': 1 },
+      providers: [
+        {
+          name: 'PROVIDER 1',
+          count: 1,
+        },
+        {
+          name: 'PROVIDER 2',
+          count: 1,
+        },
+      ],
       showModal: () => {},
       handleProviderFilterChange: provider => {
         selectedVal = provider;
@@ -52,10 +105,10 @@ describe('<VetTecFilterBy>', () => {
     };
 
     const wrapper = mount(<VetTecFilterBy {...props} />);
-    expect(wrapper.find('input[name="Provider 1"]').props().checked).to.eq(
+    expect(wrapper.find('input[name="PROVIDER 1"]').props().checked).to.eq(
       false,
     );
-    wrapper.find('input[name="Provider 1"]').simulate('change', {
+    wrapper.find('input[name="PROVIDER 1"]').simulate('change', {
       target: { checked: true },
     });
     expect(Object.keys(selectedVal.provider)).to.have.lengthOf(2);

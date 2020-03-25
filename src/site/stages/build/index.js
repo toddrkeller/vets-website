@@ -1,6 +1,4 @@
 // Builds the site using Metalsmith as the top-level build runner.
-const chalk = require('chalk');
-const Metalsmith = require('metalsmith');
 const assets = require('metalsmith-assets');
 const collections = require('metalsmith-collections');
 const dateInFilename = require('metalsmith-date-in-filename');
@@ -11,6 +9,7 @@ const markdown = require('metalsmith-markdownit');
 const navigation = require('metalsmith-navigation');
 const permalinks = require('metalsmith-permalinks');
 
+const silverSmith = require('./silversmith');
 const getOptions = require('./options');
 const registerLiquidFilters = require('../../filters/liquid');
 const { getDrupalContent } = require('./drupal/metalsmith-drupal');
@@ -26,7 +25,6 @@ const processEntryNames = require('./plugins/process-entry-names');
 const createBuildSettings = require('./plugins/create-build-settings');
 const createDrupalDebugPage = require('./plugins/create-drupal-debug');
 const createEnvironmentFilter = require('./plugins/create-environment-filter');
-const createFeatureToggles = require('./plugins/create-feature-toggles');
 const createHeaderFooter = require('./plugins/create-header-footer');
 const createOutreachAssetsData = require('./plugins/create-outreach-assets-data');
 const createReactPages = require('./plugins/create-react-pages');
@@ -42,40 +40,7 @@ const updateExternalLinks = require('./plugins/update-external-links');
 const updateRobots = require('./plugins/update-robots');
 
 function defaultBuild(BUILD_OPTIONS) {
-  const smith = Metalsmith(__dirname); // eslint-disable-line new-cap
-
-  // Override the normal use function to provide timing and logging information
-  smith._use = smith.use;
-  let stepCount = 0;
-  smith.use = function use(plugin, description) {
-    const step = ++stepCount;
-    if (!description) return smith._use(plugin);
-
-    let timerStart;
-
-    /* eslint-disable no-console */
-    return smith
-      ._use(() => {
-        console.log(chalk.cyan(`\nStep ${step} start: ${description}`));
-        timerStart = process.hrtime.bigint();
-      })
-      ._use(plugin)
-      ._use(() => {
-        const time = (process.hrtime.bigint() - timerStart) / 1000000n;
-
-        // Color the time
-        let color;
-        if (time < 1000) color = chalk.green;
-        else if (time < 10000) color = chalk.yellow;
-        else color = chalk.red;
-        const coloredTime = color(`[${time}ms]`);
-
-        console.log(
-          chalk.cyan(`Step ${step} end ${coloredTime}: ${description}`),
-        );
-      });
-    /* eslint-enable no-console */
-  };
+  const smith = silverSmith();
 
   registerLiquidFilters();
 
@@ -167,7 +132,6 @@ function defaultBuild(BUILD_OPTIONS) {
     'Add permalinks and change foo.md to foo/index.html',
   );
 
-  smith.use(createFeatureToggles(BUILD_OPTIONS), 'Create feature toggles');
   smith.use(createHeaderFooter(BUILD_OPTIONS), 'Create header and footer');
 
   smith.use(
@@ -246,6 +210,7 @@ function defaultBuild(BUILD_OPTIONS) {
     if (BUILD_OPTIONS.watch) {
       console.log('Metalsmith build finished!  Starting webpack-dev-server...');
     } else {
+      smith.printSummary();
       console.log('Build finished!');
     }
   });

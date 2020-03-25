@@ -31,6 +31,7 @@ import startReactApp from './react';
  */
 export default function startApp({
   routes,
+  createRoutesWithStore,
   component,
   reducer,
   url,
@@ -39,6 +40,9 @@ export default function startApp({
 }) {
   // Set further errors to have the appropriate source tag
   Sentry.setTag('source', entryName);
+
+  // Set the app name for use in the apiRequest helper
+  window.appName = entryName;
 
   const store = createCommonStore(reducer, analyticsEvents);
   connectFeatureToggle(store.dispatch);
@@ -62,7 +66,9 @@ export default function startApp({
   });
 
   let content = component;
-  if (routes) {
+  if (createRoutesWithStore) {
+    content = <Router history={history}>{createRoutesWithStore(store)}</Router>;
+  } else if (routes) {
     content = <Router history={history}>{routes}</Router>;
   }
 

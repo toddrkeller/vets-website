@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import SchemaForm from 'platform/forms-system/src/js/components/SchemaForm';
 import FormButtons from '../components/FormButtons';
+import { FACILITY_TYPES } from '../utils/constants';
 import {
   openFormPage,
   updateFormData,
@@ -9,6 +10,7 @@ import {
   routeToPreviousAppointmentPage,
 } from '../actions/newAppointment.js';
 import { getFormPageInfo } from '../utils/selectors';
+import { scrollAndFocus } from '../utils/scrollAndFocus';
 
 const initialSchema = {
   type: 'object',
@@ -16,7 +18,7 @@ const initialSchema = {
   properties: {
     facilityType: {
       type: 'string',
-      enum: ['vamc', 'communityCare'],
+      enum: Object.keys(FACILITY_TYPES).map(key => FACILITY_TYPES[key]),
     },
   },
 };
@@ -24,11 +26,11 @@ const initialSchema = {
 const uiSchema = {
   facilityType: {
     'ui:title':
-      'You are eligible to see either a VA provider or community care provider for this type of service.',
+      'You’re eligible to see either a VA provider or Community Care provider for this type of care.',
     'ui:widget': 'radio',
     'ui:options': {
       labels: {
-        vamc: (
+        [FACILITY_TYPES.VAMC]: (
           <>
             <span className="vads-u-display--block vads-u-font-size--lg vads-u-font-weight--bold">
               VA medical center or clinic
@@ -38,13 +40,13 @@ const uiSchema = {
             </span>
           </>
         ),
-        communityCare: (
+        [FACILITY_TYPES.COMMUNITY_CARE]: (
           <>
             <span className="vads-u-display--block vads-u-font-size--lg vads-u-font-weight--bold">
-              Community care facility
+              Community Care facility
             </span>
             <span className="vads-u-display--block vads-u-font-size--sm">
-              Go to a community care facility near your home
+              Go to a Community Care facility near your home
             </span>
           </>
         ),
@@ -54,10 +56,13 @@ const uiSchema = {
 };
 
 const pageKey = 'typeOfFacility';
+const pageTitle = 'Choose where you want to receive your care';
 
 export class TypeOfFacilityPage extends React.Component {
   componentDidMount() {
     this.props.openFormPage(pageKey, uiSchema, initialSchema);
+    document.title = `${pageTitle} | Veterans Affairs`;
+    scrollAndFocus();
   }
 
   goBack = () => {
@@ -73,9 +78,7 @@ export class TypeOfFacilityPage extends React.Component {
 
     return (
       <div className="vaos-form__facility-type vaos-form__detailed-radio">
-        <h1 className="vads-u-font-size--h2">
-          Choose where you would prefer to receive your care
-        </h1>
+        <h1 className="vads-u-font-size--h2">{pageTitle}</h1>
         <SchemaForm
           name="Type of appointment"
           title="Type of appointment"

@@ -1,7 +1,38 @@
+import moment from 'moment';
+
+const DEFAULT_MAX_DAYS_AHEAD = 90;
+
 function pad(num, size) {
   let s = num.toString();
   while (s.length < size) s = `0${s}`;
   return s;
+}
+
+export function getMaxMonth(maxDate, startMonth) {
+  const defaultMaxMonth = moment()
+    .add(DEFAULT_MAX_DAYS_AHEAD, 'days')
+    .format('YYYY-MM');
+
+  // If provided start month is beyond our default, set that month as max month
+  // This is needed in the case of direct schedule if the user selects a date
+  // beyond the max date
+  if (startMonth && startMonth > defaultMaxMonth) {
+    return startMonth;
+  }
+
+  if (
+    maxDate &&
+    moment(maxDate)
+      .startOf('month')
+      .isAfter(defaultMaxMonth)
+  ) {
+    return moment(maxDate)
+      .startOf('month')
+      .format('YYYY-MM');
+  }
+
+  // If no available dates array provided, set max to default from now
+  return defaultMaxMonth;
 }
 
 function getWeekdayOfFirstOfMonth(momentDate) {
@@ -103,4 +134,35 @@ export function removeDateOptionPairFromSelectedArray(
       d.date !== dateObj.date ||
       (d.date === dateObj.date && d[fieldName] !== dateObj[fieldName]),
   );
+}
+
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+export function generateMockSlots() {
+  const times = [];
+  const today = moment();
+  const minuteSlots = ['00:00', '20:00', '40:00'];
+
+  while (times.length < 300) {
+    const daysToAdd = randomInt(1, 365);
+    const date = today
+      .clone()
+      .add(daysToAdd, 'day')
+      .format('YYYY-MM-DD');
+    const hour = `0${randomInt(9, 16)}`.slice(-2);
+    const minutes = minuteSlots[Math.floor(Math.random() * minuteSlots.length)];
+    const startDateTime = `${date}T${hour}:${minutes}.000+00:00`;
+    if (!times.includes(startDateTime)) {
+      times.push(startDateTime);
+    }
+  }
+
+  return times.sort().map(startDateTime => ({
+    startDateTime,
+    bookingStatus: '1',
+    remainingAllowedOverBookings: '3',
+    availability: true,
+  }));
 }

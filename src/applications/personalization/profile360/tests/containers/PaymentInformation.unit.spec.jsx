@@ -6,7 +6,7 @@ import sinon from 'sinon';
 import set from 'platform/utilities/data/set';
 
 import { PaymentInformation } from '../../containers/PaymentInformation';
-import ProfileFieldHeading from 'vet360/components/base/ProfileFieldHeading';
+import ProfileFieldHeading from 'vet360/components/base/Vet360ProfileFieldHeading';
 import PaymentInformationEditModal from '../../components/PaymentInformationEditModal';
 import DowntimeNotification from 'platform/monitoring/DowntimeNotification';
 
@@ -18,10 +18,11 @@ describe('<PaymentInformation/>', () => {
     financialInstitutionRoutingNumber: '123456789',
   };
   const defaultProps = {
-    directDepositIsSetUp: true,
+    isDirectDepositSetUp: true,
     multifactorEnabled: true,
     isLoading: false,
-    isEligible: true,
+    isEvssAvailable: true,
+    isEligibleToSignUp: true,
     fetchPaymentInformation() {},
     savePaymentInformation() {},
     editModalToggled() {},
@@ -38,6 +39,8 @@ describe('<PaymentInformation/>', () => {
         },
       ],
     },
+    shouldShowDirectDeposit: true,
+    directDepositIsBlocked: false,
   };
 
   it('renders', () => {
@@ -51,7 +54,8 @@ describe('<PaymentInformation/>', () => {
     const props = {
       ...defaultProps,
       fetchPaymentInformation,
-      isEligible: false,
+      isEvssAvailable: false,
+      shouldShowDirectDeposit: false,
     };
     const wrapper = shallow(<PaymentInformation {...props} />);
     expect(wrapper.text()).to.be.empty;
@@ -59,21 +63,53 @@ describe('<PaymentInformation/>', () => {
     wrapper.unmount();
   });
 
-  it('renders nothing if the user has not already set up direct deposit', () => {
+  it('does not render if the user is blocked from accessing direct deposit', () => {
+    const fetchPaymentInformation = sinon.spy();
     const props = {
       ...defaultProps,
-      directDepositIsSetUp: false,
+      fetchPaymentInformation,
+      // `false` because the GET payment_information endpoint will not populate
+      // the account number when the controlInformation indicates that they are
+      // blocked from accessing the direct deposit feature
+      isDirectDepositSetUp: false,
+      shouldShowDirectDeposit: false,
+      directDepositIsBlocked: true,
+    };
+    const wrapper = shallow(<PaymentInformation {...props} />);
+    expect(fetchPaymentInformation.called).to.be.true;
+    expect(wrapper.text()).to.be.empty;
+    wrapper.unmount();
+  });
+
+  it('renders the correct content if the user is eligible for direct deposit but has not yet set it up', () => {
+    const props = {
+      ...defaultProps,
+      isDirectDepositSetUp: false,
     };
     const wrapper = shallow(<PaymentInformation {...props} />);
 
-    expect(wrapper.text()).to.be.empty;
+    // expect(wrapper.text()).to.be.empty;
+    const profileFieldHeadings = wrapper.find(ProfileFieldHeading);
+    profileFieldHeadings.forEach(node => {
+      expect(node.props().onEditClick).to.be.false;
+    });
+    wrapper.find('.vet360-profile-field').forEach(node => {
+      expect(node.text()).to.contain('Please add your');
+    });
+    expect(wrapper.find('p')).to.have.length(0);
 
     wrapper.unmount();
   });
 
   it('renders a prompt to enable 2FA is the user does not have it enabled already', () => {
-    const props = { ...defaultProps, multifactorEnabled: false };
+    const fetchPaymentInformation = sinon.spy();
+    const props = {
+      ...defaultProps,
+      fetchPaymentInformation,
+      multifactorEnabled: false,
+    };
     const wrapper = shallow(<PaymentInformation {...props} />);
+    expect(fetchPaymentInformation.called).to.be.false;
     expect(wrapper.find('PaymentInformation2FARequired')).to.have.lengthOf(1);
     wrapper.unmount();
   });

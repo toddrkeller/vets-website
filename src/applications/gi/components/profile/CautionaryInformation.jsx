@@ -142,7 +142,8 @@ export class CautionaryInformation extends React.Component {
                 rel="noopener noreferrer"
               >
                 student complaints
-              </a>
+              </a>{' '}
+              in the last 24 months
             </h3>
             <span>
               &nbsp;(

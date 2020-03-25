@@ -48,7 +48,8 @@ Example data:
 {% include "src/site/includes/header.html" with drupalTags = true %}
 {% include "src/site/includes/alerts.drupal.liquid" %}
 {% include "src/site/includes/preview-edit.drupal.liquid" %}
-{% include "src/site/includes/breadcrumbs.drupal.liquid" %}
+{% include "src/site/includes/breadcrumbs.drupal.liquid" with hideHomeBreadcrumb = true %}
+
 <div id="content" class="interior">
   <main class="va-l-detail-page va-facility-page">
     <div class="usa-grid usa-grid-full">
@@ -56,10 +57,15 @@ Example data:
       <div class="usa-width-three-fourths">
        {% include "src/site/components/navigation-sidebar-trigger.html" with menuId = "va-detailpage-sidebar" %}
         <article class="usa-content">
-          <h1>Stories</h1>
-          <div class="va-introtext vads-u-margin-bottom--4">
-            {{ fieldIntroTextNewsStories.processed }}
-          </div>
+            <h1 id="article-heading">{{ title }}</h1>
+            <div class="vads-l-grid-container--full">
+            {% if fieldIntroText %}
+              <div class="va-introtext">
+                <p class="events-show" id="office-events-description">
+                  {{ fieldIntroText }}
+                </p>
+              </div>
+            {% endif %}
           {% if paginator.prev == null %}
           {% for storyFeature in newsStoryTeasers.entities %}
             {% if forloop.first == true %}
@@ -68,7 +74,9 @@ Example data:
           {% endfor %}
           {% endif %}
           {% for story in pagedItems %}
+            {% if story.fieldFeatured == false %}
               {% include "src/site/teasers/news_story_page.drupal.liquid" with node = story %}
+            {% endif %}
           {% endfor %}
           {% include "src/site/includes/pagination.drupal.liquid" %}
         </article>
@@ -76,5 +84,6 @@ Example data:
     </div>
   </main>
 </div>
+
 {% include "src/site/includes/footer.html" %}
 {% include "src/site/includes/debug.drupal.liquid" %}

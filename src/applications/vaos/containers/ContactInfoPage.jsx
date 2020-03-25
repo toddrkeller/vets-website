@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import SchemaForm from 'platform/forms-system/src/js/components/SchemaForm';
 import phoneUI from 'platform/forms-system/src/js/definitions/phone';
+import { validateBooleanGroup } from 'platform/forms-system/src/js/validation';
 import FormButtons from '../components/FormButtons';
 
 import {
@@ -11,10 +12,11 @@ import {
   routeToPreviousAppointmentPage,
 } from '../actions/newAppointment.js';
 import { getFormPageInfo } from '../utils/selectors';
+import { scrollAndFocus } from '../utils/scrollAndFocus';
 
 const initialSchema = {
   type: 'object',
-  required: ['phoneNumber', 'email'],
+  required: ['phoneNumber', 'email', 'bestTimeToCall'],
   properties: {
     phoneNumber: {
       type: 'string',
@@ -60,9 +62,14 @@ const uiSchema = {
       </p>
     </>
   ),
-  phoneNumber: phoneUI('Phone number'),
+  phoneNumber: phoneUI('Your phone number'),
   bestTimeToCall: {
-    'ui:title': 'Best times for us to call you',
+    'ui:title': 'What are the best times for us to call you?',
+    'ui:validations': [validateBooleanGroup],
+    'ui:options': {
+      showFieldLabel: true,
+      classNames: 'vaos-form__checkboxgroup',
+    },
     morning: {
       'ui:title': 'Morning (8 a.m. – noon)',
       'ui:options': {
@@ -83,15 +90,18 @@ const uiSchema = {
     },
   },
   email: {
-    'ui:title': 'Email address',
+    'ui:title': 'Your email address',
   },
 };
 
 const pageKey = 'contactInfo';
+const pageTitle = 'Your contact information';
 
 export class ContactInfoPage extends React.Component {
   componentDidMount() {
     this.props.openFormPage(pageKey, uiSchema, initialSchema);
+    document.title = `${pageTitle} | Veterans Affairs`;
+    scrollAndFocus();
   }
 
   goBack = () => {
@@ -107,7 +117,7 @@ export class ContactInfoPage extends React.Component {
 
     return (
       <div>
-        <h1 className="vads-u-font-size--h2">Contact information</h1>
+        <h1 className="vads-u-font-size--h2">{pageTitle}</h1>
 
         <SchemaForm
           name="Contact info"

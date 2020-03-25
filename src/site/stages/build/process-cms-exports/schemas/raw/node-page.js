@@ -21,6 +21,11 @@ module.exports = {
     },
     field_alert: {
       type: 'array',
+      items: {
+        // Sometimes what should be entity references are empty arrays
+        oneOf: [{ $ref: 'EntityReference' }, { type: 'array', maxItems: 0 }],
+      },
+      maxItems: 1,
     },
     field_related_links: {
       $ref: 'EntityReferenceArray',
@@ -39,6 +44,17 @@ module.exports = {
     },
     metatag: {
       type: 'object',
+    },
+    path: {
+      type: 'array',
+      maxItems: 1,
+      items: {
+        type: 'object',
+        properties: {
+          alias: { type: 'string' },
+        },
+        required: ['alias'],
+      },
     },
   },
   required: getFilter('node-page'),

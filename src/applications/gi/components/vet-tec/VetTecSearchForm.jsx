@@ -2,11 +2,10 @@ import React from 'react';
 
 import KeywordSearch from '../search/KeywordSearch';
 import CheckboxGroup from '../CheckboxGroup';
-import { addAllOption } from '../../utils/helpers';
+import { addAllOption, getStateNameForCode } from '../../utils/helpers';
 import PropTypes from 'prop-types';
 import Dropdown from '../Dropdown';
 import VetTecFilterBy from './VetTecFilterBy';
-import environment from 'platform/utilities/environment';
 
 class VetTecSearchForm extends React.Component {
   static propTypes = {
@@ -26,11 +25,6 @@ class VetTecSearchForm extends React.Component {
     searchResults: PropTypes.object.isRequired,
     eligibility: PropTypes.object.isRequired,
   };
-
-  searchLabel = () =>
-    environment.isProduction()
-      ? 'City, school, or employer'
-      : 'City, VET TEC program or provider';
 
   handleDropdownChange = e => {
     const { name: field, value } = e.target;
@@ -58,7 +52,7 @@ class VetTecSearchForm extends React.Component {
         name: 'inPerson',
         label: (
           <div>
-            In Person &nbsp; <i className="fas fa-user" />
+            In Person &nbsp; <i className="fas fa-user" aria-hidden="true" />
           </div>
         ),
         checked: inPerson,
@@ -67,7 +61,7 @@ class VetTecSearchForm extends React.Component {
         name: 'online',
         label: (
           <div>
-            Online &nbsp; <i className="fas fa-laptop" />
+            Online &nbsp; <i className="fas fa-laptop" aria-hidden="true" />
           </div>
         ),
         checked: online,
@@ -101,10 +95,13 @@ class VetTecSearchForm extends React.Component {
   };
 
   renderStateFilter = () => {
-    const options = Object.keys(this.props.search.facets.state).map(state => ({
-      value: state,
-      label: state,
-    }));
+    const options = Object.keys(this.props.search.facets.state)
+      .sort()
+      .map(state => ({
+        value: state,
+        label: getStateNameForCode(state),
+      }));
+
     return (
       <Dropdown
         label="State"
@@ -137,7 +134,7 @@ class VetTecSearchForm extends React.Component {
             <h2>Refine search</h2>
             <KeywordSearch
               autocomplete={this.props.autocomplete}
-              label={this.searchLabel()}
+              label={'City, VET TEC program or provider'}
               location={this.props.location}
               onClearAutocompleteSuggestions={
                 this.props.clearAutocompleteSuggestions
@@ -153,8 +150,6 @@ class VetTecSearchForm extends React.Component {
 
             {this.renderCountryFilter()}
             {this.renderStateFilter()}
-            {/* prod flag for story 19734 */}
-            {environment.isProduction() && this.renderLearningFormat()}
             {this.renderFilterBy()}
           </div>
           <div className="results-button">

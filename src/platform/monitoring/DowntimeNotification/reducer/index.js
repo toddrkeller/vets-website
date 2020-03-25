@@ -1,6 +1,7 @@
 import { createServiceMap } from '../util/helpers';
 
 import {
+  RECEIVE_GLOBAL_DOWNTIME,
   RECEIVE_SCHEDULED_DOWNTIME,
   RETRIEVE_SCHEDULED_DOWNTIME,
   INIT_DISMISSED_DOWNTIME_APPROACHING_MODALS,
@@ -8,6 +9,7 @@ import {
 } from '../actions';
 
 const initialState = {
+  globalDowntime: null,
   isReady: false,
   isPending: false,
   serviceMap: null,
@@ -16,6 +18,12 @@ const initialState = {
 
 export default function scheduledDowntime(state = initialState, action) {
   switch (action.type) {
+    case RECEIVE_GLOBAL_DOWNTIME:
+      return {
+        ...state,
+        globalDowntime: action.downtime,
+      };
+
     case RECEIVE_SCHEDULED_DOWNTIME:
       return {
         ...state,

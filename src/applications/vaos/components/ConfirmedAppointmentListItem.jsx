@@ -1,16 +1,25 @@
 import React from 'react';
+import classNames from 'classnames';
 import {
-  getLocationHeader,
-  getAppointmentLocation,
+  getAppointmentAddress,
   getAppointmentDate,
   getAppointmentDateTime,
+  getAppointmentDuration,
+  getAppointmentInstructions,
+  getAppointmentInstructionsHeader,
+  getAppointmentLocation,
+  getAppointmentTypeHeader,
+  getLocationHeader,
+  getMomentConfirmedDate,
+  hasInstructions,
   isVideoVisit,
 } from '../utils/appointment';
 import {
   CANCELLED_APPOINTMENT_SET,
   APPOINTMENT_TYPES,
 } from '../utils/constants';
-import VideoVisitLink from './VideoVisitLink';
+import VideoVisitSection from './VideoVisitSection';
+import AddToCalendar from './AddToCalendar';
 
 export default function ConfirmedAppointmentListItem({
   appointment,
@@ -18,6 +27,7 @@ export default function ConfirmedAppointmentListItem({
   index,
   cancelAppointment,
   showCancelButton,
+  facility,
 }) {
   let canceled = false;
   if (type === APPOINTMENT_TYPES.vaAppointment) {
@@ -32,69 +42,103 @@ export default function ConfirmedAppointmentListItem({
     type !== APPOINTMENT_TYPES.ccAppointment &&
     !isVideoVisit(appointment);
 
+  const showAddToCal = allowCancel || (!allowCancel && !canceled);
+
+  const itemClasses = classNames(
+    'vads-u-background-color--gray-lightest vads-u-padding--2p5 vads-u-margin-bottom--3',
+    {
+      'vads-u-border-top--4px': true,
+      'vads-u-border-color--green': !canceled,
+      'vads-u-border-color--secondary-dark': canceled,
+    },
+  );
+
   return (
     <li
-      aria-labelledby={`card-${index}`}
-      className="vads-u-background-color--gray-lightest vads-u-padding--2p5 vads-u-margin-bottom--3"
+      aria-labelledby={`card-${index}-type card-${index}-state`}
+      className={itemClasses}
     >
-      <div className="vads-u-display--flex vads-u-justify-content--space-between">
-        <div className="vaos-appts__status vads-u-flex--1">
-          {canceled ? (
-            <i className="fas fa-exclamation-circle vads-u-color--secondary-dark" />
-          ) : (
-            <i className="fas fa-check-circle vads-u-color--green" />
-          )}
-          <span
-            id={`card-${index}`}
-            className="vads-u-font-weight--bold vads-u-margin-bottom--1 vads-u-margin-left--1 vads-u-display--inline-block"
-          >
-            {canceled ? 'Canceled' : 'Confirmed'}
-            <span className="sr-only"> appointment</span>
-          </span>
-        </div>
-
-        {allowCancel && (
-          <button
-            onClick={() => cancelAppointment(appointment)}
-            aria-label="Cancel appointment"
-            className="vaos-appts__cancel-btn usa-button-secondary vads-u-margin--0 vads-u-flex--0"
-          >
-            Cancel
-            <span className="sr-only">
-              {' '}
-              appointment on {getAppointmentDate(appointment)}
-            </span>
-          </button>
-        )}
+      <div
+        id={`card-${index}-type`}
+        className="vaos-form__title vads-u-font-size--sm vads-u-font-weight--normal vads-u-font-family--sans"
+      >
+        {getAppointmentTypeHeader(appointment)}
       </div>
-      <div className="vaos-form__title vads-u-margin-top--1 vads-u-font-size--sm vads-u-font-weight--normal vads-u-font-family--sans">
-        {type === APPOINTMENT_TYPES.ccAppointment && 'Community Care'}
-        {type === APPOINTMENT_TYPES.vaAppointment &&
-          !isVideoVisit(appointment) &&
-          'VA Facility'}
-        {type === APPOINTMENT_TYPES.vaAppointment &&
-          isVideoVisit(appointment) &&
-          'VA Video Connect'}
-      </div>
-      <h2 className="vaos-appts__date-time vads-u-font-size--lg vads-u-margin-bottom--2">
+      <h3 className="vaos-appts__date-time vads-u-font-size--h3 vads-u-margin-x--0">
         {getAppointmentDateTime(appointment)}
-      </h2>
+      </h3>
+      <div className="vads-u-margin-top--2">
+        {canceled ? (
+          <i aria-hidden="true" className="fas fa-exclamation-circle" />
+        ) : (
+          <i aria-hidden="true" className="fas fa-check-circle" />
+        )}
+        <span
+          id={`card-${index}-state`}
+          className="vads-u-font-weight--bold vads-u-margin-left--1 vads-u-display--inline-block"
+        >
+          {canceled ? 'Canceled' : 'Confirmed'}
+        </span>
+      </div>
 
-      <div className="vaos-appts__split-section">
-        <div className="vads-u-flex--1">
+      <div className="vads-u-display--flex vads-u-flex-direction--column small-screen:vads-u-flex-direction--row">
+        <div className="vads-u-flex--1 vads-u-margin-top--2 vads-u-margin-right--1 vaos-u-word-break--break-word">
           {isVideoVisit(appointment) ? (
-            <VideoVisitLink appointment={appointment} />
+            <VideoVisitSection appointment={appointment} />
           ) : (
             <dl className="vads-u-margin--0">
               <dt className="vads-u-font-weight--bold">
                 {getLocationHeader(appointment)}
               </dt>
-              <dd>{getAppointmentLocation(appointment)}</dd>
+              <dd>{getAppointmentLocation(appointment, facility)}</dd>
             </dl>
           )}
         </div>
-        <div className="vads-u-flex--1">&nbsp;</div>
+        {hasInstructions(appointment) && (
+          <div className="vads-u-flex--1 vads-u-margin-top--2 vaos-u-word-break--break-word">
+            <dl className="vads-u-margin--0">
+              <dt className="vads-u-font-weight--bold">
+                {getAppointmentInstructionsHeader(appointment)}
+              </dt>
+              <dd>{getAppointmentInstructions(appointment)}</dd>
+            </dl>
+          </div>
+        )}
       </div>
+
+      {(showAddToCal || allowCancel) && (
+        <div className="vads-u-margin-top--2">
+          {showAddToCal && (
+            <AddToCalendar
+              summary={getAppointmentTypeHeader(appointment)}
+              description={
+                hasInstructions(appointment)
+                  ? `${getAppointmentInstructionsHeader(
+                      appointment,
+                    )}. ${getAppointmentInstructions(appointment)}`
+                  : ''
+              }
+              location={getAppointmentAddress(appointment, facility)}
+              duration={getAppointmentDuration(appointment)}
+              startDateTime={getMomentConfirmedDate(appointment).toDate()}
+              endDateTime={getMomentConfirmedDate(appointment)}
+            />
+          )}
+          {allowCancel && (
+            <button
+              onClick={() => cancelAppointment(appointment)}
+              aria-label="Cancel appointment"
+              className="vaos-appts__cancel-btn va-button-link vads-u-margin--0 vads-u-flex--0"
+            >
+              Cancel appointment
+              <span className="sr-only">
+                {' '}
+                on {getAppointmentDate(appointment)}
+              </span>
+            </button>
+          )}
+        </div>
+      )}
     </li>
   );
 }

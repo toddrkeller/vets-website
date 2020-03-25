@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
+
 import {
   mockFetch,
   resetFetch,
@@ -16,6 +17,16 @@ import {
   FETCH_PROFILE_STARTED,
   FETCH_PROFILE_FAILED,
   FETCH_PROFILE_SUCCEEDED,
+  fetchInstitutionAutocompleteSuggestions,
+  fetchProgramAutocompleteSuggestions,
+  fetchConstants,
+  fetchInstitutionSearchResults,
+  AUTOCOMPLETE_SUCCEEDED,
+  AUTOCOMPLETE_FAILED,
+  FETCH_CONSTANTS_STARTED,
+  FETCH_CONSTANTS_FAILED,
+  SEARCH_STARTED,
+  SEARCH_FAILED,
 } from '../../actions/index';
 
 describe('beneficiaryZIPCodeChanged', () => {
@@ -116,20 +127,6 @@ describe('fetchProfile', () => {
       },
     };
 
-    const ZIPPayload = {
-      data: {
-        id: '35442',
-        type: 'zipcode_rates',
-        attributes: {
-          zip_code: '84121', // eslint-disable-line camelcase
-          mha_code: 'UT292', // eslint-disable-line camelcase
-          mha_name: 'SALT LAKE CITY, UT', // eslint-disable-line camelcase
-          mha_rate: 1380, // eslint-disable-line camelcase
-          mha_rate_grandfathered: 1430, // eslint-disable-line camelcase
-        },
-      },
-    };
-
     const constants = {
       constants: {
         AVGVABAH: 10,
@@ -140,7 +137,6 @@ describe('fetchProfile', () => {
     const getState = () => ({ constants });
 
     setFetchResponse(global.fetch.onFirstCall(), institutionPayload);
-    setFetchResponse(global.fetch.onSecondCall(), ZIPPayload);
 
     const dispatch = sinon.spy();
 
@@ -160,7 +156,6 @@ describe('fetchProfile', () => {
             ...institutionPayload,
             ...constants.constants,
           },
-          zipRatesPayload: ZIPPayload,
         }),
       ).to.be.true;
       done();
@@ -188,9 +183,8 @@ describe('fetchProfile', () => {
     ).to.be.true;
 
     setTimeout(() => {
-      const { type, err } = dispatch.secondCall.args[0];
+      const { type } = dispatch.secondCall.args[0];
       expect(type).to.eql(FETCH_PROFILE_FAILED);
-      expect(err instanceof Error).to.be.true;
       done();
     }, 0);
   });
@@ -207,13 +201,6 @@ describe('fetchProfile', () => {
         },
       },
     };
-    const ZIPPayload = {
-      errors: [
-        {
-          title: 'error',
-        },
-      ],
-    };
     const constants = {
       constants: {
         AVGVABAH: 10,
@@ -223,7 +210,6 @@ describe('fetchProfile', () => {
 
     const getState = () => ({ constants });
     setFetchResponse(global.fetch.onFirstCall(), institutionPayload);
-    setFetchFailure(global.fetch.onSecondCall(), ZIPPayload);
 
     const dispatch = sinon.spy();
 
@@ -243,11 +229,152 @@ describe('fetchProfile', () => {
             ...institutionPayload,
             ...constants.constants,
           },
-          zipRatesPayload: ZIPPayload,
         }),
       ).to.be.true;
       done();
     }, 0);
   });
   afterEach(() => resetFetch());
+});
+
+describe('institution autocomplete', () => {
+  beforeEach(() => mockFetch());
+  it('should dispatch a success action', done => {
+    const autocompleteResults = {
+      meta: {
+        version: 1,
+      },
+      data: [],
+    };
+
+    setFetchResponse(global.fetch.onFirstCall(), autocompleteResults);
+
+    const dispatch = sinon.spy();
+
+    fetchInstitutionAutocompleteSuggestions('test', {})(dispatch);
+
+    setTimeout(() => {
+      expect(
+        dispatch.firstCall.calledWith({
+          type: AUTOCOMPLETE_SUCCEEDED,
+          payload: {
+            ...autocompleteResults,
+          },
+        }),
+      ).to.be.true;
+      done();
+    }, 0);
+  });
+
+  it('should dispatch a failure action', done => {
+    const error = { test: 'test' };
+    setFetchFailure(global.fetch.onFirstCall(), error);
+
+    const dispatch = sinon.spy();
+
+    fetchInstitutionAutocompleteSuggestions('test', {})(dispatch);
+
+    setTimeout(() => {
+      const { type, err } = dispatch.firstCall.args[0];
+      expect(type).to.eql(AUTOCOMPLETE_FAILED);
+      expect(err instanceof Error).to.be.true;
+      done();
+    }, 0);
+  });
+});
+
+describe('institution program autocomplete', () => {
+  beforeEach(() => mockFetch());
+  it('should dispatch a success action', done => {
+    const autocompleteResults = {
+      meta: {
+        version: 1,
+      },
+      data: [],
+    };
+
+    setFetchResponse(global.fetch.onFirstCall(), autocompleteResults);
+
+    const dispatch = sinon.spy();
+
+    fetchProgramAutocompleteSuggestions('test', {})(dispatch);
+
+    setTimeout(() => {
+      expect(
+        dispatch.firstCall.calledWith({
+          type: AUTOCOMPLETE_SUCCEEDED,
+          payload: {
+            ...autocompleteResults,
+          },
+        }),
+      ).to.be.true;
+      done();
+    }, 0);
+  });
+
+  it('should dispatch a failure action', done => {
+    const error = { test: 'test' };
+    setFetchFailure(global.fetch.onFirstCall(), error);
+
+    const dispatch = sinon.spy();
+
+    fetchProgramAutocompleteSuggestions('test', {})(dispatch);
+
+    setTimeout(() => {
+      const { type, err } = dispatch.firstCall.args[0];
+      expect(type).to.eql(AUTOCOMPLETE_FAILED);
+      expect(err instanceof Error).to.be.true;
+      done();
+    }, 0);
+  });
+});
+
+describe('institution search', () => {
+  beforeEach(() => mockFetch());
+
+  it('should dispatch a failure action', done => {
+    const error = { test: 'test' };
+    setFetchFailure(global.fetch.onFirstCall(), error);
+
+    const dispatch = sinon.spy();
+
+    fetchInstitutionSearchResults('@@', {})(dispatch);
+
+    expect(dispatch.firstCall.args[0].type).to.equal(SEARCH_STARTED);
+
+    setTimeout(() => {
+      const { payload } = dispatch.secondCall.args[0];
+
+      expect(dispatch.secondCall.args[0]).to.eql({
+        type: SEARCH_FAILED,
+        payload,
+      });
+      done();
+    }, 0);
+  });
+});
+
+describe('constants', () => {
+  beforeEach(() => mockFetch());
+
+  it('should dispatch a failure action', done => {
+    const error = { test: 'test' };
+    setFetchFailure(global.fetch.onFirstCall(), error);
+
+    const dispatch = sinon.spy();
+
+    fetchConstants('test')(dispatch);
+
+    expect(dispatch.firstCall.args[0].type).to.equal(FETCH_CONSTANTS_STARTED);
+
+    setTimeout(() => {
+      const { payload } = dispatch.secondCall.args[0];
+
+      expect(dispatch.secondCall.args[0]).to.eql({
+        type: FETCH_CONSTANTS_FAILED,
+        payload,
+      });
+      done();
+    }, 0);
+  });
 });

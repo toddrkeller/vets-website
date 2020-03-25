@@ -1,32 +1,39 @@
-import merge from 'lodash/merge';
-
+import React from 'react';
 // import fullSchema from 'vets-json-schema/dist/20-0996-schema.json';
 import fullSchema from '../20-0996-schema.json';
 
-import dateRangeUI from 'platform/forms-system/src/js/definitions/dateRange';
-import PhoneNumberWidget from 'platform/forms-system/src/js/widgets/PhoneNumberWidget';
-import PhoneNumberReviewWidget from 'platform/forms-system/src/js/review/PhoneNumberWidget';
+// import dateRangeUI from 'platform/forms-system/src/js/definitions/dateRange';
+import phoneUI from 'platform/forms-system/src/js/definitions/phone';
+import emailUI from 'platform/forms-system/src/js/definitions/email';
+import {
+  uiSchema as addressUISchema,
+  schema as addressSchema,
+} from 'platform/forms/definitions/address';
 
 import ReviewCardField from '../../all-claims/components/ReviewCardField';
-import { addressUISchema } from '../../all-claims/utils';
+import AddressViewField from '../containers/AddressViewField';
+import { phoneEmailViewField } from '../../all-claims/content/contactInformation';
 import {
   contactInfoDescription,
-  contactInfoUpdateHelp,
-  phoneEmailViewField,
-} from '../../all-claims/content/contactInformation';
+  contactInfoProfileLink,
+} from '../content/contactInformation';
+
+/*
+import { errorMessages } from '../constants';
 
 import { hasForwardingAddress, forwardingCountryIsUSA } from '../helpers';
 import {
   ForwardingAddressViewField,
   ForwardingAddressDescription,
   forwardingAddressCheckboxLabel,
+  ForwardingAddressReviewWidget,
 } from '../content/ForwardingAddress';
 import { checkDateRange } from '../validations';
-import { errorMessages } from '../constants';
+import ForwardingAddressReviewField from '../containers/ForwardingAddressReviewField';
+*/
 
 const {
-  mailingAddress,
-  forwardingAddress,
+  // forwardingAddress,
   emailAddress,
   phone,
 } = fullSchema.properties;
@@ -34,84 +41,64 @@ const {
 const contactInfo = {
   uiSchema: {
     'ui:title': 'Contact Information',
-    'ui:description': () =>
-      contactInfoDescription({
-        formName: 'Higher-Level Review',
-      }),
+    'ui:description': contactInfoDescription,
     phoneEmailCard: {
       'ui:title': 'Phone & email',
       'ui:field': ReviewCardField,
       'ui:options': {
         viewComponent: phoneEmailViewField,
       },
-      phone: {
-        'ui:title': 'Phone number',
-        'ui:widget': PhoneNumberWidget,
-        'ui:reviewWidget': PhoneNumberReviewWidget,
+      phone: phoneUI('Phone number'),
+      emailAddress: emailUI(),
+    },
+    mailingAddress: {
+      ...addressUISchema('Mailing address', false, () => true),
+      'ui:field': ReviewCardField,
+      'ui:options': {
+        viewComponent: AddressViewField,
+      },
+      street: {
+        'ui:title': 'Street address',
         'ui:errorMessages': {
-          pattern: errorMessages.phone,
-          required: errorMessages.phone,
-        },
-        'ui:options': {
-          widgetClassNames: 'va-input-medium-large',
-          inputType: 'tel',
+          pattern: 'Please enter a valid street address',
+          required: 'Please enter a street address',
         },
       },
-      emailAddress: {
-        'ui:title': 'Email address',
-        'ui:errorMessages': {
-          pattern: errorMessages.email,
-          required: errorMessages.email,
-        },
-        'ui:options': {
-          inputType: 'email',
-        },
+      street2: {
+        'ui:title': 'Street address',
+        'ui:reviewField': ({ children, uiSchema }) =>
+          // Don't render undefined entries
+          !children?.props.formData ? null : (
+            <div className="review-row">
+              <dt>{uiSchema?.['ui:title'] || ''}</dt>
+              <dd>{children}</dd>
+            </div>
+          ),
       },
     },
-    mailingAddress: merge(
-      addressUISchema('mailingAddress', 'Mailing address', true),
-      {
-        addressLine1: {
-          'ui:errorMessages': {
-            pattern: errorMessages.address1,
-            required: errorMessages.address1,
-          },
-        },
-        city: {
-          'ui:errorMessages': {
-            pattern: errorMessages.city,
-            required: errorMessages.city,
-          },
-        },
-        state: {
-          'ui:errorMessages': {
-            pattern: errorMessages.state,
-            required: errorMessages.state,
-          },
-        },
-        zipCode: {
-          'ui:errorMessages': {
-            pattern: errorMessages.zipCode,
-            required: errorMessages.zipCode,
-          },
-        },
-      },
-    ),
+    /*
     'view:hasForwardingAddress': {
       'ui:title': forwardingAddressCheckboxLabel,
+      'ui:field': 'StringField',
+      'ui:widget': 'checkbox',
+      'ui:reviewWidget': ForwardingAddressReviewWidget,
+      'ui:reviewField': ForwardingAddressReviewField,
+      'ui:options': {
+        hideLabelText: true,
+      },
     },
     forwardingAddress: merge(
+      // update this to _not_ use 526's addressUISchema
       addressUISchema('forwardingAddress', 'Forwarding address', true),
       {
         'ui:order': [
           'effectiveDates',
           'country',
-          'addressLine1',
-          'addressLine2',
-          'addressLine3',
+          'street',
+          'street2',
           'city',
           'state',
-          'zipCode',
+          'postalCode',
         ],
         'ui:subtitle': ForwardingAddressDescription,
         'ui:options': {
@@ -138,40 +125,25 @@ const contactInfo = {
         country: {
           'ui:required': hasForwardingAddress,
         },
-        addressLine1: {
+        street: {
           'ui:required': hasForwardingAddress,
-          'ui:errorMessages': {
-            pattern: errorMessages.address1,
-            required: errorMessages.address1,
-          },
         },
         city: {
           'ui:required': hasForwardingAddress,
-          'ui:errorMessages': {
-            pattern: errorMessages.city,
-            required: errorMessages.city,
-          },
         },
         state: {
           'ui:required': formData =>
             hasForwardingAddress(formData) && forwardingCountryIsUSA(formData),
-          'ui:errorMessages': {
-            pattern: errorMessages.state,
-            required: errorMessages.state,
-          },
         },
-        zipCode: {
+        postalCode: {
           'ui:required': formData =>
             hasForwardingAddress(formData) && forwardingCountryIsUSA(formData),
-          'ui:errorMessages': {
-            pattern: errorMessages.zipCode,
-            required: errorMessages.zipCode,
-          },
         },
       },
     ),
+    */
     'view:contactInfoDescription': {
-      'ui:description': contactInfoUpdateHelp,
+      'ui:description': contactInfoProfileLink,
     },
   },
 
@@ -186,11 +158,17 @@ const contactInfo = {
           emailAddress,
         },
       },
-      mailingAddress,
+      mailingAddress: addressSchema(fullSchema, true, 'address'),
+      /*
       'view:hasForwardingAddress': {
         type: 'boolean',
       },
       forwardingAddress,
+      'view:contactInfoDescription': {
+        type: 'object',
+        properties: {},
+      },
+      */
       'view:contactInfoDescription': {
         type: 'object',
         properties: {},

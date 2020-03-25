@@ -1,6 +1,12 @@
 import { isValidDate } from '../helpers';
 import { errorMessages } from '../constants';
 
+export const optInCheckboxRequired = (errors, isChecked) => {
+  if (!isChecked) {
+    errors.addError(errorMessages.optOutCheckbox);
+  }
+};
+
 // This function does _additional_ date validation; it doesn't need to
 // add error messages for missing values
 export const checkDateRange = (errors, { from = '', to = '' } = {}) => {
@@ -29,9 +35,9 @@ export const checkDateRange = (errors, { from = '', to = '' } = {}) => {
 
 export const requireRatedDisability = (err, fieldData /* , formData */) => {
   if (!fieldData.some(entry => entry['view:selected'])) {
-    // The actual validation error is displayed as an alert field, so we don't
-    // need to add an error message here.
-    err.addError('');
+    // The actual validation error is displayed as an alert field. The message
+    // here will be shown on the review page
+    err.addError(errorMessages.contestedIssue);
   }
 };
 

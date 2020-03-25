@@ -1,7 +1,9 @@
-import { apiRequest } from '../../../utilities/api';
+import { apiRequest } from 'platform/utilities/api';
+import { getCurrentGlobalDowntime } from '../util/helpers';
 
 export const RETRIEVE_SCHEDULED_DOWNTIME = 'RETRIEVE_SCHEDULED_DOWNTIME';
 export const RECEIVE_SCHEDULED_DOWNTIME = 'RECEIVE_SCHEDULED_DOWNTIME';
+export const RECEIVE_GLOBAL_DOWNTIME = 'RECEIVE_GLOBAL_DOWNTIME';
 
 export const INIT_DISMISSED_DOWNTIME_APPROACHING_MODALS =
   'INIT_DISMISSED_DOWNTIME_APPROACHING_MODALS';
@@ -49,20 +51,24 @@ export function dismissDowntimeWarning(appTitle) {
   };
 }
 
+export const getGlobalDowntime = () => async dispatch => {
+  const downtime = await getCurrentGlobalDowntime();
+  dispatch({ type: RECEIVE_GLOBAL_DOWNTIME, downtime });
+};
+
 export function getScheduledDowntime() {
   return async dispatch => {
     dispatch({ type: RETRIEVE_SCHEDULED_DOWNTIME });
+
     let data;
+
     try {
       const response = await apiRequest('/maintenance_windows/');
       data = response.data;
-    } catch (err) {
+    } catch (error) {
       // Probably in a test environment and the route isn't mocked.
     } finally {
-      dispatch({
-        type: RECEIVE_SCHEDULED_DOWNTIME,
-        data,
-      });
+      dispatch({ type: RECEIVE_SCHEDULED_DOWNTIME, data });
     }
   };
 }

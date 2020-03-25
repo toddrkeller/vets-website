@@ -8,6 +8,7 @@ import environment from 'platform/utilities/environment';
 import GetFormHelp from '../../components/GetFormHelp';
 import ErrorText from '../../components/ErrorText';
 import preSubmitInfo from 'platform/forms/preSubmitInfo';
+
 import applicantServicePage from '../../pages/applicantService';
 import createOldSchoolPage from '../../pages/oldSchool';
 import createSchoolSelectionPage from '../../pages/schoolSelection';

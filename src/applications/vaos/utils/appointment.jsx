@@ -1,39 +1,46 @@
 import React from 'react';
 import moment from './moment-tz';
+import guid from 'simple-guid';
 import environment from 'platform/utilities/environment';
-import { APPOINTMENT_TYPES, TIME_TEXT } from './constants';
+import { APPOINTMENT_TYPES, TIME_TEXT, PURPOSE_TEXT } from './constants';
+import FacilityAddress from '../components/FacilityAddress';
+import FacilityDirectionsLink from '../components/FacilityDirectionsLink';
+
 import {
   getTimezoneBySystemId,
   getTimezoneAbbrBySystemId,
+  getTimezoneDescFromAbbr,
   stripDST,
 } from './timezone';
 
+export function getRealFacilityId(facilityId) {
+  if (!environment.isProduction() && facilityId) {
+    return facilityId.replace('983', '442').replace('984', '552');
+  }
+
+  return facilityId;
+}
+
 export function getAppointmentType(appt) {
-  if (appt.optionDate1 && appt.ccAppointmentRequest?.preferredProviders) {
+  if (appt.typeOfCareId?.startsWith('CC')) {
     return APPOINTMENT_TYPES.ccRequest;
   } else if (appt.optionDate1) {
     return APPOINTMENT_TYPES.request;
-  } else if (appt.appointmentRequestId) {
-    return APPOINTMENT_TYPES.ccAppointment;
-  } else if (appt.startDate) {
+  } else if (appt.clinicId || appt.vvsAppointments) {
     return APPOINTMENT_TYPES.vaAppointment;
+  } else if (appt.appointmentTime) {
+    return APPOINTMENT_TYPES.ccAppointment;
   }
 
   return null;
 }
 
-export function getAppointmentId(appt) {
-  if (appt.appointmentRequestId) {
-    return appt.appointmentRequestId;
-  } else if (appt.vvsAppointments?.length) {
-    return appt.vvsAppointments[0].id;
-  }
-
-  return `va-${appt.facilityId}-${appt.clinicId}-${appt.startDate}`;
-}
-
 export function isCommunityCare(appt) {
-  return !!appt.appointmentRequestId;
+  const apptType = getAppointmentType(appt);
+  return (
+    apptType === APPOINTMENT_TYPES.ccRequest ||
+    apptType === APPOINTMENT_TYPES.ccAppointment
+  );
 }
 
 export function isGFEVideoVisit(appt) {
@@ -48,19 +55,43 @@ export function getVideoVisitLink(appt) {
   return appt.vvsAppointments[0]?.patients?.[0]?.virtualMeetingRoom?.url;
 }
 
-export function getStagingId(facilityId) {
-  if (!environment.isProduction() && facilityId.startsWith('983')) {
-    return facilityId.replace('983', '442');
-  }
-
-  return facilityId;
-}
-
 export function titleCase(str) {
   return str
     .toLowerCase()
     .split(' ')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+export function sentenceCase(str) {
+  return str
+    .split(' ')
+    .map((word, index) => {
+      if (/^[^a-z]*$/.test(word)) {
+        return word;
+      }
+
+      if (index === 0) {
+        return `${word.charAt(0).toUpperCase()}${word
+          .substr(1, word.length - 1)
+          .toLowerCase()}`;
+      }
+
+      return word.toLowerCase();
+    })
+    .join(' ');
+}
+
+export function lowerCase(str = '') {
+  return str
+    .split(' ')
+    .map(word => {
+      if (/^[^a-z]*$/.test(word)) {
+        return word;
+      }
+
+      return word.toLowerCase();
+    })
     .join(' ');
 }
 
@@ -89,7 +120,7 @@ export function getAppointmentTitle(appt) {
   return 'VA visit';
 }
 
-export function getAppointmentLocation(appt) {
+export function getAppointmentLocation(appt, facility) {
   if (isVideoVisit(appt)) {
     return 'Video conference';
   }
@@ -102,6 +133,8 @@ export function getAppointmentLocation(appt) {
         {appt.address.street}
         <br />
         {appt.address.city}, {appt.address.state} {appt.address.zipCode}
+        <br />
+        <FacilityDirectionsLink location={appt} />
       </>
     );
   }
@@ -124,6 +157,28 @@ export function getAppointmentLocation(appt) {
     );
   }
 
+  if (facility) {
+    return (
+      <>
+        {type !== APPOINTMENT_TYPES.request && (
+          <>
+            {facility.name}
+            <br />
+          </>
+        )}
+        <FacilityAddress facility={facility} showDirectionsLink />
+      </>
+    );
+  }
+
+  if (type === APPOINTMENT_TYPES.vaAppointment) {
+    return (
+      <a href="/find-locations" rel="noopener noreferrer" target="_blank">
+        Find facility information
+      </a>
+    );
+  }
+
   const facilityId =
     type === APPOINTMENT_TYPES.request || type === APPOINTMENT_TYPES.ccRequest
       ? appt.facility.facilityCode
@@ -131,7 +186,7 @@ export function getAppointmentLocation(appt) {
 
   return (
     <a
-      href={`/find-locations/facility/vha_${getStagingId(facilityId)}`}
+      href={`/find-locations/facility/vha_${getRealFacilityId(facilityId)}`}
       rel="noopener noreferrer"
       target="_blank"
     >
@@ -146,7 +201,11 @@ export function getAppointmentLocation(appt) {
 
 export function getMomentConfirmedDate(appt) {
   if (isCommunityCare(appt)) {
-    return moment(appt.appointmentTime, 'MM/DD/YYYY HH:mm:ss');
+    const zoneSplit = appt.timeZone.split(' ');
+    const offset = zoneSplit.length > 1 ? zoneSplit[0] : '+0:00';
+    return moment
+      .utc(appt.appointmentTime, 'MM/DD/YYYY HH:mm:ss')
+      .utcOffset(offset);
   }
 
   const timezone = getTimezoneBySystemId(appt.facilityId)?.timezone;
@@ -169,8 +228,10 @@ export function getAppointmentTimezoneAbbreviation(appt) {
   const type = getAppointmentType(appt);
 
   switch (type) {
-    case APPOINTMENT_TYPES.ccAppointment:
-      return stripDST(appt?.timeZone?.split(' ')?.[1]);
+    case APPOINTMENT_TYPES.ccAppointment: {
+      const tzAbbr = appt?.timeZone?.split(' ')?.[1] || appt?.timeZone;
+      return stripDST(tzAbbr);
+    }
     case APPOINTMENT_TYPES.ccRequest:
     case APPOINTMENT_TYPES.request:
       return getTimezoneAbbrBySystemId(appt?.facility?.facilityCode);
@@ -179,6 +240,12 @@ export function getAppointmentTimezoneAbbreviation(appt) {
     default:
       return '';
   }
+}
+
+export function getAppointmentTimezoneDescription(appt) {
+  const abbr = getAppointmentTimezoneAbbreviation(appt);
+
+  return getTimezoneDescFromAbbr(abbr);
 }
 
 export function getAppointmentDate(appt) {
@@ -205,7 +272,7 @@ export function getAppointmentDateTime(appt) {
         {parsedDate.format('a')} {getAppointmentTimezoneAbbreviation(appt)}
       </span>
       <span className="sr-only">
-        {parsedDate.format('a')} {getAppointmentTimezoneAbbreviation(appt)}
+        {parsedDate.format('a')} {getAppointmentTimezoneDescription(appt)}
       </span>
     </>
   );
@@ -237,7 +304,7 @@ export function getRequestDateOptions(appt) {
 
   return options.reduce((formatted, option, index) => {
     formatted.push(
-      <li key={`${appt.uniqueId}-option-${index}`}>
+      <li key={`${appt.id}-option-${index}`}>
         {option.date.format('ddd, MMMM D, YYYY')} {TIME_TEXT[option.optionTime]}
       </li>,
     );
@@ -263,49 +330,243 @@ export function getRequestTimeToCall(appt) {
  */
 
 export function filterFutureConfirmedAppointments(appt, today) {
-  const date = getMomentConfirmedDate(appt);
-  return date.isValid() && date.isAfter(today);
+  // return appointments where current time is less than appointment time
+  // +60 min or +240 min in the case of video
+  const threshold = isVideoVisit(appt) ? 240 : 60;
+  const apptDateTime = getMomentConfirmedDate(appt);
+  return (
+    apptDateTime.isValid() &&
+    apptDateTime.add(threshold, 'minutes').isAfter(today)
+  );
 }
 
-export function filterFutureRequests(request, today) {
+export function sortFutureConfirmedAppointments(a, b) {
+  return getMomentConfirmedDate(a).isBefore(getMomentConfirmedDate(b)) ? -1 : 1;
+}
+
+export function filterRequests(request, today) {
+  const status = request?.status;
   const optionDate1 = moment(request.optionDate1, 'MM/DD/YYYY');
   const optionDate2 = moment(request.optionDate2, 'MM/DD/YYYY');
   const optionDate3 = moment(request.optionDate3, 'MM/DD/YYYY');
 
+  const hasValidDateAfterToday =
+    (optionDate1.isValid() && optionDate1.isAfter(today)) ||
+    (optionDate2.isValid() && optionDate2.isAfter(today)) ||
+    (optionDate3.isValid() && optionDate3.isAfter(today));
+
   return (
-    ['Submitted', 'Cancelled'].includes(request.status) &&
-    ((optionDate1.isValid() && optionDate1.isAfter(today)) ||
-      (optionDate2.isValid() && optionDate2.isAfter(today)) ||
-      (optionDate3.isValid() && optionDate3.isAfter(today)))
+    status === 'Submitted' || (status === 'Cancelled' && hasValidDateAfterToday)
   );
 }
 
-export function sortFutureList(a, b) {
-  const aIsRequest =
-    getAppointmentType(a) === APPOINTMENT_TYPES.request ||
-    getAppointmentType(a) === APPOINTMENT_TYPES.ccRequest;
-  const bIsRequest =
-    getAppointmentType(b) === APPOINTMENT_TYPES.request ||
-    getAppointmentType(b) === APPOINTMENT_TYPES.ccRequest;
+export function sortFutureRequests(a, b) {
+  const aDate = getMomentRequestOptionDate(a.optionDate1);
+  const bDate = getMomentRequestOptionDate(b.optionDate1);
 
-  const aDate = aIsRequest
-    ? getMomentRequestOptionDate(a.optionDate1)
-    : getMomentConfirmedDate(a);
-
-  const bDate = bIsRequest
-    ? getMomentRequestOptionDate(b.optionDate1)
-    : getMomentConfirmedDate(b);
-
-  if (aDate.isSame(bDate)) {
-    // If same date, requests should show after confirmed
-    if (aIsRequest && !bIsRequest) {
-      return 1;
-    } else if (bIsRequest && !aIsRequest) {
-      return -1;
-    }
-
-    return 0;
+  // If appointmentType is the same, return the one with the sooner date
+  if (a.appointmentType === b.appointmentType) {
+    return aDate.isBefore(bDate) ? -1 : 1;
   }
 
-  return aDate.isBefore(bDate) ? -1 : 1;
+  // Otherwise, return sorted alphabetically by appointmentType
+  return a.appointmentType < b.appointmentType ? -1 : 1;
+}
+
+export function sortMessages(a, b) {
+  return moment(a.attributes.date).isBefore(b.attributes.date) ? -1 : 1;
+}
+
+export function getAppointmentInstructions(appt) {
+  const type = getAppointmentType(appt);
+
+  switch (type) {
+    case APPOINTMENT_TYPES.ccAppointment:
+      return appt.instructionsToVeteran;
+    case APPOINTMENT_TYPES.vaAppointment: {
+      const bookingNotes =
+        appt.vdsAppointments?.[0]?.bookingNote ||
+        appt.vvsAppointments?.[0]?.bookingNotes;
+
+      const instructions = bookingNotes?.split(': ', 2);
+
+      if (instructions && instructions.length > 1) {
+        return instructions[1];
+      }
+
+      return '';
+    }
+    default:
+      return '';
+  }
+}
+
+export function getAppointmentInstructionsHeader(appt) {
+  const type = getAppointmentType(appt);
+
+  switch (type) {
+    case APPOINTMENT_TYPES.ccAppointment:
+      return 'Special instructions';
+    case APPOINTMENT_TYPES.vaAppointment: {
+      const bookingNotes =
+        appt.vdsAppointments?.[0]?.bookingNote ||
+        appt.vvsAppointments?.[0]?.bookingNotes;
+
+      const instructions = bookingNotes?.split(': ', 2);
+
+      return instructions ? instructions[0] : '';
+    }
+    default:
+      return '';
+  }
+}
+
+export function hasInstructions(appt) {
+  if (appt.instructionsToVeteran) {
+    return true;
+  }
+
+  const bookingNotes =
+    appt.vdsAppointments?.[0]?.bookingNote ||
+    appt.vvsAppointments?.[0]?.bookingNotes;
+
+  return (
+    !!bookingNotes &&
+    PURPOSE_TEXT.some(purpose => bookingNotes.startsWith(purpose.short))
+  );
+}
+
+export function getPurposeOfVisit(appt) {
+  const type = getAppointmentType(appt);
+
+  switch (type) {
+    case APPOINTMENT_TYPES.ccRequest:
+      return PURPOSE_TEXT.find(purpose => purpose.id === appt.purposeOfVisit)
+        ?.short;
+    case APPOINTMENT_TYPES.request:
+      return PURPOSE_TEXT.find(
+        purpose => purpose.serviceName === appt.purposeOfVisit,
+      )?.short;
+    default:
+      return appt.purposeOfVisit;
+  }
+}
+
+export function getAppointmentTypeHeader(appt) {
+  const type = getAppointmentType(appt);
+
+  switch (type) {
+    case APPOINTMENT_TYPES.ccAppointment:
+    case APPOINTMENT_TYPES.ccRequest:
+      return 'Community Care';
+    case APPOINTMENT_TYPES.request: {
+      if (appt.visitType === 'Video Conference') {
+        return 'VA Video Connect';
+      }
+
+      return 'VA Appointment';
+    }
+    case APPOINTMENT_TYPES.vaAppointment: {
+      if (isVideoVisit(appt)) {
+        return 'VA Video Connect';
+      }
+
+      return 'VA Appointment';
+    }
+    default:
+      return appt.purposeOfVisit;
+  }
+}
+
+/**
+ * Function to get the appointment duration in minutes. The default is 60 minutes.
+ *
+ * @param {*} appt
+ * @returns
+ */
+export function getAppointmentDuration(appt) {
+  const type = getAppointmentType(appt);
+
+  switch (type) {
+    case APPOINTMENT_TYPES.vaAppointment: {
+      const appointmentLength = parseInt(
+        appt.vdsAppointments[0]?.appointmentLength,
+        10,
+      );
+      return isNaN(appointmentLength) ? 60 : appointmentLength;
+    }
+    default:
+      return 60;
+  }
+}
+/**
+ * Returns formatted address from facility details object
+ *
+ * @param {*} facility - facility details object
+ */
+export function getFacilityAddress(facility) {
+  return `${facility.address.physical.address1} ${
+    facility.address.physical.city
+  }, ${facility.address.physical.state} ${facility.address.physical.zip}`;
+}
+
+/**
+ * Function to get the appointment address.
+ *
+ * @param {*} appt
+ * @param {*} facility
+ * @returns 'undefined' if there is no address
+ */
+export function getAppointmentAddress(appt, facility) {
+  if (isVideoVisit(appt)) {
+    return 'Video conference';
+  }
+
+  const type = getAppointmentType(appt);
+
+  if (type === APPOINTMENT_TYPES.ccAppointment) {
+    return `${appt.address.street} ${appt.address.city}, ${
+      appt.address.state
+    } ${appt.address.zipCode}`;
+  }
+
+  if (facility) {
+    return getFacilityAddress(facility);
+  }
+
+  return undefined;
+}
+
+/**
+ * Function to generate ICS.
+ *
+ * @param {*} summary - summary or subject of invite
+ * @param {*} description - additional detials
+ * @param {*} location - address / location
+ * @param {*} startDateTime - start datetime in js date format
+ * @param {*} endDateTime - end datetime in js date format
+ */
+
+export function generateICS(
+  summary,
+  description,
+  location,
+  startDateTime,
+  endDateTime,
+) {
+  const startDate = moment(startDateTime).format('YYYYMMDDTHHmmss');
+  const endDate = moment(endDateTime).format('YYYYMMDDTHHmmss');
+  return `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:VA
+BEGIN:VEVENT
+UID:${guid()}
+SUMMARY:${summary}
+DESCRIPTION:${description}
+LOCATION:${location}
+DTSTAMP:${startDate}
+DTSTART:${startDate}
+DTEND:${endDate}
+END:VEVENT
+END:VCALENDAR`;
 }

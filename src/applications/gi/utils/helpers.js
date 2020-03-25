@@ -1,4 +1,5 @@
 import { snakeCase } from 'lodash';
+import constants from 'vets-json-schema/dist/constants.json';
 
 export const formatNumber = value => {
   const str = (+value).toString();
@@ -7,8 +8,7 @@ export const formatNumber = value => {
 
 export const formatCurrency = value => `$${formatNumber(Math.round(+value))}`;
 
-export const isVetTecSelected = filters =>
-  filters.category === 'vettec' || filters.vetTecProvider;
+export const isVetTecSelected = filters => filters.category === 'vettec';
 
 export const addAllOption = options => [
   { value: 'ALL', label: 'ALL' },
@@ -46,7 +46,12 @@ export const phoneInfo = (areaCode, phoneNumber) => {
   return providerPhone;
 };
 
-export const snakeCaseKeys = query =>
+/**
+ * Snake-cases field names
+ * @param query {Object} an object containing query fields
+ * @returns {Object} query object with updated field names
+ */
+export const rubyifyKeys = query =>
   Object.keys(query).reduce(
     (queryParams, key) => ({
       ...queryParams,
@@ -56,3 +61,20 @@ export const snakeCaseKeys = query =>
   );
 
 export const isPresent = value => value && value !== '';
+
+export const getStateNameForCode = stateCode => {
+  const stateLabel = constants.states.USA.find(
+    state => state.value.toUpperCase() === stateCode.toUpperCase(),
+  );
+  return stateLabel !== undefined ? stateLabel.label : stateCode.toUpperCase();
+};
+
+export const sortOptionsByStateName = (stateA, stateB) => {
+  if (stateA.label < stateB.label) {
+    return -1;
+  }
+  if (stateA.label > stateB.label) {
+    return 1;
+  }
+  return 0;
+};

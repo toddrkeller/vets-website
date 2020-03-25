@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import _ from 'lodash';
+import classNames from 'classnames';
 
 import ToolTip from './ToolTip';
+import { SMALL_SCREEN_WIDTH } from '../constants';
 
 /**
  * A form checkbox with a label that can display error messages.
@@ -29,12 +31,19 @@ class Checkbox extends React.Component {
     this.props.onChange(domEvent);
   }
 
+  handleFocus = e => {
+    if (window.innerWidth <= SMALL_SCREEN_WIDTH) {
+      e.target.scrollIntoView();
+    }
+  };
+
   render() {
     // TODO: extract error logic into a utility function
     // Calculate error state.
     let errorSpan = '';
     let errorSpanId = undefined;
-    if (this.props.errorMessage) {
+    const hasErrors = !!this.props.errorMessage;
+    if (hasErrors) {
       errorSpanId = `${this.inputId}-error-message`;
       errorSpan = (
         <span className="usa-input-error-message" role="alert" id={errorSpanId}>
@@ -60,13 +69,10 @@ class Checkbox extends React.Component {
       requiredSpan = <span className="form-required-span">*</span>;
     }
 
-    let className = `form-checkbox${
-      this.props.errorMessage ? ' usa-input-error' : ''
-    }`;
+    let className = `form-checkbox${hasErrors ? ' usa-input-error' : ''}`;
     if (!_.isUndefined(this.props.className)) {
       className = `${className} ${this.props.className}`;
     }
-
     return (
       <div className={className}>
         <input
@@ -76,11 +82,12 @@ class Checkbox extends React.Component {
           name={this.props.name}
           type="checkbox"
           onChange={this.handleChange}
+          onFocus={this.handleFocus}
         />
         <label
-          className={
-            this.props.errorMessage ? 'usa-input-error-label' : undefined
-          }
+          className={classNames('gi-checkbox-label', {
+            'usa-input-error-label': hasErrors,
+          })}
           name={`${this.props.name}-label`}
           htmlFor={this.inputId}
         >

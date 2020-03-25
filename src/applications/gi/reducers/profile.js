@@ -6,12 +6,12 @@ import {
 } from '../actions';
 import { normalizedInstitutionAttributes } from './utility';
 import camelCaseKeysRecursive from 'camelcase-keys-recursive';
-import _ from 'lodash';
 
 const INITIAL_STATE = {
   attributes: {},
   version: {},
   inProgress: false,
+  error: null,
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -26,19 +26,15 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         ...action.err,
         inProgress: false,
+        error: action.payload,
       };
     case FETCH_PROFILE_SUCCEEDED:
       const camelPayload = camelCaseKeysRecursive(action.payload);
-      const bahGrandfathered = _.get(
-        action,
-        'zipRatesPayload.data.attributes.mhaRateGrandfathered',
-      );
       const attributes = {
         ...normalizedInstitutionAttributes({
           ...camelPayload.data.attributes,
           ...camelPayload.data.links,
         }),
-        bahGrandfathered,
       };
 
       // delete attributes.self;
@@ -48,6 +44,7 @@ export default function(state = INITIAL_STATE, action) {
         attributes,
         version,
         inProgress: false,
+        error: null,
       };
     default:
       return state;

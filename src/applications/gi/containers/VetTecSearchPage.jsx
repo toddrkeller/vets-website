@@ -8,7 +8,6 @@ import classNames from 'classnames';
 import {
   clearAutocompleteSuggestions,
   fetchProgramAutocompleteSuggestions,
-  fetchInstitutionSearchResults,
   fetchProgramSearchResults,
   institutionFilterChange,
   setPageTitle,
@@ -24,6 +23,8 @@ import { getScrollOptions, focusElement } from 'platform/utilities/ui';
 import VetTecProgramSearchResult from '../components/vet-tec/VetTecProgramSearchResult';
 import VetTecSearchForm from '../components/vet-tec/VetTecSearchForm';
 import { renderVetTecLogo } from '../utils/render';
+import environment from 'platform/utilities/environment';
+import ServiceError from '../components/ServiceError';
 
 const { Element: ScrollElement, scroller } = Scroll;
 
@@ -68,11 +69,24 @@ export class VetTecSearchPage extends React.Component {
 
     const stringSearchParams = ['page', 'name'];
 
-    const query = _.pick(this.props.location.query, [
+    let providerQueryVal = this.props.location.query.provider
+      ? this.props.location.query.provider
+      : [];
+
+    if (typeof providerQueryVal === 'string') {
+      providerQueryVal = [providerQueryVal];
+    }
+
+    const queryParams = _.pick(this.props.location.query, [
       ...stringSearchParams,
       ...stringFilterParams,
       ...booleanFilterParams,
     ]);
+
+    const query = {
+      ...queryParams,
+      provider: providerQueryVal || [],
+    };
 
     // Update form selections based on query.
     const institutionFilter = _.omit(query, stringSearchParams);
@@ -91,8 +105,10 @@ export class VetTecSearchPage extends React.Component {
 
   updateSearchResults = () => {
     const queryFilterFields = this.getQueryFilterFields();
-    this.props.institutionFilterChange(queryFilterFields.institutionFilter);
-    this.props.fetchProgramSearchResults(queryFilterFields.query);
+    if (!_.isEqual(this.props.search.query, queryFilterFields.query)) {
+      this.props.institutionFilterChange(queryFilterFields.institutionFilter);
+      this.props.fetchProgramSearchResults(queryFilterFields.query);
+    }
   };
 
   handlePageSelect = page => {
@@ -103,12 +119,7 @@ export class VetTecSearchPage extends React.Component {
   };
 
   handleProviderFilterChange = provider => {
-    scroller.scrollTo('searchPage', getScrollOptions());
-
-    this.props.institutionFilterChange({
-      ...this.getQueryFilterFields().institutionFilter,
-      ...provider,
-    });
+    this.handleFilterChange('provider', provider.provider);
   };
 
   handleFilterChange = (field, value) => {
@@ -116,7 +127,7 @@ export class VetTecSearchPage extends React.Component {
     const query = {
       ...this.props.location.query,
       [field]: value,
-      name: this.props.autocomplete.searchTerm,
+      name: value === undefined ? field : this.props.autocomplete.searchTerm,
     };
 
     // Don’t update the route if the query hasn’t changed.
@@ -126,6 +137,7 @@ export class VetTecSearchPage extends React.Component {
     ) {
       return;
     }
+    this.props.clearAutocompleteSuggestions();
 
     // Reset to the first page upon a filter change.
     delete query.page;
@@ -141,6 +153,16 @@ export class VetTecSearchPage extends React.Component {
     this.props.router.push({ ...this.props.location, query });
   };
 
+  autocomplete = (value, version) => {
+    if (value) {
+      this.props.fetchProgramAutocompleteSuggestions(
+        value,
+        _.omit(this.props.search.query, 'name'),
+        version,
+      );
+    }
+  };
+
   filterResultsByProvider = result =>
     this.props.filters.provider.length === 0 ||
     this.props.filters.provider.includes(result.institutionName);
@@ -154,7 +176,7 @@ export class VetTecSearchPage extends React.Component {
     const resultsClass = classNames(
       'search-results',
       'small-12',
-      'usa-width-three-fourths medium-9',
+      'medium-9',
       'columns',
       { opened: !search.filterOpened },
     );
@@ -205,15 +227,12 @@ export class VetTecSearchPage extends React.Component {
     return searchResults;
   };
 
-  renderSearchResultsHeader = search => {
-    const resultCount =
-      search.results.filter(this.filterResultsByProvider).length || 0;
-    return (
-      <h1 tabIndex={-1}>
-        {!search.inProgress && `${resultCount.toLocaleString()} Search Results`}
-      </h1>
-    );
-  };
+  renderSearchResultsHeader = search => (
+    <h1 tabIndex={-1}>
+      {!search.inProgress &&
+        `${(search.count || 0).toLocaleString()} Search Results`}
+    </h1>
+  );
 
   render() {
     const { search, filters } = this.props;
@@ -231,44 +250,47 @@ export class VetTecSearchPage extends React.Component {
 
     return (
       <ScrollElement name="searchPage" className="search-page">
-        <div>
-          <div className="vads-u-display--block small-screen:vads-u-display--none vettec-logo-container">
-            {renderVetTecLogo(classNames('vettec-logo'))}
-          </div>
-          <div className="vads-l-row vads-u-justify-content--space-between vads-u-align-items--flex-end">
-            <div className="vads-l-col--10 search-results-count">
-              {this.renderSearchResultsHeader(this.props.search)}
+        {search.error && !environment.isProduction() ? (
+          <ServiceError />
+        ) : (
+          <div>
+            <div className="vads-u-display--block single-column-display-none  vettec-logo-container">
+              {renderVetTecLogo(classNames('vettec-logo'))}
             </div>
-            <div className="vads-l-col--2">
-              <div className="vads-u-display--none small-screen:vads-u-display--block vettec-logo-container">
-                {renderVetTecLogo(classNames('vettec-logo'))}
+            <div className="vads-l-row vads-u-justify-content--space-between vads-u-align-items--flex-end vads-u-margin-top--neg3">
+              <div className="vads-l-col--9 search-results-count">
+                {this.renderSearchResultsHeader(this.props.search)}
+              </div>
+              <div className="vads-l-col--3">
+                <div className="vads-u-display--none single-column-display-block vettec-logo-container">
+                  {renderVetTecLogo(classNames('vettec-logo'))}
+                </div>
               </div>
             </div>
+
+            <VetTecSearchForm
+              filtersClass={filtersClass}
+              search={this.props.search}
+              autocomplete={this.props.autocomplete}
+              location={this.props.location}
+              clearAutocompleteSuggestions={
+                this.props.clearAutocompleteSuggestions
+              }
+              fetchAutocompleteSuggestions={this.autocomplete}
+              handleFilterChange={this.handleFilterChange}
+              handleProviderFilterChange={this.handleProviderFilterChange}
+              updateAutocompleteSearchTerm={
+                this.props.updateAutocompleteSearchTerm
+              }
+              filters={filters}
+              toggleFilter={this.props.toggleFilter}
+              searchResults={searchResults}
+              eligibility={this.props.eligibility}
+              showModal={this.props.showModal}
+              eligibilityChange={this.props.eligibilityChange}
+            />
           </div>
-          <VetTecSearchForm
-            filtersClass={filtersClass}
-            search={this.props.search}
-            autocomplete={this.props.autocomplete}
-            location={this.props.location}
-            clearAutocompleteSuggestions={
-              this.props.clearAutocompleteSuggestions
-            }
-            fetchAutocompleteSuggestions={
-              this.props.fetchProgramAutocompleteSuggestions
-            }
-            handleFilterChange={this.handleFilterChange}
-            handleProviderFilterChange={this.handleProviderFilterChange}
-            updateAutocompleteSearchTerm={
-              this.props.updateAutocompleteSearchTerm
-            }
-            filters={filters}
-            toggleFilter={this.props.toggleFilter}
-            searchResults={searchResults}
-            eligibility={this.props.eligibility}
-            showModal={this.props.showModal}
-            eligibilityChange={this.props.eligibilityChange}
-          />
-        </div>
+        )}
       </ScrollElement>
     );
   }
@@ -287,7 +309,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   clearAutocompleteSuggestions,
   fetchProgramAutocompleteSuggestions,
-  fetchInstitutionSearchResults,
   fetchProgramSearchResults,
   institutionFilterChange,
   setPageTitle,

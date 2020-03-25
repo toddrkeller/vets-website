@@ -244,8 +244,7 @@ more.\r\n",
           </div>
 
           <section id="table-of-contents" class="vads-u-margin-bottom--5">
-            <h2 class="vads-u-margin-bottom--2 vads-u-font-size--lg">On this
-              page</h2>
+            <h2 class="vads-u-margin-bottom--2 vads-u-font-size--lg">On this page</h2>
             <ul class="usa-unstyled-list"></ul>
           </section>
 
@@ -259,6 +258,11 @@ more.\r\n",
               class="usa-width-two-thirds vads-u-display--block vads-u-width--full">
               <div>
                 <div class="vads-c-facility-detail">
+                  {% if fieldOperatingStatusFacility and fieldOperatingStatusFacility != 'normal' %}
+                    <div class="vads-u-display--inline-block vads-u-margin-bottom--2p5">
+                      {% include "src/site/includes/operatingStatusFlags.drupal.liquid" %}
+                    </div>
+                  {% endif %}
                   <section class="vads-facility-detail">
                     <h3
                       class="vads-u-font-size--lg vads-u-margin-top--0 vads-u-line-height--1 vads-u-margin-bottom--1">
@@ -351,6 +355,7 @@ more.\r\n",
             <h2 id="prepare-for-your-visit"
               class="vads-u-margin-top--0 vads-u-font-size--lg small-screen:vads-u-font-size--xl vads-u-margin-bottom--2">
               Prepare for your visit</h2>
+              <p>Click on a topic for more details.</p>
             <div class="usa-accordion-bordered">
               <ul class="usa-unstyled-list">
                 {% for accordionItem in fieldLocationServices %}
@@ -380,8 +385,9 @@ more.\r\n",
           <!-- Local Health Services -->
           {% if fieldLocalHealthCareService != empty and fieldLocalHealthCareService.length %}
           <h2 id="health-care-offered-here"
-            class="vads-u-font-size--xl vads-u-margin-top--5">Health care
-            services offered here</h2>
+            class="vads-u-font-size--xl vads-u-margin-top--5">Health services offered here</h2>
+            <p>Click on a service for more details like location, contact, and appointment
+            information.</p>
           <section class="local-health-services" id="local-health-services">
 
             {% assign localHealthServices = fieldLocalHealthCareService | sortObjectsBy: 'entity.fieldRegionalHealthService.entity.fieldServiceNameAndDescripti.entity.name' %}
@@ -404,9 +410,16 @@ more.\r\n",
 
 
           <!-- Social Links -->
-          {% if fieldFacebook != empty || fieldFlickr != empty || fieldInstagram != empty || fieldTwitter != empty || fieldEmailSubscription != empty || (fieldLinks != empty and fieldLinks.length)%}
-          {% include "src/site/facilities/facility_social_links.drupal.liquid" with regionNickname = fieldRegionPage.entity.fieldNicknameForThisFacility %}
-          {% endif %}
+          {% include "src/site/facilities/facility_social_links.drupal.liquid"
+          with regionNickname = fieldRegionPage.entity.fieldNicknameForThisFacility
+          fieldGovdeliveryIdEmerg = fieldRegionPage.entity.fieldGovdeliveryIdEmerg
+          fieldGovdeliveryIdNews = fieldRegionPage.entity.fieldGovdeliveryIdNews
+          fieldOperatingStatus = fieldRegionPage.entity.fieldOperatingStatus
+          fieldFacebook = fieldRegionPage.entity.fieldFacebook
+          fieldTwitter = fieldRegionPage.entity.fieldTwitter
+          fieldFlickr = fieldRegionPage.entity.fieldFlickr
+          fieldInstagram = fieldRegionPage.entity.fieldInstagram
+          %}
 
         </article>
         <div class="last-updated usa-content">

@@ -8,9 +8,9 @@ import { VAFacilityPage } from '../../containers/VAFacilityPage';
 describe('VAOS <VAFacilityPage>', () => {
   const defaultSchema = {
     type: 'object',
-    required: ['vaSystem', 'vaFacility'],
+    required: ['vaParent', 'vaFacility'],
     properties: {
-      vaSystem: {
+      vaParent: {
         type: 'string',
         enum: ['983'],
       },
@@ -26,7 +26,7 @@ describe('VAOS <VAFacilityPage>', () => {
     const openFormPage = sinon.spy();
     const form = shallow(
       <VAFacilityPage
-        loadingSystems
+        loadingParentFacilities
         data={defaultData}
         openFacilityPage={openFormPage}
       />,
@@ -42,7 +42,7 @@ describe('VAOS <VAFacilityPage>', () => {
     const form = shallow(
       <VAFacilityPage
         data={defaultData}
-        noValidVASystems
+        noValidVAParentFacilities
         openFacilityPage={openFormPage}
       />,
     );
@@ -67,6 +67,27 @@ describe('VAOS <VAFacilityPage>', () => {
     form.unmount();
   });
 
+  it('should go forward from single facility view', () => {
+    const openFormPage = sinon.spy();
+    const routeToNextAppointmentPage = sinon.spy();
+    const form = shallow(
+      <VAFacilityPage
+        routeToNextAppointmentPage={routeToNextAppointmentPage}
+        singleValidVALocation
+        data={{}}
+        openFacilityPage={openFormPage}
+      />,
+    );
+
+    expect(form.find('VAFacilityInfoMessage').exists()).to.be.true;
+    form
+      .find('FormButtons')
+      .props()
+      .onSubmit();
+    expect(routeToNextAppointmentPage.called).to.be.true;
+    form.unmount();
+  });
+
   it('should render form with facility loading message', () => {
     const openFormPage = sinon.spy();
     const schema = {
@@ -78,7 +99,7 @@ describe('VAOS <VAFacilityPage>', () => {
 
     const form = mount(
       <VAFacilityPage
-        data={{ vaSystem: '123' }}
+        data={{ vaParent: '123' }}
         loadingFacilities
         schema={schema}
         openFacilityPage={openFormPage}
@@ -101,8 +122,8 @@ describe('VAOS <VAFacilityPage>', () => {
 
     const form = mount(
       <VAFacilityPage
-        data={{ vaSystem: '123' }}
-        noValidVASystems
+        data={{ vaParent: '123' }}
+        noValidVAParentFacilities
         schema={schema}
         openFacilityPage={openFormPage}
       />,
@@ -158,7 +179,7 @@ describe('VAOS <VAFacilityPage>', () => {
         openFacilityPage={openFormPage}
         routeToNextAppointmentPage={routeToNextAppointmentPage}
         data={{
-          vaSystem: '983',
+          vaParent: '983',
           vaFacility: '983',
         }}
       />,
@@ -180,9 +201,10 @@ describe('VAOS <VAFacilityPage>', () => {
         eligibility={{}}
         schema={defaultSchema}
         openFacilityPage={openFormPage}
+        parentOfChosenFacility="983"
         routeToNextAppointmentPage={routeToNextAppointmentPage}
         data={{
-          vaSystem: '983',
+          vaParent: '983',
           vaFacility: '983',
         }}
       />,
@@ -205,10 +227,11 @@ describe('VAOS <VAFacilityPage>', () => {
         singleValidVALocation
         schema={defaultSchema}
         openFacilityPage={openFormPage}
-        facility={{ institution: {} }}
+        facility={{}}
+        parentOfChosenFacility="983"
         routeToNextAppointmentPage={routeToNextAppointmentPage}
         data={{
-          vaSystem: '983',
+          vaParent: '983',
           vaFacility: '983',
         }}
       />,
@@ -217,6 +240,56 @@ describe('VAOS <VAFacilityPage>', () => {
     expect(form.find('button[type="submit"]').props().disabled).to.be.true;
     expect(form.find('input').length).to.equal(0);
     expect(form.find('.usa-alert').exists()).to.be.true;
+    form.unmount();
+  });
+
+  it('document title should match h1 text', () => {
+    const openFormPage = sinon.spy();
+    const pageTitle = 'Choose a VA location for your appointment';
+
+    const form = mount(
+      <VAFacilityPage
+        data={{}}
+        schema={defaultSchema}
+        openFacilityPage={openFormPage}
+      />,
+    );
+
+    expect(form.find('h1').text()).to.equal(pageTitle);
+    expect(document.title).contain(pageTitle);
+    form.unmount();
+  });
+
+  it('should render data fetching error', () => {
+    const openFormPage = sinon.spy();
+    const form = shallow(
+      <VAFacilityPage
+        data={defaultData}
+        hasDataFetchingError
+        openFacilityPage={openFormPage}
+      />,
+    );
+
+    expect(form.find('LoadingIndicator').exists()).to.be.false;
+    expect(form.find('SchemaForm').exists()).to.be.false;
+    expect(form.find('ErrorMessage').exists()).to.be.true;
+    form.unmount();
+  });
+
+  it('should render eligibility error', () => {
+    const openFormPage = sinon.spy();
+    const form = shallow(
+      <VAFacilityPage
+        data={defaultData}
+        schema={defaultSchema}
+        hasEligibilityError
+        openFacilityPage={openFormPage}
+      />,
+    );
+
+    expect(form.find('LoadingIndicator').exists()).to.be.false;
+    expect(form.find('SchemaForm').exists()).to.be.true;
+    expect(form.find('ErrorMessage').exists()).to.be.true;
     form.unmount();
   });
 });

@@ -9,30 +9,24 @@ import fullSchema from '../20-0996-schema.json';
 
 // import environment from 'platform/utilities/environment';
 import { VA_FORM_IDS } from 'platform/forms/constants';
-import FormFooter from 'platform/forms/components/FormFooter';
-import GetFormHelp from '../content/GetFormHelp';
 import preSubmitInfo from 'platform/forms/preSubmitInfo';
 
-// import { capitalizeEachWord } from '../../all-claims/utils';
+import FormFooter from 'platform/forms/components/FormFooter';
+import GetFormHelp from '../components/GetFormHelp';
 
 import IntroductionPage from '../components/IntroductionPage';
 import ConfirmationPage from '../containers/ConfirmationPage';
 
 // Pages
-import veteranDetailsDescription from '../pages/confirmVeteranDetails';
+import veteranInformationDescription from '../pages/veteranInformation';
 
 import contactInfo from '../pages/contactInformation';
 import contestedIssuesPage from '../pages/contestedIssues';
-import contestedIssueFollowup from '../pages/contestedIssueFollowup';
-
-import { contestedIssuesNotesStart } from '../content/contestedIssues';
-
 import informalConference from '../pages/informalConference';
 
 // TODO: Mock data - remove once API is connected
 import initialData from '../tests/schema/initialData';
 import { errorMessages } from '../constants';
-import { hasSelectedIssues } from '../helpers';
 
 const {
   name,
@@ -60,6 +54,15 @@ const formConfig = {
   formId: VA_FORM_IDS.FORM_20_0996,
   version: 0,
   prefillEnabled: true,
+  // beforeLoad: props => { console.log('form config before load', props); },
+  // onFormLoaded: ({ formData, savedForms, returnUrl, formConfig, router }) => {
+  //   console.log('form loaded', formData, savedForms, returnUrl, formConfig, router);
+  // },
+  // verifyRequiredPrefill: true,
+  // prefillTransformer: (pages, formData, metadata) => {
+  //   console.log('prefill transformer', pages, formData, metadata);
+  //   return { pages, formData, metadata };
+  // },
   savedFormMessages: {
     notFound: errorMessages.savedFormNotFound,
     noAuth: errorMessages.savedFormNoAuth,
@@ -78,18 +81,17 @@ const formConfig = {
     contactRepresentativeChoice,
     representative,
     scheduleTimes,
-    veteranDetailsDescription,
   },
   preSubmitInfo,
   chapters: {
-    veteranDetails: {
-      title: 'Veteran details',
+    step1: {
+      title: 'Veteran information',
       pages: {
-        confirmVeteranDetails: {
-          title: 'Confirm Veteran details',
-          path: 'veteran-details',
+        veteranInformation: {
+          title: 'Veteran information',
+          path: 'veteran-information',
           uiSchema: {
-            'ui:description': veteranDetailsDescription,
+            'ui:description': veteranInformationDescription,
           },
           schema: {
             type: 'object',
@@ -114,28 +116,6 @@ const formConfig = {
           path: 'contested-issues',
           uiSchema: contestedIssuesPage.uiSchema,
           schema: contestedIssuesPage.schema,
-          initialData,
-        },
-        'view:contestedIssueFollowupStart': {
-          title: ' ',
-          path: 'contested-issues/start',
-          uiSchema: {
-            'ui:description': contestedIssuesNotesStart,
-          },
-          schema: {
-            type: 'object',
-            properties: {},
-          },
-        },
-        'view:contestedIssueFollowup': {
-          title: item => item?.name,
-          path: 'contested-issues/:index',
-          depends: () => hasSelectedIssues,
-          showPagePerItem: true,
-          itemFilter: item => item?.['view:selected'],
-          arrayPath: 'contestedIssues',
-          uiSchema: contestedIssueFollowup.uiSchema,
-          schema: contestedIssueFollowup.schema,
           initialData,
         },
       },

@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import { expect } from 'chai';
 
 import ConfirmationRequestInfo from '../../components/ConfirmationRequestInfo';
@@ -16,34 +16,41 @@ describe('VAOS <ConfirmationRequestInfo>', () => {
         selectedDates: [{ date: '2019-12-20', optionTime: 'AM' }],
       },
     };
-    const facility = {
-      institution: {
-        institutionCode: '983GB',
-        name: 'CHYSHR-Sidney VA Clinic',
-        city: 'Sidney',
-        stateAbbrev: 'NE',
-        authoritativeName: 'CHYSHR-Sidney VA Clinic',
-        rootStationCode: '983',
-        adminParent: false,
-        parentStationCode: '983',
+    const facilityDetails = {
+      name: 'CHYSHR-Sidney VA Clinic',
+      address: {
+        physical: {
+          zip: '82001-5356',
+          city: 'Cheyenne',
+          state: 'WY',
+          address1: '2360 East Pershing Boulevard',
+          address2: null,
+          address3: null,
+        },
       },
-      institutionTimezone: 'America/Denver',
     };
+    const pageTitle = 'Your appointment request has been submitted';
 
-    const tree = shallow(
-      <ConfirmationRequestInfo data={data} facility={facility} />,
+    const tree = mount(
+      <ConfirmationRequestInfo
+        data={data}
+        facilityDetails={facilityDetails}
+        pageTitle={pageTitle}
+      />,
     );
 
-    const text = tree
-      .find('AlertBox')
-      .at(1)
-      .dive()
-      .text();
+    const text = tree.text();
+
+    const heading = tree.find('h1');
+
     expect(text).not.to.contain('Community Care');
     expect(text).to.contain('CHYSHR-Sidney VA Clinic');
-    expect(text).to.contain('Sidney, NE');
+    expect(text).to.contain('Cheyenne, WY');
 
     expect(tree.find('AlertBox').exists()).to.be.true;
+    expect(tree);
+    expect(heading.exists()).to.be.true;
+    expect(heading.text()).to.equal(pageTitle);
 
     tree.unmount();
   });
@@ -74,33 +81,33 @@ describe('VAOS <ConfirmationRequestInfo>', () => {
         selectedDates: [{ date: '2019-12-20', optionTime: 'AM' }],
       },
     };
-    const facility = {
-      institution: {
-        institutionCode: '983GB',
-        name: 'CHYSHR-Sidney VA Clinic',
-        city: 'Sidney',
-        stateAbbrev: 'NE',
-        authoritativeName: 'CHYSHR-Sidney VA Clinic',
-        rootStationCode: '983',
-        adminParent: false,
-        parentStationCode: '983',
+    const facilityDetails = {
+      name: 'CHYSHR-Sidney VA Clinic',
+      address: {
+        physical: {
+          zip: '82001-5356',
+          city: 'Cheyenne',
+          state: 'WY',
+          address1: '2360 East Pershing Boulevard',
+          address2: null,
+          address3: null,
+        },
       },
-      institutionTimezone: 'America/Denver',
     };
 
-    const tree = shallow(
+    const pageTitle = 'Your appointment request has been submitted';
+    const tree = mount(
       <ConfirmationRequestInfo
         data={data}
-        facility={facility}
+        facilityDetails={facilityDetails}
         vaCityState="Cheyenne, WY"
+        pageTitle={pageTitle}
       />,
     );
 
-    const text = tree
-      .find('AlertBox')
-      .at(1)
-      .dive()
-      .text();
+    const text = tree.text();
+    const heading = tree.find('h1');
+
     expect(text).to.contain('Community Care');
     expect(text).not.to.contain('CHYSHR-Sidney VA Clinic');
     expect(text).to.contain('Jane Doe');
@@ -108,7 +115,159 @@ describe('VAOS <ConfirmationRequestInfo>', () => {
     expect(text).to.contain('Northampton, MA');
 
     expect(tree.find('AlertBox').exists()).to.be.true;
+    expect(tree.find('h1').exists()).to.be.true;
+    expect(heading.exists()).to.be.true;
+    expect(heading.text()).to.equal(pageTitle);
 
+    tree.unmount();
+  });
+
+  it('should render CC request without provider', () => {
+    const data = {
+      facilityType: 'communityCare',
+      distanceWillingToTravel: '25',
+      preferredLanguage: 'english',
+      visitType: 'office',
+      bestTimeToCall: {
+        morning: true,
+        afternoon: true,
+      },
+      hasCommunityCareProvider: false,
+      calendarData: {
+        selectedDates: [{ date: '2019-12-20', optionTime: 'AM' }],
+      },
+    };
+    const facilityDetails = {
+      name: 'CHYSHR-Sidney VA Clinic',
+      address: {
+        physical: {
+          zip: '82001-5356',
+          city: 'Cheyenne',
+          state: 'WY',
+          address1: '2360 East Pershing Boulevard',
+          address2: null,
+          address3: null,
+        },
+      },
+    };
+
+    const pageTitle = 'Your appointment request has been submitted';
+    const tree = mount(
+      <ConfirmationRequestInfo
+        data={data}
+        facilityDetails={facilityDetails}
+        vaCityState="Cheyenne, WY"
+        pageTitle={pageTitle}
+      />,
+    );
+
+    const text = tree.text();
+    const heading = tree.find('h1');
+
+    expect(text).to.contain('Community Care');
+    expect(text).not.to.contain('CHYSHR-Sidney VA Clinic');
+    expect(text).to.contain('No preference');
+
+    expect(tree.find('AlertBox').exists()).to.be.true;
+    expect(tree.find('h1').exists()).to.be.true;
+    expect(heading.exists()).to.be.true;
+    expect(heading.text()).to.equal(pageTitle);
+
+    tree.unmount();
+  });
+
+  it('should render single time', () => {
+    const data = {
+      visitType: 'office',
+      bestTimeToCall: {
+        evening: true,
+      },
+      calendarData: {
+        selectedDates: [{ date: '2019-12-20', optionTime: 'AM' }],
+      },
+    };
+    const facilityDetails = {
+      name: 'CHYSHR-Sidney VA Clinic',
+      address: {
+        physical: {
+          zip: '82001-5356',
+          city: 'Cheyenne',
+          state: 'WY',
+          address1: '2360 East Pershing Boulevard',
+          address2: null,
+          address3: null,
+        },
+      },
+    };
+    const pageTitle = 'Your appointment request has been submitted';
+
+    const tree = mount(
+      <ConfirmationRequestInfo
+        data={data}
+        facilityDetails={facilityDetails}
+        pageTitle={pageTitle}
+      />,
+    );
+
+    tree
+      .find('AdditionalInfo')
+      .find('button')
+      .simulate('click');
+    tree.setProps();
+
+    const text = tree.text();
+
+    expect(text).to.contain('Evening');
+    expect(text).to.contain('Show less');
+
+    tree.unmount();
+  });
+
+  it('should render message for all times', () => {
+    const data = {
+      visitType: 'office',
+      bestTimeToCall: {
+        evening: true,
+        morning: true,
+        afternoon: true,
+      },
+      calendarData: {
+        selectedDates: [{ date: '2019-12-20', optionTime: 'AM' }],
+      },
+    };
+    const facilityDetails = {
+      name: 'CHYSHR-Sidney VA Clinic',
+      address: {
+        physical: {
+          zip: '82001-5356',
+          city: 'Cheyenne',
+          state: 'WY',
+          address1: '2360 East Pershing Boulevard',
+          address2: null,
+          address3: null,
+        },
+      },
+    };
+    const pageTitle = 'Your appointment request has been submitted';
+
+    const tree = mount(
+      <ConfirmationRequestInfo
+        data={data}
+        facilityDetails={facilityDetails}
+        pageTitle={pageTitle}
+      />,
+    );
+
+    tree
+      .find('AdditionalInfo')
+      .find('button')
+      .simulate('click');
+    tree.setProps();
+
+    const text = tree.text();
+
+    expect(text).to.contain('Anytime during the day');
+    expect(tree.find('.vaos-u-word-break--break-word').exists()).to.be.true;
     tree.unmount();
   });
 });

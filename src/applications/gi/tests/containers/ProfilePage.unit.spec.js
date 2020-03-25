@@ -22,8 +22,8 @@ describe('<ProfilePage>', () => {
       profile: {
         ...defaultProps.profile,
         attributes: {
-          vetTecProvider: true,
           type: 'FOR PROFIT',
+          vetTecProvider: true,
         },
       },
       params: {
@@ -43,5 +43,14 @@ describe('<ProfilePage>', () => {
     const vdom = tree.getRenderOutput();
     expect(vdom).to.not.be.undefined;
     expect(tree.subTree('LoadingIndicator')).to.be.ok;
+  });
+
+  it('should show error message when profile failed', () => {
+    const errorProps = {
+      ...defaultProps,
+      profile: { inProgress: true, error: 'Service Unavailable' },
+    };
+    const tree = SkinDeep.shallowRender(<ProfilePage {...errorProps} />);
+    expect(tree.subTree('ServiceError')).to.be.ok;
   });
 });

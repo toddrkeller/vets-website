@@ -1,32 +1,59 @@
-import {
-  DIRECT_SCHEDULE_TYPES,
-  PRIMARY_CARE,
-  DISABLED_LIMIT_VALUE,
-  CANCELLED_APPOINTMENT_SET,
-} from '../utils/constants';
+import { DISABLED_LIMIT_VALUE } from '../utils/constants';
+import { captureError } from '../utils/error';
 
-import {
-  checkPastVisits,
-  getRequestLimits,
-  getPacTeam,
-  getClinics,
-} from '../api';
+import { checkPastVisits, getRequestLimits, getAvailableClinics } from '../api';
 
-export async function getEligibilityData(facilityId, typeOfCareId) {
-  let eligibilityChecks = [
-    checkPastVisits(facilityId, typeOfCareId, 'request'),
-    getRequestLimits(facilityId, typeOfCareId),
+import { recordVaosError, recordEligibilityFailure } from './events';
+
+function createErrorHandler(directOrRequest, errorKey) {
+  return data => {
+    captureError(data, true);
+    recordVaosError(`eligibility-${errorKey}`);
+    return { [`${directOrRequest}Failed`]: true };
+  };
+}
+
+/*
+ * This makes all the service calls needed to determine if a Veteran
+ * is eligible for direct scheduling or requests. The getEligibilityChecks
+ * function below takes the raw data from here and determines if the 
+ * check passes or fails.
+ *
+ * Any errors in the promises for each service are caught so that
+ * Promise.all doesn't abort and we can figure out if we can see if
+ * we made it through either all the request related checks or all the 
+ * direct related requests
+ */
+export async function getEligibilityData(
+  facility,
+  typeOfCareId,
+  systemId,
+  isDirectScheduleEnabled,
+) {
+  const facilityId = facility.institutionCode;
+  const eligibilityChecks = [
+    checkPastVisits(systemId, facilityId, typeOfCareId, 'request').catch(
+      createErrorHandler('request', 'request-check-past-visits-error'),
+    ),
+    getRequestLimits(facilityId, typeOfCareId).catch(
+      createErrorHandler(
+        'request',
+        'request-exceeded-outstanding-requests-error',
+      ),
+    ),
   ];
 
-  if (DIRECT_SCHEDULE_TYPES.has(typeOfCareId)) {
-    eligibilityChecks = eligibilityChecks.concat([
-      checkPastVisits(facilityId, typeOfCareId, 'direct'),
-      getClinics(facilityId, typeOfCareId),
-    ]);
-  }
-
-  if (typeOfCareId === PRIMARY_CARE) {
-    eligibilityChecks.push(getPacTeam(facilityId));
+  if (facility.directSchedulingSupported && isDirectScheduleEnabled) {
+    eligibilityChecks.push(
+      checkPastVisits(systemId, facilityId, typeOfCareId, 'direct').catch(
+        createErrorHandler('direct', 'direct-check-past-visits-error'),
+      ),
+    );
+    eligibilityChecks.push(
+      getAvailableClinics(facilityId, typeOfCareId, systemId).catch(
+        createErrorHandler('direct', 'direct-available-clinics-error'),
+      ),
+    );
   }
 
   const [requestPastVisit, requestLimits, ...directData] = await Promise.all(
@@ -35,91 +62,101 @@ export async function getEligibilityData(facilityId, typeOfCareId) {
   let eligibility = {
     requestPastVisit,
     requestLimits,
+    directSupported: facility.directSchedulingSupported,
+    requestSupported: facility.requestSupported,
   };
 
   if (directData?.length) {
-    const [directPastVisit, clinics, ...pacTeam] = directData;
+    const [directPastVisit, clinics] = directData;
     eligibility = {
       ...eligibility,
       directPastVisit,
       clinics,
     };
-
-    if (pacTeam.length) {
-      eligibility = {
-        ...eligibility,
-        pacTeam: pacTeam[0],
-      };
-    }
   }
 
   return eligibility;
 }
 
-export function getEligibilityChecks(
-  vaFacility,
-  typeOfCareId,
-  eligibilityData,
-) {
-  const eligibility = {
-    directTypes: true,
-    directPastVisit: true,
-    directPastVisitValue: null,
-    directPACT: true,
-    directClinics: true,
-    requestPastVisit: true,
-    requestPastVisitValue: null,
-    requestLimit: true,
-    requestLimitValue: null,
+function hasVisitedInPastMonthsDirect(eligibilityData) {
+  return (
+    eligibilityData.directPastVisit.durationInMonths === DISABLED_LIMIT_VALUE ||
+    eligibilityData.directPastVisit.hasVisitedInPastMonths
+  );
+}
+
+function hasVisitedInPastMonthsRequest(eligibilityData) {
+  return (
+    eligibilityData.requestPastVisit?.durationInMonths ===
+      DISABLED_LIMIT_VALUE ||
+    eligibilityData.requestPastVisit?.hasVisitedInPastMonths
+  );
+}
+
+function isUnderRequestLimit(eligibilityData) {
+  return (
+    eligibilityData.requestLimits?.requestLimit === DISABLED_LIMIT_VALUE ||
+    eligibilityData.requestLimits?.numberOfRequests <
+      eligibilityData.requestLimits?.requestLimit
+  );
+}
+
+function isDirectSchedulingEnabled(eligibilityData) {
+  return typeof eligibilityData.directPastVisit !== 'undefined';
+}
+
+function hasRequestFailed(eligibilityData) {
+  return Object.values(eligibilityData).some(result => result?.requestFailed);
+}
+
+function hasDirectFailed(eligibilityData) {
+  return Object.values(eligibilityData).some(result => result?.directFailed);
+}
+
+/*
+ * This function takes the data from the eligibility related services and 
+ * decides if each check we need to make passes or fails. It also checks for
+ * errors in either of the two "blocks" of checks (requests or direct). If 
+ * one block of checks is successful, we can still let a user continue on that,
+ * even if another path is blocked.
+*/
+export function getEligibilityChecks(systemId, typeOfCareId, eligibilityData) {
+  // If we're missing this property, it means no DS checks were made
+  // because it's disabled
+  const directSchedulingEnabled = isDirectSchedulingEnabled(eligibilityData);
+
+  let eligibilityChecks = {
+    requestSupported: eligibilityData.requestSupported,
+    requestFailed: hasRequestFailed(eligibilityData),
+    directSupported: eligibilityData.directSupported,
+    directFailed: hasDirectFailed(eligibilityData),
   };
 
-  if (!DIRECT_SCHEDULE_TYPES.has(typeOfCareId)) {
-    eligibility.directTypes = false;
-  } else {
-    if (
-      eligibilityData.directPastVisit.durationInMonths ===
-        DISABLED_LIMIT_VALUE ||
-      !eligibilityData.directPastVisit.hasVisitedInPastMonths
-    ) {
-      eligibility.directPastVisit = false;
-      eligibility.directPastVisitValue =
-        eligibilityData.directPastVisit.durationInMonths;
-    }
-
-    if (
-      typeOfCareId === PRIMARY_CARE &&
-      !eligibilityData.pacTeam.some(
-        provider => provider.facilityId === vaFacility.substring(0, 3),
-      )
-    ) {
-      eligibility.directPACT = false;
-    }
-
-    if (!eligibilityData.clinics.length) {
-      eligibility.directClinics = false;
-    }
+  if (!eligibilityChecks.requestFailed) {
+    eligibilityChecks = {
+      ...eligibilityChecks,
+      requestPastVisit: hasVisitedInPastMonthsRequest(eligibilityData),
+      requestPastVisitValue: eligibilityData.requestPastVisit.durationInMonths,
+      requestLimit: isUnderRequestLimit(eligibilityData),
+      requestLimitValue: eligibilityData.requestLimits.requestLimit,
+    };
   }
 
-  if (
-    eligibilityData.requestPastVisit.durationInMonths ===
-      DISABLED_LIMIT_VALUE ||
-    !eligibilityData.requestPastVisit.hasVisitedInPastMonths
-  ) {
-    eligibility.requestPastVisit = false;
-    eligibility.requestPastVisitValue =
-      eligibilityData.requestPastVisit.durationInMonths;
+  if (!eligibilityChecks.directFailed) {
+    eligibilityChecks = {
+      ...eligibilityChecks,
+      directPastVisit:
+        directSchedulingEnabled &&
+        hasVisitedInPastMonthsDirect(eligibilityData),
+      directPastVisitValue:
+        directSchedulingEnabled &&
+        eligibilityData.directPastVisit.durationInMonths,
+      directClinics:
+        directSchedulingEnabled && !!eligibilityData.clinics.length,
+    };
   }
 
-  if (
-    eligibilityData.requestLimits.requestLimit === DISABLED_LIMIT_VALUE ||
-    eligibilityData.requestLimits.numberOfRequests >=
-      eligibilityData.requestLimits.requestLimit
-  ) {
-    eligibility.requestLimit = false;
-    eligibility.requestLimitValue = eligibilityData.requestLimits.requestLimit;
-  }
-
-  return eligibility;
+  return eligibilityChecks;
 }
 
 export function isEligible(eligibilityChecks) {
@@ -131,17 +168,21 @@ export function isEligible(eligibilityChecks) {
   }
 
   const {
+    directFailed,
+    directSupported,
     directPastVisit,
-    directTypes,
     directClinics,
-    directPACT,
+    requestFailed,
+    requestSupported,
     requestLimit,
     requestPastVisit,
   } = eligibilityChecks;
 
   return {
-    direct: directTypes && directPastVisit && directPACT && directClinics,
-    request: requestLimit && requestPastVisit,
+    direct:
+      !directFailed && directSupported && directPastVisit && directClinics,
+    request:
+      !requestFailed && requestSupported && requestLimit && requestPastVisit,
   };
 }
 
@@ -150,20 +191,32 @@ export function getEligibleFacilities(facilities) {
     facility => facility.requestSupported || facility.directSchedulingSupported,
   );
 }
+/**
+ * Record Google Analytics events based on results of eligibility checks.
+ * Error keys ending with 'error' represent a failure in fetching info for the check,
+ * while keys ending with 'failure' signify that the user didn't meet the condition
+ * of the check.
+ */
+export function recordEligibilityGAEvents(eligibilityData) {
+  if (!hasRequestFailed(eligibilityData)) {
+    if (!isUnderRequestLimit(eligibilityData)) {
+      recordEligibilityFailure('request-exceeded-outstanding-requests');
+    }
 
-export function hasEligibleClinics(facilityId, pastAppointments, clinics) {
-  const pastClinicIds = new Set(
-    pastAppointments
-      .filter(
-        appt =>
-          appt.facilityId === facilityId &&
-          appt.clinicId &&
-          !CANCELLED_APPOINTMENT_SET.has(
-            appt.vdsAppointments?.[0]?.currentStatus || 'FUTURE',
-          ),
-      )
-      .map(appt => appt.clinicId),
-  );
+    if (!hasVisitedInPastMonthsRequest(eligibilityData)) {
+      recordEligibilityFailure('request-past-visits');
+    }
+  }
 
-  return clinics.some(clinic => pastClinicIds.has(clinic.clinicId));
+  const directSchedulingEnabled = isDirectSchedulingEnabled(eligibilityData);
+
+  if (directSchedulingEnabled && !hasRequestFailed(eligibilityData)) {
+    if (!hasVisitedInPastMonthsDirect(eligibilityData)) {
+      recordEligibilityFailure('direct-check-past-visits');
+    }
+
+    if (!eligibilityData.clinics?.length) {
+      recordEligibilityFailure('direct-available-clinics');
+    }
+  }
 }

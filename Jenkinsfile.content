@@ -7,12 +7,29 @@ node('vetsgov-general-purpose') {
     ref = getLatestGitRef("vets-website", branch: "master")
   }
 
-  refStatusState = getGithubCommitState("vets-website", ref)
-  if ("${refStatusState}" != "SUCCESS") {
-    slackSend(message:"Web content refresh on ${params.env} aborted due to '${refStatusState}' status on vets-website commit ${ref}.",
+  def jobFailed = false
+  def refStatusState
+  while({
+    echo "checking build status..."
+    refStatusState = getGithubCommitState("vets-website", ref)
+    if ("${refStatusState}" == "SUCCESS") {
+      return false
+    } else if ("${refStatusState}" == "PENDING") {
+      sleep 60
+      return true
+    }
+    jobFailed = true
+    return false
+  }()) continue
+
+  if (jobFailed) {
+    message = "Web content refresh on ${params.env} aborted due to '${refStatusState}' status on vets-website commit ${ref}."
+    echo "${message}"
+    slackSend(message: "${message}",
               color: "warning",
               channel: "cms-notifications")
 
+    currentBuild.result = 'FAILURE'
     return
   }
 
@@ -40,8 +57,9 @@ node('vetsgov-general-purpose') {
   stage("Deploy Dev or Staging") {
     if (params.env != "vagovprod" && params.deploy) {
       commonStages.runDeploy("deploys/vets-website-${params.env}", ref, true)
-
-      slackSend(message:"Web content refresh in ${params.env} completed.",
+      message = "Web content refresh in ${params.env} completed."
+      echo "${message}"
+      slackSend(message: "${message}",
                 color: "good",
                 channel: "cms-notifications")
     }

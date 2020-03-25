@@ -5,7 +5,8 @@ import SchemaForm from 'platform/forms-system/src/js/components/SchemaForm';
 import phoneUI from 'platform/forms-system/src/js/definitions/phone';
 import FormButtons from '../components/FormButtons';
 import * as address from '../utils/address';
-import { LANGUAGES } from './../utils/constants';
+import { LANGUAGES, FETCH_STATUS } from './../utils/constants';
+import ErrorMessage from '../components/ErrorMessage';
 
 import {
   openCommunityCarePreferencesPage,
@@ -14,6 +15,7 @@ import {
   routeToPreviousAppointmentPage,
 } from '../actions/newAppointment.js';
 import { getFormPageInfo } from '../utils/selectors';
+import { scrollAndFocus } from '../utils/scrollAndFocus';
 
 const initialSchema = {
   type: 'object',
@@ -56,12 +58,12 @@ const initialSchema = {
 const addressUISchema = address.uiSchema();
 const uiSchema = {
   communityCareSystemId: {
-    'ui:title': 'What is the closest city and state for your appointment?',
+    'ui:title': 'What’s the closest city and state to you?',
     'ui:widget': 'radio',
   },
   preferredLanguage: {
     'ui:title':
-      'Do you have a preferred language for your Community Care provider?',
+      'Do you prefer that your Community Care provider speak a certain language?',
   },
   hasCommunityCareProvider: {
     'ui:widget': 'yesNo',
@@ -116,6 +118,7 @@ const uiSchema = {
 };
 
 const pageKey = 'ccPreferences';
+const pageTitle = 'Tell us your Community Care preferences';
 
 export class CommunityCarePreferencesPage extends React.Component {
   componentDidMount() {
@@ -124,6 +127,8 @@ export class CommunityCarePreferencesPage extends React.Component {
       uiSchema,
       initialSchema,
     );
+    document.title = `${pageTitle}  | Veterans Affairs`;
+    scrollAndFocus();
   }
 
   goBack = () => {
@@ -135,18 +140,22 @@ export class CommunityCarePreferencesPage extends React.Component {
   };
 
   render() {
-    const { schema, data, pageChangeInProgress, loading } = this.props;
+    const {
+      schema,
+      data,
+      pageChangeInProgress,
+      parentFacilitiesStatus,
+    } = this.props;
 
     return (
       <div>
-        <h1 className="vads-u-font-size--h2">
-          Share your community care provider preferences
-        </h1>
-        {(!schema || loading) && (
+        <h1 className="vads-u-font-size--h2">{pageTitle}</h1>
+        {parentFacilitiesStatus === FETCH_STATUS.failed && <ErrorMessage />}
+        {(!schema || parentFacilitiesStatus === FETCH_STATUS.loading) && (
           <LoadingIndicator message="Loading Community Care facilities" />
         )}
         {!!schema &&
-          !loading && (
+          parentFacilitiesStatus === FETCH_STATUS.succeeded && (
             <SchemaForm
               name="ccPreferences"
               title="Community Care preferences"
@@ -172,7 +181,7 @@ export class CommunityCarePreferencesPage extends React.Component {
 function mapStateToProps(state) {
   return {
     ...getFormPageInfo(state, pageKey),
-    loading: state.newAppointment.loadingSystems,
+    parentFacilitiesStatus: state.newAppointment.parentFacilitiesStatus,
   };
 }
 

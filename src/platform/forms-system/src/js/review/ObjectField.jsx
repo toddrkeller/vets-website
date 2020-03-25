@@ -122,6 +122,7 @@ class ObjectField extends React.Component {
         if (objectFields.length > 1 && visible.length > 0) {
           return objectFields.filter(showField).map(renderField);
         }
+        // eslint-disable-next-line sonarjs/no-extra-arguments
         return showField(first) ? renderField(first, index) : null;
       },
     );
@@ -136,12 +137,13 @@ class ObjectField extends React.Component {
         `Edit ${title}`;
 
       return (
-        <div>
+        <>
           {!formContext.hideHeaderRow && (
             <div className="form-review-panel-page-header-row">
-              <h5 className="form-review-panel-page-header">
-                {!formContext.hideTitle ? title : null}
-              </h5>
+              {title?.trim() &&
+                !formContext.hideTitle && (
+                  <h5 className="form-review-panel-page-header">{title}</h5>
+                )}
               <button
                 type="button"
                 className="edit-btn primary-outline"
@@ -153,11 +155,11 @@ class ObjectField extends React.Component {
             </div>
           )}
           <dl className="review">{renderedProperties}</dl>
-        </div>
+        </>
       );
     }
 
-    return <div>{renderedProperties}</div>;
+    return <>{renderedProperties}</>;
   }
 }
 

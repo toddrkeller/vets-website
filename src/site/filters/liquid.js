@@ -20,7 +20,7 @@ module.exports = function registerFilters() {
     moment.unix(dt).format('MMMM D, YYYY');
 
   function prettyTimeFormatted(dt, format) {
-    const date = moment(dt).format(format);
+    const date = moment.utc(dt).format(format);
     return date.replace(/AM/g, 'a.m.').replace(/PM/g, 'p.m.');
   }
 
@@ -89,8 +89,8 @@ module.exports = function registerFilters() {
 
   liquid.filters.genericModulo = (i, n) => i % n;
 
-  liquid.filters.listValue = data => {
-    const string = data.split('_').join(' ');
+  liquid.filters.removeUnderscores = data => {
+    const string = data && data.length ? data.replace('_', ' ') : data;
     return string;
   };
 
@@ -233,6 +233,20 @@ module.exports = function registerFilters() {
     return JSON.stringify(id);
   };
 
+  liquid.filters.sortMainFacility = item =>
+    item ? item.sort((a, b) => a.entityId - b.entityId) : undefined;
+
+  liquid.filters.eventSorter = item => {
+    const sorted =
+      item &&
+      item.sort((a, b) => {
+        const start1 = moment(a.fieldDate.startDate);
+        const start2 = moment(b.fieldDate.startDate);
+        return start1.isAfter(start2);
+      });
+    return sorted;
+  };
+
   // Find the current path in an array of nested link arrays and then return it's depth + it's parent and children
   liquid.filters.findCurrentPathDepth = (linksArray, currentPath) => {
     const getDeepLinks = (path, linkArr) => {
@@ -327,6 +341,10 @@ module.exports = function registerFilters() {
     let deepObj = {};
 
     function findLink(arr, depth = 0) {
+      if (arr === null) {
+        return;
+      }
+
       let d = depth;
       // start depth at 1
       d++;
@@ -372,6 +390,8 @@ module.exports = function registerFilters() {
       ? entity.fieldClinicalHealthServices[0].entity
       : null;
   };
+
+  liquid.filters.getPagerPage = page => parseInt(page.split('page-')[1], 10);
 
   liquid.filters.featureSingleValueFieldLink = fieldLink => {
     if (fieldLink && cmsFeatureFlags.FEATURE_SINGLE_VALUE_FIELD_LINK) {

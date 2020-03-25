@@ -8,12 +8,12 @@ import { ReasonForAppointmentPage } from '../../containers/ReasonForAppointmentP
 
 describe('VAOS <ReasonForAppointmentPage>', () => {
   it('should render', () => {
-    const openFormPage = sinon.spy();
+    const openReasonForAppointment = sinon.spy();
     const updateReasonForAppointmentData = sinon.spy();
 
     const form = mount(
       <ReasonForAppointmentPage
-        openFormPage={openFormPage}
+        openReasonForAppointment={openReasonForAppointment}
         updateReasonForAppointmentData={updateReasonForAppointmentData}
         data={{}}
       />,
@@ -25,14 +25,14 @@ describe('VAOS <ReasonForAppointmentPage>', () => {
   });
 
   it('should not submit empty form', () => {
-    const openFormPage = sinon.spy();
+    const openReasonForAppointment = sinon.spy();
     const router = {
       push: sinon.spy(),
     };
 
     const form = mount(
       <ReasonForAppointmentPage
-        openFormPage={openFormPage}
+        openReasonForAppointment={openReasonForAppointment}
         router={router}
         data={{}}
       />,
@@ -40,13 +40,15 @@ describe('VAOS <ReasonForAppointmentPage>', () => {
 
     form.find('form').simulate('submit');
 
+    expect(form.find('AlertBox').length).to.equal(1);
+
     expect(form.find('.usa-input-error').length).to.equal(2);
     expect(router.push.called).to.be.false;
     form.unmount();
   });
 
   it('should call updateReasonForAppointmentData after change', () => {
-    const openFormPage = sinon.spy();
+    const openReasonForAppointment = sinon.spy();
     const updateReasonForAppointmentData = sinon.spy();
     const router = {
       push: sinon.spy(),
@@ -54,7 +56,7 @@ describe('VAOS <ReasonForAppointmentPage>', () => {
 
     const form = mount(
       <ReasonForAppointmentPage
-        openFormPage={openFormPage}
+        openReasonForAppointment={openReasonForAppointment}
         updateReasonForAppointmentData={updateReasonForAppointmentData}
         router={router}
         data={{}}
@@ -70,12 +72,12 @@ describe('VAOS <ReasonForAppointmentPage>', () => {
   });
 
   it('should submit with valid data', () => {
-    const openFormPage = sinon.spy();
+    const openReasonForAppointment = sinon.spy();
     const routeToNextAppointmentPage = sinon.spy();
 
     const form = mount(
       <ReasonForAppointmentPage
-        openFormPage={openFormPage}
+        openReasonForAppointment={openReasonForAppointment}
         routeToNextAppointmentPage={routeToNextAppointmentPage}
         data={{
           reasonForAppointment: 'routine-follow-up',
@@ -86,6 +88,43 @@ describe('VAOS <ReasonForAppointmentPage>', () => {
     form.find('form').simulate('submit');
 
     expect(form.find('.usa-input-error').length).to.equal(0);
+
+    form.unmount();
+  });
+
+  it('should render alert message', () => {
+    const openReasonForAppointment = sinon.spy();
+    const updateReasonForAppointmentData = sinon.spy();
+
+    const form = mount(
+      <ReasonForAppointmentPage
+        openReasonForAppointment={openReasonForAppointment}
+        updateReasonForAppointmentData={updateReasonForAppointmentData}
+        data={{}}
+      />,
+    );
+    expect(form.text()).to.contain(
+      'If you have an urgent medical need, please',
+    );
+
+    form.unmount();
+  });
+  it('document title should match h1 text', () => {
+    const openReasonForAppointment = sinon.spy();
+    const updateReasonForAppointmentData = sinon.spy();
+    const pageTitle = 'Choose a reason for your appointment';
+
+    const form = mount(
+      <ReasonForAppointmentPage
+        openReasonForAppointment={openReasonForAppointment}
+        updateReasonForAppointmentData={updateReasonForAppointmentData}
+        data={{}}
+      />,
+    );
+
+    expect(form.find('h1').text()).to.equal(pageTitle);
+    expect(document.title).contain(pageTitle);
+
     form.unmount();
   });
 });

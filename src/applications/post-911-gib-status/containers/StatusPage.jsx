@@ -48,7 +48,7 @@ class StatusPage extends React.Component {
     }
 
     return (
-      <div className="usa-width-two-thirds medium-8 columns gib-info">
+      <div className="gib-info">
         <FormTitle title="Post-9/11 GI Bill Statement of Benefits" />
         {introText}
         {printButton}
@@ -62,7 +62,7 @@ class StatusPage extends React.Component {
             href="https://www.ebenefits.va.gov/ebenefits/about/feature?feature=payment-history"
             onClick={() =>
               recordEvent({
-                event: 'ebenefits-navigation',
+                event: 'nav-ebenefits-click',
               })
             }
           >

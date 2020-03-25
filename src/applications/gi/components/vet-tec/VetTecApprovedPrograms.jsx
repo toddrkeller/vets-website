@@ -1,86 +1,91 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import environment from 'platform/utilities/environment';
 import PropTypes from 'prop-types';
-import VetTecContactInformation from './VetTecContactInformation';
+import recordEvent from 'platform/monitoring/record-event';
+import ContactInformation from '../profile/ContactInformation';
 import { calculatorInputChange } from '../../actions';
 import { formatCurrency, isPresent } from '../../utils/helpers';
 
 class VetTecApprovedPrograms extends React.Component {
   constructor(props) {
     super(props);
-    if (!environment.isProduction()) {
-      this.state = { selectedProgram: props.preSelectedProgram };
-      this.setProgramFields(props.preSelectedProgram);
-    }
-  }
-
-  componentDidUpdate() {
-    if (!environment.isProduction()) {
-      this.setProgramFields(this.state.selectedProgram);
-    }
+    this.state = { selectedProgram: props.preSelectedProgram };
+    this.setProgramFields(props.preSelectedProgram);
   }
 
   setProgramFields = programName => {
-    const program = this.props.institution.programs.find(
-      p => p.description === programName,
-    );
-    if (program) {
-      const field = 'vetTecProgram';
-      const value = {
-        vetTecTuitionFees: program.tuitionAmount,
-        vetTecProgramName: program.description,
-      };
-      this.props.calculatorInputChange({ field, value });
+    if (programName) {
+      const program = this.props.institution.programs.find(
+        p => p.description.toLowerCase() === programName.toLowerCase(),
+      );
+      if (program) {
+        const field = 'vetTecProgram';
+        const value = {
+          vetTecTuitionFees: program.tuitionAmount,
+          vetTecProgramName: program.description,
+          vetTecProgramFacilityCode: this.props.institution.facilityCode,
+        };
+        this.props.calculatorInputChange({ field, value });
+      }
     }
   };
 
   handleInputChange = (event, index, vetTecProgramName) => {
+    recordEvent({
+      event: 'gibct-form-change',
+      'gibct-form-field': 'Program Name Radio Button',
+      'gibct-form-value': vetTecProgramName,
+    });
     this.setState({ selectedProgram: vetTecProgramName });
     this.setProgramFields(vetTecProgramName);
   };
 
   render() {
     const programs = this.props.institution.programs;
-    // prod flag for CT 116 story 19614
-    if (!environment.isProduction() && programs && programs.length) {
+    if (programs && programs.length) {
       const programRows = programs.map((program, index) => {
-        const programLength = isPresent(program.lengthInHours)
-          ? `${program.lengthInHours} hours`
-          : 'TBD';
+        const programLength =
+          isPresent(program.lengthInHours) && program.lengthInHours !== '0'
+            ? `${program.lengthInHours} hours`
+            : 'TBD';
         const tuition = isPresent(program.tuitionAmount)
           ? formatCurrency(program.tuitionAmount)
           : 'TBD';
+        const checked =
+          this.state.selectedProgram &&
+          program.description.toLowerCase() ===
+            this.state.selectedProgram.toLowerCase();
         return (
           <tr key={index}>
-            <td>
+            <td className="vads-u-padding-y--0">
               <div className="form-radio-buttons gids-radio-buttons">
                 <input
                   id={`radio-${index}`}
                   name="vetTecProgram"
-                  checked={program.description === this.state.selectedProgram}
+                  checked={checked}
                   className="gids-radio-buttons-input"
                   type="radio"
                   value={program.description}
                   onChange={e =>
                     this.handleInputChange(e, index, program.description)
                   }
-                  aria-labelledby={`program-name-header program-${index}`}
                 />
                 <label id={`program-${index}`} htmlFor={`radio-${index}`}>
                   {program.description}
                 </label>
               </div>
             </td>
-            <td>{programLength}</td>
-            <td>{tuition}</td>
+            <td className="vads-u-padding-y--0 program-length">
+              {programLength}
+            </td>
+            <td className="vads-u-padding-y--0">{tuition}</td>
           </tr>
         );
       });
 
       return (
-        <div>
-          <p>Select a program below to view your estimated benefits.</p>
+        <div className="vads-u-margin-top--2">
+          <span>Select a program below to view your estimated benefits.</span>
           <table className="vet-tec-programs-table">
             <colgroup>
               <col className="name-col" />
@@ -120,7 +125,7 @@ class VetTecApprovedPrograms extends React.Component {
   }
 }
 
-VetTecContactInformation.propTypes = {
+ContactInformation.propTypes = {
   institution: PropTypes.object,
   preSelectedProgram: PropTypes.string,
 };

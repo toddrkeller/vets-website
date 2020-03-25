@@ -20,6 +20,7 @@ import ssnUI from 'platform/forms-system/src/js/definitions/ssn';
 import * as addressDefinition from '../definitions/address';
 import currentOrPastDateUI from 'platform/forms-system/src/js/definitions/currentOrPastDate';
 import phoneUI from 'platform/forms-system/src/js/definitions/phone';
+import emailUI from 'platform/forms-system/src/js/definitions/email';
 import fileUploadUI from 'platform/forms-system/src/js/definitions/file';
 import { genderLabels } from 'platform/static-data/labels';
 import { validateMatch } from 'platform/forms-system/src/js/validation';
@@ -145,15 +146,12 @@ const formConfig = {
           path: 'contact-information',
           title: 'Contact information',
           uiSchema: {
-            email: {
-              'ui:title': 'Email address',
-            },
-            'view:confirmEmail': {
-              'ui:title': 'Re-enter email address',
+            email: emailUI(),
+            'view:confirmEmail': _.merge(emailUI('Re-enter email address'), {
               'ui:options': {
                 hideOnReview: true,
               },
-            },
+            }),
             phone: phoneUI('Phone number'),
             'ui:validations': [validateMatch('email', 'view:confirmEmail')],
           },
@@ -206,9 +204,7 @@ const formConfig = {
               }),
               {
                 'ui:field': asyncLoader(() =>
-                  import(/* webpackChunkName: "photo-field" */ '../components/PhotoField').then(
-                    m => m.default,
-                  ),
+                  import(/* webpackChunkName: "photo-field" */ '../components/PhotoField'),
                 ),
                 'ui:validations': [validateFile],
               },

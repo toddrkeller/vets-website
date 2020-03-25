@@ -65,7 +65,7 @@ export class VetTecVeteranPrograms extends React.Component {
     );
     return (
       <div key={index}>
-        <i className={icon} /> {label} {link}
+        <i className={icon} aria-hidden="true" /> {label} {link}
       </div>
     );
   };
@@ -73,25 +73,21 @@ export class VetTecVeteranPrograms extends React.Component {
   render() {
     const programs = this.programs();
     const availablePrograms = programs.filter(program => program.available);
-    const notAvailablePrograms = programs.filter(program => !program.available);
+
     return (
       <div className="programs row">
-        {availablePrograms.length > 0 && (
-          <div className="usa-width-one-half medium-6 large-6 column">
-            <h3>Available at this campus</h3>
+        {availablePrograms.length > 0 ? (
+          <div className="usa-width-one-half medium-6 large-6 column vads-u-margin-top--2">
             {availablePrograms.map((program, index) =>
               this.renderProgramLabel(program, index),
             )}
             <br />
           </div>
-        )}
-        {notAvailablePrograms.length > 0 && (
-          <div className="usa-width-one-half medium-6 large-6 column">
-            <h3>Not available at this campus</h3>
-            {notAvailablePrograms.map((program, index) =>
-              this.renderProgramLabel(program, index),
-            )}
-          </div>
+        ) : (
+          <p>
+            Please contact the school or their military office directly for
+            information on the Veteran programs they offer.
+          </p>
         )}
       </div>
     );

@@ -9,8 +9,8 @@ import accountManifest from '../../account/manifest.json';
 
 import { TRANSACTION_CATEGORY_TYPES } from 'vet360/constants';
 
-import Vet360InitializeID from 'vet360/containers/InitializeID';
-import Vet360PendingTransactionCategory from 'vet360/containers/PendingTransactionCategory';
+import Vet360InitializeID from 'vet360/containers/InitializeVet360ID';
+import Vet360PendingTransactionCategory from 'vet360/containers/Vet360PendingTransactionCategory';
 
 import MailingAddress from 'vet360/components/MailingAddress';
 import ResidentialAddress from 'vet360/components/ResidentialAddress';
@@ -57,7 +57,9 @@ export default class ContactInformation extends React.Component {
   render() {
     return (
       <div>
-        <h2 className="va-profile-heading">Contact information</h2>
+        <h2 className="va-profile-heading" tabIndex="-1">
+          Contact information
+        </h2>
         <DowntimeNotification
           render={handleDowntimeForSection('contact')}
           dependencies={[externalServices.vet360]}

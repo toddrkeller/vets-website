@@ -69,7 +69,7 @@ export const schema = {
     },
     postalCode: {
       type: 'string',
-      maxLength: 51,
+      maxLength: 10,
     },
   },
 };
@@ -145,7 +145,7 @@ export function uiSchema(label = '') {
       'ui:title': 'State',
     },
     postalCode: {
-      'ui:title': 'ZIP code',
+      'ui:title': 'Postal code',
       'ui:options': {
         widgetClassNames: 'usa-input-medium',
       },

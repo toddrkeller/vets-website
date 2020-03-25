@@ -1,7 +1,7 @@
 import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { FETCH_STATUS } from '../../utils/constants';
 
 import { AppointmentsPage } from '../../containers/AppointmentsPage';
@@ -12,6 +12,7 @@ describe('VAOS <AppointmentsPage>', () => {
       appointments: {
         future: [],
         futureStatus: FETCH_STATUS.loading,
+        facilityData: {},
       },
     };
 
@@ -30,6 +31,7 @@ describe('VAOS <AppointmentsPage>', () => {
 
   it('should render 3 appointments', () => {
     const appointments = {
+      facilityData: {},
       futureStatus: FETCH_STATUS.succeeded,
       future: [
         {
@@ -159,46 +161,12 @@ describe('VAOS <AppointmentsPage>', () => {
           uniqueId: '8a48912a6c2409b9016c9a9afff101ee',
           systemId: 'var',
           objectType: 'VARAppointmentRequest',
-          selfUri:
-            '/var/VeteranAppointmentRequestService/v4/rest/appointment-service/patient/ICN/1012845331V153043/appointments/system/var/id/8a48912a6c2409b9016c9a9afff101ee',
-          selfLink: {
-            rel: 'self',
-            href:
-              '/var/VeteranAppointmentRequestService/v4/rest/appointment-service/patient/ICN/1012845331V153043/appointments/system/var/id/8a48912a6c2409b9016c9a9afff101ee',
-            objectType: 'AtomLink',
-          },
-          link: [
-            {
-              rel: 'self',
-              href:
-                '/var/VeteranAppointmentRequestService/v4/rest/appointment-service/patient/ICN/1012845331V153043/appointments/system/var/id/8a48912a6c2409b9016c9a9afff101ee',
-              objectType: 'AtomLink',
-            },
-            {
-              rel: 'related',
-              title: 'appointment-request-messages',
-              href:
-                '/var/VeteranAppointmentRequestService/v4/rest/appointment-service/patient/ICN/1012845331V153043/appointment-requests/system/var/id/8a48912a6c2409b9016c9a9afff101ee/messages',
-              objectType: 'AtomLink',
-            },
-            {
-              rel: 'related',
-              title: 'appointment-request-new-message-flag',
-              href:
-                '/var/VeteranAppointmentRequestService/v4/rest/appointment-service/patient/ICN/1012845331V153043/appointment-requests/system/var/id/8a48912a6c2409b9016c9a9afff101ee/messages/read',
-              objectType: 'AtomLink',
-            },
-            {
-              rel: 'related',
-              title: 'appointment-request-provider-seen-flag',
-              href:
-                '/var/VeteranAppointmentRequestService/v4/rest/appointment-service/patient/ICN/1012845331V153043/appointment-requests/system/var/id/8a48912a6c2409b9016c9a9afff101ee/appointment/provider-read',
-              objectType: 'AtomLink',
-            },
-          ],
           createdDate: '12/16/2019 07:25:44',
         },
       ],
+      systemClinicToFacilityMap: {
+        '983_455': {},
+      },
     };
 
     const fetchFutureAppointments = sinon.spy();
@@ -212,8 +180,130 @@ describe('VAOS <AppointmentsPage>', () => {
     );
 
     expect(tree.find('ConfirmedAppointmentListItem').length).to.equal(2);
+    expect(
+      tree
+        .find('ConfirmedAppointmentListItem')
+        .first()
+        .props().facility,
+    ).to.equal(appointments.systemClinicToFacilityMap['983_455']);
     expect(tree.find('AppointmentRequestListItem').length).to.equal(1);
     expect(tree.find('.usa-button').length).to.equal(1);
+
+    tree.unmount();
+  });
+
+  it('document title should match h1 text', () => {
+    const defaultProps = {
+      appointments: {
+        future: [],
+        futureStatus: FETCH_STATUS.succeeded,
+        facilityData: {},
+      },
+    };
+
+    const fetchFutureAppointments = sinon.spy();
+    const pageTitle = 'VA appointments';
+    const tree = shallow(
+      <AppointmentsPage
+        fetchFutureAppointments={fetchFutureAppointments}
+        {...defaultProps}
+      />,
+    );
+    expect(fetchFutureAppointments.called).to.be.true;
+    expect(tree.find('h1').text()).to.equal(pageTitle);
+    expect(document.title).contain(pageTitle);
+    tree.unmount();
+  });
+
+  it('should focus if modal is dismissed', () => {
+    const defaultProps = {
+      appointments: {
+        future: [],
+        futureStatus: FETCH_STATUS.succeeded,
+        facilityData: {},
+      },
+      isWelcomeModalDismissed: false,
+    };
+
+    const fetchFutureAppointments = sinon.spy();
+    const div = document.createElement('div');
+    document.body.appendChild(div);
+
+    const tree = mount(
+      <AppointmentsPage
+        fetchFutureAppointments={fetchFutureAppointments}
+        {...defaultProps}
+      />,
+      {
+        attachTo: div,
+      },
+    );
+
+    expect(document.activeElement.nodeName).to.not.equal('H1');
+    tree.setProps({ isWelcomeModalDismissed: true });
+    expect(document.activeElement.nodeName).to.equal('H1');
+
+    tree.unmount();
+    div.remove();
+  });
+
+  it('should fire a GA event when clicking schedule new appointment button', () => {
+    const defaultProps = {
+      appointments: {
+        future: [],
+        futureStatus: FETCH_STATUS.succeeded,
+        facilityData: {},
+      },
+    };
+
+    const startNewAppointmentFlow = sinon.spy();
+    const fetchFutureAppointments = sinon.spy();
+    const tree = shallow(
+      <AppointmentsPage
+        {...defaultProps}
+        showScheduleButton
+        fetchFutureAppointments={fetchFutureAppointments}
+        startNewAppointmentFlow={startNewAppointmentFlow}
+      />,
+    );
+
+    tree
+      .find('Link')
+      .at(0)
+      .simulate('click');
+    expect(global.window.dataLayer[0].event).to.equal(
+      'vaos-schedule-appointment-button-clicked',
+    );
+    tree.unmount();
+  });
+
+  it('should fire a GA event when clicking past appointments link', () => {
+    const defaultProps = {
+      appointments: {
+        future: [],
+        futureStatus: FETCH_STATUS.succeeded,
+        facilityData: {},
+      },
+    };
+
+    const startNewAppointmentFlow = sinon.spy();
+    const fetchFutureAppointments = sinon.spy();
+    const tree = shallow(
+      <AppointmentsPage
+        {...defaultProps}
+        showScheduleButton
+        fetchFutureAppointments={fetchFutureAppointments}
+        startNewAppointmentFlow={startNewAppointmentFlow}
+      />,
+    );
+
+    tree
+      .find('a')
+      .at(0)
+      .simulate('click');
+    expect(global.window.dataLayer[0].event).to.equal(
+      'vaos-past-appointments-legacy-link-clicked',
+    );
     tree.unmount();
   });
 });

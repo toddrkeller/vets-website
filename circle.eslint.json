@@ -1,0 +1,5 @@
+{
+  "rules": {
+    "sonarjs/no-extra-arguments": 2
+  }
+}

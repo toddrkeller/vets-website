@@ -114,7 +114,9 @@ export const validateIdString = (urlObj, urlPrefixString) => {
  * @returns {String} Formatted operating hours, like '8:00am - 5:00pm' or 'All Day', etc.
  *
  */
-export const formatOperatingHours = (operatingHours = 'N/A - N/A') => {
+export const formatOperatingHours = operatingHours => {
+  if (!operatingHours) return operatingHours;
+
   // Remove all whitespace.
   const sanitizedOperatingHours = replace(operatingHours, ' ', '');
 
@@ -144,22 +146,39 @@ export const formatOperatingHours = (operatingHours = 'N/A - N/A') => {
 
   // Attempt to format the hours based on 'h:mmA' if theere's a colon.
   if (includes(openingHour, ':')) {
-    formattedOpeningHour = moment(openingHour, 'h:mmA').format('h:mma');
+    formattedOpeningHour = moment(openingHour, 'h:mmA').format('h:mm a');
   }
   if (includes(closingHour, ':')) {
-    formattedClosingHour = moment(closingHour, 'h:mmA').format('h:mma');
+    formattedClosingHour = moment(closingHour, 'h:mmA').format('h:mm a');
+  }
+
+  // Return original string if invalid date.
+  if (formattedOpeningHour.search(/Invalid date/i) === 0) {
+    formattedOpeningHour = operatingHours;
+  }
+
+  // Return original string if invalid date.
+  if (formattedClosingHour.search(/Invalid date/i) === 0) {
+    formattedClosingHour = closingHour;
   }
 
   // Derive the formatted operating hours.
-  let formattedOperatingHours = `${formattedOpeningHour} - ${formattedClosingHour}`;
-
-  // Swap 'Invalid date' with 'N/A' for legibility.
-  formattedOperatingHours = replace(
-    formattedOperatingHours,
-    /Invalid date/g,
-    'N/A',
-  );
+  const formattedOperatingHours = `${formattedOpeningHour} - ${formattedClosingHour}`;
 
   // Return the formatted operating hours.
   return formattedOperatingHours;
+};
+
+/**
+ *
+ * @param {String} website for example google.com, https://va.gov/
+ *
+ * Uses a regular expression to find va.gov, www.va.gov or staging.va.gov in the website domain
+ *
+ * @returns {boolean}
+ *
+ */
+export const isVADomain = website => {
+  const regExp1 = /https?:\/\/(?:www\.|staging\.)?va\.gov(\/*)/;
+  return regExp1.test(website);
 };

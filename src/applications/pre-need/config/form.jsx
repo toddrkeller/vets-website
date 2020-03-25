@@ -13,6 +13,7 @@ import dateRangeUI from 'platform/forms-system/src/js/definitions/dateRange';
 import fileUploadUI from 'platform/forms-system/src/js/definitions/file';
 import fullNameUI from 'platform/forms/definitions/fullName';
 import phoneUI from 'platform/forms-system/src/js/definitions/phone';
+import emailUI from 'platform/forms-system/src/js/definitions/email';
 
 import applicantDescription from 'platform/forms/components/ApplicantDescription';
 
@@ -664,12 +665,7 @@ const formConfig = {
                   'ui:description': contactInfoDescription,
                 },
                 phoneNumber: phoneUI('Primary telephone number'),
-                email: {
-                  'ui:title': 'Email address',
-                  'ui:errorMessages': {
-                    pattern: 'Please enter a valid email address',
-                  },
-                },
+                email: emailUI(),
               },
             },
           },

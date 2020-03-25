@@ -4,7 +4,7 @@
 
 - Update `IntroductionPage.jsx`
   - [x] Replace placeholder `isInLegacySystem` with value from API
-  - [ ] Add code to update `isInLegacySystem` (or whatever it's named).
+  - [x] Add code to update `isInLegacySystem` (or whatever it's named).
 -  Update `OptOutFromLegacySystem.jsx`
   - [x] Consider converting the `OptOutFromLegacySystem` component into a
         standalone form with it's own form schema - suggested by Erik Hansen.
@@ -23,12 +23,12 @@
 - [x] Update checkbox error message (needs content approval).
 - [x] URL destination for the "Learn more about the review options" link?
       Currently it is pointing to `/decision-reviews`.
-- [ ] Destination or component that opens when the "See all your contested
+- [x] Destination or component that opens when the "See all your contested
       issues" link is used.
 
-### Confirm Veteran Details (Step 1)
+### Veteran Information (Step 1)
 
-- [x] Build form `confirmVeteranDetails` in `config/form.js`
+- [x] Build form `veteranInformation` in `config/form.js`
 - [ ] Get last 4 of SSN? Look for API entry.
 - [x] Auto-fill contact info review (collapsed with edit button? - talk to design)
 - [x] Add unit tests
@@ -38,43 +38,58 @@
 
 - [x] Build form `selectContestedIssues` in `config/form.js`
 - [ ] Get eligible issues API call?
-- [ ] Desination of "See all your issues" click?
+- [x] Desination of "See all your issues" link?
 - [x] Add unit tests
 - [ ] Add e2e tests
 
 ### Same jurisdiction & add notes (Step 2c)
 
 - [x] Build form `addNotes` in `config/form.js`
-- [x] Choose same regional office yes/no
 - [x] Add note for relevant evidence
 - [x] Add unit tests
 - [ ] Add e2e tests
+- [x] Remove "add notes" from contested issues
 
-### Request an informal conference (Step 3)
+### Office of review (Step 3)
 
-- [x] Build form `requestAnInformalConference` in `config/form.js`
-- [x] Awaiting design on "Weekday" dropdown content - remove
+- [x] Choose same regional office yes/no
 - [x] Add unit tests
 - [ ] Add e2e tests
 
-### Submit your application (Step 4)
+### Request an informal conference (Step 4)
 
-- [ ] Is there a design? This page was automaticaly added by the form builder.
+- [x] Build form `requestAnInformalConference` in `config/form.js`
+- [x] Awaiting design on "Weekday" dropdown content - remove
+- [x] Applied step 3 redesign
+- [x] Add unit tests
+- [ ] Add e2e tests
+
+### Submit your application (Step 5)
+
+- [x] Is there a design? This page was automaticaly added by the form builder.
 - [x] Change wording to be "Review and submit your
       application", can it be changed to match the design?)
 - [x] Add privacy policy check
 - [ ] Add unit tests
 - [ ] Add e2e tests
 
-### Swap order of intro & opt out page
+### Confirmation page
 
-- [ ] Opt out page should only be visible if user has a legacy appeal
-- [ ] Consider updating JSON form schema library to accept an option to add an
+- [x] Update pre-built page from design
+- [x] Update link "after you apply" when available
+- [x] Add unit tests
+- [ ] Add e2e tests
+
+### Move opt out page
+
+- [x] ~Opt out page should only be visible if user has a legacy appeal~ - N/A, always visible now
+- [x] Consider updating JSON form schema library to accept an option to add an
       opt out/in page after the introduction page
+- [x] Remove opt out page!
 
 ### Before Production
 - [ ] Check for, and remove, all console logs.
-- [ ] Move `20-0996-schema.json` to `vets-json-schema` repo.
+- [x] Move `20-0996-schema.json` to `vets-json-schema` repo.
 - [ ] Ensure matching tracking prefixes (if changed)
   - `src/applications/disability-benefits/996/config/form.js` in `formConfig.trackingPrefix`.
   - `src/applications/personalization/dashboard/helpers.jsx` ~line 146

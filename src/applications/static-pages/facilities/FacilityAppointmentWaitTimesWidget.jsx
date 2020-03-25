@@ -17,9 +17,8 @@ export class FacilityAppointmentWaitTimesWidget extends React.Component {
     // find service in waitTimes object as a key
     const time = waitTimes[serviceKey];
     // return waitTimes for service
-    return time
-      ? `${time[established ? 'established' : 'new'].toFixed(0)} days`
-      : '';
+    const waitTime = time[established ? 'established' : 'new'];
+    return waitTime ? `${waitTime.toFixed(0)} days` : '';
   }
 
   render() {
@@ -41,7 +40,7 @@ export class FacilityAppointmentWaitTimesWidget extends React.Component {
     const service = this.props.service.split('(')[0];
     const serviceExists = facility.access.health[_.camelCase(service)];
     // check if this health service has a wait time associated with it
-    if (serviceExists) {
+    if (serviceExists && (serviceExists.new || serviceExists.established)) {
       return (
         <div>
           <h3>Average number of days to get an appointment</h3>
@@ -55,30 +54,36 @@ export class FacilityAppointmentWaitTimesWidget extends React.Component {
           </p>
           <div className="usa-grid-full">
             <div className="vads-u-display--flex">
-              <div className="facility-satisfaction-tile vads-u-background-color--gray-lightest vads-u-padding-x--2 vads-u-padding-top--1 vads-u-padding-bottom--1p5 vads-u-margin-right--1">
-                <p className="vads-u-margin--0">New patient</p>
-                <p
-                  id={`facility-${_.camelCase(service)}-new-patient-wait-time`}
-                  className="vads-u-font-size--lg vads-u-font-weight--bold vads-u-margin--0 vads-u-font-family--serif"
-                >
-                  {this.appointmentWaitTime(facility.access.health, service)}
-                </p>
-              </div>
-              <div className="facility-satisfaction-tile vads-u-background-color--gray-lightest vads-u-padding-x--2 vads-u-padding-top--1 vads-u-padding-bottom--1p5">
-                <p className="vads-u-margin--0">Existing patient</p>
-                <p
-                  id={`facility-${_.camelCase(
-                    service,
-                  )}-existing-patient-wait-time`}
-                  className="vads-u-font-size--lg vads-u-font-weight--bold vads-u-margin--0 vads-u-font-family--serif"
-                >
-                  {this.appointmentWaitTime(
-                    facility.access.health,
-                    service,
-                    true,
-                  )}
-                </p>
-              </div>
+              {serviceExists.new && (
+                <div className="facility-satisfaction-tile vads-u-background-color--gray-lightest vads-u-padding-x--2 vads-u-padding-top--1 vads-u-padding-bottom--1p5 vads-u-margin-right--1">
+                  <p className="vads-u-margin--0">New patient</p>
+                  <p
+                    id={`facility-${_.camelCase(
+                      service,
+                    )}-new-patient-wait-time`}
+                    className="vads-u-font-size--lg vads-u-font-weight--bold vads-u-margin--0 vads-u-font-family--serif"
+                  >
+                    {this.appointmentWaitTime(facility.access.health, service)}
+                  </p>
+                </div>
+              )}
+              {serviceExists.established && (
+                <div className="facility-satisfaction-tile vads-u-background-color--gray-lightest vads-u-padding-x--2 vads-u-padding-top--1 vads-u-padding-bottom--1p5">
+                  <p className="vads-u-margin--0">Existing patient</p>
+                  <p
+                    id={`facility-${_.camelCase(
+                      service,
+                    )}-existing-patient-wait-time`}
+                    className="vads-u-font-size--lg vads-u-font-weight--bold vads-u-margin--0 vads-u-font-family--serif"
+                  >
+                    {this.appointmentWaitTime(
+                      facility.access.health,
+                      service,
+                      true,
+                    )}
+                  </p>
+                </div>
+              )}
             </div>
             <div className="vads-l-row">
               <p

@@ -29,6 +29,8 @@ module.exports = `
           }
       }
     }
+    fieldGovdeliveryIdEmerg
+    fieldGovdeliveryIdNews
     fieldIntroText
 	  fieldRelatedLinks {
       entity {
@@ -54,12 +56,6 @@ module.exports = `
         title
     }
     fieldInstagram {
-      url {
-        path
-      }
-      title
-    }
-    fieldLinks {
       url {
         path
       }

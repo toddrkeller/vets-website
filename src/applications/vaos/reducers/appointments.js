@@ -1,21 +1,27 @@
+import set from 'platform/utilities/data/set';
+
 import {
   FETCH_FUTURE_APPOINTMENTS,
   FETCH_FUTURE_APPOINTMENTS_SUCCEEDED,
   FETCH_FUTURE_APPOINTMENTS_FAILED,
-  FETCH_PAST_APPOINTMENTS,
-  FETCH_PAST_APPOINTMENTS_SUCCEEDED,
-  FETCH_PAST_APPOINTMENTS_FAILED,
+  FETCH_REQUEST_MESSAGES_SUCCEEDED,
   CANCEL_APPOINTMENT,
   CANCEL_APPOINTMENT_CONFIRMED,
   CANCEL_APPOINTMENT_CONFIRMED_FAILED,
   CANCEL_APPOINTMENT_CONFIRMED_SUCCEEDED,
   CANCEL_APPOINTMENT_CLOSED,
+  FETCH_FACILITY_LIST_DATA_SUCCEEDED,
 } from '../actions/appointments';
 
+import { FORM_SUBMIT_SUCCEEDED } from '../actions/sitewide';
+
 import {
-  filterFutureRequests,
   filterFutureConfirmedAppointments,
-  sortFutureList,
+  filterRequests,
+  sortFutureConfirmedAppointments,
+  sortFutureRequests,
+  sortMessages,
+  getRealFacilityId,
 } from '../utils/appointment';
 import { FETCH_STATUS } from '../utils/constants';
 
@@ -27,9 +33,10 @@ const initialState = {
   showCancelModal: false,
   cancelAppointmentStatus: FETCH_STATUS.notStarted,
   appointmentToCancel: null,
+  facilityData: {},
+  requestMessages: {},
+  systemClinicToFacilityMap: {},
 };
-
-const BOOKED_REQUEST = 'Booked';
 
 export default function appointmentsReducer(state = initialState, action) {
   switch (action.type) {
@@ -40,23 +47,18 @@ export default function appointmentsReducer(state = initialState, action) {
       };
     case FETCH_FUTURE_APPOINTMENTS_SUCCEEDED: {
       const [vaAppointments, ccAppointments, requests] = action.data;
-      const futureAppointments = [
-        ...vaAppointments,
-        ...ccAppointments.filter(appt =>
-          filterFutureConfirmedAppointments(appt, action.today),
-        ),
-        ...requests.filter(
-          req =>
-            req.status !== BOOKED_REQUEST &&
-            filterFutureRequests(req, action.today),
-        ),
-      ];
 
-      futureAppointments.sort(sortFutureList);
+      const confirmedFilteredAndSorted = [...vaAppointments, ...ccAppointments]
+        .filter(appt => filterFutureConfirmedAppointments(appt, action.today))
+        .sort(sortFutureConfirmedAppointments);
+
+      const requestsFilteredAndSorted = [
+        ...requests.filter(req => filterRequests(req, action.today)),
+      ].sort(sortFutureRequests);
 
       return {
         ...state,
-        future: futureAppointments,
+        future: [...confirmedFilteredAndSorted, ...requestsFilteredAndSorted],
         futureStatus: FETCH_STATUS.succeeded,
       };
     }
@@ -66,23 +68,42 @@ export default function appointmentsReducer(state = initialState, action) {
         futureStatus: FETCH_STATUS.failed,
         future: null,
       };
-    case FETCH_PAST_APPOINTMENTS:
+    case FETCH_FACILITY_LIST_DATA_SUCCEEDED: {
+      const facilityData = action.facilityData.reduce(
+        (acc, facility) => ({
+          ...acc,
+          [facility.uniqueId]: facility,
+        }),
+        {},
+      );
+      const systemClinicToFacilityMap =
+        action.clinicInstitutionList?.reduce(
+          (acc, clinic) => ({
+            ...acc,
+            [`${clinic.systemId}_${clinic.locationIen}`]: facilityData[
+              getRealFacilityId(clinic.institutionCode)
+            ],
+          }),
+          {},
+        ) || state.systemClinicToFacilityMap;
       return {
         ...state,
-        pastStatus: FETCH_STATUS.loading,
+        facilityData,
+        systemClinicToFacilityMap,
       };
-    case FETCH_PAST_APPOINTMENTS_SUCCEEDED:
+    }
+    case FETCH_REQUEST_MESSAGES_SUCCEEDED: {
+      const requestMessages = { ...state.requestMessages };
+      const messages = action.messages;
+
+      if (messages.length)
+        requestMessages[action.requestId] = messages.sort(sortMessages);
+
       return {
         ...state,
-        pastStatus: FETCH_STATUS.succeeded,
-        past: action.data,
+        requestMessages,
       };
-    case FETCH_PAST_APPOINTMENTS_FAILED:
-      return {
-        ...state,
-        pastStatus: FETCH_STATUS.failed,
-        past: null,
-      };
+    }
     case CANCEL_APPOINTMENT:
       return {
         ...state,
@@ -97,9 +118,23 @@ export default function appointmentsReducer(state = initialState, action) {
         cancelAppointmentStatus: FETCH_STATUS.loading,
       };
     case CANCEL_APPOINTMENT_CONFIRMED_SUCCEEDED: {
-      const future = state.future.filter(
-        appt => appt !== state.appointmentToCancel,
-      );
+      const future = state.future.map(appt => {
+        if (appt !== state.appointmentToCancel) {
+          return appt;
+        }
+
+        // confirmed VA appt
+        if (state.appointmentToCancel.clinicId) {
+          return set(
+            'vdsAppointments[0].currentStatus',
+            'CANCELLED BY PATIENT',
+            appt,
+          );
+        }
+
+        // Appt request
+        return { ...appt, status: 'Cancelled' };
+      });
       return {
         ...state,
         showCancelModal: true,
@@ -119,6 +154,12 @@ export default function appointmentsReducer(state = initialState, action) {
         showCancelModal: false,
         appointmentToCancel: null,
         cancelAppointmentStatus: FETCH_STATUS.notStarted,
+      };
+    case FORM_SUBMIT_SUCCEEDED:
+      return {
+        ...state,
+        future: null,
+        futureStatus: FETCH_STATUS.notStarted,
       };
     default:
       return state;

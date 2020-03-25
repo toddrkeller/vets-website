@@ -15,11 +15,18 @@ import subscribeAccordionEvents from './subscribeAccordionEvents';
 import createApplicationStatus from './createApplicationStatus';
 import createCallToActionWidget from './createCallToActionWidget';
 import createMyVALoginWidget from './createMyVALoginWidget';
-import renderHomepageBanner from './renderHomepageBanner';
+import createHomepageBanner from './homepage-banner/createHomepageBanner';
 import createDisabilityFormWizard from '../disability-benefits/wizard/createWizard';
 import createDisabilityRatingCalculator from '../disability-benefits/disability-rating-calculator/createCalculator';
 import createEducationApplicationStatus from '../edu-benefits/components/createEducationApplicationStatus';
 import createOptOutApplicationStatus from '../edu-benefits/components/createOptOutApplicationStatus';
+import createFindVaForms, {
+  findVaFormsWidgetReducer,
+} from '../find-va-forms/createFindVaForms';
+import createHigherLevelReviewApplicationStatus from '../../applications/disability-benefits/996/components/createHLRApplicationStatus';
+import createPost911GiBillStatusWidget, {
+  post911GIBillStatusReducer,
+} from '../post-911-gib-status/createPost911GiBillStatusWidget';
 
 // No-react styles.
 import './sass/static-pages.scss';
@@ -39,10 +46,18 @@ import {
   createScoAnnouncementsWidget,
 } from './school-resources/SchoolResources';
 
+// Set the app name header when using the apiRequest helper
+window.appName = 'static-pages';
+
 // Set further errors to have the appropriate source tag
 Sentry.configureScope(scope => scope.setTag('source', 'static-pages'));
 
-const store = createCommonStore(facilityReducer);
+const store = createCommonStore({
+  ...facilityReducer,
+  ...findVaFormsWidgetReducer,
+  ...post911GIBillStatusReducer,
+});
+
 Sentry.withScope(scope => {
   scope.setTag('source', 'site-wide');
   startSitewideComponents(store);
@@ -76,6 +91,11 @@ createEducationApplicationStatus(store, widgetTypes.EDUCATION_APP_STATUS);
 
 createOptOutApplicationStatus(store, widgetTypes.OPT_OUT_APP_STATUS);
 
+createHigherLevelReviewApplicationStatus(
+  store,
+  widgetTypes.HIGHER_LEVEL_REVIEW_APP_STATUS,
+);
+
 createApplicationStatus(store, {
   formId: VA_FORM_IDS.FORM_21P_530,
   applyHeading: 'How do I apply?',
@@ -98,9 +118,16 @@ createBasicFacilityListWidget();
 createScoEventsWidget();
 createScoAnnouncementsWidget();
 
+createFindVaForms(store, widgetTypes.FIND_VA_FORMS);
+createPost911GiBillStatusWidget(
+  store,
+  widgetTypes.POST_911_GI_BILL_STATUS_WIDGET,
+);
+
+createHomepageBanner(store, widgetTypes.HOMEPAGE_BANNER);
+
 // homepage widgets
 if (location.pathname === '/') {
-  renderHomepageBanner();
   createMyVALoginWidget(store);
 }
 

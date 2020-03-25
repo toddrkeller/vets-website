@@ -1,6 +1,11 @@
 const moment = require('moment-timezone');
 const { flatten, isEmpty } = require('lodash');
-const { getDrupalValue, createMetaTag } = require('./helpers');
+
+const {
+  getDrupalValue,
+  utcToEpochTime,
+  createMetaTagArray,
+} = require('./helpers');
 
 function pageTransform(entity) {
   const {
@@ -17,10 +22,14 @@ function pageTransform(entity) {
   const transformed = Object.assign({}, entity, {
     title: getDrupalValue(title),
     entityBundle: 'page',
+    entityUrl: {
+      path: entity.path[0].alias,
+    },
+    fieldAdministration: entity.fieldAdministration[0],
 
     fieldIntroText: getDrupalValue(fieldIntroText),
     fieldDescription: getDrupalValue(fieldDescription),
-    changed: new Date(getDrupalValue(changed)).getTime() / 1000,
+    changed: utcToEpochTime(getDrupalValue(changed)),
     fieldPageLastBuilt: {
       // Assume the raw data is in UTC
       date: moment
@@ -32,24 +41,32 @@ function pageTransform(entity) {
     // ).toUTCString(),
 
     entityPublished: published === 'published',
-    entityMetaTags: [
-      createMetaTag('MetaValue', 'title', metaTags.title),
-      createMetaTag('MetaValue', 'twitter:card', metaTags.twitter_cards_type),
-      createMetaTag('MetaProperty', 'og:site_name', metaTags.og_site_name),
-      createMetaTag('MetaValue', 'twitter:title', metaTags.twitter_cards_title),
-      createMetaTag('MetaValue', 'twitter:site', metaTags.twitter_cards_site),
-      createMetaTag('MetaProperty', 'og:title', metaTags.og_title),
-    ],
+    entityMetaTags: createMetaTagArray(metaTags, 'type'),
   });
 
-  if (isEmpty(flatten(fieldAlert))) {
-    transformed.fieldAlert = { entity: null };
-  }
+  transformed.fieldAlert = !isEmpty(flatten(fieldAlert)) ? fieldAlert[0] : null;
 
   delete transformed.moderationState;
   delete transformed.metatag;
+  delete transformed.path;
 
   return transformed;
 }
 
-module.exports = pageTransform;
+module.exports = {
+  filter: [
+    'field_intro_text',
+    'field_description',
+    'field_featured_content',
+    'field_content_block',
+    'field_alert',
+    'field_related_links',
+    'field_administration',
+    'field_page_last_built',
+    'metatag',
+    'changed',
+    'moderation_state',
+    'path',
+  ],
+  transform: pageTransform,
+};

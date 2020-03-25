@@ -16,7 +16,7 @@ import backendServices from 'platform/user/profile/constants/backendServices';
 
 import recordEvent from 'platform/monitoring/record-event';
 
-import ProfileFieldHeading from 'vet360/components/base/ProfileFieldHeading';
+import ProfileFieldHeading from 'vet360/components/base/Vet360ProfileFieldHeading';
 
 import { handleDowntimeForSection } from '../components/DowntimeBanner';
 import LoadFail from '../components/LoadFail';
@@ -30,8 +30,10 @@ import {
 } from '../actions/paymentInformation';
 import {
   directDepositAccountInformation,
+  directDepositAddressIsSetUp,
   directDepositInformation,
-  directDepositIsSetUp as directDepositIsSetUpSelector,
+  directDepositIsBlocked,
+  directDepositIsSetUp,
 } from '../selectors';
 
 const AdditionalInfos = props => (
@@ -62,7 +64,7 @@ const AdditionalInfos = props => (
           href="https://www.ebenefits.va.gov/ebenefits/about/feature?feature=direct-deposit-and-contact-information"
           onClick={() =>
             recordEvent({
-              event: 'ebenefits-navigation',
+              event: 'nav-ebenefits-click',
             })
           }
         >
@@ -106,7 +108,7 @@ const recordProfileNavEvent = (customProps = {}) => {
 class PaymentInformation extends React.Component {
   static propTypes = {
     isLoading: PropTypes.bool.isRequired,
-    isEligible: PropTypes.bool.isRequired,
+    isEvssAvailable: PropTypes.bool.isRequired,
     multifactorEnabled: PropTypes.bool.isRequired,
     fetchPaymentInformation: PropTypes.func.isRequired,
     editModalToggled: PropTypes.func.isRequired,
@@ -128,13 +130,13 @@ class PaymentInformation extends React.Component {
   };
 
   componentDidMount() {
-    if (this.props.isEligible && this.props.multifactorEnabled) {
+    if (this.props.isEvssAvailable && this.props.multifactorEnabled) {
       this.props.fetchPaymentInformation();
     }
   }
 
-  handleDirectDepositUpdateSubmit = data => {
-    this.props.savePaymentInformation(data);
+  handleDirectDepositUpdateSubmit = (data, isEnrollingInDirectDeposit) => {
+    this.props.savePaymentInformation(data, isEnrollingInDirectDeposit);
   };
 
   handleLinkClick = (linkType, gaProfileSection) => {
@@ -148,21 +150,26 @@ class PaymentInformation extends React.Component {
     });
   };
 
+  renderSetupButton(label, gaProfileSection) {
+    return (
+      <button
+        className="va-button-link"
+        onClick={() => this.handleLinkClick('add', gaProfileSection)}
+      >{`Please add your ${label}`}</button>
+    );
+  }
+
   render() {
     const {
-      directDepositIsSetUp,
-      isEligible,
+      isDirectDepositSetUp,
       isLoading,
       multifactorEnabled,
       paymentInformation,
       paymentAccount,
+      shouldShowDirectDeposit,
     } = this.props;
 
     let content = null;
-
-    if (!isEligible) {
-      return content;
-    }
 
     if (isLoading) {
       return <LoadingIndicator message="Loading payment information..." />;
@@ -170,53 +177,74 @@ class PaymentInformation extends React.Component {
 
     if (!multifactorEnabled) {
       content = <PaymentInformation2FARequired />;
-    } else if (paymentInformation.error) {
+    } else if (paymentInformation?.error) {
       content = <LoadFail information="payment" />;
-    } else if (!directDepositIsSetUp) {
-      return null;
+    } else if (!shouldShowDirectDeposit) {
+      return content;
     } else {
       content = (
         <>
           <div className="vet360-profile-field">
             <ProfileFieldHeading
-              onEditClick={() => this.handleLinkClick('edit', 'bank-name')}
+              onEditClick={
+                isDirectDepositSetUp &&
+                (() => this.handleLinkClick('edit', 'bank-name'))
+              }
             >
               Bank name
             </ProfileFieldHeading>
-            {paymentAccount.financialInstitutionName}
+            {isDirectDepositSetUp
+              ? paymentAccount.financialInstitutionName
+              : this.renderSetupButton('bank name', 'bank-name')}
           </div>
           <div className="vet360-profile-field">
             <ProfileFieldHeading
-              onEditClick={() => this.handleLinkClick('edit', 'account-number')}
+              onEditClick={
+                isDirectDepositSetUp &&
+                (() => this.handleLinkClick('edit', 'account-number'))
+              }
             >
               Account number
             </ProfileFieldHeading>
-            {paymentAccount.accountNumber}
+            {isDirectDepositSetUp
+              ? paymentAccount.accountNumber
+              : this.renderSetupButton('account number', 'account-number')}
           </div>
           <div className="vet360-profile-field">
             <ProfileFieldHeading
-              onEditClick={() => this.handleLinkClick('edit', 'account-type')}
+              onEditClick={
+                isDirectDepositSetUp &&
+                (() => this.handleLinkClick('edit', 'account-type'))
+              }
             >
               Account type
             </ProfileFieldHeading>
-            {paymentAccount.accountType}
+            {isDirectDepositSetUp
+              ? paymentAccount.accountType
+              : this.renderSetupButton(
+                  'account type (checking or savings)',
+                  'account-type',
+                )}
           </div>
-          <p>
-            <strong>Note:</strong> If you think you’ve been the victim of bank
-            fraud, please call us at{' '}
-            <a href="tel:1-800-827-1000" className="no-wrap">
-              800-827-1000
-            </a>{' '}
-            (TTY: <span className="no-wrap">800-829-4833</span>
-            ). We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m.
-          </p>
+          {isDirectDepositSetUp && (
+            <p>
+              <strong>Note:</strong> If you think you’ve been the victim of bank
+              fraud, please call us at{' '}
+              <a href="tel:1-800-827-1000" className="no-wrap">
+                800-827-1000
+              </a>{' '}
+              (TTY: <span className="no-wrap">800-829-4833</span>
+              ). We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.
+            </p>
+          )}
 
           <PaymentInformationEditModal
             onClose={this.props.editModalToggled}
-            onSubmit={this.handleDirectDepositUpdateSubmit}
+            onSubmit={data =>
+              this.handleDirectDepositUpdateSubmit(data, !isDirectDepositSetUp)
+            }
             isEditing={this.props.paymentInformationUiState.isEditing}
             isSaving={this.props.paymentInformationUiState.isSaving}
-            fields={this.props.paymentInformationUiState.editModalForm}
             editModalFieldChanged={this.props.editModalFieldChanged}
             responseError={this.props.paymentInformationUiState.responseError}
           />
@@ -226,7 +254,7 @@ class PaymentInformation extends React.Component {
 
     return (
       <>
-        <h2 className="va-profile-heading">
+        <h2 className="va-profile-heading" tabIndex="-1">
           Direct deposit information for disability compensation and pension
           benefits
         </h2>
@@ -243,22 +271,34 @@ class PaymentInformation extends React.Component {
   }
 }
 
-const isEvssAvailable = createIsServiceAvailableSelector(
+const isEvssAvailableSelector = createIsServiceAvailableSelector(
   backendServices.EVSS_CLAIMS,
 );
 
-const mapStateToProps = state => ({
-  directDepositIsSetUp: directDepositIsSetUpSelector(state),
-  multifactorEnabled: isMultifactorEnabled(state),
-  isEligible: isEvssAvailable(state),
-  isLoading:
-    isEvssAvailable(state) &&
-    isMultifactorEnabled(state) &&
-    !directDepositInformation(state),
-  paymentAccount: directDepositAccountInformation(state),
-  paymentInformation: directDepositInformation(state),
-  paymentInformationUiState: state.vaProfile.paymentInformationUiState,
-});
+const mapStateToProps = state => {
+  const isDirectDepositSetUp = directDepositIsSetUp(state);
+  const isDirectDepositBlocked = directDepositIsBlocked(state);
+  const isEvssAvailable = isEvssAvailableSelector(state);
+  const isEligibleToSignUp = directDepositAddressIsSetUp(state);
+
+  return {
+    isDirectDepositSetUp,
+    isEvssAvailable,
+    isEligibleToSignUp,
+    isLoading:
+      isEvssAvailable &&
+      isMultifactorEnabled(state) &&
+      !directDepositInformation(state),
+    multifactorEnabled: isMultifactorEnabled(state),
+    paymentAccount: directDepositAccountInformation(state),
+    paymentInformation: directDepositInformation(state),
+    paymentInformationUiState: state.vaProfile.paymentInformationUiState,
+    shouldShowDirectDeposit:
+      isEvssAvailable &&
+      !isDirectDepositBlocked &&
+      (isDirectDepositSetUp || isEligibleToSignUp),
+  };
+};
 
 const mapDispatchToProps = {
   fetchPaymentInformation,

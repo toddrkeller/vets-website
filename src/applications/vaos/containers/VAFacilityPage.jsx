@@ -2,10 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import LoadingIndicator from '@department-of-veterans-affairs/formation-react/LoadingIndicator';
+import AlertBox from '@department-of-veterans-affairs/formation-react/AlertBox';
 import SchemaForm from 'platform/forms-system/src/js/components/SchemaForm';
 import FormButtons from '../components/FormButtons';
 import EligibilityCheckMessage from '../components/EligibilityCheckMessage';
 import SingleFacilityEligibilityCheckMessage from '../components/SingleFacilityEligibilityCheckMessage';
+import ErrorMessage from '../components/ErrorMessage';
 import { scrollAndFocus } from '../utils/scrollAndFocus';
 
 import {
@@ -22,9 +24,9 @@ import VAFacilityInfoMessage from '../components/VAFacilityInfoMessage';
 
 const initialSchema = {
   type: 'object',
-  required: ['vaSystem', 'vaFacility'],
+  required: ['vaParent', 'vaFacility'],
   properties: {
-    vaSystem: {
+    vaParent: {
       type: 'string',
       enum: [],
     },
@@ -36,26 +38,29 @@ const initialSchema = {
 };
 
 const uiSchema = {
-  vaSystem: {
+  vaParent: {
     'ui:widget': 'radio',
     'ui:title':
-      'You are registered at the following VA health systems. Select where you would like to have your appointment',
+      'You’re registered at the following VA medical centers. Please let us know where you would like to have your appointment.',
   },
   vaFacility: {
     'ui:title':
-      'Appointments are available at the following locations. Some types of care are only available at one location. Select your preferred location',
+      'Appointments are available at the following locations. Some types of care are only available at certain locations. Please choose your preferred location.',
     'ui:widget': 'radio',
     'ui:validations': [
       (errors, vaFacility, data) => {
-        if (vaFacility && !vaFacility.startsWith(data.vaSystem)) {
+        if (
+          vaFacility &&
+          !vaFacility.startsWith(data.vaParent.substring(0, 3))
+        ) {
           errors.addError(
-            'Please choose a facility that is in the selected VA health systems',
+            'Please choose a facility that is in the selected VA health system',
           );
         }
       },
     ],
     'ui:options': {
-      hideIf: data => !data.vaSystem,
+      hideIf: data => !data.vaParent,
     },
   },
   vaFacilityLoading: {
@@ -66,7 +71,7 @@ const uiSchema = {
   },
   vaFacilityMessage: {
     'ui:field': ({ formContext }) => (
-      <NoValidVAFacilities systemId={formContext.vaSystem} />
+      <NoValidVAFacilities formContext={formContext} />
     ),
     'ui:options': {
       hideLabelText: true,
@@ -75,17 +80,14 @@ const uiSchema = {
 };
 
 const pageKey = 'vaFacility';
-
-const title = (
-  <h1 className="vads-u-font-size--h2">
-    Choose a VA location for your appointment
-  </h1>
-);
+const pageTitle = 'Choose a VA location for your appointment';
+const title = <h1 className="vads-u-font-size--h2">{pageTitle}</h1>;
 
 export class VAFacilityPage extends React.Component {
   componentDidMount() {
-    scrollAndFocus();
     this.props.openFacilityPage(pageKey, uiSchema, initialSchema);
+    document.title = `${pageTitle} | Veterans Affairs`;
+    scrollAndFocus();
   }
 
   goBack = () => {
@@ -101,25 +103,40 @@ export class VAFacilityPage extends React.Component {
       schema,
       data,
       pageChangeInProgress,
-      loadingSystems,
+      loadingParentFacilities,
       loadingFacilities,
       loadingEligibility,
       facility,
       singleValidVALocation,
-      noValidVASystems,
+      noValidVAParentFacilities,
       noValidVAFacilities,
       eligibility,
       canScheduleAtChosenFacility,
+      typeOfCare,
+      facilityDetailsStatus,
+      parentDetails,
+      hasDataFetchingError,
+      hasEligibilityError,
+      parentOfChosenFacility,
     } = this.props;
 
     const notEligibleAtChosenFacility =
       data.vaFacility &&
-      data.vaFacility.startsWith(data.vaSystem) &&
+      parentOfChosenFacility === data.vaParent &&
       !loadingEligibility &&
       eligibility &&
       !canScheduleAtChosenFacility;
 
-    if (loadingSystems) {
+    if (hasDataFetchingError) {
+      return (
+        <div>
+          {title}
+          <ErrorMessage />
+        </div>
+      );
+    }
+
+    if (loadingParentFacilities) {
       return (
         <div>
           {title}
@@ -155,6 +172,7 @@ export class VAFacilityPage extends React.Component {
           <div className="vads-u-margin-top--2">
             <FormButtons
               onBack={this.goBack}
+              onSubmit={this.goForward}
               pageChangeInProgress={pageChangeInProgress}
             />
           </div>
@@ -162,7 +180,7 @@ export class VAFacilityPage extends React.Component {
       );
     }
 
-    if (noValidVASystems) {
+    if (noValidVAParentFacilities) {
       return (
         <div>
           {title}
@@ -179,7 +197,10 @@ export class VAFacilityPage extends React.Component {
     }
 
     const disableSubmitButton =
-      loadingFacilities || noValidVAFacilities || notEligibleAtChosenFacility;
+      loadingFacilities ||
+      noValidVAFacilities ||
+      notEligibleAtChosenFacility ||
+      hasEligibilityError;
 
     return (
       <div>
@@ -193,7 +214,12 @@ export class VAFacilityPage extends React.Component {
           onChange={newData =>
             this.props.updateFacilityPageData(pageKey, uiSchema, newData)
           }
-          formContext={{ vaSystem: data.vaSystem }}
+          formContext={{
+            parentId: data.vaParent,
+            typeOfCare,
+            facilityDetailsStatus,
+            parentDetails,
+          }}
           data={data}
         >
           {notEligibleAtChosenFacility && (
@@ -201,11 +227,22 @@ export class VAFacilityPage extends React.Component {
               <EligibilityCheckMessage eligibility={eligibility} />
             </div>
           )}
+          {hasEligibilityError && <ErrorMessage />}
           <FormButtons
             onBack={this.goBack}
+            continueLabel=""
             disabled={disableSubmitButton}
             pageChangeInProgress={loadingEligibility || pageChangeInProgress}
           />
+          {(loadingEligibility || pageChangeInProgress) && (
+            <div aria-atomic="true" aria-live="assertive">
+              <AlertBox isVisible status="info" headline="Please wait">
+                We’re checking if we can create an appointment for you at this
+                facility. This may take up to a minute. Thank you for your
+                patience.
+              </AlertBox>
+            </div>
+          )}
         </SchemaForm>
       </div>
     );
@@ -216,10 +253,10 @@ VAFacilityPage.propTypes = {
   schema: PropTypes.object,
   data: PropTypes.object.isRequired,
   facility: PropTypes.object,
-  loadingSystems: PropTypes.bool,
+  loadingParentFacilities: PropTypes.bool,
   loadingFacilities: PropTypes.bool,
   singleValidVALocation: PropTypes.bool,
-  noValidVASystems: PropTypes.bool,
+  noValidVAParentFacilities: PropTypes.bool,
   noValidVAFacilities: PropTypes.bool,
 };
 

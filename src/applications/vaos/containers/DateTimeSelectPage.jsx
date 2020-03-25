@@ -1,69 +1,108 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import SchemaForm from 'platform/forms-system/src/js/components/SchemaForm';
-import LoadingIndicator from '@department-of-veterans-affairs/formation-react/LoadingIndicator';
+import moment from 'moment';
+import AlertBox from '@department-of-veterans-affairs/formation-react/AlertBox';
 
 import {
-  openSelectAppointmentPage,
-  updateFormData,
+  getAppointmentSlots,
+  onCalendarChange,
   routeToNextAppointmentPage,
-  startRequestAppointmentFlow,
   routeToPreviousAppointmentPage,
+  startRequestAppointmentFlow,
+  requestAppointmentDateChoice,
 } from '../actions/newAppointment.js';
-import { focusElement } from 'platform/utilities/ui';
+import { scrollAndFocus } from '../utils/scrollAndFocus';
 import FormButtons from '../components/FormButtons';
 import { getDateTimeSelect } from '../utils/selectors';
-import DateTimeSelectField from '../components/DateTimeSelectField';
+import CalendarWidget from '../components/calendar/CalendarWidget';
 import WaitTimeAlert from '../components/WaitTimeAlert';
+import { FETCH_STATUS } from '../utils/constants';
+import { getRealFacilityId } from '../utils/appointment';
 
 const pageKey = 'selectDateTime';
+const pageTitle = 'Tell us the date and time you’d like your appointment';
 
-const initialSchema = {
-  type: 'object',
-  required: ['calendarData'],
-  properties: {
-    calendarData: {
-      type: 'object',
-      properties: {
-        currentlySelectedDate: {
-          type: 'string',
-        },
-        currentRowIndex: {
-          type: 'number',
-        },
-        selectedDates: {
-          type: 'array',
-          items: {
-            type: 'object',
-            properties: {
-              date: {
-                type: 'string',
-              },
-              datetime: {
-                type: 'string',
-              },
-            },
-          },
-        },
-      },
-    },
-  },
-};
+const missingDateError = 'Please select a preferred date for your appointment';
 
-const uiSchema = {
-  calendarData: {
-    'ui:field': DateTimeSelectField,
-    'ui:title': 'What date and time would you like to make an appointment?',
-    'ui:options': {
-      hideLabelText: true,
-    },
-  },
-};
+export function getOptionsByDate(selectedDate, availableSlots = []) {
+  const options = availableSlots.reduce((acc, slot) => {
+    if (slot.date === selectedDate) {
+      const time = moment(slot.datetime);
+      const meridiem = time.format('A');
+      const screenReaderMeridiem = meridiem.replace(/\./g, '').toUpperCase();
+      acc.push({
+        value: slot.datetime,
+        label: (
+          <>
+            {time.format('h:mm')} <span aria-hidden="true">{meridiem}</span>{' '}
+            <span className="sr-only">{screenReaderMeridiem}</span>
+          </>
+        ),
+      });
+    }
+    return acc;
+  }, []);
+
+  return options;
+}
+
+function ErrorMessage({ facilityId, startRequestFlow }) {
+  return (
+    <div aria-atomic="true" aria-live="assertive">
+      <AlertBox
+        status="error"
+        headline="We’ve run into a problem when trying to find available appointment times"
+      >
+        To schedule this appointment, you can{' '}
+        <button onClick={startRequestFlow} className="va-button-link">
+          submit a request for a VA appointment
+        </button>{' '}
+        or{' '}
+        <a
+          href={`/find-locations/facility/vha_${getRealFacilityId(facilityId)}`}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          call your local VA medical center
+        </a>
+        .
+      </AlertBox>
+    </div>
+  );
+}
 
 export class DateTimeSelectPage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      submitted: false,
+      validationError: null,
+    };
+  }
+
   componentDidMount() {
-    focusElement('h1.vads-u-font-size--h2');
-    this.props.openSelectAppointmentPage(pageKey, uiSchema, initialSchema);
+    const { preferredDate } = this.props;
+    this.props.getAppointmentSlots(
+      moment(preferredDate)
+        .startOf('month')
+        .format('YYYY-MM-DD'),
+      moment(preferredDate)
+        .add(1, 'months')
+        .endOf('month')
+        .format('YYYY-MM-DD'),
+    );
+    document.title = `${pageTitle} | Veterans Affairs`;
+    scrollAndFocus();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      this.state.validationError &&
+      !prevState.submitted &&
+      this.state.submitted
+    ) {
+      scrollAndFocus('.usa-input-error-message');
+    }
   }
 
   goBack = () => {
@@ -71,71 +110,119 @@ export class DateTimeSelectPage extends React.Component {
   };
 
   goForward = () => {
-    if (this.props.data.calendarData?.selectedDates?.length) {
-      this.props.routeToNextAppointmentPage(this.props.router, pageKey);
+    const { data, router } = this.props;
+    const { calendarData } = data || {};
+    this.validate(calendarData);
+    if (this.userSelectedSlot(calendarData)) {
+      this.props.routeToNextAppointmentPage(router, pageKey);
+    } else if (this.state.submitted) {
+      scrollAndFocus('.usa-input-error-message');
+    } else {
+      this.setState({ submitted: true });
     }
   };
 
+  startRequestFlow = () => {
+    this.props.requestAppointmentDateChoice(this.props.router);
+  };
+
+  validate = data => {
+    if (this.userSelectedSlot(data)) {
+      this.setState({ validationError: null });
+    } else {
+      this.setState({
+        validationError: missingDateError,
+      });
+    }
+  };
+
+  userSelectedSlot(calendarData) {
+    return calendarData?.selectedDates?.length > 0;
+  }
+
   render() {
     const {
-      schema,
-      data,
-      pageChangeInProgress,
-      availableSlots,
+      appointmentSlotsStatus,
       availableDates,
-      loadingAppointmentSlots,
+      availableSlots,
+      data,
+      eligibleForRequests,
+      facilityId,
+      pageChangeInProgress,
+      preferredDate,
       timezone,
       typeOfCareId,
-      preferredDate,
-      eligibleForRequests,
     } = this.props;
 
-    const title = (
-      <h1 className="vads-u-font-size--h2">
-        What date and time would you like to make an appointment?
-      </h1>
-    );
-
-    if (loadingAppointmentSlots) {
-      return (
-        <div>
-          {title}
-          <LoadingIndicator message="Finding appointment availability..." />
-        </div>
-      );
-    }
+    const calendarData = data?.calendarData || {};
+    const { currentlySelectedDate, selectedDates } = calendarData;
+    const startMonth = preferredDate
+      ? moment(preferredDate).format('YYYY-MM')
+      : null;
 
     return (
       <div>
-        {title}
-        <WaitTimeAlert
-          preferredDate={preferredDate}
-          nextAvailableApptDate={availableDates?.[0]}
-          typeOfCareId={typeOfCareId}
-          eligibleForRequests={eligibleForRequests}
-          onClickRequest={this.props.startRequestAppointmentFlow}
-        />
-        <p>
-          Please select a desired date and time for your appointment.
-          {timezone && ` Appointment times are displayed in ${timezone}.`}
-        </p>
-        <SchemaForm
-          name="Schedule appointment"
-          title="Schedule appointment"
-          schema={schema || initialSchema}
-          uiSchema={uiSchema}
-          onSubmit={this.goForward}
-          onChange={newData => {
-            this.props.updateFormData(pageKey, uiSchema, newData);
-          }}
-          formContext={{ availableSlots, availableDates }}
-          data={data}
-        >
-          <FormButtons
-            onBack={this.goBack}
-            pageChangeInProgress={pageChangeInProgress}
+        <h1 className="vads-u-font-size--h2">{pageTitle}</h1>
+        {appointmentSlotsStatus !== FETCH_STATUS.loading && (
+          <WaitTimeAlert
+            eligibleForRequests={eligibleForRequests}
+            facilityId={facilityId}
+            nextAvailableApptDate={availableSlots?.[0]?.datetime}
+            onClickRequest={this.props.startRequestAppointmentFlow}
+            preferredDate={preferredDate}
+            timezone={timezone}
+            typeOfCareId={typeOfCareId}
           />
-        </SchemaForm>
+        )}
+        {appointmentSlotsStatus !== FETCH_STATUS.failed && (
+          <p>
+            Please select a desired date and time for your appointment.
+            {timezone && ` Appointment times are displayed in ${timezone}.`}
+          </p>
+        )}
+        <CalendarWidget
+          monthsToShowAtOnce={2}
+          maxSelections={1}
+          availableDates={availableDates}
+          currentlySelectedDate={currentlySelectedDate}
+          selectedDates={selectedDates}
+          additionalOptions={{
+            fieldName: 'datetime',
+            required: true,
+            maxSelections: 1,
+            getOptionsByDate: selectedDate =>
+              getOptionsByDate(selectedDate, availableSlots),
+          }}
+          loadingStatus={appointmentSlotsStatus}
+          loadingErrorMessage={
+            <ErrorMessage
+              facilityId={facilityId}
+              startRequestFlow={this.startRequestFlow}
+            />
+          }
+          onChange={newData => {
+            this.validate(newData);
+            this.props.onCalendarChange(newData);
+          }}
+          onClickNext={this.props.getAppointmentSlots}
+          onClickPrev={this.props.getAppointmentSlots}
+          minDate={moment()
+            .add(1, 'days')
+            .format('YYYY-MM-DD')}
+          maxDate={moment()
+            .add(395, 'days')
+            .format('YYYY-MM-DD')}
+          startMonth={startMonth}
+          validationError={
+            this.state.submitted ? this.state.validationError : null
+          }
+        />
+        <FormButtons
+          onBack={this.goBack}
+          onSubmit={this.goForward}
+          disabled={appointmentSlotsStatus === FETCH_STATUS.failed}
+          pageChangeInProgress={pageChangeInProgress}
+        />
       </div>
     );
   }
@@ -146,11 +233,12 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  openSelectAppointmentPage,
-  updateFormData,
-  startRequestAppointmentFlow,
+  getAppointmentSlots,
+  onCalendarChange,
   routeToNextAppointmentPage,
   routeToPreviousAppointmentPage,
+  startRequestAppointmentFlow,
+  requestAppointmentDateChoice,
 };
 
 export default connect(

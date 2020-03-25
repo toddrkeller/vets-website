@@ -3,41 +3,54 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import { mount } from 'enzyme';
 
-import {
-  resetFetch,
-  mockFetch,
-  setFetchJSONResponse,
-} from 'platform/testing/unit/helpers';
+import { mockFetch, setFetchJSONResponse } from 'platform/testing/unit/helpers';
 
 import { selectRadio } from 'platform/testing/unit/schemaform-utils.jsx';
 import { TypeOfCarePage } from '../../containers/TypeOfCarePage';
+import { TYPES_OF_CARE } from '../../utils/constants';
 
+const initialSchema = {
+  type: 'object',
+  required: ['typeOfCareId'],
+  properties: {
+    typeOfCareId: {
+      type: 'string',
+      enum: TYPES_OF_CARE.map(care => care.id || care.ccId),
+      enumNames: TYPES_OF_CARE.map(care => care.label || care.name),
+    },
+  },
+};
 describe('VAOS <TypeOfCarePage>', () => {
   it('should render', () => {
-    const openFormPage = sinon.spy();
+    const openTypeOfCarePage = sinon.spy();
     const updateFormData = sinon.spy();
 
     const form = mount(
       <TypeOfCarePage
-        openFormPage={openFormPage}
+        openTypeOfCarePage={openTypeOfCarePage}
         updateFormData={updateFormData}
+        schema={initialSchema}
         data={{}}
       />,
     );
 
-    expect(form.find('fieldset').length).to.equal(3);
-    expect(form.find('input').length).to.equal(12);
+    expect(form.find('fieldset').length).to.equal(1);
     form.unmount();
   });
 
   it('should not submit empty form', () => {
-    const openFormPage = sinon.spy();
+    const openTypeOfCarePage = sinon.spy();
     const router = {
       push: sinon.spy(),
     };
 
     const form = mount(
-      <TypeOfCarePage openFormPage={openFormPage} router={router} data={{}} />,
+      <TypeOfCarePage
+        openTypeOfCarePage={openTypeOfCarePage}
+        schema={initialSchema}
+        router={router}
+        data={{}}
+      />,
     );
 
     form.find('form').simulate('submit');
@@ -50,7 +63,7 @@ describe('VAOS <TypeOfCarePage>', () => {
   it('should call updateFormData after change', () => {
     mockFetch();
     setFetchJSONResponse(global.fetch, { data: [] });
-    const openFormPage = sinon.spy();
+    const openTypeOfCarePage = sinon.spy();
     const updateFormData = sinon.spy();
     const router = {
       push: sinon.spy(),
@@ -58,8 +71,9 @@ describe('VAOS <TypeOfCarePage>', () => {
 
     const form = mount(
       <TypeOfCarePage
-        openFormPage={openFormPage}
+        openTypeOfCarePage={openTypeOfCarePage}
         updateFormData={updateFormData}
+        schema={initialSchema}
         router={router}
         data={{}}
       />,
@@ -69,16 +83,17 @@ describe('VAOS <TypeOfCarePage>', () => {
 
     expect(updateFormData.firstCall.args[2].typeOfCareId).to.equal('323');
     form.unmount();
-    resetFetch();
+    global.fetch.resetHistory();
   });
 
   it('should submit with valid data', () => {
-    const openFormPage = sinon.spy();
+    const openTypeOfCarePage = sinon.spy();
     const routeToNextAppointmentPage = sinon.spy();
 
     const form = mount(
       <TypeOfCarePage
-        openFormPage={openFormPage}
+        openTypeOfCarePage={openTypeOfCarePage}
+        schema={initialSchema}
         routeToNextAppointmentPage={routeToNextAppointmentPage}
         data={{ typeOfCareId: '323' }}
       />,
@@ -88,6 +103,24 @@ describe('VAOS <TypeOfCarePage>', () => {
 
     expect(form.find('.usa-input-error').length).to.equal(0);
     expect(routeToNextAppointmentPage.called).to.be.true;
+    form.unmount();
+  });
+
+  it('document title should match h1 text', () => {
+    const openTypeOfCarePage = sinon.spy();
+    const updateFormData = sinon.spy();
+    const pageTitle = 'Choose the type of care you need';
+
+    const form = mount(
+      <TypeOfCarePage
+        openTypeOfCarePage={openTypeOfCarePage}
+        schema={initialSchema}
+        updateFormData={updateFormData}
+        data={{}}
+      />,
+    );
+    expect(form.find('h1').text()).to.equal(pageTitle);
+    expect(document.title).contain(pageTitle);
     form.unmount();
   });
 });

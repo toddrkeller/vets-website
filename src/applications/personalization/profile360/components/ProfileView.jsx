@@ -9,12 +9,13 @@ import DowntimeNotification, {
 import DowntimeApproaching from 'platform/monitoring/DowntimeNotification/components/DowntimeApproaching';
 import recordEvent from 'platform/monitoring/record-event';
 
-import Vet360TransactionReporter from 'vet360/containers/TransactionReporter';
+import Vet360TransactionReporter from 'vet360/containers/Vet360TransactionReporter';
 
 import Hero from './Hero';
 import ContactInformation from './ContactInformation';
 import PersonalInformation from './PersonalInformation';
 import MilitaryInformation from './MilitaryInformation';
+import PaymentInformationBlocked from './PaymentInformationBlocked';
 import PaymentInformation from '../containers/PaymentInformation';
 import PaymentInformationTOCItem from '../containers/PaymentInformationTOCItem';
 
@@ -22,8 +23,9 @@ import IdentityVerification from './IdentityVerification';
 import MVIError from './MVIError';
 
 import {
-  directDepositIsSetUp as directDepositIsSetUpSelector,
-  profileShowDirectDeposit,
+  directDepositIsSetUp,
+  directDepositAddressIsSetUp,
+  directDepositIsBlocked as directDepositIsBlockedSelector,
   profileShowReceiveTextNotifications,
 } from 'applications/personalization/profile360/selectors';
 
@@ -89,8 +91,8 @@ class ProfileView extends React.Component {
       fetchPersonalInformation,
       profile: { hero, personalInformation, militaryInformation },
       downtimeData: { appTitle },
-      directDepositIsSetUp,
-      showDirectDepositFeature,
+      directDepositIsBlocked,
+      showDirectDepositLink,
       showReceiveTextNotifications,
     } = this.props;
 
@@ -111,6 +113,7 @@ class ProfileView extends React.Component {
           >
             <div>
               <Vet360TransactionReporter />
+              {directDepositIsBlocked && <PaymentInformationBlocked />}
               <Hero
                 fetchHero={fetchHero}
                 hero={hero}
@@ -118,18 +121,16 @@ class ProfileView extends React.Component {
               />
               <ProfileTOC
                 militaryInformation={militaryInformation}
-                showDirectDepositLink={directDepositIsSetUp}
+                showDirectDepositLink={showDirectDepositLink}
               />
               <div id="contact-information" />
               <ContactInformation
                 showReceiveTextNotifications={showReceiveTextNotifications}
               />
-              {showDirectDepositFeature && (
-                <>
-                  <div id="direct-deposit" />
-                  <PaymentInformation />
-                </>
-              )}
+              <>
+                <div id="direct-deposit" />
+                <PaymentInformation />
+              </>
               <div id="personal-information" />
               <PersonalInformation
                 fetchPersonalInformation={fetchPersonalInformation}
@@ -192,9 +193,12 @@ class ProfileView extends React.Component {
 }
 
 function mapStateToProps(state) {
+  const directDepositIsBlocked = directDepositIsBlockedSelector(state);
   return {
-    directDepositIsSetUp: directDepositIsSetUpSelector(state),
-    showDirectDepositFeature: profileShowDirectDeposit(state),
+    directDepositIsBlocked,
+    showDirectDepositLink:
+      !directDepositIsBlocked &&
+      (directDepositIsSetUp(state) || directDepositAddressIsSetUp(state)),
     showReceiveTextNotifications: profileShowReceiveTextNotifications(state),
   };
 }

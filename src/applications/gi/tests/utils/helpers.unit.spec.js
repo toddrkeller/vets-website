@@ -7,7 +7,8 @@ import {
   addAllOption,
   isCountryUSA,
   isCountryInternational,
-  snakeCaseKeys,
+  rubyifyKeys,
+  sortOptionsByStateName,
 } from '../../utils/helpers';
 
 describe('GIBCT helpers:', () => {
@@ -29,9 +30,6 @@ describe('GIBCT helpers:', () => {
   describe('isVetTecSelected', () => {
     it('should recognize VET TEC', () => {
       expect(isVetTecSelected({ category: 'vettec' })).to.be.true;
-    });
-    it('should recognize vetTecProvider flag', () => {
-      expect(isVetTecSelected({ vetTecProvider: true })).to.be.true;
     });
   });
 
@@ -67,13 +65,32 @@ describe('GIBCT helpers:', () => {
     });
   });
 
-  describe('snakeCaseKeys', () => {
+  describe('rubyifyKeys', () => {
     it('should properly snake-case keys', () => {
       const data = {
         testKey: '',
       };
+      expect(rubyifyKeys(data)).to.have.key('test_key');
+    });
+  });
 
-      expect(snakeCaseKeys(data)).to.have.key('test_key');
+  describe('sortOptionsByStateName', () => {
+    it('should sort an array of objects by label', () => {
+      const data = [
+        { value: 'AK', label: 'Alaska' },
+        { value: 'AL', label: 'Alabama' },
+        { value: 'AR', label: 'Arkansas' },
+        { value: 'AZ', label: 'Arizona' },
+        { value: 'CA', label: 'California' },
+      ];
+      const sortedData = [
+        { value: 'AL', label: 'Alabama' },
+        { value: 'AK', label: 'Alaska' },
+        { value: 'AZ', label: 'Arizona' },
+        { value: 'AR', label: 'Arkansas' },
+        { value: 'CA', label: 'California' },
+      ];
+      expect(data.sort(sortOptionsByStateName)).to.deep.equal(sortedData);
     });
   });
 });

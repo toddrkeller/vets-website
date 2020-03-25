@@ -9,6 +9,7 @@ import SchoolLocations from './SchoolLocations';
 import Calculator from './Calculator';
 import CautionaryInformation from './CautionaryInformation';
 import AdditionalInformation from './AdditionalInformation';
+import ContactInformation from './ContactInformation';
 
 export class InstitutionProfile extends React.Component {
   static propTypes = {
@@ -69,6 +70,9 @@ export class InstitutionProfile extends React.Component {
                 institution={profile.attributes}
                 onShowModal={showModal}
               />
+            </AccordionItem>
+            <AccordionItem button="Contact details">
+              <ContactInformation institution={profile.attributes} />
             </AccordionItem>
             <AccordionItem button="Additional information">
               <AdditionalInformation

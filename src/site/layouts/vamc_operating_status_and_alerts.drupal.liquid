@@ -1,3 +1,8 @@
+<style>
+    .facility-title-width {
+        max-width: 90%;
+    }
+</style>
 {% include "src/site/includes/header.html" with drupalTags = true %}
 {% include "src/site/includes/alerts.drupal.liquid" %}
 {% include "src/site/includes/preview-edit.drupal.liquid" %}
@@ -12,8 +17,7 @@
                 <article class="usa-content">
                     <h1 class="vads-u-margin-bottom--2">Operating status</h1>
                     <div class="va-introtext vads-u-margin-bottom--0">
-                        Check the latest operating status of services and
-                        facility hours for {{facilitySidebar.name}}
+                        {{facilitySidebar.name}} facility operating statuses and emergency information.
                     </div>
                     {% if fieldOffice.entity.fieldLinkFacilityEmergList.url.path %}
                     <div class="usa-grid usa-grid-full vads-u-margin-y--1p5">
@@ -32,7 +36,7 @@
                             id="on-this-page">On this
                             page</h2>
                         <ul class="usa-unstyled-list">
-                            {% if fieldBannerAlert.0.entity %}
+                            {% if fieldBannerAlert.0.entity.status != false and fieldBannerAlert.0.entity.fieldSituationUpdates.0.entity %}
                             <li class="vads-u-margin-bottom--2">
                                 <a href="#situation-updates"
                                     onclick="recordEvent({ event: 'nav-jumplink-click' });"
@@ -66,11 +70,9 @@
                         </ul>
                     </section>
 
-                    {% if fieldBannerAlert.0.entity %}
+                    {% if fieldBannerAlert.0.entity.status != false and fieldBannerAlert.0.entity.fieldSituationUpdates.0.entity %}
                     {% include "src/site/components/situation_updates.drupal.liquid" with fieldBannerAlert %}
                     {% endif %}
-
-
 
                     {% if fieldFacilityOperatingStatus.0.entity %}
                     <section id="operating-statuses"
@@ -82,8 +84,8 @@
                             <div
                                 class="vads-l-row vads-u-border-top--1px vads-u-border-color--gray-light">
                                 <div
-                                    class="vads-l-col--6 vads-u-display--flex operating-status-title">
-                                    <a class="vads-u-font-weight--bold"
+                                    class="vads-l-col--6 vads-u-margin-y--3 vads-u-display--flex operating-status-title">
+                                    <a class="facility-title-width vads-u-font-weight--bold"
                                         href="{{status.entity.entityUrl.path}}">{{ status.entity.title }}</a>
                                 </div>
                                 <div class="vads-l-col--6">
@@ -97,7 +99,7 @@
                                         </span>
                                         {% elsif status.entity.fieldOperatingStatusFacility == 'normal' %}
                                         <span
-                                            class="operating-status normal-hours vads-u-margin-top--2 vads-u-display--block">
+                                            class="operating-status normal-hours vads-u-margin-top--1p5 vads-u-display--block">
                                             Normal services and hours
                                         </span>
                                         {% elsif status.entity.fieldOperatingStatusFacility == 'limited' %}

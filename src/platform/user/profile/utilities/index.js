@@ -4,7 +4,16 @@ import {
   setSentryLoginType,
   clearSentryLoginType,
 } from '../../authentication/utilities';
-import localStorage from '../../../utilities/storage/localStorage';
+import localStorage from 'platform/utilities/storage/localStorage';
+
+import { ssoKeepAliveSession } from 'platform/utilities/api/ssoHelpers';
+
+import {
+  ADDRESS_VALIDATION_TYPES,
+  BAD_UNIT_NUMBER,
+  MISSING_UNIT_NUMBER,
+  CONFIRMED,
+} from '../constants/addressValidationMessages';
 
 import {
   isVet360Configured,
@@ -99,6 +108,9 @@ export function mapRawUserDataToState(json) {
     userState.status = getErrorStatusDesc(errorStatus);
   } else {
     userState.status = vaProfile.status;
+    if (vaProfile.facilities) {
+      userState.facilities = vaProfile.facilities;
+    }
   }
 
   // This one is checking userState because there's no extra mapping and it's
@@ -119,11 +131,14 @@ export function mapRawUserDataToState(json) {
 // as a trigger to properly update any components that subscribe to it.
 export const hasSession = () => localStorage.getItem('hasSession');
 
+export const hasSessionSSO = () => localStorage.getItem('hasSessionSSO');
+
 export function setupProfileSession(userProfile) {
   const { firstName, signIn } = userProfile;
   const loginType = (signIn && signIn.serviceName) || null;
 
   localStorage.setItem('hasSession', true);
+  ssoKeepAliveSession();
 
   // Since localStorage coerces everything into String,
   // this avoids setting the first name to the string 'null'.
@@ -136,8 +151,102 @@ export function setupProfileSession(userProfile) {
 export function teardownProfileSession() {
   // Legacy keys (entryTime, userToken) can be removed
   // after session cookie is fully in place.
-  const sessionKeys = ['hasSession', 'userFirstName', 'sessionExpiration'];
+  const sessionKeys = [
+    'hasSession',
+    'userFirstName',
+    'sessionExpiration',
+    'hasSessionSSO',
+    'sessionExpirationSSO',
+  ];
   for (const key of sessionKeys) localStorage.removeItem(key);
   sessionStorage.removeItem('shouldRedirectExpiredSession');
   clearSentryLoginType();
 }
+
+export const getValidationMessageKey = (
+  suggestedAddresses,
+  validationKey,
+  addressValidationError,
+  confirmedSuggestions,
+) => {
+  const singleSuggestion = suggestedAddresses.length === 1;
+  const multipleSuggestions = suggestedAddresses.length > 1;
+  const containsBadUnitNumber =
+    suggestedAddresses.filter(
+      address =>
+        address.addressMetaData?.deliveryPointValidation === BAD_UNIT_NUMBER,
+    ).length > 0;
+
+  const containsMissingUnitNumber =
+    suggestedAddresses.filter(
+      address =>
+        address.addressMetaData?.deliveryPointValidation ===
+        MISSING_UNIT_NUMBER,
+    ).length > 0;
+
+  if (addressValidationError) {
+    return ADDRESS_VALIDATION_TYPES.VALIDATION_ERROR;
+  }
+
+  if (singleSuggestion && containsBadUnitNumber) {
+    return validationKey
+      ? ADDRESS_VALIDATION_TYPES.BAD_UNIT_OVERRIDE
+      : ADDRESS_VALIDATION_TYPES.BAD_UNIT;
+  }
+
+  if (singleSuggestion && containsMissingUnitNumber) {
+    return validationKey
+      ? ADDRESS_VALIDATION_TYPES.MISSING_UNIT_OVERRIDE
+      : ADDRESS_VALIDATION_TYPES.MISSING_UNIT;
+  }
+
+  if (
+    !confirmedSuggestions.length &&
+    singleSuggestion &&
+    !containsMissingUnitNumber &&
+    !containsBadUnitNumber
+  ) {
+    return validationKey
+      ? ADDRESS_VALIDATION_TYPES.SHOW_SUGGESTIONS_NO_CONFIRMED_OVERRIDE
+      : ADDRESS_VALIDATION_TYPES.SHOW_SUGGESTIONS_NO_CONFIRMED;
+  }
+
+  if (
+    confirmedSuggestions.length &&
+    singleSuggestion &&
+    !containsMissingUnitNumber &&
+    !containsBadUnitNumber
+  ) {
+    return validationKey
+      ? ADDRESS_VALIDATION_TYPES.SHOW_SUGGESTIONS_OVERRIDE
+      : ADDRESS_VALIDATION_TYPES.SHOW_SUGGESTIONS;
+  }
+
+  if (multipleSuggestions) {
+    return validationKey
+      ? ADDRESS_VALIDATION_TYPES.SHOW_SUGGESTIONS_OVERRIDE
+      : ADDRESS_VALIDATION_TYPES.SHOW_SUGGESTIONS;
+  }
+
+  return ADDRESS_VALIDATION_TYPES.SHOW_SUGGESTIONS; // defaulting here so the modal will show but not allow override
+};
+
+// Determines if we need to prompt the user to pick from a list of suggested
+// addresses and/or edit the address that they had entered. The only time the
+// address validation modal will _not_ be shown to the user is if the validation
+// API came back with one valid address suggestion that it is very confident is
+// the address the user entered.
+export const showAddressValidationModal = suggestedAddresses => {
+  // pull the addressMetaData prop off the first suggestedAddresses element
+  const [{ addressMetaData } = {}] = suggestedAddresses;
+
+  if (
+    suggestedAddresses.length === 1 &&
+    addressMetaData.confidenceScore > 90 &&
+    addressMetaData.deliveryPointValidation === CONFIRMED
+  ) {
+    return false;
+  }
+
+  return true;
+};

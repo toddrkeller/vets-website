@@ -6,7 +6,7 @@ const commandLineArgs = require('command-line-args');
 const path = require('path');
 const express = require('express');
 const proxy = require('express-http-proxy');
-const createPipieline = require('../src/site/stages/preview');
+const createPipeline = require('../src/site/stages/preview');
 
 const getDrupalClient = require('../src/site/stages/build/drupal/api');
 const {
@@ -35,6 +35,7 @@ const COMMAND_LINE_OPTIONS_DEFINITIONS = [
   { name: 'destination', type: String, defaultValue: null },
   { name: 'content-directory', type: String, defaultValue: defaultContentDir },
   { name: 'accessibility', type: Boolean, defaultValue: true },
+  { name: 'lint-plain-language', type: Boolean, defaultValue: false },
   {
     name: 'drupal-address',
     type: String,
@@ -84,6 +85,23 @@ if (process.env.SENTRY_DSN) {
   app.use(Raven.requestHandler());
 }
 
+/**
+ * Make the query params case-insensitive.
+ */
+app.use((req, res, next) => {
+  // eslint-disable-next-line fp/no-proxy
+  req.query = new Proxy(req.query, {
+    get: (target, name) =>
+      target[
+        Object.keys(target).find(
+          key => key.toLowerCase() === name.toLowerCase(),
+        )
+      ],
+  });
+
+  next();
+});
+
 // eslint-disable-next-line no-unused-vars
 app.get('/error', (req, res) => {
   throw new Error('fake error');
@@ -95,7 +113,7 @@ app.get('/health', (req, res) => {
 
 app.get('/preview', async (req, res, next) => {
   try {
-    const smith = await createPipieline({
+    const smith = await createPipeline({
       ...options,
       isPreviewServer: true,
       port: process.env.PORT || 3001,

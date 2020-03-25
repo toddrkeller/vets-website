@@ -1,14 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import classNames from 'classnames';
 import CalendarCell from './CalendarCell';
-import CalendarRadioOption from './CalendarRadioOption';
-import CalendarCheckboxOption from './CalendarCheckboxOption';
-import {
-  isDateInSelectedArray,
-  isDateOptionPairInSelectedArray,
-} from './../../utils/calendar';
+import { isDateInSelectedArray } from './../../utils/calendar';
 
 export default class CalendarRow extends Component {
   static propTypes = {
@@ -18,156 +12,85 @@ export default class CalendarRow extends Component {
     getSelectedDateOptions: PropTypes.func,
     handleSelectDate: PropTypes.func.isRequired,
     handleSelectOption: PropTypes.func,
-    optionsError: PropTypes.string,
+    maxDate: PropTypes.string,
+    maxSelections: PropTypes.number,
+    minDate: PropTypes.string,
     rowNumber: PropTypes.number.isRequired,
     selectedDates: PropTypes.array,
   };
 
   isCellDisabled = date => {
-    // If user provides an array of availableDates, disable dates that are not
-    // in the array.  Otherwise, assume all dates >= today are valid
-    const { availableDates } = this.props;
+    const { availableDates, minDate, maxDate } = this.props;
     let disabled = false;
 
+    // If user provides an array of availableDates, disable dates that are not
+    // in the array.
     if (
       (Array.isArray(availableDates) && !availableDates.includes(date)) ||
       moment(date).isBefore(moment().format('YYYY-MM-DD'))
     ) {
       disabled = true;
     }
-    return disabled;
-  };
 
-  renderOptions = () => {
-    const {
-      cells,
-      currentlySelectedDate,
-      additionalOptions,
-      handleSelectOption,
-      optionsError,
-      selectedDates,
-    } = this.props;
-
+    // If minDate provided, disable dates before minDate
     if (
-      currentlySelectedDate &&
-      cells.includes(currentlySelectedDate) &&
-      additionalOptions
+      minDate &&
+      moment(minDate).isValid() &&
+      moment(date).isBefore(moment(minDate))
     ) {
-      const selectedDateOptions = additionalOptions?.getOptionsByDate(
-        currentlySelectedDate,
-      );
-
-      if (selectedDateOptions) {
-        const selectedCellIndex = cells.indexOf(currentlySelectedDate);
-        const fieldName = additionalOptions.fieldName;
-
-        const maxCellsPerRow = 4;
-        const middleCellIndex = 2;
-        const beginningCellIndex = [0, 1];
-        const endCellIndexes = [3, 4];
-
-        // If list of items is won't fill row, align items closer to selected cell
-        const cssClasses = classNames(
-          'vaos-calendar__options',
-          selectedDateOptions.length < maxCellsPerRow
-            ? {
-                'usa-input-error': optionsError,
-                'vads-u-justify-content--flex-start': beginningCellIndex.includes(
-                  selectedCellIndex,
-                ),
-                'vads-u-justify-content--center':
-                  selectedCellIndex === middleCellIndex,
-                'vads-u-justify-content--flex-end': endCellIndexes.includes(
-                  selectedCellIndex,
-                ),
-              }
-            : null,
-        );
-
-        return (
-          <fieldset>
-            <legend className="vads-u-visibility--screen-reader">
-              {additionalOptions.legend ||
-                'Please select an option for this date'}
-            </legend>
-            <div className={cssClasses}>
-              {optionsError && (
-                <span
-                  className="usa-input-error-message vads-u-margin-bottom--2 vads-u-padding-top--0 vads-u-width--full"
-                  role="alert"
-                >
-                  <span className="sr-only">Error</span> {optionsError}
-                </span>
-              )}
-              {selectedDateOptions.map((o, index) => {
-                const dateObj = {
-                  date: currentlySelectedDate,
-                  [fieldName]: o.value,
-                };
-                const checked = isDateOptionPairInSelectedArray(
-                  dateObj,
-                  selectedDates,
-                  fieldName,
-                );
-
-                return additionalOptions?.maxSelections > 1 ? (
-                  <CalendarCheckboxOption
-                    key={`checkbox-${index}`}
-                    index={index}
-                    fieldName={fieldName}
-                    value={o.value}
-                    checked={checked}
-                    onChange={() => handleSelectOption(dateObj)}
-                    label={o.label}
-                  />
-                ) : (
-                  <CalendarRadioOption
-                    key={`radio-${index}`}
-                    index={index}
-                    fieldName={fieldName}
-                    value={o.value}
-                    checked={checked}
-                    onChange={() => handleSelectOption(dateObj)}
-                    label={o.label}
-                  />
-                );
-              })}
-            </div>
-          </fieldset>
-        );
-      }
-      return null;
+      disabled = true;
     }
-    return null;
+
+    // If maxDate provided, disable dates after maxDate
+    if (
+      maxDate &&
+      moment(maxDate).isValid() &&
+      moment(date).isAfter(moment(maxDate))
+    ) {
+      disabled = true;
+    }
+
+    return disabled;
   };
 
   render() {
     const {
+      additionalOptions,
       cells,
       currentlySelectedDate,
       handleSelectDate,
+      handleSelectOption,
+      hasError,
+      maxSelections,
       rowNumber,
       selectedDates,
+      selectedIndicatorType,
     } = this.props;
 
     return (
       <div>
         <div
-          className="vaos-calendar__calendar-week vads-u-display--flex vads-u-justify-content--space-between"
+          className="vads-u-flex-wrap--wrap vads-u-display--flex vads-u-justify-content--space-between"
           role="row"
         >
           {cells.map((date, index) => (
             <CalendarCell
-              key={`row-${rowNumber}-cell-${index}`}
+              additionalOptions={additionalOptions}
+              currentlySelectedDate={currentlySelectedDate}
               date={date}
-              isCurrentlySelected={currentlySelectedDate === date}
-              inSelectedArray={isDateInSelectedArray(date, selectedDates)}
-              onClick={() => handleSelectDate(date, rowNumber)}
               disabled={this.isCellDisabled(date)}
+              handleSelectOption={handleSelectOption}
+              hasError={hasError}
+              index={index}
+              inSelectedArray={isDateInSelectedArray(date, selectedDates)}
+              key={`row-${rowNumber}-cell-${index}`}
+              maxSelections={maxSelections}
+              onClick={() => handleSelectDate(date, rowNumber)}
+              selectedDates={selectedDates}
+              selectedIndicatorType={selectedIndicatorType}
             />
           ))}
         </div>
-        {this.renderOptions()}
       </div>
     );
   }

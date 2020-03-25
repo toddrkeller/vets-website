@@ -49,7 +49,20 @@ function paginatePages(page, files, field, layout, ariaLabel, perPage) {
     ariaLabel = ` of ${ariaLabel}`;
   }
 
-  const pagedEntities = _.chunk(page[field].entities, perPage);
+  /* eslint-disable camelcase */
+  // Map the page.entityBundle value to a property value we want for page
+  const bundleToField = {
+    event_listing: 'allEventTeasers',
+    story_listing: 'allNewsStoryTeasers',
+    leadership_listing: 'fieldLeadership',
+    press_releases_listing: 'allPressReleaseTeasers',
+  };
+
+  /* eslint-enable camelcase */
+  const pageField = _.get(bundleToField, page.entityBundle, field);
+  const pagedEntities = _.chunk(page[pageField].entities, perPage);
+
+  const pageReturn = [];
   for (let pageNum = 0; pageNum < pagedEntities.length; pageNum++) {
     let pagedPage = Object.assign({}, page);
 
@@ -64,7 +77,7 @@ function paginatePages(page, files, field, layout, ariaLabel, perPage) {
     pagedPage.pagedItems = pagedEntities[pageNum];
     const innerPages = [];
 
-    if (pagedEntities.length > 1) {
+    if (pagedEntities.length > 0) {
       // add page numbers
       const numPageLinks = 3;
       let start;
@@ -104,12 +117,14 @@ function paginatePages(page, files, field, layout, ariaLabel, perPage) {
             ? `${page.entityUrl.path}${paginationPath(pageNum + 1)}`
             : null,
       };
+      pageReturn.push(pagedPage);
     }
 
     const fileName = path.join('.', pagedPage.entityUrl.path, 'index.html');
 
     files[fileName] = createFileObj(pagedPage, layout);
   }
+  return pageReturn;
 }
 
 // Return page object with path, breadcrumb and title set.
@@ -182,6 +197,53 @@ function getHubSidebar(navsArray, owner) {
   return { sidebar: {} };
 }
 
+// used to find the correct sidebar menu if the page belongs to a health care region
+function getFacilitySidebar(page, contentData) {
+  // for pages like New Releases, Stories, Events, and Detail Pages
+  const facilityPage =
+    page.fieldOffice &&
+    page.fieldOffice.entity &&
+    page.fieldOffice.entity.entityLabel;
+
+  // for Local Facility pages
+  const localFacilityPage = page.fieldRegionPage;
+
+  // if neither of those, check if it's a health care region page
+  if (
+    facilityPage ||
+    localFacilityPage ||
+    page.entityBundle === 'health_care_region_page'
+  ) {
+    let pageTitle = null;
+
+    if (!facilityPage) {
+      pageTitle = localFacilityPage
+        ? localFacilityPage.entity.title
+        : page.title;
+    }
+
+    // set the correct menuName based on the page
+    const facilityNavName = facilityPage
+      ? page.fieldOffice.entity.entityLabel
+      : pageTitle;
+
+    // choose the correct menu name to retrieve the object from contentData
+    const facilitySidebarNavName = Object.keys(contentData.data).find(
+      attribute =>
+        contentData.data[attribute]
+          ? contentData.data[attribute].name === facilityNavName
+          : false,
+    );
+
+    if (facilitySidebarNavName) {
+      return contentData.data[facilitySidebarNavName];
+    }
+  }
+
+  // return the default and most important of the menu structure
+  return { links: [] };
+}
+
 function compilePage(page, contentData) {
   const {
     data: {
@@ -196,7 +258,7 @@ function compilePage(page, contentData) {
       pensionBenefitsHubQuery: pensionHubSidebarNav = {},
       recordsBenefitsHubQuery: recordsHubSidebarNav = {},
       alerts: alertsItem = {},
-      facilitySidebarQuery: facilitySidebarNav = {},
+      bannerAlerts: bannerAlertsItem = {},
       outreachSidebarQuery: outreachSidebarNav = {},
     },
   } = contentData;
@@ -221,9 +283,12 @@ function compilePage(page, contentData) {
   ];
   let sidebarNavItems;
 
-  const facilitySidebarNavItems = { facilitySidebar: facilitySidebarNav };
+  const facilitySidebarNavItems = {
+    facilitySidebar: getFacilitySidebar(page, contentData),
+  };
   const outreachSidebarNavItems = { outreachSidebar: outreachSidebarNav };
   const alertItems = { alert: alertsItem };
+  const bannerAlertsItems = { bannerAlert: bannerAlertsItem };
 
   const { entityUrl, entityBundle } = page;
 
@@ -239,13 +304,19 @@ function compilePage(page, contentData) {
   switch (entityBundle) {
     case 'office':
     case 'publication_listing':
+    case 'locations_listing':
     case 'event_listing':
+    case 'leadership_listing':
+    case 'story_listing':
+    case 'press_releases_listing':
+    case 'health_services_listing':
       pageCompiled = Object.assign(
         {},
         page,
         facilitySidebarNavItems,
         outreachSidebarNavItems,
         alertItems,
+        bannerAlertsItems,
         pageId,
       );
       break;
@@ -257,6 +328,7 @@ function compilePage(page, contentData) {
         facilitySidebarNavItems,
         outreachSidebarNavItems,
         alertItems,
+        bannerAlertsItems,
         pageId,
       );
       break;
@@ -267,6 +339,7 @@ function compilePage(page, contentData) {
         page,
         facilitySidebarNavItems,
         alertItems,
+        bannerAlertsItems,
         pageId,
       );
       break;
@@ -276,6 +349,7 @@ function compilePage(page, contentData) {
         facilitySidebarNavItems,
         outreachSidebarNavItems,
         alertItems,
+        bannerAlertsItems,
         pageId,
       );
       break;
@@ -294,6 +368,7 @@ function compilePage(page, contentData) {
         facilitySidebarNavItems,
         outreachSidebarNavItems,
         alertItems,
+        bannerAlertsItems,
         pageId,
       );
       break;
@@ -305,6 +380,7 @@ function compilePage(page, contentData) {
         facilitySidebarNavItems,
         outreachSidebarNavItems,
         alertItems,
+        bannerAlertsItems,
         pageId,
       );
       break;
@@ -315,6 +391,7 @@ function compilePage(page, contentData) {
         facilitySidebarNavItems,
         outreachSidebarNavItems,
         alertItems,
+        bannerAlertsItems,
         pageId,
       );
       break;
@@ -329,6 +406,7 @@ function compilePage(page, contentData) {
         sidebarNavItems,
         outreachSidebarNavItems,
         alertItems,
+        bannerAlertsItems,
         pageId,
       );
       break;
