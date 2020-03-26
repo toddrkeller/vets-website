@@ -76,11 +76,12 @@ class SubmitController extends React.Component {
     // Validation errors in this situation are not visible, so we’d
     // like to know if they’re common
     const { isValid, errors } = isValidForm(form, pageList);
-    // eslint-disable-next-line no-unused-expressions
-    this.props.setFormErrors?.({
-      rawErrors: errors,
-      errors: reduceErrors(errors, pageList),
-    });
+    if (this.props.setFormErrors) {
+      this.props.setFormErrors({
+        rawErrors: errors,
+        errors: reduceErrors(errors, pageList),
+      });
+    }
     if (!isValid) {
       recordEvent({
         event: `${trackingPrefix}-validation-failed`,
