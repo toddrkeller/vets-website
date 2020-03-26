@@ -58,6 +58,8 @@ describe('Schemaform review: <SubmitButtons>', () => {
     expect(tree.everySubTree('a').length).to.equal(2);
   });
   it('should render validation error with a list of errors', () => {
+    const oldWindow = global.window;
+    global.window = { location: { pathname: 'form-21-526ez' } };
     const submission = {
       status: 'validationError',
     };
@@ -85,6 +87,7 @@ describe('Schemaform review: <SubmitButtons>', () => {
     expect(tree.everySubTree('ProgressButton').length).to.equal(2);
     expect(tree.everySubTree('.error-message-list-item').length).to.equal(3);
     expect(tree.everySubTree('.error-message-list-link').length).to.equal(2);
+    global.window = oldWindow;
   });
   it('should render error in prod mode', () => {
     const submission = {

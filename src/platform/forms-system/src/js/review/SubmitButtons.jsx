@@ -97,8 +97,12 @@ export default function SubmitButtons(props) {
   } else if (submission.status === 'validationError') {
     const errors = formErrors?.errors || [];
     const errLen = errors.length;
-    // Needs evaluation & testing before production
-    const renderErrors = errLen > 0 && !environment.isProduction();
+
+    // check if we're using form 526 (will make this globally apply later)
+    const isForm526 = window?.location?.pathname.includes('form-21-526ez');
+    // error links need evaluation & testing before production
+    const renderErrors = errLen > 0 && isForm526 && !environment.isProduction();
+
     submitButton = (
       <ProgressButton
         onButtonClick={onSubmit}
