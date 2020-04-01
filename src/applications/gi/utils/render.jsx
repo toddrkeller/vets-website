@@ -6,6 +6,7 @@ export const renderSchoolClosingAlert = result => {
   const { schoolClosing, schoolClosingOn } = result;
 
   if (!schoolClosing) return null;
+  // Prod flag for 6803
   // prod flag for bah-7020
   if (!environment.isProduction()) {
     if (schoolClosingOn) {
@@ -14,13 +15,9 @@ export const renderSchoolClosingAlert = result => {
       if (currentDate > schoolClosingDate) {
         return (
           <AlertBox
-            headline="This campus has closed"
-            content={
-              <p>
-                This campus has closed. Visit the school's website to learn
-                more.
-              </p>
-            }
+            className="vads-u-margin-top--1"
+            headline="School closed"
+            content={<p>School has closed</p>}
             isVisible={!!schoolClosing}
             status="warning"
           />
@@ -29,7 +26,8 @@ export const renderSchoolClosingAlert = result => {
     }
     return (
       <AlertBox
-        content={<p>Upcoming campus closure</p>}
+        className="vads-u-margin-top--1"
+        content={<p>A campus at this school will be closing soon</p>}
         headline="A campus is closing soon"
         isVisible={!!schoolClosing}
         status="warning"
@@ -39,6 +37,7 @@ export const renderSchoolClosingAlert = result => {
 
   return (
     <AlertBox
+      className="vads-u-margin-top--1"
       content={<p>Upcoming campus closure</p>}
       headline="School closure"
       isVisible={!!schoolClosing}
@@ -60,18 +59,27 @@ const renderReasons = cautionFlags => {
       return 0;
     })
     .forEach(flag => {
-      flags.push(<li key={flag.id}>{flag.reason}</li>);
+      flags.push(
+        <li
+          className="vads-u-margin-y--0p25 vads-u-margin-left--1p5"
+          key={flag.id}
+        >
+          {flag.reason}
+        </li>,
+      );
     });
 
-  return <ul>{flags}</ul>;
+  return <ul className="vads-u-margin-top--0">{flags}</ul>;
 };
 
 export const renderCautionAlert = result => {
   const { cautionFlags } = result;
   if (cautionFlags.length === 0) return null;
+  // Prod flag for 6803
   if (!environment.isProduction()) {
     return (
       <AlertBox
+        className="vads-u-margin-top--1"
         content={renderReasons(cautionFlags)}
         headline={
           cautionFlags.length > 1
@@ -85,6 +93,7 @@ export const renderCautionAlert = result => {
   }
   return (
     <AlertBox
+      className="vads-u-margin-top--1"
       content={<p>This school has cautionary warnings</p>}
       headline="Caution"
       isVisible={cautionFlags.length > 0}

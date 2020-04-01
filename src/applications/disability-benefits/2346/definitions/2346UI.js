@@ -10,7 +10,6 @@ import orderSupplyPageContent from '../components/oderSupplyPageContent';
 import orderAccessoriesPageContent from '../components/orderAccessoriesPageContent';
 import SelectArrayItemsAccessoriesWidget from '../components/SelectArrayItemsAccessoriesWidget';
 import SelectArrayItemsBatteriesWidget from '../components/SelectArrayItemsBatteriesWidget';
-import SuppliesReview from '../components/suppliesReview';
 import {
   canLabels,
   canProvinces,
@@ -432,7 +431,7 @@ export default {
           no: "No, I don't need to order hearing aid batteries.",
         },
       },
-      'ui:reviewField': SuppliesReview,
+      hideOnReview: true,
     },
     addAccessoriesUI: {
       'ui:title': 'Add hearing aid accessories to your order',
@@ -444,7 +443,7 @@ export default {
           no: "No, I don't need to order hearing aid accessories.",
         },
       },
-      'ui:reviewField': SuppliesReview,
+      hideOnReview: true,
     },
     batteriesUI: {
       'ui:title': 'Which hearing aid do you need batteries for?',
@@ -457,7 +456,7 @@ export default {
       },
     },
     accessoriesUI: {
-      'ui:title': 'Which hearing aid do you need batteries for?',
+      'ui:title': 'Which hearing aid do you need accessories for?',
       'ui:description':
         'You will be sent a 6 month supply of batteries for each device you select below.',
       'ui:field': SelectArrayItemsAccessoriesWidget,

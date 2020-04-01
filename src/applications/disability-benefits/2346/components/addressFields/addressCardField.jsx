@@ -50,7 +50,6 @@ export class AddressCardField extends React.Component {
 
   constructor(props) {
     super(props);
-
     // Throw an error if there’s no viewComponent (should be React component)
     if (
       typeof get('ui:options.viewComponent', this.props.uiSchema) !== 'function'

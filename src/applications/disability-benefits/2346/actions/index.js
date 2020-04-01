@@ -32,9 +32,55 @@ export const fetchReOrderBatteryAndAccessoriesInformation = data => ({
   data,
 });
 
-export const fetchReOrderBatteryAndAccessoriesInformationFailure = error => ({
+export const fetchReOrderBatteryAndAccessoriesInformationFailure = (
+  error,
+  message,
+) => ({
   type: FETCH_REORDER_BATTERY_AND_ACCESSORIES_INFORMATION_FAILURE,
   error,
+  message,
+});
+
+export const permAddressSelectedFailure = (error, message) => ({
+  type: PERM_ADDRESS_SELECTED_FAILURE,
+  error,
+  message,
+});
+
+export const tempAddressSelectedSuccessful = data => ({
+  type: TEMP_ADDRESS_SELECTED_SUCCESSFUL,
+  data,
+});
+
+export const tempAddressSelectedFailure = (error, message) => ({
+  type: TEMP_ADDRESS_SELECTED_FAILURE,
+  error,
+  message,
+});
+
+export const permAddressMilitaryBaseStatusChange = (data, actionType) => ({
+  type: actionType,
+  data,
+});
+
+export const permAddressMilitaryBaseStatusChangeFailure = (error, message) => ({
+  type: PERM_ADDRESS_MILITARY_BASE_SELECTION_FAILURE,
+  error,
+  message,
+});
+
+export const tempAddressMilitaryBaseStatusChange = (data, actionType) => ({
+  type: actionType,
+  data,
+});
+
+export const tempAddressIsAMilitaryBaseStatusChangeFailure = (
+  error,
+  message,
+) => ({
+  type: TEMP_ADDRESS_MILITARY_BASE_SELECTION_FAILURE,
+  error,
+  message,
 });
 
 export const getVeteranInformationData = data => async dispatch => {
@@ -79,41 +125,6 @@ export const permAddressSelectedSuccessful = data => ({
   data,
 });
 
-export const permAddressSelectedFailure = error => ({
-  type: PERM_ADDRESS_SELECTED_FAILURE,
-  error,
-});
-
-export const tempAddressSelectedSuccessful = data => ({
-  type: TEMP_ADDRESS_SELECTED_SUCCESSFUL,
-  data,
-});
-
-export const tempAddressSelectedFailure = error => ({
-  type: TEMP_ADDRESS_SELECTED_FAILURE,
-  error,
-});
-
-export const permAddressMilitaryBaseStatusChange = (data, actionType) => ({
-  type: actionType,
-  data,
-});
-
-export const permAddressMilitaryBaseStatusChangeFailure = error => ({
-  type: PERM_ADDRESS_MILITARY_BASE_SELECTION_FAILURE,
-  error,
-});
-
-export const tempAddressMilitaryBaseStatusChange = (data, actionType) => ({
-  type: actionType,
-  data,
-});
-
-export const tempAddressIsAMilitaryBaseStatusChangeFailure = error => ({
-  type: TEMP_ADDRESS_MILITARY_BASE_SELECTION_FAILURE,
-  error,
-});
-
 export const permAddressIsSelected = data => dispatch => {
   try {
     dispatch(permAddressSelectedSuccessful(data));
@@ -128,7 +139,7 @@ export const permAddressIsSelected = data => dispatch => {
 
 export const tempAddressIsSelected = data => dispatch => {
   try {
-    dispatch(tempAddressSelectedSuccessful(data));
+    dispatch(data);
     // dispatch(setData(data));
   } catch (error) {
     tempAddressSelectedFailure(

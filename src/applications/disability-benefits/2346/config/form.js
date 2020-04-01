@@ -6,7 +6,7 @@ import ConfirmationPage from '../containers/ConfirmationPage';
 import IntroductionPage from '../containers/IntroductionPage';
 import UIDefinitions from '../definitions/2346UI';
 
-const { email, date, gender, address, supplies } = fullSchemaMDOT.definitions;
+const { email, address, yesOrNo, supplies } = fullSchemaMDOT.definitions;
 
 const {
   permAddressField,
@@ -60,10 +60,9 @@ const formConfig = {
   },
   defaultDefinitions: {
     email,
-    date,
     address,
-    gender,
     supplies,
+    yesOrNo,
   },
   chapters: {
     veteranInformationChapter: {
@@ -103,7 +102,7 @@ const formConfig = {
       title: formChapters.orderSupplies,
       pages: {
         [formPages.addBatteriesPage]: {
-          path: 'supplies',
+          path: 'batteries',
           title: formPages.addBatteriesPage,
           schema: {
             type: 'object',
