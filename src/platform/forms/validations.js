@@ -54,7 +54,7 @@ function isValidRequiredField(validator, field) {
 function isValidYear(value) {
   return (
     Number(value) >= 1900 &&
-    Number(value) <= addYears(new Date(), 100).getFullYear()
+    Number(value) <= addYears(Date.now(), 100).getFullYear()
   );
 }
 
