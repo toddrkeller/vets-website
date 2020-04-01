@@ -63,7 +63,10 @@ function isValidYearOrBlank(value) {
 }
 
 function isValidCurrentOrPastYear(value) {
-  return Number(value) >= 1900 && Number(value) < moment().year() + 1;
+  return (
+    Number(value) >= 1900 &&
+    Number(value) < addYears(Date.now(), 1).getFullYear()
+  );
 }
 
 function isValidMonths(value) {
