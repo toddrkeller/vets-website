@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import moment from 'moment';
+import { addYears } from 'date-fns';
 import { dateToMoment } from '../utilities/date';
 
 /**
@@ -53,10 +54,7 @@ function isValidRequiredField(validator, field) {
 function isValidYear(value) {
   return (
     Number(value) >= 1900 &&
-    Number(value) <=
-      moment()
-        .add(100, 'year')
-        .year()
+    Number(value) <= addYears(new Date(), 100).getFullYear()
   );
 }
 
