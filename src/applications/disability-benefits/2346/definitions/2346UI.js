@@ -430,8 +430,8 @@ export default {
           yes: 'Yes, I need to order hearing aid batteries.',
           no: "No, I don't need to order hearing aid batteries.",
         },
+        hideOnReview: true,
       },
-      hideOnReview: true,
     },
     addAccessoriesUI: {
       'ui:title': 'Add hearing aid accessories to your order',
@@ -442,8 +442,8 @@ export default {
           yes: 'Yes, I need to order hearing aid accessories.',
           no: "No, I don't need to order hearing aid accessories.",
         },
+        hideOnReview: true,
       },
-      hideOnReview: true,
     },
     batteriesUI: {
       'ui:title': 'Which hearing aid do you need batteries for?',
