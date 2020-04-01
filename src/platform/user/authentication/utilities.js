@@ -89,6 +89,10 @@ export function login(policy, version = 'v0', application = null) {
   );
 }
 
+export function autoLogin() {
+  return redirect(sessionTypeUrl('idme', 'v1'), 'sso-automatic-login');
+}
+
 export function mfa() {
   return redirect(MFA_URL, 'multifactor-link-clicked');
 }
@@ -100,6 +104,10 @@ export function verify() {
 export function logout(version = 'v0') {
   clearSentryLoginType();
   return redirect(sessionTypeUrl('slo', version), 'logout-link-clicked');
+}
+
+export function autoLogout() {
+  return redirect(sessionTypeUrl('slo', 'v1'), 'sso-automatic-logout');
 }
 
 export function signup(version = 'v0', application = null) {
