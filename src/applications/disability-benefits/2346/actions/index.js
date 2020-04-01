@@ -1,5 +1,4 @@
 import * as Sentry from '@sentry/browser';
-// import { setData } from 'platform/forms-system/src/js/actions';
 import {
   FETCH_REORDER_BATTERY_AND_ACCESSORIES_INFORMATION,
   FETCH_REORDER_BATTERY_AND_ACCESSORIES_INFORMATION_FAILURE,
@@ -128,7 +127,6 @@ export const permAddressSelectedSuccessful = data => ({
 export const permAddressIsSelected = data => dispatch => {
   try {
     dispatch(permAddressSelectedSuccessful(data));
-    // dispatch(setData(data));
   } catch (error) {
     permAddressSelectedFailure(
       error,
@@ -139,8 +137,7 @@ export const permAddressIsSelected = data => dispatch => {
 
 export const tempAddressIsSelected = data => dispatch => {
   try {
-    dispatch(data);
-    // dispatch(setData(data));
+    dispatch(tempAddressSelectedSuccessful(data));
   } catch (error) {
     tempAddressSelectedFailure(
       error,
@@ -166,7 +163,6 @@ export const permAddressMilitaryBaseChecker = data => dispatch => {
         ),
       );
     }
-    // dispatch(setData(data));
   } catch (error) {
     permAddressMilitaryBaseStatusChangeFailure(
       error,
@@ -194,7 +190,6 @@ export const tempAddressMilitaryBaseChecker = data => dispatch => {
         ),
       );
     }
-    // dispatch(setData(data));
   } catch (error) {
     tempAddressIsAMilitaryBaseStatusChangeFailure(
       error,
