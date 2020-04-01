@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import moment from 'moment';
-import { addYears, isValid } from 'date-fns';
+import { addYears } from 'date-fns';
 import { dateToMoment } from '../utilities/date';
 
 /**
@@ -118,14 +118,6 @@ function validateIfDirtyDate(dayField, monthField, yearField, validator) {
   }
 
   return true;
-}
-
-function isValidAnyDate(day, month, year) {
-  if (!isValidYear(year)) {
-    return false;
-  }
-
-  return isValid(new Date(year, parseInt(month, 10) - 1, day));
 }
 
 function isValidPartialDate(day, month, year) {
@@ -355,7 +347,6 @@ export {
   isFullDate,
   isNotBlank,
   isNotBlankDateField,
-  isValidAnyDate,
   isValidCurrentOrPastDate,
   isValidCurrentOrFutureMonthYear,
   isValidFutureDate,
