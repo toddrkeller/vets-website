@@ -62,13 +62,6 @@ function isValidYearOrBlank(value) {
   return isValidYear(value) || value === '';
 }
 
-function isValidCurrentOrPastYear(value) {
-  return (
-    Number(value) >= 1900 &&
-    Number(value) < addYears(Date.now(), 1).getFullYear()
-  );
-}
-
 function isValidMonths(value) {
   return Number(value) >= 0;
 }
@@ -367,7 +360,6 @@ export {
   isNotBlank,
   isNotBlankDateField,
   isValidAnyDate,
-  isValidCurrentOrPastYear,
   isValidCurrentOrPastDate,
   isValidCurrentOrFutureMonthYear,
   isValidFutureDate,
