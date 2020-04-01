@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import moment from 'moment';
-import { addYears } from 'date-fns';
+import { addYears, isValid } from 'date-fns';
 import { dateToMoment } from '../utilities/date';
 
 /**
@@ -125,11 +125,7 @@ function isValidAnyDate(day, month, year) {
     return false;
   }
 
-  return moment({
-    day,
-    month: month ? parseInt(month, 10) - 1 : month,
-    year,
-  }).isValid();
+  return isValid(new Date(year, parseInt(month, 10) - 1, day));
 }
 
 function isValidPartialDate(day, month, year) {
