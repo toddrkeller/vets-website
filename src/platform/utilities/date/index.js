@@ -1,4 +1,9 @@
 import moment from 'moment';
+import {
+  differenceInSeconds,
+  differenceInDays,
+  formatDistanceStrict,
+} from 'date-fns';
 
 export function dateToMoment(dateField) {
   return moment({
@@ -24,48 +29,29 @@ export function formatDateParsedZoneShort(date) {
   return moment.parseZone(date).format('MM/DD/YYYY');
 }
 
-function formatDiff(diff, desc) {
-  return `${diff} ${desc}${diff === 1 ? '' : 's'}`;
-}
-
 /**
- * timeFromNow returns the number of days, hours, or minutes until
- * the provided date occurs. It’s meant to be less fuzzy than moment’s
- * timeFromNow so it can be used for expiration dates
+ * timeFromNow returns the number of days, hours, minutes, or seconds until
+ * the provided date occurs. It’s meant to be less fuzzy than date-fn’s
+ * formatDistanceToNow so it can be used for expiration dates
  *
- * @param date {Moment Date} The future date to check against
- * @param userFromDate {Moment Date} The earlier date in the range. Defaults to today.
+ * @param date {Date} The future date to check against
+ * @param userFromDate {Date} The earlier date in the range. Defaults to today.
  * @returns {string} The string description of how long until date occurs
  */
 export function timeFromNow(date, userFromDate = null) {
-  // Not using defaulting because we want today to be when this function
-  // is called, not when the file is parsed and run
-  const fromDate = userFromDate || moment();
-  const dayDiff = date.diff(fromDate, 'days');
+  const now = userFromDate || Date.now();
 
-  if (dayDiff >= 1) {
-    return formatDiff(dayDiff, 'day');
+  // The largest unit we want to show is days - don't treat anything as months/years
+  if (differenceInDays(date, now) >= 29) {
+    return formatDistanceStrict(date, now, { unit: 'day' });
   }
 
-  const hourDiff = date.diff(fromDate, 'hours');
-
-  if (hourDiff >= 1) {
-    return formatDiff(hourDiff, 'hour');
+  // Don't round seconds up to minutes
+  if (differenceInSeconds(date, now) < 60) {
+    return formatDistanceStrict(date, now, { unit: 'second' });
   }
 
-  const minuteDiff = date.diff(fromDate, 'minutes');
-
-  if (minuteDiff >= 1) {
-    return formatDiff(minuteDiff, 'minute');
-  }
-
-  const secondDiff = date.diff(fromDate, 'seconds');
-
-  if (secondDiff >= 1) {
-    return formatDiff(secondDiff, 'second');
-  }
-
-  return 'a moment';
+  return formatDistanceStrict(date, now);
 }
 
 /**
