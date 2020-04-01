@@ -197,11 +197,6 @@ function isValidFutureDate(day, month, year) {
   return momentDate.isAfter(moment().endOf('day'), 'day');
 }
 
-function isValidCurrentOrFutureMonthYear(month, year) {
-  const momentDate = moment({ month: parseInt(month, 10) - 1, year });
-  return momentDate.isSameOrAfter(moment(), 'month');
-}
-
 function isBlankMonthYear(field) {
   return isBlank(field.month.value) && isBlank(field.year.value);
 }
@@ -348,7 +343,6 @@ export {
   isNotBlank,
   isNotBlankDateField,
   isValidCurrentOrPastDate,
-  isValidCurrentOrFutureMonthYear,
   isValidFutureDate,
   isValidDate,
   isValidDateField,
