@@ -1,3 +1,5 @@
+import ReviewCardField from 'platform/forms-system/src/js/components/ReviewCardField';
+import AddressViewField from 'platform/forms-system/src/js/components/AddressViewField';
 import { VA_FORM_IDS } from 'platform/forms/constants';
 import fullSchemaMDOT from '../2346-schema.json';
 import personalInfoBox from '../components/personalInfoBox';
@@ -5,6 +7,10 @@ import { schemaFields } from '../constants';
 import ConfirmationPage from '../containers/ConfirmationPage';
 import IntroductionPage from '../containers/IntroductionPage';
 import UIDefinitions from '../definitions/2346UI';
+import {
+  buildAddressSchema,
+  addressUISchema,
+} from '../../686c-674/config/address-schema';
 
 const { email, address, yesOrNo, supplies } = fullSchemaMDOT.definitions;
 
@@ -17,12 +23,10 @@ const {
   viewAddBatteriesField,
 } = schemaFields;
 
-const { permanentAddress, temporaryAddress } = fullSchemaMDOT.properties;
+// const { permanentAddress, temporaryAddress } = fullSchemaMDOT.properties;
 
 const {
   emailUI,
-  permAddressUI,
-  tempAddressUI,
   addAccessoriesUI,
   addBatteriesUI,
   batteriesUI,
@@ -40,6 +44,8 @@ const formPages = {
   addBatteriesPage: 'Add batteries to your order',
   addAccessoriesPage: 'Add accessories to your order',
 };
+
+const addressSchema = buildAddressSchema(true);
 
 const formConfig = {
   urlPrefix: '/',
@@ -83,15 +89,61 @@ const formConfig = {
           path: 'veteran-information/addresses',
           title: formPages.address,
           uiSchema: {
-            [permAddressField]: permAddressUI,
-            [tempAddressField]: tempAddressUI,
+            permanentAddressOption: {
+              [permAddressField]: {
+                ...addressUISchema(
+                  true,
+                  'permanentAddressOption.permanentAddress',
+                  () => true,
+                ),
+                'ui:field': ReviewCardField,
+                'ui:options': {
+                  viewComponent: AddressViewField,
+                },
+              },
+              useThisAddress: {
+                'ui:title': 'Ship to this address',
+              },
+            },
+            temporaryAddressOption: {
+              [tempAddressField]: {
+                ...addressUISchema(
+                  true,
+                  'temporaryAddressOption.temporaryAddress',
+                  () => true,
+                ),
+                'ui:field': ReviewCardField,
+                'ui:options': {
+                  viewComponent: AddressViewField,
+                },
+              },
+              useThisAddress: {
+                'ui:title': 'Ship to this address',
+              },
+            },
             [emailField]: emailUI,
           },
           schema: {
             type: 'object',
             properties: {
-              permanentAddress,
-              temporaryAddress,
+              permanentAddressOption: {
+                type: 'object',
+                properties: {
+                  permanentAddress: addressSchema,
+                  useThisAddress: {
+                    type: 'boolean',
+                  },
+                },
+              },
+              temporaryAddressOption: {
+                type: 'object',
+                properties: {
+                  temporaryAddress: addressSchema,
+                  useThisAddress: {
+                    type: 'boolean',
+                  },
+                },
+              },
               email,
             },
           },
