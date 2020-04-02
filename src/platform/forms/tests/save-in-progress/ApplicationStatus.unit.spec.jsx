@@ -45,6 +45,9 @@ describe('schemaform <ApplicationStatus>', () => {
   it('should render saved form', () => {
     const lastUpdated = getUnixTime(Date.now());
     const lastUpdatedString = format(lastUpdated, "M/d/yyyy 'at' h:mm a");
+    const expiresAt = moment()
+      .add(1, 'day')
+      .unix();
 
     const tree = SkinDeep.shallowRender(
       <ApplicationStatus
@@ -60,9 +63,7 @@ describe('schemaform <ApplicationStatus>', () => {
             {
               form: VA_FORM_IDS.FORM_21P_527EZ,
               metadata: {
-                expiresAt: moment()
-                  .add(1, 'day')
-                  .unix(),
+                expiresAt,
                 lastUpdated,
               },
             },
@@ -80,6 +81,9 @@ describe('schemaform <ApplicationStatus>', () => {
     );
     expect(tree.everySubTree('.saved-form-item-metadata')[1].text()).to.equal(
       `Your application was last saved on ${lastUpdatedString}`,
+    );
+    expect(tree.subTree('.expires').text()).to.equal(
+      `will expire on ${moment.unix(expiresAt).format('M/D/YYYY')}.`,
     );
   });
   it('should render expired form', () => {
