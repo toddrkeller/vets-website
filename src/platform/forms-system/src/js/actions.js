@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/browser';
-import moment from 'moment';
+import { fromUnixTime } from 'date-fns';
 import { transformForSubmit } from './helpers';
 import recordEvent from 'platform/monitoring/record-event';
 import { timeFromNow } from './utilities/date';
@@ -257,7 +257,7 @@ export function uploadFile(
         let errorMessage = req.statusText;
         if (req.status === 429) {
           errorMessage = `You’ve reached the limit for the number of submissions we can accept at this time. Please try again in ${timeFromNow(
-            moment.unix(
+            fromUnixTime(
               parseInt(req.getResponseHeader('x-ratelimit-reset'), 10),
             ),
           )}.`;
