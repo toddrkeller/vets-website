@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment';
+import { getUnixTime } from 'date-fns';
 import { expect } from 'chai';
 import SkinDeep from 'skin-deep';
 import { VA_FORM_IDS } from 'platform/forms/constants';
@@ -27,7 +27,7 @@ describe('Schemaform <FormSaved>', () => {
     },
   });
   const lastSavedDate = 1497300513914;
-  const expirationDate = moment().unix() + 2000;
+  const expirationDate = getUnixTime(Date.now()) + 2000;
 
   it('should render', () => {
     const tree = SkinDeep.shallowRender(

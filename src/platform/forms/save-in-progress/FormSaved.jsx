@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment';
+import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -46,9 +46,7 @@ class FormSaved extends React.Component {
       profile && profile.prefillsAvailable.includes(formId)
     );
     const { success } = this.props.route.formConfig.savedFormMessages || {};
-    const expirationDate = moment
-      .unix(this.props.expirationDate)
-      .format('M/D/YYYY');
+    const expirationDate = format(this.props.expirationDate, 'M/d/yyyy');
 
     return (
       <div>
@@ -63,7 +61,7 @@ class FormSaved extends React.Component {
                 <div className="saved-form-metadata-container">
                   <span className="saved-form-metadata">
                     Last saved on{' '}
-                    {moment(lastSavedDate).format('M/D/YYYY [at] h:mm a')}
+                    {format(lastSavedDate, "M/d/yyyy 'at' h:mm a")}
                   </span>
                   {expirationMessage || (
                     <p className="expires-container">
