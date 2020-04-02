@@ -1,4 +1,5 @@
 import React from 'react';
+import { format, getUnixTime } from 'date-fns';
 import moment from 'moment';
 import { expect } from 'chai';
 import SkinDeep from 'skin-deep';
@@ -42,10 +43,8 @@ describe('schemaform <ApplicationStatus>', () => {
     );
   });
   it('should render saved form', () => {
-    const lastUpdated = moment().unix();
-    const lastUpdatedString = moment
-      .unix(lastUpdated)
-      .format('M/D/YYYY [at] h:mm a');
+    const lastUpdated = getUnixTime(Date.now());
+    const lastUpdatedString = format(lastUpdated, "M/d/yyyy 'at' h:mm a");
 
     const tree = SkinDeep.shallowRender(
       <ApplicationStatus
@@ -130,6 +129,7 @@ describe('schemaform <ApplicationStatus>', () => {
                 expiresAt: moment()
                   .add(1, 'day')
                   .unix(),
+                lastUpdated: getUnixTime(Date.now()),
               },
             },
           ],
@@ -163,6 +163,7 @@ describe('schemaform <ApplicationStatus>', () => {
                 expiresAt: moment()
                   .add(1, 'day')
                   .unix(),
+                lastUpdated: getUnixTime(Date.now()),
               },
             },
             {

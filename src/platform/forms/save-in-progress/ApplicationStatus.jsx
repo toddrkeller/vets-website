@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { format } from 'date-fns';
 import { connect } from 'react-redux';
 
 import {
@@ -100,9 +101,7 @@ export class ApplicationStatus extends React.Component {
       const isExpired = expirationDate.isBefore();
 
       if (!isExpired) {
-        const lastSavedDateTime = moment
-          .unix(lastSaved)
-          .format('M/D/YYYY [at] h:mm a');
+        const lastSavedDateTime = format(lastSaved, "M/d/yyyy 'at' h:mm a");
 
         return (
           <div className="usa-alert usa-alert-info background-color-only sip-application-status">
