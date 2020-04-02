@@ -1,5 +1,4 @@
 import camelCaseKeysRecursive from 'camelcase-keys-recursive';
-import moment from 'moment';
 import { addHours, isAfter, isBefore, isEqual } from 'date-fns';
 import * as Sentry from '@sentry/browser';
 
@@ -77,8 +76,8 @@ export function createServiceMap(maintenanceWindows = []) {
       },
     } = maintenanceWindow;
 
-    const startTime = moment(startTimeRaw);
-    const endTime = endTimeRaw && moment(endTimeRaw);
+    const startTime = new Date(startTimeRaw);
+    const endTime = endTimeRaw && new Date(endTimeRaw);
     const status = getStatusForTimeframe(startTime, endTime);
 
     serviceMap.set(externalService, {
@@ -105,7 +104,7 @@ export function getSoonestDowntime(serviceMap, serviceNames) {
     .filter(service => service.status !== externalServiceStatus.ok)
     .reduce((mostUrgentService, service) => {
       if (!mostUrgentService) return service;
-      return mostUrgentService.startTime.isBefore(service.startTime)
+      return isBefore(mostUrgentService.startTime, service.startTime)
         ? mostUrgentService
         : service;
     }, null);
@@ -139,7 +138,7 @@ export const getCurrentGlobalDowntime = (() => {
     : null;
 
   const includesCurrentTime = ({ startTime, endTime }) =>
-    moment().isAfter(startTime) && moment().isBefore(endTime);
+    isAfter(Date.now(), startTime) && isBefore(Date.now(), endTime);
 
   return async () => {
     try {
