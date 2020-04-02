@@ -1,7 +1,7 @@
 // Dependencies.
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import { differenceInMinutes } from 'date-fns';
 import PromoBanner, {
   PROMO_BANNER_TYPES,
 } from '@department-of-veterans-affairs/formation-react/PromoBanner';
@@ -18,10 +18,10 @@ class PreDowntime extends Component {
     super(props);
 
     // Derive minutes remaining.
-    const now = moment();
-    const minutesRemaining = moment(props?.announcement?.downtimeStartsAt).diff(
+    const now = Date.now();
+    const minutesRemaining = differenceInMinutes(
+      props?.announcement?.downtimeStartsAt,
       now,
-      'minutes',
     );
 
     this.state = {
@@ -48,8 +48,8 @@ class PreDowntime extends Component {
     } = this.props;
 
     // Derive minutes remaining.
-    const now = moment();
-    const minutesRemaining = moment(downtimeStartsAt).diff(now, 'minutes');
+    const now = Date.now();
+    const minutesRemaining = differenceInMinutes(downtimeStartsAt, now);
 
     // Update minutes remaining in state.
     this.setState({ minutesRemaining });
