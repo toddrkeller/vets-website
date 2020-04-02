@@ -1,6 +1,5 @@
 import { expect } from 'chai';
-import moment from 'moment';
-
+import { addDays, addMinutes, subDays, subHours, subMinutes } from 'date-fns';
 import {
   mockFetch,
   setFetchJSONResponse,
@@ -15,60 +14,40 @@ import * as downtimeHelpers from '../util/helpers';
 const pastDowntime = {
   attributes: {
     externalService: 'dslogon',
-    startTime: moment()
-      .subtract(1, 'hour')
-      .toISOString(),
-    endTime: moment()
-      .subtract(1, 'minute')
-      .toISOString(),
+    startTime: subHours(Date.now(), 1),
+    endTime: subMinutes(Date.now(), 1),
   },
 };
 
 const activeDowntime = {
   attributes: {
     externalService: 'evss',
-    startTime: moment()
-      .subtract(1, 'day')
-      .toISOString(),
-    endTime: moment()
-      .add(1, 'day')
-      .toISOString(),
+    startTime: subDays(new Date(), 1),
+    endTime: addDays(new Date(), 1),
   },
 };
 
 const distantFutureDowntime = {
   attributes: {
     externalService: 'vic',
-    startTime: moment()
-      .add(1, 'day')
-      .toISOString(),
-    endTime: moment()
-      .add(2, 'day')
-      .toISOString(),
+    startTime: addDays(Date.now(), 1),
+    endTime: addDays(Date.now(), 2),
   },
 };
 
 const approachingDowntime = {
   attributes: {
     externalService: 'mvi',
-    startTime: moment()
-      .add(10, 'minute')
-      .toISOString(),
-    endTime: moment()
-      .add(1, 'day')
-      .toISOString(),
+    startTime: addMinutes(Date.now(), 10),
+    endTime: addDays(Date.now(), 1),
   },
 };
 
 const lessUrgentApproachingDowntime = {
   attributes: {
     externalService: 'appeals',
-    startTime: moment()
-      .add(15, 'minute')
-      .toISOString(),
-    endTime: moment()
-      .add(1, 'day')
-      .toISOString(),
+    startTime: addMinutes(Date.now(), 15),
+    endTime: addDays(Date.now(), 1),
   },
 };
 

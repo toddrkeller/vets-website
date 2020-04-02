@@ -1,5 +1,6 @@
 import camelCaseKeysRecursive from 'camelcase-keys-recursive';
 import moment from 'moment';
+import { addHours, isAfter, isBefore, isEqual } from 'date-fns';
 import * as Sentry from '@sentry/browser';
 
 import environment from 'platform/utilities/environment';
@@ -10,24 +11,27 @@ import defaultExternalServices from '../config/externalServices';
 
 /**
  * Derives downtime status based on a time range
- * @param {string|Date|Moment} startTime
- * @param {string|Date|Moment} endTime
+ * @param {string|Date} startTime
+ * @param {string|Date} endTime
  * @returns {string} A service status
  */
 export function getStatusForTimeframe(startTime, endTime) {
-  const now = moment();
-  const hasStarted = now.isSameOrAfter(startTime);
+  const now = Date.now();
+
+  const afterStart = time =>
+    isEqual(time, startTime) || isAfter(time, startTime);
+  const hasStarted = afterStart(now);
 
   if (hasStarted) {
     // Check for indefinite downtime (null endTime) or that the endTime is in the future
-    if (!endTime || now.isBefore(endTime)) {
+    if (!endTime || isBefore(now, endTime)) {
       return externalServiceStatus.down;
     }
     // The downtime must be old and outdated. The API should filter these so this shouldn't happen.
     return externalServiceStatus.ok;
   }
 
-  const startsWithinHour = now.add(1, 'hour').isSameOrAfter(startTime);
+  const startsWithinHour = afterStart(addHours(now, 1));
   if (startsWithinHour) return externalServiceStatus.downtimeApproaching;
 
   return externalServiceStatus.ok;
