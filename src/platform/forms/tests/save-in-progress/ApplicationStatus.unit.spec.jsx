@@ -1,6 +1,5 @@
 import React from 'react';
-import { format, getUnixTime } from 'date-fns';
-import moment from 'moment';
+import { addDays, format, getUnixTime, subDays } from 'date-fns';
 import { expect } from 'chai';
 import SkinDeep from 'skin-deep';
 
@@ -45,9 +44,7 @@ describe('schemaform <ApplicationStatus>', () => {
   it('should render saved form', () => {
     const lastUpdated = getUnixTime(Date.now());
     const lastUpdatedString = format(lastUpdated, "M/d/yyyy 'at' h:mm a");
-    const expiresAt = moment()
-      .add(1, 'day')
-      .unix();
+    const expiresAt = getUnixTime(addDays(Date.now(), 1));
 
     const tree = SkinDeep.shallowRender(
       <ApplicationStatus
@@ -83,7 +80,7 @@ describe('schemaform <ApplicationStatus>', () => {
       `Your application was last saved on ${lastUpdatedString}`,
     );
     expect(tree.subTree('.expires').text()).to.equal(
-      `will expire on ${moment.unix(expiresAt).format('M/D/YYYY')}.`,
+      `will expire on ${format(expiresAt, 'M/d/yyyy')}.`,
     );
   });
   it('should render expired form', () => {
@@ -101,9 +98,7 @@ describe('schemaform <ApplicationStatus>', () => {
             {
               form: VA_FORM_IDS.FORM_21P_527EZ,
               metadata: {
-                expiresAt: moment()
-                  .add(-1, 'day')
-                  .unix(),
+                expiresAt: getUnixTime(subDays(Date.now(), 1)),
               },
             },
           ],
@@ -130,9 +125,7 @@ describe('schemaform <ApplicationStatus>', () => {
             {
               form: VA_FORM_IDS.FORM_22_1990,
               metadata: {
-                expiresAt: moment()
-                  .add(1, 'day')
-                  .unix(),
+                expiresAt: getUnixTime(addDays(Date.now(), 1)),
                 lastUpdated: getUnixTime(Date.now()),
               },
             },
@@ -164,18 +157,14 @@ describe('schemaform <ApplicationStatus>', () => {
             {
               form: VA_FORM_IDS.FORM_22_1990,
               metadata: {
-                expiresAt: moment()
-                  .add(1, 'day')
-                  .unix(),
+                expiresAt: getUnixTime(addDays(Date.now(), 1)),
                 lastUpdated: getUnixTime(Date.now()),
               },
             },
             {
               form: VA_FORM_IDS.FORM_22_1995,
               metadata: {
-                expiresAt: moment()
-                  .add(1, 'day')
-                  .unix(),
+                expiresAt: getUnixTime(addDays(Date.now(), 1)),
               },
             },
           ],

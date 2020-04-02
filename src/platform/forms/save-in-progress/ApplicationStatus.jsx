@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
-import { format } from 'date-fns';
+import { format, fromUnixTime, isBefore } from 'date-fns';
 import { connect } from 'react-redux';
 
 import {
@@ -97,8 +96,7 @@ export class ApplicationStatus extends React.Component {
         lastUpdated: lastSaved,
         expiresAt: expirationTime,
       } = savedForm.metadata;
-      const expirationDate = moment.unix(expirationTime);
-      const isExpired = expirationDate.isBefore();
+      const isExpired = isBefore(fromUnixTime(expirationTime), Date.now());
 
       if (!isExpired) {
         const lastSavedDateTime = format(lastSaved, "M/d/yyyy 'at' h:mm a");
@@ -118,7 +116,7 @@ export class ApplicationStatus extends React.Component {
               You can continue applying now, or come back later to finish your
               application. Your application{' '}
               <span className="expires">
-                will expire on {expirationDate.format('M/D/YYYY')}.
+                will expire on {format(expirationTime, 'M/d/yyyy')}.
               </span>
             </div>
             <p>
