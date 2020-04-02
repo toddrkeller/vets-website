@@ -37,6 +37,11 @@ export function getFormPageInfo(state, pageKey) {
   };
 }
 
+export const selectCernerFacilities = state =>
+  selectPatientFacilities(state)
+    ?.filter(f => f.isCerner)
+    .map(f => f.facilityId) || [];
+
 const AUDIOLOGY = '203';
 const SLEEP_CARE = 'SLEEP';
 const EYE_CARE = 'EYE';
@@ -213,7 +218,9 @@ export function getFacilityPageInfo(state) {
       newAppointment.eligibilityStatus === FETCH_STATUS.failed,
     typeOfCare: getTypeOfCare(data)?.name,
     parentDetails: newAppointment?.facilityDetails[data.vaParent],
+    facilityDetails: newAppointment?.facilityDetails[data.vaFacility],
     parentOfChosenFacility: getParentOfChosenFacility(state),
+    cernerFacilities: selectCernerFacilities(state),
   };
 }
 
@@ -254,6 +261,7 @@ export function getClinicPageInfo(state, pageKey) {
 }
 
 export function getCancelInfo(state) {
+  const cernerFacilities = selectCernerFacilities(state);
   const {
     appointmentToCancel,
     showCancelModal,
@@ -264,15 +272,20 @@ export function getCancelInfo(state) {
 
   let facility = null;
   if (appointmentToCancel?.clinicId) {
+    // Confirmed in person VA appts
     facility =
       systemClinicToFacilityMap[
         `${appointmentToCancel.facilityId}_${appointmentToCancel.clinicId}`
       ];
-  } else if (appointmentToCancel) {
+  } else if (appointmentToCancel?.facility) {
+    // Requests
     facility =
       facilityData[
-        getRealFacilityId(appointmentToCancel.facility?.facilityCode)
+        getRealFacilityId(appointmentToCancel.facility.facilityCode)
       ];
+  } else if (appointmentToCancel) {
+    // Video visits
+    facility = facilityData[getRealFacilityId(appointmentToCancel.facilityId)];
   }
 
   return {
@@ -280,6 +293,7 @@ export function getCancelInfo(state) {
     appointmentToCancel,
     showCancelModal,
     cancelAppointmentStatus,
+    cernerFacilities,
   };
 }
 

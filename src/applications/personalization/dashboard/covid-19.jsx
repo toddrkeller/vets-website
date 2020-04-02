@@ -101,6 +101,8 @@ const visn23Facilities = [
   { name: 'Brainerd VA Clinic', id: '656GA' },
   { name: 'Fort Snelling VA Clinic', id: '618QA' },
   { name: 'Hayward VA Clinic', id: '618GH' },
+  { name: 'Maplewood VA Clinic', id: '618GD' },
+  { name: 'Max J. Beilke VA Outpatient Clinic', id: '656GC' },
   { name: 'Minneapolis VA Medical Center', id: '618' },
   { name: 'Montevideo VA Clinic', id: '656GB' },
   { name: 'Northwest Metro VA Clinic', id: '618GI' },
@@ -119,11 +121,8 @@ const testingFacilities = [
   { name: 'zzzFakeTestFacility 2', id: '984' },
 ];
 
-const eligibleFacilities = [
-  ...visn8Facilities,
-  ...visn23Facilities,
-  ...testingFacilities,
-];
+// 2020-03-24: removed VISN8 facilities from eligibleFacilities
+const eligibleFacilities = [...visn23Facilities, ...testingFacilities];
 
 /**
  * This filters the list of VISN8 facilities and returns just a set of

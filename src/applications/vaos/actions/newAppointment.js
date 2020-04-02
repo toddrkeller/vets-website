@@ -17,6 +17,7 @@ import {
   getSystemFromChosenFacility,
   vaosCommunityCare,
   selectSystemIds,
+  getEligibilityStatus,
 } from '../utils/selectors';
 import {
   getParentFacilities,
@@ -47,6 +48,8 @@ import {
   getEligibleFacilities,
   recordEligibilityGAEvents,
 } from '../utils/eligibility';
+
+import { recordEligibilityFailure } from '../utils/events';
 
 import { captureError } from '../utils/error';
 
@@ -281,10 +284,16 @@ export function openFacilityPage(page, uiSchema, schema) {
         );
       }
 
-      const eligibilityDataNeeded = !!facilityId || facilities?.length === 1;
+      const eligibleFacilities = getEligibleFacilities(facilities);
+      const eligibilityDataNeeded =
+        !!facilityId || eligibleFacilities?.length === 1;
 
       if (eligibilityDataNeeded && !facilityId) {
-        facilityId = facilities[0].institutionCode;
+        facilityId = eligibleFacilities[0].institutionCode;
+      }
+
+      if (!eligibleFacilities?.length) {
+        recordEligibilityFailure('supported-facilities');
       }
 
       const eligibilityChecks =
@@ -292,7 +301,9 @@ export function openFacilityPage(page, uiSchema, schema) {
 
       if (eligibilityDataNeeded && !eligibilityChecks) {
         eligibilityData = await getEligibilityData(
-          facilities.find(facility => facility.institutionCode === facilityId),
+          eligibleFacilities.find(
+            facility => facility.institutionCode === facilityId,
+          ),
           typeOfCareId,
           systemId,
           directSchedulingEnabled,
@@ -311,6 +322,18 @@ export function openFacilityPage(page, uiSchema, schema) {
         typeOfCareId,
         eligibilityData,
       });
+
+      if (facilityId) {
+        try {
+          const eligibility = getEligibilityStatus(getState());
+          if (!eligibility.direct && !eligibility.request) {
+            const thunk = fetchFacilityDetails(facilityId);
+            await thunk(dispatch, getState);
+          }
+        } catch (e) {
+          captureError(e);
+        }
+      }
     } catch (e) {
       captureError(e);
       dispatch({
@@ -349,6 +372,7 @@ export function updateFacilityPageData(page, uiSchema, data) {
         // If no available facilities, fetch system details to display contact info
         if (!availableFacilities?.length) {
           dispatch(fetchFacilityDetails(data.vaParent));
+          recordEligibilityFailure('supported-facilities');
         }
 
         dispatch({
@@ -399,6 +423,16 @@ export function updateFacilityPageData(page, uiSchema, data) {
           typeOfCareId,
           eligibilityData,
         });
+
+        try {
+          const eligibility = getEligibilityStatus(getState());
+          if (!eligibility.direct && !eligibility.request) {
+            const thunk = fetchFacilityDetails(data.vaFacility);
+            await thunk(dispatch, getState);
+          }
+        } catch (e) {
+          captureError(e);
+        }
       } catch (e) {
         captureError(e);
         dispatch({

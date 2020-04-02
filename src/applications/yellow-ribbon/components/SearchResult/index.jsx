@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import includes from 'lodash/includes';
+import startCase from 'lodash/startCase';
 import toLower from 'lodash/toLower';
 import { connect } from 'react-redux';
 // Relative imports.
@@ -10,12 +11,12 @@ import { capitalize } from '../../helpers';
 
 const deriveNameLabel = school => {
   // Show unknown if there's no name.
-  if (!school?.schoolNameInYrDatabase) {
+  if (!school?.name) {
     return 'Not provided';
   }
 
   // Show the name.
-  return capitalize(school?.schoolNameInYrDatabase);
+  return startCase(school?.name);
 };
 
 const deriveLocationLabel = (school = {}) => {
@@ -48,12 +49,14 @@ const deriveMaxAmountLabel = (school = {}) => {
   const contributionAmountNum = parseFloat(school?.contributionAmount);
 
   if (contributionAmountNum > 90000) {
-    return 'All tuition and fees not covered by Post-9/11 GI Bill';
+    return 'All tuition and fees not covered by Post-9/11 GI Bill benefits';
   }
 
   // Show formatted contributionAmount.
   return contributionAmountNum.toLocaleString('en-US', {
     currency: 'USD',
+    maximumFractionDigits: 0,
+    minimumFractionDigits: 0,
     style: 'currency',
   });
 };
@@ -146,7 +149,7 @@ export const SearchResult = ({ school, schoolIDs }) => (
 SearchResult.propTypes = {
   school: PropTypes.shape({
     city: PropTypes.string.isRequired,
-    insturl: PropTypes.number,
+    insturl: PropTypes.string,
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     state: PropTypes.string.isRequired,

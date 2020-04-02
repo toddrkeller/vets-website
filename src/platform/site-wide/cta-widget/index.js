@@ -6,6 +6,7 @@ import URLSearchParams from 'url-search-params';
 
 import LoadingIndicator from '@department-of-veterans-affairs/formation-react/LoadingIndicator';
 import { toggleLoginModal } from 'platform/site-wide/user-nav/actions';
+import { ssoe } from 'platform/user/authentication/selectors';
 import { logout, verify, mfa } from 'platform/user/authentication/utilities';
 import recordEvent from 'platform/monitoring/record-event';
 import {
@@ -133,7 +134,14 @@ export class CallToActionWidget extends React.Component {
         return this.getMviErrorContent();
       }
 
-      return <VAOnlineScheduling appId={this.props.appId} />;
+      return (
+        <VAOnlineScheduling
+          appId={this.props.appId}
+          isCommunityCareEnabled={
+            this.props.featureToggles.vaOnlineSchedulingCommunityCare
+          }
+        />
+      );
     }
 
     return null;
@@ -366,7 +374,7 @@ export class CallToActionWidget extends React.Component {
 
   signOut = () => {
     recordEvent({ event: 'logout-link-clicked-createcta-mhv' });
-    logout();
+    logout(this.props.useSSOe ? 'v1' : 'v0');
   };
 
   render() {
@@ -424,6 +432,7 @@ const mapStateToProps = state => {
     mhvAccount,
     mviStatus: status,
     featureToggles: state.featureToggles,
+    useSSOe: ssoe(state),
   };
 };
 
