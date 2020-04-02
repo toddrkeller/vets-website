@@ -1,6 +1,6 @@
 // Dependencies.
 import React from 'react';
-import moment from 'moment';
+import { add } from 'date-fns';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
@@ -10,13 +10,10 @@ import Downtime from '../../components/Downtime';
 describe('Downtime Messaging <Downtime />', () => {
   it('should render', () => {
     // Derive props.
-    const downtimeExpiresAt = moment()
-      .add(1, 'hours')
-      .add(30, 'minutes')
-      .toISOString();
+    const expiresAt = add(Date.now(), { hours: 1, minutes: 30 });
     const dismiss = sinon.stub();
     const props = {
-      announcement: { downtimeExpiresAt },
+      announcement: { expiresAt },
       dismiss,
     };
 

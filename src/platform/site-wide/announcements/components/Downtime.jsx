@@ -1,7 +1,7 @@
 // Dependencies.
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import { format } from 'date-fns';
 import PromoBanner, {
   PROMO_BANNER_TYPES,
 } from '@department-of-veterans-affairs/formation-react/PromoBanner';
@@ -21,7 +21,7 @@ class Downtime extends Component {
     } = this.props;
 
     // Derive the message.
-    const formattedExpiresAt = moment(expiresAt).format('MMM D [at] h:mm a');
+    const formattedExpiresAt = format(expiresAt, "MMM d 'at' h:mm a");
     const message = `We're doing work on VA.gov. If you have trouble using online tools, check back after ${formattedExpiresAt}`;
 
     return (

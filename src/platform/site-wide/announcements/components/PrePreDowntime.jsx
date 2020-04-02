@@ -1,7 +1,7 @@
 // Dependencies.
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import { format } from 'date-fns';
 import PromoBanner, {
   PROMO_BANNER_TYPES,
 } from '@department-of-veterans-affairs/formation-react/PromoBanner';
@@ -22,10 +22,8 @@ class PrePreDowntime extends Component {
     } = this.props;
 
     // Derive the message.
-    const formattedStartsAt = moment(downtimeStartsAt).format(
-      'MMM D [at] h:mm a',
-    );
-    const formattedExpiresAt = moment(downtimeExpiresAt).format('h:mm a');
+    const formattedStartsAt = format(downtimeStartsAt, "MMM d 'at' h:mm a");
+    const formattedExpiresAt = format(downtimeExpiresAt, 'h:mm a');
     const message = `We'll be doing site maintenance on ${formattedStartsAt} until ${formattedExpiresAt} You won’t be able to sign in or use some tools during this time.`;
 
     return (

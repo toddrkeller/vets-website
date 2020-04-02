@@ -1,6 +1,6 @@
 // Dependencies.
 import React from 'react';
-import moment from 'moment';
+import { addHours, add, format } from 'date-fns';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
@@ -10,13 +10,11 @@ import PrePreDowntime from '../../components/PrePreDowntime';
 describe('Downtime Messaging <PrePreDowntime />', () => {
   it('should render', () => {
     // Derive props.
-    const downtimeStartsAt = moment()
-      .add(1, 'hour')
-      .toISOString();
-    const downtimeExpiresAt = moment()
-      .add(1, 'hours')
-      .add(30, 'minutes')
-      .toISOString();
+    const downtimeStartsAt = addHours(Date.now(), 1);
+    const downtimeExpiresAt = add(Date.now(), {
+      hours: 1,
+      minutes: 30,
+    });
     const dismiss = sinon.stub();
     const props = {
       announcement: { downtimeStartsAt, downtimeExpiresAt },
