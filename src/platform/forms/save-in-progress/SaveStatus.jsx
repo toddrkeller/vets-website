@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import moment from 'moment';
+import { format } from 'date-fns';
 
 import SignInLink from '../components/SignInLink';
 import { SAVE_STATUSES, saveErrors } from './actions';
@@ -11,9 +11,9 @@ class SaveStatus extends React.Component {
 
     let savedAtMessage;
     if (form.lastSavedDate) {
-      const savedAt = moment(form.lastSavedDate);
-      savedAtMessage = ` Last saved at ${savedAt.format(
-        'MMM D, YYYY [at] h:mm a',
+      savedAtMessage = ` Last saved at ${format(
+        form.lastSavedDate,
+        "MMM d, yyyy 'at' h:mm a",
       )}`;
     } else {
       savedAtMessage = '';
